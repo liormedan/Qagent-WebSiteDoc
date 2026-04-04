@@ -4,34 +4,34 @@ export const constraintsContent: DocPageContent = {
   slug: "constraints",
   title: "Constraints",
   description:
-    "Non-negotiable operating boundaries for Q to ensure safety, determinism, and implementation clarity.",
+    "Non-negotiable rules for safe, bounded, and deterministic Q behavior.",
   sections: [
     {
       title: "Q NEVER",
       body: [
-        "Performs DSP directly. Q only plans and emits contracts.",
-        "Mutates runtime/editor state directly. Execution belongs to downstream agents.",
-        "Skips approval when policy marks request as risky/destructive.",
-        "Returns success status for actions that were not executed.",
-        "Invents facts, metadata, or execution results that do not exist.",
+        "Perform DSP directly.",
+        "Mutate editor/runtime state directly.",
+        "Skip required approval.",
+        "Report success without execution proof.",
+        "Fabricate unknown facts.",
       ],
-      code: `export const Q_NEVER = [
+      code: `const Q_NEVER = [
   "execute_dsp",
   "mutate_state_directly",
   "bypass_approval",
   "report_success_without_execution",
-  "fabricate_missing_information",
+  "fabricate_information",
 ] as const;`,
     },
     {
       title: "Q MUST",
       body: [
-        "Return schema-valid outputs at every boundary (QOutput, QPlan, AudioDAL).",
-        "Preserve contract compatibility and explicit typing.",
-        "Be explainable: each plan step requires a deterministic rationale.",
-        "Stay deterministic in structure: same input class should produce same output shape.",
+        "Return schema-valid structures.",
+        "Preserve contracts and compatibility.",
+        "Expose explainable reasoning for decisions.",
+        "Keep deterministic output structure for same scenario class.",
       ],
-      code: `export const Q_MUST = [
+      code: `const Q_MUST = [
   "return_valid_structures",
   "preserve_contracts",
   "provide_explainability",
@@ -39,30 +39,30 @@ export const constraintsContent: DocPageContent = {
 ] as const;`,
     },
     {
-      title: "Determinism Rules",
+      title: "Reasoning Constraints",
       body: [
-        "Action ordering must be stable and index-preserving from plan to DAL.",
-        "Optional fields are emitted only when data exists; no random optional payloads.",
-        "Error output schema must be stable to support orchestration retries.",
+        "Must not run infinite reasoning loops.",
+        "Must not ask excessive user questions.",
+        "Must not generate DAL before clarification when required fields are missing.",
+        "Must not hide uncertainty at low confidence.",
+        "Must not overthink clear high-confidence intents.",
       ],
-      code: `// Determinism checklist
-// 1) Stable step IDs and ordering
-// 2) No hidden side effects
-// 3) Same contract shape for same scenario class`,
+      code: `interface ReasoningLimits {
+  maxInternalReasoningIterations: 3;
+  maxUserClarificationTurns: 2;
+  unresolvedFallback: "safe_fallback" | "unknown";
+}`,
     },
     {
-      title: "Failure Behavior",
+      title: "Unresolved Policy",
       body: [
-        "If intent is unknown, return structured clarification response instead of speculative execution plan.",
-        "If DAL validation fails, halt handoff and return explicit INVALID_DAL result.",
-        "If approval is pending, status must remain needs_approval and execution must stay blocked.",
+        "If unresolved after limits, return safe fallback and explicit unknown intent path.",
       ],
-      code: `export type QFailureCode = "UNKNOWN_INTENT" | "INVALID_DAL" | "APPROVAL_REQUIRED";
-
-export interface QFailure {
-  code: QFailureCode;
-  message: string;
-  recoverable: boolean;
+      code: `if (!resolved && clarificationTurns >= 2) {
+  return {
+    intent: { type: "unknown", confidence: 0.0, rationale: "Unresolved after bounded clarification", evidence: [] },
+    status: "waiting_for_user",
+  };
 }`,
     },
   ],

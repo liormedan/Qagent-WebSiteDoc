@@ -1,6 +1,7 @@
 import { Stack } from "@chakra-ui/react";
 import { DocsContent } from "@/components/layout/DocsContent";
 import { CodeExample } from "@/components/ui/CodeExample";
+import { DeprecationBanner } from "@/components/ui/DeprecationBanner";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 import { getDocPage } from "@/lib/docs";
@@ -14,6 +15,7 @@ export default function AudioDalPage() {
 
   return (
     <DocsContent>
+      <DeprecationBanner replacementHref="/docs/dal-integration" replacementLabel="/docs/dal-integration" />
       <PageTitle title={page.title} description={page.description} />
       <Stack gap={5}>
         {page.sections.map((section) => (

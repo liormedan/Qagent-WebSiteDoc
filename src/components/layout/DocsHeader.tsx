@@ -2,8 +2,18 @@
 
 import { Flex, HStack, Link as ChakraLink, Text } from "@chakra-ui/react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { getNavigationItemByHref } from "@/lib/navigation";
 
 export function DocsHeader() {
+  const pathname = usePathname();
+  const item = getNavigationItemByHref(pathname);
+  const breadcrumb = item
+    ? `Q Documentation > ${item.section} > ${item.title}`
+    : pathname === "/docs"
+      ? "Q Documentation > Docs Index"
+      : "Q Documentation";
+
   return (
     <Flex
       as="header"
@@ -22,11 +32,11 @@ export function DocsHeader() {
       <HStack gap={3}>
         <Text fontWeight="bold">Q Documentation</Text>
         <Text color="muted" fontSize="sm">
-          Internal Product Docs
+          {breadcrumb}
         </Text>
       </HStack>
       <ChakraLink asChild fontSize="sm" color="accent">
-        <Link href="/">Home</Link>
+        <Link href="/docs">Home</Link>
       </ChakraLink>
     </Flex>
   );

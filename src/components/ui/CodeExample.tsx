@@ -16,7 +16,8 @@ export function CodeExample({ code }: Props) {
       bg="gray.950"
       overflowX="auto"
       fontSize="sm"
-      whiteSpace="pre"
+      whiteSpace="pre-wrap"
+      wordBreak="break-word"
     >
       <Box as="code">{code}</Box>
     </Box>

@@ -4,25 +4,38 @@ export const contractsContent: DocPageContent = {
   slug: "contracts",
   title: "Contracts",
   description:
-    "Authoritative TypeScript contracts for Q input, planning, approval, execution handoff, and final output.",
+    "Typed contracts for reasoning, clarification, planning, DAL generation, and execution handoff.",
   sections: [
     {
       title: "Contract Lifecycle",
       body: [
-        "QIntent is created first from raw user text and context, then wrapped into QInput for planner execution.",
-        "QPlan and QPlanStep are produced by the planner and consumed by DAL generation logic.",
-        "QExecutionRequest is emitted only after a valid plan exists and optional ApprovalRequest is resolved.",
-        "QOutput is produced at the end of the planning cycle and consumed by chat/UI and orchestration logs.",
+        "QInput enters parsing and reasoning.",
+        "ReasoningResult resolves intent or asks clarification.",
+        "QPlan and AudioDAL are created only after resolution is sufficient.",
       ],
     },
     {
-      title: "QIntent",
+      title: "Contracts Used by Runtime Modules",
       body: [
-        "Created during intent classification before planning starts.",
-        "Consumed by the planner and confidence policy.",
+        "Intent Detector reads QInput and emits QIntent.",
+        "Reasoning Engine consumes QInput + QIntent and emits ReasoningResult.",
+        "Clarification Manager consumes ReasoningResult.clarificationQuestion.",
+        "Planner consumes refined QIntent and emits QPlan.",
+        "DAL Builder consumes QPlan and emits AudioDAL.",
+        "Validation Layer consumes QOutput and DAL validation payloads.",
       ],
-      code: `/** Intent domain supported by Q v1. */
-export type QIntentType =
+      code: `type ModuleContractMap = {
+  detectIntent: { input: QInput; output: QIntent };
+  runReasoningLoop: { input: { qInput: QInput; baseIntent: QIntent }; output: ReasoningResult };
+  buildPlan: { input: QIntent; output: QPlan };
+  buildDALFromPlan: { input: QPlan; output: AudioDAL };
+  validateQOutput: { input: QOutput; output: { ok: boolean; issues: string[] } };
+};`,
+    },
+    {
+      title: "Core Types",
+      body: ["Shared types for runtime modules."],
+      code: `export type QIntentType =
   | "enhance_voice"
   | "remove_noise"
   | "master_track"
@@ -30,210 +43,60 @@ export type QIntentType =
   | "trim_silence"
   | "unknown";
 
-/** Optional target scope for processing. */
 export type QTargetScope = "full_track" | "selected_region";
 
-export interface QIntent {
-  /** Classified intent label. */
-  type: QIntentType;
-  /** Optional target extracted from prompt or UI context. */
-  target?: QTargetScope;
-  /** 0..1 confidence score produced by intent parser. */
-  confidence: number;
-  /** Short explanation used for debugging and traceability. */
-  rationale: string;
-  /** Terms used as evidence for classification. */
-  evidence: string[];
-}`,
+export type QReasoningState =
+  | "initial"
+  | "reasoning"
+  | "waiting_for_user"
+  | "refining"
+  | "finalized";`,
     },
     {
-      title: "QInput",
-      body: [
-        "Created at request start by API/controller layer.",
-        "Consumed by the planner and policy evaluator.",
-      ],
-      code: `export interface QInput {
-  /** Request-scoped unique ID for traceability. */
-  requestId: string;
-  /** Stable session or conversation identifier. */
-  sessionId: string;
-  /** Original user message from chat. */
-  userText: string;
-  /** Optional pre-classified intent from upstream stage. */
-  intent?: QIntent;
-  /** Optional edit region in milliseconds when user selected timeline range. */
-  selectedRegionMs?: {
-    startMs: number;
-    endMs: number;
-  };
-  /** Additional context that can affect planning and policy. */
-  context?: Record<string, string | number | boolean>;
-  /** ISO timestamp captured at ingress. */
-  timestamp: string;
-}`,
-    },
-    {
-      title: "QPlanStep",
-      body: [
-        "Created during planner decomposition after intent resolution.",
-        "Consumed by DAL transformer and approval policy checks.",
-      ],
-      code: `export type QPlanStepType =
-  | "analyze"
-  | "transform"
-  | "validate"
-  | "render_preview"
-  | "apply";
-
-export interface QPlanStep {
-  /** Stable unique ID for step references. */
+      title: "Runtime Interfaces",
+      body: ["Key runtime-facing interfaces."],
+      code: `export interface ClarificationQuestion {
   id: string;
-  /** Semantic role of this step in the pipeline. */
-  type: QPlanStepType;
-  /** Human-readable description for explainability. */
-  description: string;
-  /** Target scope this step operates on. */
-  target: QTargetScope;
-  /** Optional ordered dependency list of step IDs. */
-  dependsOn?: string[];
-  /** Parameters later mapped to DAL action params. */
-  params?: Record<string, unknown>;
-  /** 0..1 confidence specific to this step. */
+  question: string;
+  reason: string;
+  options?: string[];
+}
+
+export interface ReasoningStep {
+  id: string;
+  question: string;
+  answer: string;
   confidence: number;
-  /** Whether this step can alter user data. */
-  destructive: boolean;
-}`,
-    },
-    {
-      title: "QPlan",
-      body: [
-        "Created after all planning steps are generated and validated.",
-        "Consumed by DAL generation and user explainability UI.",
-      ],
-      code: `export interface QPlan {
-  /** Unique plan ID for this request. */
-  planId: string;
-  /** Main goal statement derived from intent + user phrasing. */
-  goal: string;
-  /** Ordered execution steps generated by the planner. */
-  steps: QPlanStep[];
-  /** Average confidence for whole plan, 0..1. */
-  overallConfidence: number;
-  /** True when plan cannot be executed without explicit approval. */
-  requiresApproval: boolean;
-  /** Optional risk reasons used in approval UX. */
-  approvalReasons?: string[];
-}`,
-    },
-    {
-      title: "ApprovalRequest",
-      body: [
-        "Created only when policy marks plan as risky/destructive.",
-        "Consumed by UI approval flow and orchestration gate.",
-      ],
-      code: `export interface ApprovalRequest {
-  /** Correlates approval to a specific plan. */
-  planId: string;
-  /** Deterministic summary shown to the user. */
-  summary: string;
-  /** Risk statements that justify approval requirement. */
-  reasons: string[];
-  /** Expiration time after which approval becomes invalid. */
-  expiresAt: string;
-}`,
-    },
-    {
-      title: "QExecutionRequest",
-      body: [
-        "Created after a plan is accepted and DAL is generated.",
-        "Consumed by execution orchestrator / D Agent boundary.",
-      ],
-      code: `export interface QExecutionRequest {
-  /** Correlation ID matching input request. */
-  requestId: string;
-  /** Plan chosen for execution. */
-  plan: QPlan;
-  /** DAL payload emitted from plan transformer. */
-  dal: AudioDAL;
-  /** Approval status at handoff time. */
-  approved: boolean;
-  /** Optional approver identity from product layer. */
-  approvedBy?: string;
+  source: "internal_model" | "user";
+}
+
+export interface ReasoningResult {
+  state: QReasoningState;
+  steps: ReasoningStep[];
+  refinedIntent?: QIntent;
+  requiresUserClarification: boolean;
+  clarificationQuestion?: ClarificationQuestion;
 }`,
     },
     {
       title: "QOutput",
       body: [
-        "Created as terminal output of Q planning cycle.",
-        "Consumed by chat response renderer, logs, and orchestration state.",
+        "Terminal response object used by orchestration and UI layers.",
       ],
-      code: `export type QStatus = "planned" | "needs_approval" | "rejected";
+      code: `export type QStatus = "waiting_for_user" | "planned" | "needs_approval" | "rejected";
 
 export interface QOutput {
-  /** Correlation ID matching QInput.requestId. */
   requestId: string;
-  /** Final intent used by planner. */
-  intent: QIntent;
-  /** Produced plan for execution handoff. */
-  plan: QPlan;
-  /** Optional approval payload when required. */
+  initialIntent: QIntent;
+  refinedIntent?: QIntent;
+  reasoningSummary: string;
+  reasoning?: ReasoningResult;
+  clarificationRequest?: ClarificationQuestion;
+  plan?: QPlan;
   approvalRequest?: ApprovalRequest;
-  /** Human-readable explanation for UI and logs. */
-  explanation: string;
-  /** Planning status used by orchestrator. */
   status: QStatus;
+  explanation: string;
 }`,
-    },
-    {
-      title: "Usage Example",
-      body: [
-        "Example end-to-end contract composition for one request.",
-      ],
-      code: `const output: QOutput = {
-  requestId: "req_01JQ8N3QY3",
-  intent: {
-    type: "remove_noise",
-    target: "selected_region",
-    confidence: 0.92,
-    rationale: "User explicitly asked to clean room hiss in selected range.",
-    evidence: ["clean", "background noise", "selection"],
-  },
-  plan: {
-    planId: "plan_01JQ8N4H9A",
-    goal: "Reduce steady-state background noise while preserving speech clarity.",
-    steps: [
-      {
-        id: "step_1",
-        type: "analyze",
-        description: "Estimate noise profile from selected region.",
-        target: "selected_region",
-        confidence: 0.95,
-        destructive: false,
-      },
-      {
-        id: "step_2",
-        type: "transform",
-        description: "Apply moderate denoise with speech protection.",
-        target: "selected_region",
-        params: { strength: 0.45 },
-        confidence: 0.89,
-        destructive: true,
-        dependsOn: ["step_1"],
-      },
-    ],
-    overallConfidence: 0.92,
-    requiresApproval: true,
-    approvalReasons: ["Destructive transform on user-selected data"],
-  },
-  approvalRequest: {
-    planId: "plan_01JQ8N4H9A",
-    summary: "Apply denoise to selected region with reversible preview first",
-    reasons: ["Destructive transform on selected region"],
-    expiresAt: "2026-04-04T12:00:00.000Z",
-  },
-  explanation: "Q prepared a two-step denoise plan and requires approval before apply.",
-  status: "needs_approval",
-};`,
     },
   ],
 };

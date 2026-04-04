@@ -3,25 +3,34 @@ import type { DocPageContent } from "@/lib/docs";
 export const architectureContent: DocPageContent = {
   slug: "architecture",
   title: "Architecture",
-  description: "A high-level map of the Q ecosystem and its information flow.",
+  description: "High-level system map including sandbox analysis and DAL execution contracts.",
   sections: [
     {
       title: "Core Components",
       body: [
         "Chat: user interaction surface.",
-        "Q: planning and orchestration engine.",
-        "audio.dal: strict execution contract.",
+        "Q: reasoning, clarification, planning, and routing engine.",
+        "Audio Sandbox: isolated query/analysis/indexing workspace.",
+        "audio.dal: deterministic execution contract.",
         "D Agent: deterministic execution runtime.",
         "Canvas: visual operational surface.",
         "Export Flow: serialization and delivery pipeline.",
       ],
     },
     {
-      title: "Data Flow",
+      title: "Q Internal Split",
       body: [
-        "The data path moves from user intent to execution-ready contracts and then to rendered outputs.",
+        "Q routes analysis requests to Audio Sandbox.",
+        "Q routes processing requests to Planning + DAL generation path.",
       ],
-      code: "Chat -> Q -> audio.dal -> D Agent -> Canvas -> Export",
+      code: `Q
+  |- Audio Sandbox (query / analysis / indexing)
+  |- DAL (processing / execution handoff)`,
+    },
+    {
+      title: "Data Flow",
+      body: ["Deterministic flow from user intent to query response or execution-ready contract."],
+      code: `Chat -> Q -> (Audio Sandbox query OR Planning -> audio.dal) -> D Agent -> Canvas -> Export`,
     },
   ],
 };

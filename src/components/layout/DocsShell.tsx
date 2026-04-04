@@ -2,6 +2,7 @@
 
 import { Box, Flex } from "@chakra-ui/react";
 import { DocsHeader } from "@/components/layout/DocsHeader";
+import { DocsPager } from "@/components/layout/DocsPager";
 import { DocsSidebar } from "@/components/layout/DocsSidebar";
 
 type Props = {
@@ -16,6 +17,7 @@ export function DocsShell({ children }: Props) {
         <DocsHeader />
         <Box as="main" px={{ base: 4, md: 10 }} py={{ base: 6, md: 8 }}>
           {children}
+          <DocsPager />
         </Box>
       </Flex>
     </Flex>

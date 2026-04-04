@@ -4,6 +4,7 @@ import { CodeExample } from "@/components/ui/CodeExample";
 import { InfoCard } from "@/components/ui/InfoCard";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
+import { DeprecationBanner } from "@/components/ui/DeprecationBanner";
 import { getDocPage } from "@/lib/docs";
 
 const page = getDocPage("q-agent");
@@ -15,6 +16,7 @@ export default function QAgentPage() {
 
   return (
     <DocsContent>
+      <DeprecationBanner replacementHref="/docs/overview" replacementLabel="/docs/overview" />
       <PageTitle title={page.title} description={page.description} />
       <Stack gap={5}>
         {page.sections.map((section) => (

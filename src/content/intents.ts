@@ -4,73 +4,69 @@ export const intentsContent: DocPageContent = {
   slug: "intents",
   title: "Intents",
   description:
-    "Initial intent catalog, classification rules, fallback behavior, and confidence policy for Q v1.",
+    "Intent resolution strategy combining rule-based parsing, model-assisted refinement, and bounded clarification.",
   sections: [
+    {
+      title: "Intent Categories",
+      body: [
+        "audio_query: asks about audio content/state (timestamps, words, silence, noise presence).",
+        "audio_analysis: asks to inspect or evaluate audio before action.",
+        "audio_processing: asks to change audio (requires planning and possibly DAL).",
+      ],
+      code: `type QRequestIntentCategory = "audio_query" | "audio_analysis" | "audio_processing";`,
+    },
     {
       title: "Intent Type Catalog",
       body: [
-        "Created by intent classifier before planning.",
-        "Consumed by planner strategy selection and DAL action mapping.",
+        "Intent type definitions are canonical in /docs/contracts.",
+        "This page focuses on resolution strategy and decision policy.",
       ],
-      code: `export type QIntentType =
-  | "enhance_voice"
-  | "remove_noise"
-  | "master_track"
-  | "normalize_loudness"
-  | "trim_silence"
-  | "unknown";`,
+      code: `// Canonical source: /docs/contracts
+// type QIntentType = "enhance_voice" | "remove_noise" | ... | "unknown";`,
     },
     {
-      title: "Detection Rules",
+      title: "Intent Resolution Strategy",
       body: [
-        "enhance_voice: detected from phrases like 'make voice clearer', 'boost speech presence'.",
-        "remove_noise: detected from 'clean noise', 'remove hiss', 'reduce hum'.",
-        "master_track: detected from 'finalize', 'master this track'.",
-        "normalize_loudness: detected from LUFS/volume balancing requests.",
-        "trim_silence: detected from silence cleanup and dead-air removal phrases.",
+        "Step 1: rule-based detection from user text and explicit keywords.",
+        "Step 2: model-assisted refinement when confidence is not high.",
+        "Step 3: fallback to unknown or clarification when ambiguity remains.",
       ],
-    },
-    {
-      title: "Fallback To Unknown",
-      body: [
-        "Use unknown when intent evidence is weak, contradictory, or out-of-domain.",
-        "unknown should trigger clarify-first behavior instead of speculative planning.",
-      ],
-      code: `function shouldFallbackToUnknown(input: { score: number; evidence: string[]; contradictory: boolean }): boolean {
-  return input.score < 0.6 || input.evidence.length === 0 || input.contradictory;
-}`,
-    },
-    {
-      title: "Confidence Logic",
-      body: [
-        "Confidence is scored in range 0..1 based on lexical signal strength + context match.",
-        "Recommended policy: >0.85 high confidence, 0.6-0.85 medium, <0.6 unknown fallback.",
-      ],
-      code: `interface IntentScore {
-  type: QIntentType;
-  confidence: number;
-  evidence: string[];
+      code: `interface IntentResolutionPolicy {
+  high: 0.85;
+  medium: 0.6;
 }
 
-function chooseIntent(scores: IntentScore[]): IntentScore {
-  const sorted = [...scores].sort((a, b) => b.confidence - a.confidence);
-  const top = sorted[0] ?? { type: "unknown", confidence: 0, evidence: [] };
-  if (top.confidence < 0.6) {
-    return { type: "unknown", confidence: top.confidence, evidence: top.evidence };
-  }
-  return top;
+// Decision ladder
+// confidence >= high   -> continue
+// medium <= confidence < high -> internal reasoning
+// confidence < medium  -> ask user`,
+    },
+    {
+      title: "Clarification Triggers",
+      body: [
+        "Ask user when candidate intents have similar scores.",
+        "Ask user when intent is execution-critical but under medium threshold.",
+        "Do not ask when intent is already high-confidence and specific.",
+      ],
+      code: `function shouldAskClarification(input: {
+  topConfidence: number;
+  secondConfidence: number;
+  isExecutionCritical: boolean;
+}): boolean {
+  const ambiguous = Math.abs(input.topConfidence - input.secondConfidence) < 0.12;
+  return input.topConfidence < 0.6 || (ambiguous && input.isExecutionCritical);
 }`,
     },
     {
       title: "Examples",
       body: [
-        "Examples for deterministic classification behavior.",
+        "Each case below demonstrates which branch of the resolution ladder is selected.",
       ],
       code: `const examples = [
-  { text: "clean background noise", intent: "remove_noise", confidence: 0.9 },
-  { text: "make my vocals more present", intent: "enhance_voice", confidence: 0.88 },
-  { text: "final polish for release", intent: "master_track", confidence: 0.83 },
-  { text: "do something nice", intent: "unknown", confidence: 0.34 },
+  { text: "remove background noise", result: "audio_processing:remove_noise" },
+  { text: "where did they say hello", result: "audio_query:text_lookup" },
+  { text: "check if this has noise", result: "audio_analysis:noise_presence" },
+  { text: "make it better", result: "ambiguous -> reasoning" },
 ] as const;`,
     },
   ],

@@ -1,14 +1,15 @@
 import { Box, Heading, Stack, Text } from "@chakra-ui/react";
 
 type Props = {
+  id?: string;
   title: string;
-  body: string[];
+  body: readonly string[];
   children?: React.ReactNode;
 };
 
-export function SectionBlock({ title, body, children }: Props) {
+export function SectionBlock({ id, title, body, children }: Props) {
   return (
-    <Box borderWidth="1px" borderColor="border" bg="panel" borderRadius="xl" p={{ base: 5, md: 6 }}>
+    <Box id={id} borderWidth="1px" borderColor="border" bg="panel" borderRadius="xl" p={{ base: 5, md: 6 }}>
       <Stack gap={4}>
         <Heading size="md">{title}</Heading>
         {body.map((line) => (

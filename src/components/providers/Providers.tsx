@@ -1,6 +1,5 @@
 "use client";
 
-import { CacheProvider } from "@chakra-ui/next-js";
 import { ChakraProvider } from "@chakra-ui/react";
 import { system } from "@/theme";
 
@@ -9,9 +8,5 @@ type Props = {
 };
 
 export function Providers({ children }: Props) {
-  return (
-    <CacheProvider>
-      <ChakraProvider value={system}>{children}</ChakraProvider>
-    </CacheProvider>
-  );
+  return <ChakraProvider value={system}>{children}</ChakraProvider>;
 }
