@@ -1,3 +1,4 @@
+import { linkConcepts } from "@/lib/docs/auto-link";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
 export function InfoCard({ title, description }: { title: string; description: string }) {
@@ -11,11 +12,11 @@ export function InfoCard({ title, description }: { title: string; description: s
         <details className="group" open={false}>
           <summary className="list-none cursor-pointer">
             <h3 className="mb-2 text-sm font-semibold">{title}</h3>
-            <p className="text-sm text-[var(--muted)]">{shortDescription}</p>
+            <p className="text-sm text-[var(--muted)]">{linkConcepts(shortDescription, 1)}</p>
             <p className="mt-2 text-xs text-slate-400">Expand</p>
           </summary>
           <div className="mt-3 border-t border-[var(--border)] pt-3">
-            <p className="text-sm text-[var(--muted)]">{fullDescription}</p>
+            <p className="text-sm text-[var(--muted)]">{linkConcepts(fullDescription, 2)}</p>
           </div>
         </details>
       </CardContent>

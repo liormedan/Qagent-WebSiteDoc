@@ -17,6 +17,13 @@ export type DocNavItem = {
 };
 
 const orderedGroups: DocsNavGroup[] = ["Start Here", "Main Flow", "Decision System", "Audio Intelligence", "Implementation"];
+const groupSlugs: Record<DocsNavGroup, string> = {
+  "Start Here": "start-here",
+  "Main Flow": "main-flow",
+  "Decision System": "decision-system",
+  "Audio Intelligence": "audio-intelligence",
+  Implementation: "implementation",
+};
 
 export const docsNavigation: DocNavItem[] = [
   { title: "System Overview", description: "Understand the system mission and request lifecycle before technical details.", href: "/docs/overview", group: "Start Here", recommendedFirst: true },
@@ -116,6 +123,27 @@ export function getNavigationItemByHref(href: string): DocNavItem | undefined {
 
 export function getNavigationGroups(): DocsNavGroup[] {
   return orderedGroups;
+}
+
+export function getGroupSlug(group: DocsNavGroup): string {
+  return groupSlugs[group];
+}
+
+export function getGroupBySlug(slug: string): DocsNavGroup | undefined {
+  return (Object.entries(groupSlugs).find(([, value]) => value === slug)?.[0] as DocsNavGroup | undefined);
+}
+
+export function getGroupHubHref(group: DocsNavGroup): string {
+  return `/docs/sections/${getGroupSlug(group)}`;
+}
+
+export function getGroupNeighbors(group: DocsNavGroup): { previous?: DocsNavGroup; next?: DocsNavGroup } {
+  const index = orderedGroups.indexOf(group);
+  if (index < 0) return {};
+  return {
+    previous: orderedGroups[index - 1],
+    next: orderedGroups[index + 1],
+  };
 }
 
 export function getFlowProgressByHref(href: string): { group: DocsNavGroup; step: number; total: number } | undefined {

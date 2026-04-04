@@ -22,6 +22,11 @@ body {
   color: var(--text);
 }
 
+pre,
+code {
+  font-family: var(--font-geist-mono);
+}
+
 html {
   scroll-behavior: smooth;
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 
@@ -20,6 +21,7 @@ function slugify(value: string): string {
 }
 
 export function DocsToc({ className }: { className?: string }) {
+  const pathname = usePathname();
   const [headings, setHeadings] = useState<TocHeading[]>([]);
   const [activeId, setActiveId] = useState<string>("");
 
@@ -43,7 +45,7 @@ export function DocsToc({ className }: { className?: string }) {
 
     const frame = window.requestAnimationFrame(() => setHeadings(nextHeadings));
     return () => window.cancelAnimationFrame(frame);
-  }, []);
+  }, [pathname]);
 
   useEffect(() => {
     if (!headings.length) return;
