@@ -11,6 +11,9 @@ export const audioSandboxIndexContent: DocPageContent = {
         "This section defines sandbox contracts and state flow used by Q for audio investigation.",
         "It does not define runtime DSP execution.",
         "Highlighted regions are supported as first-class analysis output for timeline and canvas linking.",
+        "Audio Sandbox operates as a data and query service inside orchestration.",
+        "Sandbox becomes active after session load.",
+        "Sandbox supports repeated analysis across one lifecycle.",
       ],
       code: `Read next:
 1) /docs/audio-sandbox/overview
@@ -24,7 +27,13 @@ interface SandboxHighlightRegion {
   end: number;
   label: string;
   source: "query_match" | "difference_marker";
-}`,
+}
+
+Orchestration cross-link:
+/docs/orchestration/agent-roles
+
+Lifecycle cross-link:
+/docs/lifecycle/overview`,
     },
   ],
 };

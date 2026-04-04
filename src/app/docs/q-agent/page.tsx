@@ -1,4 +1,3 @@
-import { HStack, Stack } from "@chakra-ui/react";
 import { DocsContent } from "@/components/layout/DocsContent";
 import { CodeExample } from "@/components/ui/CodeExample";
 import { InfoCard } from "@/components/ui/InfoCard";
@@ -18,18 +17,20 @@ export default function QAgentPage() {
     <DocsContent>
       <DeprecationBanner replacementHref="/docs/overview" replacementLabel="/docs/overview" />
       <PageTitle title={page.title} description={page.description} />
-      <Stack gap={5}>
+      <div className="flex flex-col gap-5">
         {page.sections.map((section) => (
           <SectionBlock key={section.title} title={section.title} body={section.body}>
             {section.code ? <CodeExample code={section.code} /> : null}
           </SectionBlock>
         ))}
-      </Stack>
-      <HStack align="stretch" gap={4} flexDir={{ base: "column", md: "row" }} mt={8}>
+      </div>
+      <div className="mt-8 flex flex-col items-stretch gap-4 md:flex-row">
         {page.infoCards?.map((card) => (
           <InfoCard key={card.title} title={card.title} description={card.description} />
         ))}
-      </HStack>
+      </div>
     </DocsContent>
   );
 }
+
+

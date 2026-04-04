@@ -10,6 +10,7 @@ export const architectureContent: DocPageContent = {
       body: [
         "Chat: user interaction surface.",
         "Q: reasoning, clarification, planning, and routing engine.",
+        "Orchestration Layer: control plane that coordinates specialized agents and shared state.",
         "Audio Sandbox: isolated query/analysis/indexing workspace.",
         "audio.dal: deterministic execution contract.",
         "D Agent: deterministic execution runtime.",
@@ -20,17 +21,20 @@ export const architectureContent: DocPageContent = {
     {
       title: "Q Internal Split",
       body: [
-        "Q routes analysis requests to Audio Sandbox.",
-        "Q routes processing requests to Planning + DAL generation path.",
+        "Q delegates coordination to Orchestration Layer for deterministic multi-agent sequencing.",
+        "Orchestration routes analysis requests to Audio Sandbox and related intelligence services.",
+        "Orchestration routes execution-approved processing requests to DAL generation path.",
       ],
       code: `Q
-  |- Audio Sandbox (query / analysis / indexing)
-  |- DAL (processing / execution handoff)`,
+  -> Orchestration Layer
+      |- Agents (reasoning / query / comparison / recommendation)
+      |- Shared state + aggregation
+      |- DAL (execution contract / handoff)`,
     },
     {
       title: "Data Flow",
       body: ["Deterministic flow from user intent to query response or execution-ready contract."],
-      code: `Chat -> Q -> (Audio Sandbox query OR Planning -> audio.dal) -> D Agent -> Canvas -> Export`,
+      code: `Chat -> Q -> Orchestration Layer -> Agents -> DAL -> D Agent -> Canvas -> Export`,
     },
   ],
 };

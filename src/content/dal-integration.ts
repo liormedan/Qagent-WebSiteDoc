@@ -71,8 +71,29 @@ interface DALAction {
   id: string;
   type: string;
   target: "full_track" | "selected_region";
-  params?: Record<string, unknown>;
+  params?: DALActionParams;
 }`,
+    },
+    {
+      title: "DALAction Typed Params",
+      body: [
+        "Action params are typed per action family to remove untyped payload decisions during implementation.",
+      ],
+      code: `interface RemoveNoiseParams {
+  strength: number;
+  profile?: "mild" | "balanced" | "aggressive";
+}
+
+interface NormalizeLoudnessParams {
+  targetLufs: number;
+}
+
+interface EqRefineParams {
+  preset: string;
+  gainDb?: number;
+}
+
+type DALActionParams = RemoveNoiseParams | NormalizeLoudnessParams | EqRefineParams;`,
     },
     {
       title: "Invalid DAL Handling",

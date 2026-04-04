@@ -1,4 +1,3 @@
-import { Link as ChakraLink, List, Stack } from "@chakra-ui/react";
 import Link from "next/link";
 import { DocsContent } from "@/components/layout/DocsContent";
 import { CodeExample } from "@/components/ui/CodeExample";
@@ -16,7 +15,7 @@ export default function OverviewPage() {
   return (
     <DocsContent>
       <PageTitle title={page.title} description={page.description} />
-      <Stack gap={5}>
+      <div className="flex flex-col gap-5">
         {page.sections.map((section) => (
           <SectionBlock key={section.title} title={section.title} body={section.body}>
             {section.code ? <CodeExample code={section.code} /> : null}
@@ -27,35 +26,16 @@ export default function OverviewPage() {
           title="Recommended Read Order"
           body={["Read in this order to move from conceptual spec to implementation planning."]}
         >
-          <List.Root as="ol" ps={5} gap={1}>
-            <List.Item>
-              <ChakraLink asChild color="accent">
-                <Link href="/docs/contracts">/docs/contracts</Link>
-              </ChakraLink>
-            </List.Item>
-            <List.Item>
-              <ChakraLink asChild color="accent">
-                <Link href="/docs/reasoning-system">/docs/reasoning-system</Link>
-              </ChakraLink>
-            </List.Item>
-            <List.Item>
-              <ChakraLink asChild color="accent">
-                <Link href="/docs/state-machine">/docs/state-machine</Link>
-              </ChakraLink>
-            </List.Item>
-            <List.Item>
-              <ChakraLink asChild color="accent">
-                <Link href="/docs/implementation-map">/docs/implementation-map</Link>
-              </ChakraLink>
-            </List.Item>
-            <List.Item>
-              <ChakraLink asChild color="accent">
-                <Link href="/docs/function-contracts">/docs/function-contracts</Link>
-              </ChakraLink>
-            </List.Item>
-          </List.Root>
+          <ol className="list-decimal space-y-1 ps-5">
+            <li><Link href="/docs/contracts" className="text-[var(--accent)] hover:underline">/docs/contracts</Link></li>
+            <li><Link href="/docs/reasoning-system" className="text-[var(--accent)] hover:underline">/docs/reasoning-system</Link></li>
+            <li><Link href="/docs/state-machine" className="text-[var(--accent)] hover:underline">/docs/state-machine</Link></li>
+            <li><Link href="/docs/implementation-map" className="text-[var(--accent)] hover:underline">/docs/implementation-map</Link></li>
+            <li><Link href="/docs/function-contracts" className="text-[var(--accent)] hover:underline">/docs/function-contracts</Link></li>
+          </ol>
         </SectionBlock>
-      </Stack>
+      </div>
     </DocsContent>
   );
 }
+

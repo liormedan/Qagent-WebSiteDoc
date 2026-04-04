@@ -1,43 +1,39 @@
-import { Badge, Card, Heading, HStack, Text } from "@chakra-ui/react";
 import Link from "next/link";
-import type { DocsSection } from "@/lib/navigation";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import type { DocsNavGroup } from "@/lib/navigation";
 
-type Props = {
-  title: string;
-  description: string;
-  href: string;
-  section?: DocsSection;
-  icon?: string;
-};
-
-export function NavCard({ title, description, href, section = "Spec", icon }: Props) {
-  const isDesign = section === "Design";
-  const isAudioSandbox = section === "Audio Sandbox";
-  const isAudioComparison = section === "Audio Comparison";
+export function NavCard({ title, description, href, section = "Start Here" }: { title: string; description: string; href: string; section?: DocsNavGroup; icon?: string }) {
+  const isImplementation = section === "Implementation";
+  const isDecision = section === "Decision System";
+  const isAudio = section === "Audio Intelligence";
+  const isMainFlow = section === "Main Flow";
+  const [shortDescription, ...rest] = description.split(". ");
+  const fullDescription = rest.length > 0 ? `${shortDescription}. ${rest.join(". ")}` : description;
 
   return (
-    <Card.Root
-      asChild
-      bg={isDesign ? "gray.900" : isAudioSandbox ? "gray.950" : isAudioComparison ? "gray.900" : "panel"}
-      borderColor={isDesign ? "cyan.700" : isAudioSandbox ? "teal.700" : isAudioComparison ? "orange.700" : "border"}
-      borderWidth="1px"
-      _hover={{ borderColor: "accent", transform: "translateY(-1px)" }}
-      transition="all 0.2s ease"
-    >
-      <Link href={href}>
-        <Card.Body>
-          <HStack justify="space-between" mb={2}>
-            <Heading size="sm">
-              {icon ? `${icon} ` : ""}
-              {title}
-            </Heading>
-            <Badge colorPalette={isDesign ? "cyan" : isAudioSandbox ? "teal" : isAudioComparison ? "orange" : "gray"}>
-              {section}
-            </Badge>
-          </HStack>
-          <Text color="muted">{description}</Text>
-        </Card.Body>
-      </Link>
-    </Card.Root>
+    <Card className={isImplementation || isDecision || isAudio || isMainFlow ? "bg-slate-900" : ""}>
+      <CardContent>
+        <details className="group" open={false}>
+          <summary className="cursor-pointer list-none space-y-3">
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="text-sm font-semibold">{title}</h3>
+              <Badge className={isImplementation ? "bg-cyan-700" : isDecision ? "bg-teal-700" : isAudio ? "bg-orange-700" : "bg-slate-700"}>
+                {section}
+              </Badge>
+            </div>
+            <p className="text-sm leading-6 text-[var(--muted)]">{shortDescription}</p>
+            <p className="text-xs text-slate-400">Expand</p>
+          </summary>
+
+          <div className="mt-3 space-y-3 border-t border-[var(--border)] pt-3">
+            <p className="text-sm text-[var(--muted)]">{fullDescription}</p>
+            <Link href={href} className="inline-block text-sm text-slate-300 hover:text-[var(--accent)]">
+              Open page
+            </Link>
+          </div>
+        </details>
+      </CardContent>
+    </Card>
   );
 }

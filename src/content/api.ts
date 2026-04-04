@@ -32,9 +32,15 @@ export const apiContent: DocPageContent = {
       body: [
         "A minimal first contract for deterministic execution.",
       ],
-      code: `interface DalContract {
+      code: `type DalPayloadMap = {
+  remove_noise: { strength: number; profile?: 'mild' | 'balanced' | 'aggressive' }
+  normalize_loudness: { targetLufs: number }
+  eq_refine: { preset: string; gainDb?: number }
+}
+
+interface DalContract<TAction extends keyof DalPayloadMap = keyof DalPayloadMap> {
   action: string;
-  payload: Record<string, unknown>;
+  payload: DalPayloadMap[TAction];
   hash: string;
 }`,
     },

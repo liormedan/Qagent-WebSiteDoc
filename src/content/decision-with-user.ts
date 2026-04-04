@@ -45,5 +45,19 @@ export const decisionWithUserContent: DocPageContent = {
   | 'timeout'
   | 'no_previous_version'`,
     },
+    {
+      title: "Recommendation Approval Flow",
+      body: [
+        "Q presents recommendation cards with confidence, expected impact, and tradeoffs for approval.",
+        "User can accept, reject, or ask for an alternative recommendation.",
+        "User can request comparison before approving recommendation.",
+        "Decision approval is the gate before execution runtime starts.",
+        "Approval is recorded as explicit decision evidence before execution.",
+      ],
+      code: `recommendation approval flow
+recommendation proposed
+  -> user accept | user reject | user ask_alternative | user request_comparison
+  -> approved action only then eligible for execution`,
+    },
   ],
 };

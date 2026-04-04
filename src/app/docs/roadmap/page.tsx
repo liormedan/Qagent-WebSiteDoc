@@ -1,4 +1,3 @@
-import { Stack } from "@chakra-ui/react";
 import { DocsContent } from "@/components/layout/DocsContent";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
@@ -14,11 +13,12 @@ export default function RoadmapPage() {
   return (
     <DocsContent>
       <PageTitle title={page.title} description={page.description} />
-      <Stack gap={5}>
+      <div className="flex flex-col gap-5">
         {page.sections.map((section) => (
           <SectionBlock key={section.title} title={section.title} body={section.body} />
         ))}
-      </Stack>
+      </div>
     </DocsContent>
   );
 }
+

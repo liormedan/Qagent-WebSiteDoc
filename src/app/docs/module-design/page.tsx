@@ -1,4 +1,3 @@
-import { Link as ChakraLink, List, Stack } from "@chakra-ui/react";
 import Link from "next/link";
 import { DocsContent } from "@/components/layout/DocsContent";
 import { PageTitle } from "@/components/ui/PageTitle";
@@ -103,22 +102,22 @@ export default function ModuleDesignPage() {
         description="Future Q runtime modules with IO boundaries, dependencies, and failure points."
       />
       <SectionBlock title="Module Catalog" body={["Use anchor links to jump to module specs."]}>
-        <List.Root as="ul" ps={5} gap={1}>
+        <ul className="list-disc space-y-1 ps-5">
           {modules.map((module) => (
-            <List.Item key={module.id}>
-              <ChakraLink asChild color="accent">
-                <Link href={`#${module.id}`}>{module.name}</Link>
-              </ChakraLink>
-            </List.Item>
+            <li key={module.id}>
+              <Link href={`#${module.id}`} className="text-[var(--accent)] hover:underline">
+                {module.name}
+              </Link>
+            </li>
           ))}
-        </List.Root>
+        </ul>
       </SectionBlock>
 
-      <Stack gap={5} mt={5}>
+      <div className="mt-5 flex flex-col gap-5">
         {modules.map((module) => (
           <SectionBlock key={module.id} title={module.name} body={module.body} id={module.id} />
         ))}
-      </Stack>
+      </div>
     </DocsContent>
   );
 }

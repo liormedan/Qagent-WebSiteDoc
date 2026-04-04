@@ -11,6 +11,7 @@ export const reasoningSystemContent: DocPageContent = {
       body: [
         "Internal reasoning is a bounded analysis loop where Q evaluates candidate intents, target scope, and action risks.",
         "It is activated when initial intent confidence is medium or when user wording is ambiguous.",
+        "Reasoning is one orchestration role and feeds downstream routing, recommendation, and decision steps.",
       ],
       code: `type QReasoningState =
   | "initial"
@@ -80,6 +81,17 @@ export const reasoningSystemContent: DocPageContent = {
   basedOnDifferences: string[]
   confidence: number
 }`,
+    },
+    {
+      title: "Proactive Recommendation Before Action",
+      body: [
+        "Q may suggest one or more recommendations before any execution handoff when confidence is sufficient.",
+        "Recommendation output should include expected impact and explicit tradeoffs so user can approve intentionally.",
+        "Execution remains gated until user approval in decision-with-user flow.",
+        "Recommendation is a reasoning outcome, not direct execution.",
+        "Recommendation must be evidence-based before it is shown as actionable guidance.",
+        "Orchestration consumes reasoning output as a structured signal, not as an execution command.",
+      ],
     },
     {
       title: "Reasoning Does Not",

@@ -1,74 +1,150 @@
-export type DocsSection = "Spec" | "Design" | "Audio Sandbox" | "Audio Comparison";
+export type DocsNavGroup =
+  | "Start Here"
+  | "Main Flow"
+  | "Decision System"
+  | "Audio Intelligence"
+  | "Implementation";
 
 export type DocNavItem = {
   title: string;
   description: string;
   href: string;
-  section: DocsSection;
-  icon?: string;
-  legacy?: boolean;
+  group: DocsNavGroup;
+  recommendedFirst?: boolean;
+  flowStep?: number;
+  flowTotal?: number;
+  flowHelper?: string;
 };
 
+const orderedGroups: DocsNavGroup[] = ["Start Here", "Main Flow", "Decision System", "Audio Intelligence", "Implementation"];
+
 export const docsNavigation: DocNavItem[] = [
-  { title: "Overview", description: "Q system role and operational flow", href: "/docs/overview", section: "Spec", icon: "[S]" },
-  { title: "Contracts", description: "Core contracts and runtime contract usage", href: "/docs/contracts", section: "Spec", icon: "[S]" },
-  { title: "Intents", description: "Intent detection and resolution strategy", href: "/docs/intents", section: "Spec", icon: "[S]" },
-  { title: "Planning", description: "Plan construction after intent resolution", href: "/docs/planning", section: "Spec", icon: "[S]" },
-  { title: "Constraints", description: "Safety, determinism, and reasoning limits", href: "/docs/constraints", section: "Spec", icon: "[S]" },
-  { title: "Reasoning System", description: "Reasoning loop and clarification behavior", href: "/docs/reasoning-system", section: "Spec", icon: "[S]" },
-  { title: "DAL Integration", description: "DAL preconditions, mapping, and validation", href: "/docs/dal-integration", section: "Spec", icon: "[S]" },
-  { title: "State Machine", description: "Allowed states and transitions", href: "/docs/state-machine", section: "Spec", icon: "[S]" },
-  { title: "Decision Rules", description: "Deterministic routing rules", href: "/docs/decision-rules", section: "Spec", icon: "[S]" },
-  { title: "Decision With User", description: "Shared recommendation and user approval protocol", href: "/docs/decision-with-user", section: "Spec", icon: "[S]" },
-  { title: "Audio Intelligence", description: "Analysis intelligence boundaries", href: "/docs/audio-intelligence", section: "Spec", icon: "[S]" },
-  { title: "Audio Memory", description: "Persistent version lineage and timeline linkage", href: "/docs/audio-memory", section: "Spec", icon: "[S]" },
-  { title: "Architecture", description: "System components and data flow", href: "/docs/architecture", section: "Spec", icon: "[S]" },
-  { title: "API Contracts", description: "Typed interfaces and payload models", href: "/docs/api", section: "Spec", icon: "[S]" },
-  { title: "Roadmap", description: "Planned milestones", href: "/docs/roadmap", section: "Spec", icon: "[S]" },
-  { title: "Q Agent", description: "Legacy summary page", href: "/docs/q-agent", section: "Spec", icon: "[S]", legacy: true },
-  { title: "audio.dal", description: "Legacy DAL intro page", href: "/docs/audio-dal", section: "Spec", icon: "[S]", legacy: true },
+  { title: "System Overview", description: "Understand the system mission and request lifecycle before technical details.", href: "/docs/overview", group: "Start Here", recommendedFirst: true },
+  { title: "System Map", description: "See how Q, orchestration, runtime, and memory connect as one system.", href: "/docs/architecture", group: "Start Here" },
+  { title: "One Request Journey", description: "Follow one complete request from input to versioned output and review.", href: "/docs/orchestration/orchestration-flow", group: "Start Here" },
+  { title: "Core Concepts", description: "Learn the contracts and terms that make the rest of the docs deterministic.", href: "/docs/contracts", group: "Start Here" },
 
-  { title: "Implementation Map", description: "Mapping spec concepts to modules/files", href: "/docs/implementation-map", section: "Design", icon: "[D]" },
-  { title: "Runtime Flow Design", description: "Future runtime branches and stop conditions", href: "/docs/runtime-flow-design", section: "Design", icon: "[D]" },
-  { title: "Module Design", description: "Responsibilities, IO, dependencies, failures", href: "/docs/module-design", section: "Design", icon: "[D]" },
-  { title: "Function Contracts", description: "Core function signatures and intent", href: "/docs/function-contracts", section: "Design", icon: "[D]" },
-  { title: "Development Phases", description: "Build order with definition of done", href: "/docs/development-phases", section: "Design", icon: "[D]" },
-  { title: "Testing Strategy", description: "Unit/flow/ambiguity/approval/DAL tests", href: "/docs/testing-strategy", section: "Design", icon: "[D]" },
+  {
+    title: "Input / Intent",
+    description: "Understand how Q classifies requests and chooses the first system route.",
+    href: "/docs/intents",
+    group: "Main Flow",
+    flowStep: 1,
+    flowTotal: 6,
+    flowHelper: "Identify user intent and route the request into the correct operational path.",
+  },
+  {
+    title: "Audio Sandbox Analysis",
+    description: "Understand how sandbox analysis builds evidence before any irreversible action.",
+    href: "/docs/audio-sandbox/overview",
+    group: "Main Flow",
+    flowStep: 2,
+    flowTotal: 6,
+    flowHelper: "Analyze loaded audio context and extract query/feature evidence for decisions.",
+  },
+  {
+    title: "Audio Comparison",
+    description: "Understand how Q quantifies before/after differences for safe decision-making.",
+    href: "/docs/audio-comparison/overview",
+    group: "Main Flow",
+    flowStep: 3,
+    flowTotal: 6,
+    flowHelper: "Compare candidate audio against the current version before recommending changes.",
+  },
+  {
+    title: "Recommendation",
+    description: "Understand how Q turns evidence into ranked, explainable action suggestions.",
+    href: "/docs/recommendation-engine/overview",
+    group: "Main Flow",
+    flowStep: 4,
+    flowTotal: 6,
+    flowHelper: "Recommend next actions with confidence and tradeoffs before approval.",
+  },
+  {
+    title: "Execution",
+    description: "Understand how approved decisions become runtime execution and new output versions.",
+    href: "/docs/execution-runtime/overview",
+    group: "Main Flow",
+    flowStep: 5,
+    flowTotal: 6,
+    flowHelper: "Execute approved DAL actions and return result status plus output version links.",
+  },
+  {
+    title: "Lifecycle",
+    description: "Understand how sessions continue across repeated analyze-decide-execute cycles.",
+    href: "/docs/lifecycle/overview",
+    group: "Main Flow",
+    flowStep: 6,
+    flowTotal: 6,
+    flowHelper: "Continue, review, and persist the session state across multiple iterations.",
+  },
 
-  { title: "Section Home", description: "Audio sandbox section index", href: "/docs/audio-sandbox", section: "Audio Sandbox", icon: "[A]" },
-  { title: "Overview", description: "Audio sandbox purpose and boundaries", href: "/docs/audio-sandbox/overview", section: "Audio Sandbox", icon: "[A]" },
-  { title: "Session Model", description: "Sandbox session lifecycle contract", href: "/docs/audio-sandbox/session-model", section: "Audio Sandbox", icon: "[A]" },
-  { title: "Segment Model", description: "Audio segmentation contract", href: "/docs/audio-sandbox/segment-model", section: "Audio Sandbox", icon: "[A]" },
-  { title: "Transcript Index", description: "Word-level searchable transcript model", href: "/docs/audio-sandbox/transcript-index", section: "Audio Sandbox", icon: "[A]" },
-  { title: "Audio Features", description: "Feature vector contract for analysis", href: "/docs/audio-sandbox/audio-features", section: "Audio Sandbox", icon: "[A]" },
-  { title: "Query Operations", description: "Sandbox query contracts and match model", href: "/docs/audio-sandbox/query-operations", section: "Audio Sandbox", icon: "[A]" },
-  { title: "Integration with Q", description: "Q routing and enrichment rules", href: "/docs/audio-sandbox/integration-with-q", section: "Audio Sandbox", icon: "[A]" },
-  { title: "State Flow", description: "Sandbox states and transitions", href: "/docs/audio-sandbox/state-flow", section: "Audio Sandbox", icon: "[A]" },
-  { title: "Scenario Examples", description: "End-to-end query and analysis scenarios", href: "/docs/audio-sandbox/scenario-examples", section: "Audio Sandbox", icon: "[A]" },
+  { title: "Orchestration Overview", description: "Understand how orchestration unifies all subsystem actions into one control loop.", href: "/docs/orchestration/overview", group: "Decision System" },
+  { title: "Agent Roles", description: "Understand which component owns each decision and handoff.", href: "/docs/orchestration/agent-roles", group: "Decision System" },
+  { title: "Communication Model", description: "Understand the typed request/response contracts between agents.", href: "/docs/orchestration/communication-model", group: "Decision System" },
+  { title: "Routing Logic", description: "Understand exactly how intent maps to subsystem routing decisions.", href: "/docs/orchestration/routing-logic", group: "Decision System" },
+  { title: "Shared State", description: "Understand what shared state keeps all agents synchronized.", href: "/docs/orchestration/shared-state", group: "Decision System" },
+  { title: "Orchestration Flow", description: "Understand how evidence aggregates into one decision packet.", href: "/docs/orchestration/orchestration-flow", group: "Decision System" },
+  { title: "State Machine", description: "Understand allowed orchestration states and transition limits.", href: "/docs/orchestration/state-machine", group: "Decision System" },
+  { title: "Conflict Resolution", description: "Understand how the system resolves conflicting user/system signals.", href: "/docs/orchestration/conflict-resolution", group: "Decision System" },
+  { title: "Failure Handling", description: "Understand fallback behavior when one subsystem fails.", href: "/docs/orchestration/failure-handling", group: "Decision System" },
+  { title: "UI Reflection", description: "Understand how orchestration state appears in chat and canvas.", href: "/docs/orchestration/ui-reflection", group: "Decision System" },
 
-  { title: "Overview", description: "Why A/B comparison is essential for decisions and trust", href: "/docs/audio-comparison/overview", section: "Audio Comparison", icon: "[C]" },
-  { title: "Versioning", description: "Version contract and lineage graph for every action", href: "/docs/audio-comparison/versioning", section: "Audio Comparison", icon: "[C]" },
-  { title: "Comparison Model", description: "Base-vs-compared relationship model", href: "/docs/audio-comparison/comparison-model", section: "Audio Comparison", icon: "[C]" },
-  { title: "Difference Model", description: "Typed region-level change model and impact", href: "/docs/audio-comparison/difference-model", section: "Audio Comparison", icon: "[C]" },
-  { title: "Playback Modes", description: "A/B toggle, sync, instant switch, and loop compare", href: "/docs/audio-comparison/playback-modes", section: "Audio Comparison", icon: "[C]" },
-  { title: "Canvas UI", description: "Waveform overlay, split view, markers, and states", href: "/docs/audio-comparison/canvas-ui", section: "Audio Comparison", icon: "[C]" },
-  { title: "User Flow", description: "Upload to process to compare to decision scenarios", href: "/docs/audio-comparison/user-flow", section: "Audio Comparison", icon: "[C]" },
+  { title: "Comparison Overview", description: "Understand why comparison evidence is central to trustworthy recommendations.", href: "/docs/audio-comparison/overview", group: "Audio Intelligence" },
+  { title: "Versioning", description: "Understand how new outputs become traceable, comparable candidates.", href: "/docs/audio-comparison/versioning", group: "Audio Intelligence" },
+  { title: "Comparison Model", description: "Understand the exact fields used to bind A/B comparison records.", href: "/docs/audio-comparison/comparison-model", group: "Audio Intelligence" },
+  { title: "Difference Model", description: "Understand the exact metrics used to quantify audio changes.", href: "/docs/audio-comparison/difference-model", group: "Audio Intelligence" },
+  { title: "Playback Modes", description: "Understand how A/B playback exposes differences without bias.", href: "/docs/audio-comparison/playback-modes", group: "Audio Intelligence" },
+  { title: "Canvas UI", description: "Understand how comparison evidence is visualized for user review.", href: "/docs/audio-comparison/canvas-ui", group: "Audio Intelligence" },
+  { title: "User Flow", description: "Understand the comparison journey from upload to accept/revert.", href: "/docs/audio-comparison/user-flow", group: "Audio Intelligence" },
+
+  { title: "Implementation Map", description: "Understand where each spec concept lands in implementation modules.", href: "/docs/implementation-map", group: "Implementation" },
+  { title: "Runtime Flow Design", description: "Understand runtime branch behavior before writing production code.", href: "/docs/runtime-flow-design", group: "Implementation" },
+  { title: "Module Design", description: "Understand module ownership, IO, and failure boundaries.", href: "/docs/module-design", group: "Implementation" },
+  { title: "Function Contracts", description: "Understand the callable contract surface needed by developers.", href: "/docs/function-contracts", group: "Implementation" },
+  { title: "Development Phases", description: "Understand implementation sequencing and delivery checkpoints.", href: "/docs/development-phases", group: "Implementation" },
+  { title: "Testing Strategy", description: "Understand how to validate correctness across flows and edge cases.", href: "/docs/testing-strategy", group: "Implementation" },
 ];
 
-export function getNavigationBySection(section: DocsSection): DocNavItem[] {
-  return docsNavigation.filter((item) => item.section === section);
+export function getNavigationByGroup(group: DocsNavGroup): DocNavItem[] {
+  return docsNavigation.filter((item) => item.group === group);
 }
 
 export function getNavigationItemByHref(href: string): DocNavItem | undefined {
   return docsNavigation.find((item) => item.href === href);
 }
 
-export function getNavigationSections(): DocsSection[] {
-  const ordered: DocsSection[] = [];
+export function getNavigationGroups(): DocsNavGroup[] {
+  return orderedGroups;
+}
+
+export function getFlowProgressByHref(href: string): { group: DocsNavGroup; step: number; total: number } | undefined {
+  const item = getNavigationItemByHref(href);
+  if (!item || item.group !== "Main Flow" || !item.flowStep || !item.flowTotal) {
+    return undefined;
+  }
+  return { group: item.group, step: item.flowStep, total: item.flowTotal };
+}
+
+export function getFlowOrderedNavigation(): DocNavItem[] {
+  const seen = new Set<string>();
+  const ordered: DocNavItem[] = [];
   for (const item of docsNavigation) {
-    if (!ordered.includes(item.section)) {
-      ordered.push(item.section);
-    }
+    if (seen.has(item.href)) continue;
+    seen.add(item.href);
+    ordered.push(item);
   }
   return ordered;
+}
+
+export function getFlowNeighborsByHref(href: string): { previous?: DocNavItem; next?: DocNavItem } {
+  const flowItems = getNavigationByGroup("Main Flow");
+  const index = flowItems.findIndex((item) => item.href === href);
+  if (index < 0) {
+    return {};
+  }
+  return {
+    previous: flowItems[index - 1],
+    next: flowItems[index + 1],
+  };
 }

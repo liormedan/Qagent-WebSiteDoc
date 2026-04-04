@@ -1,13 +1,7 @@
-import { Box } from "@chakra-ui/react";
-
-type Props = {
-  children: React.ReactNode;
-};
-
-export function DocsContent({ children }: Props) {
+export function DocsContent({ children }: { children: React.ReactNode }) {
   return (
-    <Box maxW="5xl" mx="auto" w="full">
+    <article data-docs-content className="mx-auto w-full max-w-4xl py-6 md:py-8">
       {children}
-    </Box>
+    </article>
   );
 }

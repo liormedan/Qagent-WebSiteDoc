@@ -1,41 +1,40 @@
-import { Button, Container, Heading, List, Stack, Text } from "@chakra-ui/react";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function HomePage() {
   return (
-    <Container maxW="5xl" py={{ base: 16, md: 24 }}>
-      <Stack gap={8} align="start">
-        <Text color="accent" fontWeight="bold" letterSpacing="widest" textTransform="uppercase">
-          WaveQ Docs
-        </Text>
-        <Heading size="4xl" lineHeight="1.1">
+    <main className="mx-auto max-w-5xl px-4 py-16 md:py-24">
+      <div className="flex flex-col items-start gap-8">
+        <p className="text-sm font-bold tracking-widest text-[var(--accent)] uppercase">WaveQ Docs</p>
+        <h1 className="text-4xl font-bold leading-tight md:text-6xl">
           Engineering documentation for Q Agent and audio.dal
-        </Heading>
-        <Text color="muted" maxW="3xl" fontSize="lg">
-          Q is a planning and reasoning agent that resolves intent ambiguity, asks clarifications when needed, and generates deterministic DAL contracts for safe execution.
-        </Text>
+        </h1>
+        <p className="max-w-3xl text-lg text-[var(--muted)]">
+          Q is a planning and reasoning agent that resolves intent ambiguity, asks clarifications when needed, and
+          generates deterministic DAL contracts for safe execution.
+        </p>
 
-        <List.Root pl={4} gap={2}>
-          <List.Item>Planner + reasoner + clarification loop before execution handoff</List.Item>
-          <List.Item>Strict TypeScript contracts for intents, plans, safety, and DAL</List.Item>
-          <List.Item>Design layer that maps spec directly to implementation phases</List.Item>
-        </List.Root>
+        <ul className="list-disc space-y-2 ps-4">
+          <li>Planner + reasoner + clarification loop before execution handoff</li>
+          <li>Strict TypeScript contracts for intents, plans, safety, and DAL</li>
+          <li>Design layer that maps spec directly to implementation phases</li>
+        </ul>
 
-        <Stack direction={{ base: "column", md: "row" }} gap={3}>
-          <Button asChild colorPalette="cyan" size="lg">
+        <div className="flex flex-col gap-3 md:flex-row">
+          <Button asChild>
             <Link href="/docs">Open Docs</Link>
           </Button>
-          <Button asChild variant="outline" size="lg">
+          <Button asChild variant="outline">
             <Link href="/docs/overview">Quick Start</Link>
           </Button>
-          <Button asChild variant="outline" size="lg">
+          <Button asChild variant="outline">
             <Link href="/docs/architecture">Architecture</Link>
           </Button>
-          <Button asChild variant="outline" size="lg">
+          <Button asChild variant="outline">
             <Link href="/docs/api">API</Link>
           </Button>
-        </Stack>
-      </Stack>
-    </Container>
+        </div>
+      </div>
+    </main>
   );
 }

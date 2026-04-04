@@ -1,108 +1,78 @@
 "use client";
 
-import { Box, Input, Link as ChakraLink, Stack, Text } from "@chakra-ui/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo, useState } from "react";
-import { getNavigationBySection, getNavigationItemByHref, getNavigationSections } from "@/lib/navigation";
+import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { getNavigationByGroup, getNavigationGroups, getNavigationItemByHref } from "@/lib/navigation";
 
-export function DocsSidebar() {
+export function DocsSidebar({ className, onNavigate }: { className?: string; onNavigate?: () => void }) {
   const pathname = usePathname();
   const [query, setQuery] = useState("");
-  const activeSection = getNavigationItemByHref(pathname)?.section ?? "Spec";
-  const sections = getNavigationSections();
-
+  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
+  const activeGroup = getNavigationItemByHref(pathname)?.group ?? "Start Here";
+  const groups = getNavigationGroups();
   const normalizedQuery = query.trim().toLowerCase();
 
-  const visibleBySection = useMemo(() => {
-    return sections.reduce<Record<string, ReturnType<typeof getNavigationBySection>>>(
-      (acc, section) => {
-        const items = getNavigationBySection(section);
-        acc[section] = normalizedQuery
-          ? items.filter(
-              (item) =>
-                item.title.toLowerCase().includes(normalizedQuery) ||
-                item.description.toLowerCase().includes(normalizedQuery),
-            )
-          : items;
-        return acc;
-      },
-      {},
-    );
-  }, [sections, normalizedQuery]);
+  const visibleByGroup = useMemo(() => {
+    return groups.reduce<Record<string, ReturnType<typeof getNavigationByGroup>>>((acc, group) => {
+      const items = getNavigationByGroup(group);
+      acc[group] = normalizedQuery
+        ? items.filter((item) => item.title.toLowerCase().includes(normalizedQuery) || item.description.toLowerCase().includes(normalizedQuery))
+        : items;
+      return acc;
+    }, {});
+  }, [groups, normalizedQuery]);
 
   return (
-    <Box
-      as="aside"
-      w={{ base: "full", md: "320px" }}
-      display={{ base: "none", md: "block" }}
-      borderRightWidth="1px"
-      borderColor="border"
-      background="panel"
-      px={5}
-      py={6}
-      position="sticky"
-      top={0}
-      h="100vh"
-      overflowY="auto"
-      css={{
-        scrollbarWidth: "thin",
-        "&::-webkit-scrollbar": { width: "8px" },
-        "&::-webkit-scrollbar-thumb": { background: "#2d3748", borderRadius: "8px" },
-      }}
-    >
-      <Stack gap={4}>
-        <Text fontWeight="bold">WaveQ Docs</Text>
-        <Input
-          size="sm"
-          placeholder="Search docs..."
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          bg="gray.900"
-          borderColor="border"
-        />
+    <aside className={cn("h-full overflow-y-auto bg-[var(--panel)] px-5 py-6", className)}>
+      <div className="space-y-3">
+        <Link href="/docs" className="inline-block font-bold" onClick={() => setQuery("")}>
+          WaveQ Docs
+        </Link>
+        <Input placeholder="Search docs..." value={query} onChange={(event) => setQuery(event.target.value)} />
 
-        {sections.map((section) => {
-          const items = visibleBySection[section] ?? [];
-          const shouldOpen = normalizedQuery.length > 0 || section === activeSection;
+        {groups.map((group) => {
+          const items = visibleByGroup[group] ?? [];
+          const shouldOpen = normalizedQuery.length > 0 ? group === activeGroup || items.length > 0 : Boolean(expandedGroups[group]);
 
           return (
-            <details key={section} open={shouldOpen}>
-              <summary style={{ cursor: "pointer", listStyleType: "none", paddingTop: "8px", paddingBottom: "8px" }}>
-                <Text color="muted" fontSize="xs" textTransform="uppercase" letterSpacing="wide">
-                  {section}
-                </Text>
-              </summary>
-              <Stack gap={1} mt={2}>
+            <details
+              key={group}
+              open={shouldOpen}
+              onToggle={(event) => {
+                if (normalizedQuery.length > 0) return;
+                const isOpen = (event.currentTarget as HTMLDetailsElement).open;
+                setExpandedGroups((prev) => ({ ...prev, [group]: isOpen }));
+              }}
+            >
+              <summary className="cursor-pointer py-2 text-xs uppercase tracking-wide text-[var(--muted)]">{group}</summary>
+              <div className="mt-1.5 space-y-0.5">
                 {items.map((item) => {
                   const active = pathname === item.href;
                   return (
-                    <ChakraLink
-                      asChild
+                    <Link
                       key={item.href}
-                      px={3}
-                      py={2}
-                      borderRadius="md"
-                      bg={active ? "gray.800" : "transparent"}
-                      _hover={{ bg: "gray.800" }}
+                      href={item.href}
+                      onClick={onNavigate}
+                      title={item.description}
+                      className={`block rounded-md px-3 py-1.5 ${active ? "bg-slate-800" : "hover:bg-slate-800"}`}
                     >
-                      <Link href={item.href}>
-                        {item.icon ? `${item.icon} ` : ""}
-                        {item.title}
-                      </Link>
-                    </ChakraLink>
+                      <span className="flex items-center gap-2">
+                        <span>{item.title}</span>
+                        {item.recommendedFirst ? <Badge className="bg-green-700">Recommended First</Badge> : null}
+                      </span>
+                    </Link>
                   );
                 })}
-                {items.length === 0 ? (
-                  <Text fontSize="sm" color="muted" px={3} py={2}>
-                    No results in {section}
-                  </Text>
-                ) : null}
-              </Stack>
+                {items.length === 0 ? <p className="px-3 py-2 text-sm text-[var(--muted)]">No results in {group}</p> : null}
+              </div>
             </details>
           );
         })}
-      </Stack>
-    </Box>
+      </div>
+    </aside>
   );
 }

@@ -1,25 +1,14 @@
-import { Box } from "@chakra-ui/react";
+"use client";
 
-type Props = {
-  code: string;
-};
+import { useDocsReadMode } from "@/components/layout/DocsReadModeContext";
 
-export function CodeExample({ code }: Props) {
+export function CodeExample({ code }: { code: string }) {
+  const { mode } = useDocsReadMode();
+  if (mode !== "technical") return null;
+
   return (
-    <Box
-      as="pre"
-      mt={1}
-      p={4}
-      borderRadius="md"
-      borderWidth="1px"
-      borderColor="border"
-      bg="gray.950"
-      overflowX="auto"
-      fontSize="sm"
-      whiteSpace="pre-wrap"
-      wordBreak="break-word"
-    >
-      <Box as="code">{code}</Box>
-    </Box>
+    <pre className="mt-1 overflow-x-auto rounded-md border border-[var(--border)] bg-slate-950 p-4 text-sm whitespace-pre-wrap break-words">
+      <code>{code}</code>
+    </pre>
   );
 }

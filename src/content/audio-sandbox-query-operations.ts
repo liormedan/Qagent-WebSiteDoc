@@ -17,11 +17,36 @@ export const audioSandboxQueryOperationsContent: DocPageContent = {
     {
       title: "Contracts",
       body: ["Deterministic query request and match response payloads."],
-      code: `interface AudioSandboxQuery {
+      code: `interface TextQueryConstraints {
+  caseSensitive?: boolean
+  exactMatch?: boolean
+}
+
+interface AcousticQueryConstraints {
+  minLufs?: number
+  maxNoiseLevel?: 'none' | 'low' | 'medium' | 'high'
+}
+
+interface SemanticQueryConstraints {
+  topicHints?: string[]
+}
+
+interface StructuralQueryConstraints {
+  minDurationSec?: number
+  boundaryToleranceMs?: number
+}
+
+type AudioSandboxQueryConstraints =
+  | TextQueryConstraints
+  | AcousticQueryConstraints
+  | SemanticQueryConstraints
+  | StructuralQueryConstraints
+
+interface AudioSandboxQuery {
   type: "text" | "acoustic" | "semantic" | "structural";
   query: string;
   targetRegion?: { startSec: number; endSec: number };
-  constraints?: Record<string, unknown>;
+  constraints?: AudioSandboxQueryConstraints;
 }
 
 interface AudioQueryMatch {
