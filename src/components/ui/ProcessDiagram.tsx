@@ -14,13 +14,13 @@ export type ProcessStep = {
 
 export function ProcessDiagram({ steps }: { steps: ProcessStep[] }) {
   return (
-    <div className="flex flex-row items-center justify-center space-x-2 py-4 overflow-x-auto w-full no-scrollbar">
+    <div className="flex w-full flex-wrap items-center justify-center gap-2 py-4">
       {steps.map((step, index) => (
         <React.Fragment key={index}>
-          <div className="flex flex-col items-center flex-shrink-0">
+          <div className="flex w-full flex-col items-center sm:w-48">
             <Card
               className={cn(
-                "w-48 transition-all hover:scale-[1.05]",
+                "w-full transition-all hover:scale-[1.02]",
                 step.isBoundary
                   ? "border-2 border-purple-500/50 bg-slate-950 shadow-[0_0_20px_-10px_rgba(168,85,247,0.4)]"
                   : "border border-[var(--border)] bg-slate-900/50 backdrop-blur-sm"
@@ -44,7 +44,7 @@ export function ProcessDiagram({ steps }: { steps: ProcessStep[] }) {
           </div>
 
           {index < steps.length - 1 && (
-            <div className="flex items-center flex-shrink-0">
+            <div className="hidden items-center shrink-0 sm:flex">
               <ArrowRight className="h-4 w-4 text-[var(--accent)] opacity-50" />
             </div>
           )}

@@ -7,15 +7,15 @@ import { cn } from "@/lib/utils";
 
 const orderedModules = [
   { label: "AgentQ - stracture", href: "/docs/architecture" },
-  { label: "01. QAgent Core", href: "/docs/architecture#01-qagent-core" },
-  { label: "02. Files Handler", href: "/docs/architecture#02-files-handler" },
-  { label: "03. Analyzer", href: "/docs/architecture#03-analyzer" },
-  { label: "04. Intent + Clarification", href: "/docs/architecture#04-intent-clarification" },
-  { label: "05. DAL", href: "/docs/architecture#05-dal" },
-  { label: "06. UAgent", href: "/docs/architecture#06-uagent" },
-  { label: "07. Approval (UI-triggered, Core-enforced)", href: "/docs/architecture#07-approval-ui-triggered-core-enforced" },
-  { label: "08. DAgent", href: "/docs/architecture#08-dagent" },
-  { label: "09. Versioning", href: "/docs/architecture#09-versioning" },
+  { label: "QAgent Core", href: "/docs/architecture#01-qagent-core" },
+  { label: "Files Handler", href: "/docs/architecture#02-files-handler" },
+  { label: "Analyzer", href: "/docs/architecture#03-analyzer" },
+  { label: "Intent + Clarification", href: "/docs/architecture#04-intent-clarification" },
+  { label: "DAL", href: "/docs/architecture#05-dal" },
+  { label: "UAgent", href: "/docs/architecture#06-uagent" },
+  { label: "Approval (UI-triggered, Core-enforced)", href: "/docs/architecture#07-approval-ui-triggered-core-enforced" },
+  { label: "DAgent", href: "/docs/architecture#08-dagent" },
+  { label: "Versioning", href: "/docs/architecture#09-versioning" },
 ];
 
 export function DocsSidebar({ className, onNavigate }: { className?: string; onNavigate?: () => void }) {

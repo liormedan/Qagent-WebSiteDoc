@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Fragment } from "react";
 import { DocsContent } from "@/components/layout/DocsContent";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -13,6 +12,7 @@ type LifecycleNode = {
 
 type ModuleCard = {
   id: string;
+  anchorId: string;
   name: string;
   type: LifecycleNode["type"];
   purpose: string;
@@ -36,6 +36,7 @@ const lifecycleNodes: LifecycleNode[] = [
 const moduleCards: ModuleCard[] = [
   {
     id: "01",
+    anchorId: "01-qagent-core",
     name: "QAgent Core",
     type: "Core",
     purpose: "Controls ordered module execution and enforces deterministic system rules.",
@@ -45,6 +46,7 @@ const moduleCards: ModuleCard[] = [
   },
   {
     id: "02",
+    anchorId: "02-files-handler",
     name: "Files Handler",
     type: "Flow",
     purpose: "Loads, validates, and indexes user-provided files for analysis.",
@@ -54,6 +56,7 @@ const moduleCards: ModuleCard[] = [
   },
   {
     id: "03",
+    anchorId: "03-analyzer",
     name: "Analyzer",
     type: "Flow",
     purpose: "Extracts audio evidence and structured signal features for decision layers.",
@@ -63,6 +66,7 @@ const moduleCards: ModuleCard[] = [
   },
   {
     id: "04",
+    anchorId: "04-intent-clarification",
     name: "Intent + Clarification",
     type: "Flow",
     purpose: "Resolves user intent and blocks ambiguous actions until clarified.",
@@ -72,6 +76,7 @@ const moduleCards: ModuleCard[] = [
   },
   {
     id: "05",
+    anchorId: "05-dal",
     name: "DAL",
     type: "Integration",
     purpose: "Builds executable action plan aligned to approved intent boundaries.",
@@ -81,6 +86,7 @@ const moduleCards: ModuleCard[] = [
   },
   {
     id: "06",
+    anchorId: "06-uagent",
     name: "UAgent",
     type: "UI",
     purpose: "Generates user-facing plan view and review controls before execution.",
@@ -90,6 +96,7 @@ const moduleCards: ModuleCard[] = [
   },
   {
     id: "07",
+    anchorId: "07-approval-ui-triggered-core-enforced",
     name: "Approval (UI-triggered, Core-enforced)",
     type: "UI Gated",
     purpose: "Prevents execution until explicit user approval is captured and verified.",
@@ -99,6 +106,7 @@ const moduleCards: ModuleCard[] = [
   },
   {
     id: "08",
+    anchorId: "08-dagent",
     name: "DAgent",
     type: "Execution",
     purpose: "Executes approved DSP operations exactly as defined by the DAL plan.",
@@ -108,6 +116,7 @@ const moduleCards: ModuleCard[] = [
   },
   {
     id: "09",
+    anchorId: "09-versioning",
     name: "Versioning",
     type: "State",
     purpose: "Persists final outputs as traceable versions for compare/revert workflows.",
@@ -149,53 +158,11 @@ export default function ArchitecturePage() {
 
           <Card className="border border-[var(--border)] bg-slate-950/35">
             <CardContent className="p-4 md:p-5">
-              <div className="hidden overflow-x-auto pb-1 lg:block">
-                <div className="inline-flex min-w-full items-center">
-                  {lifecycleNodes.map((node, index) => (
-                    <Fragment key={node.id}>
-                      <div
-                        className={cn(
-                          "min-w-[180px] rounded-lg border bg-slate-900/70 p-3",
-                          node.type === "UI Gated" && "border-amber-400/40 bg-amber-400/10",
-                          node.type !== "UI Gated" && "border-[var(--border)]",
-                        )}
-                      >
-                        <div className="flex items-start justify-between gap-2">
-                          <span className="text-xs font-medium tracking-wide text-slate-400">{node.id}</span>
-                          <Badge className={cn("border text-[10px]", toneClass(node.type))}>{node.type}</Badge>
-                        </div>
-                        <p className="mt-2 text-sm font-medium leading-5 text-slate-100">{node.name}</p>
-                      </div>
-                      {index < lifecycleNodes.length - 1 ? (
-                        <div className="flex w-10 items-center justify-center">
-                          <span className="h-px w-8 bg-[var(--border)]" />
-                        </div>
-                      ) : null}
-                    </Fragment>
-                  ))}
-                </div>
-              </div>
-
-              <div className="space-y-0 lg:hidden">
-                {lifecycleNodes.map((node, index) => (
-                  <div key={node.id} className="relative ps-4">
-                    {index < lifecycleNodes.length - 1 ? (
-                      <span className="absolute start-[8px] top-8 h-[calc(100%-0.25rem)] w-px bg-[var(--border)]" aria-hidden="true" />
-                    ) : null}
-                    <div
-                      className={cn(
-                        "mb-2 rounded-lg border bg-slate-900/70 p-3",
-                        node.type === "UI Gated" && "border-amber-400/40 bg-amber-400/10",
-                        node.type !== "UI Gated" && "border-[var(--border)]",
-                      )}
-                    >
-                      <div className="flex items-start justify-between gap-2">
-                        <p className="text-sm font-medium text-slate-100">
-                          {node.id}. {node.name}
-                        </p>
-                        <Badge className={cn("border text-[10px]", toneClass(node.type))}>{node.type}</Badge>
-                      </div>
-                    </div>
+              <div className="space-y-2 border-s border-[var(--border)] ps-4">
+                {lifecycleNodes.map((node) => (
+                  <div key={node.id} className="flex items-center justify-between gap-3 rounded-lg border border-[var(--border)] bg-slate-900/70 p-3">
+                    <p className="text-sm font-medium text-slate-100">{node.name}</p>
+                    <Badge className={cn("shrink-0 border text-[10px]", toneClass(node.type))}>{node.type}</Badge>
                   </div>
                 ))}
               </div>
@@ -213,19 +180,15 @@ export default function ArchitecturePage() {
             {moduleCards.map((module) => (
               <Card
                 key={module.id}
+                id={module.anchorId}
                 className={cn(
-                  "border bg-slate-950/30 transition-colors hover:bg-slate-950/55",
+                  "scroll-mt-32 border bg-slate-950/30 transition-colors hover:bg-slate-950/55",
                   module.type === "UI Gated" ? "border-amber-400/40" : "border-[var(--border)]",
                 )}
               >
                 <CardHeader className="pb-1">
                   <div className="flex items-center justify-between gap-3">
-                    <div className="flex min-w-0 items-center gap-2.5">
-                      <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-md border border-[var(--border)] bg-slate-900 text-[11px] font-semibold text-slate-300">
-                        {module.id}
-                      </span>
-                      <h3 className="truncate text-base font-semibold leading-tight">{module.name}</h3>
-                    </div>
+                    <h3 className="truncate text-base font-semibold leading-tight">{module.name}</h3>
                     <Badge className={cn("shrink-0 border text-[10px]", toneClass(module.type))}>{module.type}</Badge>
                   </div>
                 </CardHeader>
@@ -259,9 +222,9 @@ export default function ArchitecturePage() {
 
           <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
             {[
-              { step: "01", title: "System Overview", href: "/docs/overview", summary: "Understand system scope and request lifecycle." },
-              { step: "02", title: "Architecture", href: "/docs/architecture", summary: "Map module order, constraints, and approval gate." },
-              { step: "03", title: "One Request Journey", href: "/docs/orchestration/orchestration-flow", summary: "See end-to-end execution in one concrete flow." },
+              { step: "1", title: "System Overview", href: "/docs/overview", summary: "Understand system scope and request lifecycle." },
+              { step: "2", title: "Architecture", href: "/docs/architecture", summary: "Map module order, constraints, and approval gate." },
+              { step: "3", title: "One Request Journey", href: "/docs/orchestration/orchestration-flow", summary: "See end-to-end execution in one concrete flow." },
             ].map((item) => (
               <Link
                 key={item.step}

@@ -38,10 +38,10 @@ export function OrderedModuleSeed() {
       <CardContent className="relative px-0 pb-0">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:grid-rows-5 md:gap-6">
         {seedNodes.map((node) => (
-          <div key={node.label} className={cn("mx-auto", node.className)}>
+          <div key={node.label} className={cn("mx-auto w-full max-w-56", node.className)}>
             <Card
               className={cn(
-                "w-56 border shadow-sm",
+                "w-full border shadow-sm",
                 node.tone === "primary"
                   ? "border-[var(--accent)] bg-[var(--accent)]/10"
                   : "border-[var(--border)] bg-slate-950/40",
