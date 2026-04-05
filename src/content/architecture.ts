@@ -3,38 +3,49 @@ import type { DocPageContent } from "@/lib/docs";
 export const architectureContent: DocPageContent = {
   slug: "architecture",
   title: "Architecture",
-  description: "High-level system map including sandbox analysis and DAL execution contracts.",
+  description: "",
   sections: [
     {
-      title: "Core Components",
-      body: [
-        "Chat: user interaction surface.",
-        "Q: reasoning, clarification, planning, and routing engine.",
-        "Orchestration Layer: control plane that coordinates specialized agents and shared state.",
-        "Audio Sandbox: isolated query/analysis/indexing workspace.",
-        "audio.dal: deterministic execution contract.",
-        "D Agent: deterministic execution runtime.",
-        "Canvas: visual operational surface.",
-        "Export Flow: serialization and delivery pipeline.",
-      ],
+      title: "AgentQ - stracture",
+      body: [],
     },
     {
-      title: "Q Internal Split",
-      body: [
-        "Q delegates coordination to Orchestration Layer for deterministic multi-agent sequencing.",
-        "Orchestration routes analysis requests to Audio Sandbox and related intelligence services.",
-        "Orchestration routes execution-approved processing requests to DAL generation path.",
-      ],
-      code: `Q
-  -> Orchestration Layer
-      |- Agents (reasoning / query / comparison / recommendation)
-      |- Shared state + aggregation
-      |- DAL (execution contract / handoff)`,
+      title: "01. QAgent Core",
+      body: [],
     },
     {
-      title: "Data Flow",
-      body: ["Deterministic flow from user intent to query response or execution-ready contract."],
-      code: `Chat -> Q -> Orchestration Layer -> Agents -> DAL -> D Agent -> Canvas -> Export`,
+      title: "02. Files Handler",
+      body: [],
+    },
+    {
+      title: "03. Analyzer",
+      body: [],
+    },
+    {
+      title: "04. Intent + Clarification",
+      body: [],
+    },
+    {
+      title: "05. DAL",
+      body: [],
+    },
+    {
+      title: "06. UAgent",
+      body: [],
+    },
+    {
+      title: "07. Approval (UI-triggered, Core-enforced)",
+      body: [],
+    },
+    {
+      title: "08. DAgent",
+      body: [],
+    },
+    {
+      title: "09. Versioning",
+      body: [],
     },
   ],
 };
+
+

@@ -1,4 +1,6 @@
 import { apiContent } from "@/content/api";
+import { type FlowData } from "@/components/ui/FlowDiagram";
+import { type ProcessStep } from "@/components/ui/ProcessDiagram";
 import { architectureContent } from "@/content/architecture";
 import { audioComparisonModelContent } from "@/content/audio-comparison-comparison-model";
 import { audioComparisonCanvasUiContent } from "@/content/audio-comparison-canvas-ui";
@@ -79,6 +81,10 @@ export type DocSection = {
   title: string;
   body: string[];
   code?: string;
+  image?: string;
+  flow?: FlowData;
+  processSteps?: ProcessStep[];
+  open?: boolean;
 };
 
 export type InfoCardData = {

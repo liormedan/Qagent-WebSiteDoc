@@ -1,10 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronDown, ChevronUp, Puzzle, Sparkles, Store, Users, Wrench } from "lucide-react";
-import { getFlowNeighborsByHref, getFlowProgressByHref, getNavigationByGroup, getNavigationItemByHref } from "@/lib/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -85,11 +83,6 @@ const MEGA_MENU: Record<MegaKey, Array<{ heading: string; items: Array<{ title: 
 };
 
 export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; onOpenToc: () => void }) {
-  const pathname = usePathname();
-  const item = getNavigationItemByHref(pathname);
-  const groupHomeHref = item ? getNavigationByGroup(item.group)[0]?.href ?? "/docs" : "/docs";
-  const flowProgress = getFlowProgressByHref(pathname);
-  const flowNeighbors = getFlowNeighborsByHref(pathname);
   const [activeMega, setActiveMega] = useState<MegaKey | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -129,14 +122,15 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
   );
 
   return (
-    <header className="sticky top-0 z-30 border-b border-[var(--border)] bg-[#0b1020f2] backdrop-blur">
-      <div className="space-y-3 px-3 py-3 md:px-6" ref={containerRef}>
-        <div className="relative flex items-center gap-2 lg:gap-4">
-          <button type="button" onClick={onOpenMenu} className="rounded-md border border-[var(--border)] px-3 py-1.5 text-sm text-slate-200 xl:hidden">
+    <header className="sticky top-0 z-30 h-[72px] border-b border-[var(--border)] bg-[#0b1020f2] backdrop-blur">
+      <div className="relative flex h-full items-center px-3 md:px-6" ref={containerRef}>
+        <div className="flex w-full items-center gap-2 lg:gap-4">
+          <button type="button" onClick={onOpenMenu} className="rounded-md border border-[var(--border)] px-3 py-1.5 text-sm text-slate-200 lg:hidden">
             Menu
           </button>
-          <Link href="/docs" className="rounded-md px-2 py-1 text-base font-bold hover:bg-slate-800 sm:text-lg md:text-2xl">
-            WaveQ
+
+          <Link href="/docs" className="rounded-md px-2 py-1 text-base font-bold hover:bg-slate-800 sm:text-lg md:text-xl">
+            WaveQ Docs
           </Link>
 
           <nav className="hidden items-center gap-2 text-sm text-slate-300 xl:flex">
@@ -162,9 +156,11 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
           <div className="ml-auto hidden w-full max-w-sm lg:block">
             <Input placeholder="Search Documentation" aria-label="Search Documentation" />
           </div>
+
           <Button type="button" variant="ghost" size="sm" className="hidden lg:inline-flex">
             Ask Q
           </Button>
+
           <button type="button" onClick={onOpenToc} className="rounded-md border border-[var(--border)] px-3 py-1.5 text-sm text-slate-200 xl:hidden">
             On this page
           </button>
@@ -204,40 +200,6 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
             </div>
           </div>
         ) : null}
-
-        <div className="flex flex-col gap-3 2xl:flex-row 2xl:items-start 2xl:justify-between">
-          <div className="min-w-0 space-y-2">
-            <div className="flex flex-wrap items-center gap-1.5 text-xs sm:gap-2 sm:text-sm">
-              <Link href="/docs" className="rounded-md px-2 py-1 text-slate-200 hover:bg-slate-800">Q Documentation</Link>
-              <span className="text-slate-500">&gt;</span>
-              <Link href={item ? groupHomeHref : "/docs"} className="rounded-md px-2 py-1 text-slate-300 hover:bg-slate-800">
-                {item ? item.group : "Docs Index"}
-              </Link>
-              {item ? (
-                <>
-                  <span className="text-slate-500">&gt;</span>
-                  <div className="rounded-md bg-slate-800 px-2 py-1 text-slate-100 break-words">{item.title}</div>
-                </>
-              ) : null}
-            </div>
-            {flowProgress ? (
-              <div className="w-full max-w-full rounded-md bg-teal-900/35 px-3 py-2 2xl:w-fit">
-                <p className="text-sm font-semibold text-teal-200">
-                  {flowProgress.group} · Step {flowProgress.step} of {flowProgress.total}
-                </p>
-                <p className="mt-0.5 text-xs text-teal-100">
-                  You are in: {item?.flowHelper ?? `Transitioning to ${flowNeighbors.next?.title ?? "the next stage"}.`}
-                </p>
-              </div>
-            ) : null}
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2">
-            <Button asChild variant="link" size="sm" className="px-2 py-1 text-sm sm:px-3 sm:py-1.5 sm:text-base">
-              <Link href="/docs">Home</Link>
-            </Button>
-          </div>
-        </div>
       </div>
     </header>
   );

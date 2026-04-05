@@ -3,24 +3,29 @@ import type { DocPageContent } from "@/lib/docs";
 export const decisionRulesContent: DocPageContent = {
   slug: "decision-rules",
   title: "Decision Rules",
-  description: "Deterministic routing rules for query vs processing flows.",
+  description: "",
   sections: [
     {
-      title: "Routing Rules",
-      body: [
-        "If user asks about audio content/state -> route to sandbox query flow.",
-        "For pure query requests -> do not generate DAL.",
-        "For processing requests -> sandbox may enrich context before planning.",
-      ],
-      code: `if (request.kind === "audio_query") {
-  route = "sandbox";
-  generateDal = false;
-}
-
-if (request.kind === "audio_processing") {
-  route = "reasoning_then_planning";
-  sandboxEnrichment = true;
-}`,
+      title: "AgentQ - stracture QAgent Scope",
+      body: [],
+    },
+    {
+      title: "Intent Intake",
+      body: [],
+    },
+    {
+      title: "Clarification Gate",
+      body: [],
+    },
+    {
+      title: "DAL Construction",
+      body: [],
+    },
+    {
+      title: "Approval Gate (UI-triggered, Core-enforced)",
+      body: [],
     },
   ],
 };
+
+

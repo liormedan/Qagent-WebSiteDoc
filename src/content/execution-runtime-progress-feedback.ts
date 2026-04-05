@@ -1,49 +1,27 @@
-﻿import type { DocPageContent } from "@/lib/docs";
+import type { DocPageContent } from "@/lib/docs";
 
 export const executionRuntimeProgressFeedbackContent: DocPageContent = {
   slug: "execution-runtime/progress-feedback",
   title: "Progress And Feedback",
-  description: "Runtime progress, status, and feedback surface definitions for user and system.",
+  description: "",
   sections: [
     {
-      title: "Feedback Model",
-      body: [
-        "Progress updates communicate current stage and normalized completion percentage.",
-        "Final feedback communicates completed/failed/cancelled outcome with warnings or errors.",
-      ],
-      code: `progress model
-- stage
-- progress
-- optional message
-
-final feedback
-- status
-- outputVersionId
-- warnings or error`,
+      title: "AgentQ - stracture Contract Scope",
+      body: [],
     },
     {
-      title: "Display Surfaces",
-      body: [
-        "chat: human-readable status updates and final execution summary.",
-        "canvas: execution badge/state indicator and output-ready notification.",
-        "background/internal only: low-level retries, internal transition timestamps, trace metadata.",
-      ],
+      title: "Core Module Contracts",
+      body: [],
     },
     {
-      title: "Examples",
-      body: [
-        "Applying noise reduction...",
-        "Generating processed version...",
-        "Execution completed — version B created",
-      ],
+      title: "Input and Output Contracts",
+      body: [],
     },
     {
-      title: "Warnings Vs Errors",
-      body: [
-        "Warnings indicate non-blocking quality concerns while output exists.",
-        "Errors indicate blocking failure where continuation requires retry/regeneration/manual choice.",
-      ],
+      title: "Validation and Enforcement Contracts",
+      body: [],
     },
   ],
 };
+
 

@@ -1,27 +1,281 @@
+import Link from "next/link";
+import { Fragment } from "react";
 import { DocsContent } from "@/components/layout/DocsContent";
-import { CodeExample } from "@/components/ui/CodeExample";
-import { PageTitle } from "@/components/ui/PageTitle";
-import { SectionBlock } from "@/components/ui/SectionBlock";
-import { getDocPage } from "@/lib/docs";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
-const page = getDocPage("architecture");
+type LifecycleNode = {
+  id: string;
+  name: string;
+  type: "Core" | "Flow" | "Integration" | "UI" | "UI Gated" | "Execution" | "State";
+};
+
+type ModuleCard = {
+  id: string;
+  name: string;
+  type: LifecycleNode["type"];
+  purpose: string;
+  inputs: string;
+  outputs: string;
+  dependsOn: string;
+};
+
+const lifecycleNodes: LifecycleNode[] = [
+  { id: "01", name: "QAgent Core", type: "Core" },
+  { id: "02", name: "Files Handler", type: "Flow" },
+  { id: "03", name: "Analyzer", type: "Flow" },
+  { id: "04", name: "Intent + Clarification", type: "Flow" },
+  { id: "05", name: "DAL", type: "Integration" },
+  { id: "06", name: "UAgent", type: "UI" },
+  { id: "07", name: "Approval", type: "UI Gated" },
+  { id: "08", name: "DAgent", type: "Execution" },
+  { id: "09", name: "Versioning", type: "State" },
+];
+
+const moduleCards: ModuleCard[] = [
+  {
+    id: "01",
+    name: "QAgent Core",
+    type: "Core",
+    purpose: "Controls ordered module execution and enforces deterministic system rules.",
+    inputs: "User request context, session state, module responses.",
+    outputs: "Validated next-module command and runtime state updates.",
+    dependsOn: "All downstream modules for execution results.",
+  },
+  {
+    id: "02",
+    name: "Files Handler",
+    type: "Flow",
+    purpose: "Loads, validates, and indexes user-provided files for analysis.",
+    inputs: "Uploaded files and metadata.",
+    outputs: "Normalized file references and access-safe handles.",
+    dependsOn: "QAgent Core request scope.",
+  },
+  {
+    id: "03",
+    name: "Analyzer",
+    type: "Flow",
+    purpose: "Extracts audio evidence and structured signal features for decision layers.",
+    inputs: "File handles and analysis directives.",
+    outputs: "Feature vectors, detected events, confidence metadata.",
+    dependsOn: "Files Handler output.",
+  },
+  {
+    id: "04",
+    name: "Intent + Clarification",
+    type: "Flow",
+    purpose: "Resolves user intent and blocks ambiguous actions until clarified.",
+    inputs: "User language intent and analyzer evidence.",
+    outputs: "Confirmed intent state with explicit constraints.",
+    dependsOn: "QAgent Core and Analyzer evidence.",
+  },
+  {
+    id: "05",
+    name: "DAL",
+    type: "Integration",
+    purpose: "Builds executable action plan aligned to approved intent boundaries.",
+    inputs: "Confirmed intent, constraints, and module context.",
+    outputs: "Deterministic action graph for execution modules.",
+    dependsOn: "Intent + Clarification result.",
+  },
+  {
+    id: "06",
+    name: "UAgent",
+    type: "UI",
+    purpose: "Generates user-facing plan view and review controls before execution.",
+    inputs: "DAL action graph and current session state.",
+    outputs: "UI-ready action summary and approval prompts.",
+    dependsOn: "DAL output.",
+  },
+  {
+    id: "07",
+    name: "Approval (UI-triggered, Core-enforced)",
+    type: "UI Gated",
+    purpose: "Prevents execution until explicit user approval is captured and verified.",
+    inputs: "User approval signal and DAL plan fingerprint.",
+    outputs: "Approved or rejected execution gate state.",
+    dependsOn: "UAgent prompt delivery and QAgent Core validation.",
+  },
+  {
+    id: "08",
+    name: "DAgent",
+    type: "Execution",
+    purpose: "Executes approved DSP operations exactly as defined by the DAL plan.",
+    inputs: "Approved execution graph and media context.",
+    outputs: "Processed artifacts, logs, and status outcomes.",
+    dependsOn: "Approval gate and DAL integrity.",
+  },
+  {
+    id: "09",
+    name: "Versioning",
+    type: "State",
+    purpose: "Persists final outputs as traceable versions for compare/revert workflows.",
+    inputs: "Execution artifacts and session lineage data.",
+    outputs: "Version snapshots and lifecycle transition records.",
+    dependsOn: "DAgent execution result.",
+  },
+];
+
+function toneClass(type: LifecycleNode["type"]): string {
+  if (type === "UI Gated") return "bg-amber-400/15 text-amber-200 border-amber-400/35";
+  if (type === "Core") return "bg-cyan-400/15 text-cyan-200 border-cyan-400/35";
+  if (type === "Execution") return "bg-indigo-400/15 text-indigo-200 border-indigo-400/35";
+  if (type === "State") return "bg-emerald-400/15 text-emerald-200 border-emerald-400/35";
+  if (type === "Integration") return "bg-violet-400/15 text-violet-200 border-violet-400/35";
+  if (type === "UI") return "bg-sky-400/15 text-sky-200 border-sky-400/35";
+  return "bg-slate-800 text-slate-100 border-[var(--border)]";
+}
 
 export default function ArchitecturePage() {
-  if (!page) {
-    return null;
-  }
-
   return (
     <DocsContent>
-      <PageTitle title={page.title} description={page.description} />
-      <div className="flex flex-col gap-5">
-        {page.sections.map((section) => (
-          <SectionBlock key={section.title} title={section.title} body={section.body}>
-            {section.code ? <CodeExample code={section.code} /> : null}
-          </SectionBlock>
-        ))}
+      <div className="space-y-6 pb-4">
+        <section className="rounded-xl border border-[var(--border)] bg-slate-950/30 p-5 md:p-6">
+          <h1 className="text-3xl font-semibold leading-tight md:text-[2.1rem]">Architecture</h1>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-300 md:text-base">
+            AgentQ runs an ordered modular flow for audio requests with deterministic routing, UI-gated approval, and versioned outputs.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Badge className="border border-[var(--border)] bg-slate-900 text-slate-100">9 modules</Badge>
+            <Badge className="border border-[var(--border)] bg-slate-900 text-slate-100">Request lifecycle</Badge>
+            <Badge className="border border-amber-400/35 bg-amber-400/15 text-amber-200">UI approvals</Badge>
+          </div>
+        </section>
+
+        <section id="request-lifecycle" className="space-y-2">
+          <h2 className="text-xl font-semibold">Request Lifecycle</h2>
+          <p className="text-sm text-[var(--muted)]">Ordered execution path from intake to versioned output.</p>
+
+          <Card className="border border-[var(--border)] bg-slate-950/35">
+            <CardContent className="p-4 md:p-5">
+              <div className="hidden overflow-x-auto pb-1 lg:block">
+                <div className="inline-flex min-w-full items-center">
+                  {lifecycleNodes.map((node, index) => (
+                    <Fragment key={node.id}>
+                      <div
+                        className={cn(
+                          "min-w-[180px] rounded-lg border bg-slate-900/70 p-3",
+                          node.type === "UI Gated" && "border-amber-400/40 bg-amber-400/10",
+                          node.type !== "UI Gated" && "border-[var(--border)]",
+                        )}
+                      >
+                        <div className="flex items-start justify-between gap-2">
+                          <span className="text-xs font-medium tracking-wide text-slate-400">{node.id}</span>
+                          <Badge className={cn("border text-[10px]", toneClass(node.type))}>{node.type}</Badge>
+                        </div>
+                        <p className="mt-2 text-sm font-medium leading-5 text-slate-100">{node.name}</p>
+                      </div>
+                      {index < lifecycleNodes.length - 1 ? (
+                        <div className="flex w-10 items-center justify-center">
+                          <span className="h-px w-8 bg-[var(--border)]" />
+                        </div>
+                      ) : null}
+                    </Fragment>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-0 lg:hidden">
+                {lifecycleNodes.map((node, index) => (
+                  <div key={node.id} className="relative ps-4">
+                    {index < lifecycleNodes.length - 1 ? (
+                      <span className="absolute start-[8px] top-8 h-[calc(100%-0.25rem)] w-px bg-[var(--border)]" aria-hidden="true" />
+                    ) : null}
+                    <div
+                      className={cn(
+                        "mb-2 rounded-lg border bg-slate-900/70 p-3",
+                        node.type === "UI Gated" && "border-amber-400/40 bg-amber-400/10",
+                        node.type !== "UI Gated" && "border-[var(--border)]",
+                      )}
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <p className="text-sm font-medium text-slate-100">
+                          {node.id}. {node.name}
+                        </p>
+                        <Badge className={cn("border text-[10px]", toneClass(node.type))}>{node.type}</Badge>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
+        <section id="core-components" className="space-y-2">
+          <h2 className="text-xl font-semibold">Core Components</h2>
+          <p className="text-sm text-[var(--muted)]">
+            Format per module: Purpose, Inputs, Outputs, and Depends on.
+          </p>
+
+          <div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
+            {moduleCards.map((module) => (
+              <Card
+                key={module.id}
+                className={cn(
+                  "border bg-slate-950/30 transition-colors hover:bg-slate-950/55",
+                  module.type === "UI Gated" ? "border-amber-400/40" : "border-[var(--border)]",
+                )}
+              >
+                <CardHeader className="pb-1">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex min-w-0 items-center gap-2.5">
+                      <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-md border border-[var(--border)] bg-slate-900 text-[11px] font-semibold text-slate-300">
+                        {module.id}
+                      </span>
+                      <h3 className="truncate text-base font-semibold leading-tight">{module.name}</h3>
+                    </div>
+                    <Badge className={cn("shrink-0 border text-[10px]", toneClass(module.type))}>{module.type}</Badge>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-0 text-sm">
+                  {[
+                    { label: "Purpose", value: module.purpose },
+                    { label: "Inputs", value: module.inputs },
+                    { label: "Outputs", value: module.outputs },
+                    { label: "Depends on", value: module.dependsOn },
+                  ].map((row, rowIndex) => (
+                    <div
+                      key={`${module.id}-${row.label}`}
+                      className={cn(
+                        "grid gap-1 py-2 md:grid-cols-[86px_minmax(0,1fr)] md:gap-3",
+                        rowIndex > 0 && "border-t border-[var(--border)]/70",
+                      )}
+                    >
+                      <p className="text-[11px] font-semibold tracking-wide text-slate-400 uppercase">{row.label}</p>
+                      <p className="text-slate-300 leading-6">{row.value}</p>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </section>
+
+        <section id="recommended-reading" className="space-y-2">
+          <h2 className="text-xl font-semibold">Recommended Reading Order</h2>
+          <p className="text-sm text-[var(--muted)]">Start here if this is your first pass through the system docs.</p>
+
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+            {[
+              { step: "01", title: "System Overview", href: "/docs/overview", summary: "Understand system scope and request lifecycle." },
+              { step: "02", title: "Architecture", href: "/docs/architecture", summary: "Map module order, constraints, and approval gate." },
+              { step: "03", title: "One Request Journey", href: "/docs/orchestration/orchestration-flow", summary: "See end-to-end execution in one concrete flow." },
+            ].map((item) => (
+              <Link
+                key={item.step}
+                href={item.href}
+                className="rounded-lg border border-[var(--border)] bg-slate-950/25 p-4 transition-colors hover:bg-slate-950/50"
+              >
+                <p className="text-xs text-slate-400">Step {item.step}</p>
+                <p className="mt-1 text-sm font-semibold text-slate-100">{item.title}</p>
+                <p className="mt-1 text-sm text-slate-300">{item.summary}</p>
+              </Link>
+            ))}
+          </div>
+        </section>
       </div>
     </DocsContent>
   );
 }
-

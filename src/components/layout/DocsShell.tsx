@@ -13,26 +13,26 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
   const [mobileTocOpen, setMobileTocOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)]">
+    <div className="h-screen overflow-hidden bg-[var(--bg)] text-[var(--text)]">
       <DocsHeader key={pathname} onOpenMenu={() => setMobileMenuOpen(true)} onOpenToc={() => setMobileTocOpen(true)} />
 
-      <div className="mx-auto grid w-full max-w-[1800px] grid-cols-1 xl:grid-cols-[260px_minmax(0,1fr)_260px]">
-        <div className="hidden border-r border-[var(--border)] xl:block">
-          <DocsSidebar className="sticky top-36 max-h-[calc(100vh-9rem)] overflow-y-auto" />
+      <div className="mx-auto grid h-[calc(100vh-72px)] w-full max-w-[1800px] grid-cols-1 lg:grid-cols-[260px_minmax(0,1fr)] xl:grid-cols-[260px_minmax(0,1fr)_260px]">
+        <div className="hidden border-r border-[var(--border)] lg:block">
+          <DocsSidebar className="h-full overflow-y-auto" />
         </div>
 
-        <main className="min-w-0 px-4 py-6 md:px-10 md:py-8">
+        <main className="min-w-0 overflow-y-auto px-4 py-4 md:px-8 md:py-6">
           {children}
           <DocsPager />
         </main>
 
         <div className="hidden border-l border-[var(--border)] px-5 py-6 xl:block">
-          <DocsToc className="sticky top-36 max-h-[calc(100vh-9rem)] overflow-y-auto" />
+          <DocsToc className="h-full overflow-y-auto" />
         </div>
       </div>
 
       {mobileMenuOpen ? (
-        <div className="fixed inset-0 z-40 xl:hidden" role="dialog" aria-modal="true">
+        <div className="fixed inset-0 z-40 lg:hidden" role="dialog" aria-modal="true">
           <button type="button" aria-label="Close menu" className="absolute inset-0 bg-black/60" onClick={() => setMobileMenuOpen(false)} />
           <div className="absolute inset-y-0 left-0 w-[85%] max-w-sm border-r border-[var(--border)] bg-[var(--panel)]">
             <div className="flex items-center justify-between border-b border-[var(--border)] px-4 py-3">

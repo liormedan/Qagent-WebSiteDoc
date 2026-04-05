@@ -1,5 +1,5 @@
 export type DocsNavGroup =
-  | "Start Here"
+  | "AgentQ - stracture"
   | "Main Flow"
   | "Decision System"
   | "Audio Intelligence"
@@ -16,9 +16,9 @@ export type DocNavItem = {
   flowHelper?: string;
 };
 
-const orderedGroups: DocsNavGroup[] = ["Start Here", "Main Flow", "Decision System", "Audio Intelligence", "Implementation"];
+const orderedGroups: DocsNavGroup[] = ["AgentQ - stracture", "Main Flow", "Decision System", "Audio Intelligence", "Implementation"];
 const groupSlugs: Record<DocsNavGroup, string> = {
-  "Start Here": "start-here",
+  "AgentQ - stracture": "home",
   "Main Flow": "main-flow",
   "Decision System": "decision-system",
   "Audio Intelligence": "audio-intelligence",
@@ -26,10 +26,10 @@ const groupSlugs: Record<DocsNavGroup, string> = {
 };
 
 export const docsNavigation: DocNavItem[] = [
-  { title: "System Overview", description: "Understand the system mission and request lifecycle before technical details.", href: "/docs/overview", group: "Start Here", recommendedFirst: true },
-  { title: "System Map", description: "See how Q, orchestration, runtime, and memory connect as one system.", href: "/docs/architecture", group: "Start Here" },
-  { title: "One Request Journey", description: "Follow one complete request from input to versioned output and review.", href: "/docs/orchestration/orchestration-flow", group: "Start Here" },
-  { title: "Core Concepts", description: "Learn the contracts and terms that make the rest of the docs deterministic.", href: "/docs/contracts", group: "Start Here" },
+  { title: "System Overview", description: "Understand the system mission and request lifecycle before technical details.", href: "/docs/overview", group: "AgentQ - stracture", recommendedFirst: true },
+  { title: "System Map", description: "See how Q, orchestration, runtime, and memory connect as one system.", href: "/docs/architecture", group: "AgentQ - stracture" },
+  { title: "One Request Journey", description: "Follow one complete request from input to versioned output and review.", href: "/docs/orchestration/orchestration-flow", group: "AgentQ - stracture" },
+  { title: "Core Concepts", description: "Learn the contracts and terms that make the rest of the docs deterministic.", href: "/docs/contracts", group: "AgentQ - stracture" },
 
   {
     title: "Input / Intent",
@@ -176,3 +176,5 @@ export function getFlowNeighborsByHref(href: string): { previous?: DocNavItem; n
     next: flowItems[index + 1],
   };
 }
+
+

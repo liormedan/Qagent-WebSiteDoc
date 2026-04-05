@@ -8,14 +8,14 @@ export function SectionBlock({ id, title, body, children }: { id?: string; title
   const hasTechnicalDetails = detailLines.length > 0 || Boolean(children);
 
   return (
-    <section id={id} className="rounded-xl bg-[var(--panel)] p-4 md:p-7">
-      <div className="space-y-5">
-        <h2 className="break-words text-xl font-semibold md:text-2xl">{linkConcepts(title, 1)}</h2>
+    <section id={id} className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+      <div className="space-y-3">
+        <h2 className="break-words text-xl font-semibold leading-tight md:text-2xl">{linkConcepts(title, 1)}</h2>
 
         {summaryLines.length > 0 ? (
-          <div className="space-y-3">
+          <div className="space-y-2">
             {summaryLines.map((line, index) => (
-              <p key={`${title}-summary-${index}`} className="break-words text-sm leading-7 text-slate-100 md:text-base md:leading-8">
+              <p key={`${title}-summary-${index}`} className="break-words text-sm leading-6 text-slate-100">
                 {linkConcepts(line)}
               </p>
             ))}

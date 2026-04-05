@@ -1,7 +1,11 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AutoAdvanceOnBottom } from "@/components/layout/AutoAdvanceOnBottom";
 import { DocsContent } from "@/components/layout/DocsContent";
+import { FlowDiagram } from "@/components/ui/FlowDiagram";
+import { OrderedModuleSeed } from "@/components/ui/OrderedModuleSeed";
+import { ProcessDiagram } from "@/components/ui/ProcessDiagram";
 import { CodeExample } from "@/components/ui/CodeExample";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { getDocPage } from "@/lib/docs";
@@ -27,6 +31,7 @@ export default async function GroupSectionPage({ params }: { params: Promise<{ g
 
   const items = getNavigationByGroup(group);
   if (!items.length) return notFound();
+  const isEntryGroup = group === "AgentQ - stracture";
   const neighbors = getGroupNeighbors(group);
   const nextHref = neighbors.next ? getGroupHubHref(neighbors.next) : undefined;
   const previousHref = neighbors.previous ? getGroupHubHref(neighbors.previous) : undefined;
@@ -34,6 +39,7 @@ export default async function GroupSectionPage({ params }: { params: Promise<{ g
   return (
     <DocsContent>
       <AutoAdvanceOnBottom nextHref={nextHref} />
+      {isEntryGroup ? <div className="mb-8"><OrderedModuleSeed /></div> : null}
       <PageTitle
         title={group}
         description={`Unified long-form page for ${group}. Scroll through sections and use the right menu to jump between subtopics.`}
@@ -59,14 +65,36 @@ export default async function GroupSectionPage({ params }: { params: Promise<{ g
               {page?.sections?.length ? (
                 <div className="mt-4 space-y-3">
                   {page.sections.map((section) => (
-                    <details key={`${item.href}-${section.title}`} className="rounded-md border border-[var(--border)] bg-slate-950/30 p-3">
+                    <details key={`${item.href}-${section.title}`} open={section.open} className="group/details rounded-md border border-[var(--border)] bg-slate-950/30 p-3">
                       <summary className="cursor-pointer text-sm font-semibold text-slate-200">{section.title}</summary>
-                      <div className="mt-3 space-y-2">
-                        {section.body.map((line, idx) => (
-                          <p key={`${section.title}-${idx}`} className="text-sm text-slate-300">
-                            {line}
-                          </p>
-                        ))}
+                      <div className="mt-3 space-y-4">
+                        {section.flow ? (
+                          <div className="mb-4">
+                            <FlowDiagram data={section.flow} />
+                          </div>
+                        ) : null}
+                        {section.processSteps ? (
+                          <div className="mb-4">
+                            <ProcessDiagram steps={section.processSteps} />
+                          </div>
+                        ) : null}
+                        {section.image ? (
+                          <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-[var(--border)]">
+                            <Image
+                              src={section.image}
+                              alt={section.title}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                        ) : null}
+                        <div className="space-y-2">
+                          {section.body.map((line, idx) => (
+                            <p key={`${section.title}-${idx}`} className="text-sm text-slate-300">
+                              {line}
+                            </p>
+                          ))}
+                        </div>
                         {section.code ? <CodeExample code={section.code} /> : null}
                       </div>
                     </details>
@@ -95,3 +123,5 @@ export default async function GroupSectionPage({ params }: { params: Promise<{ g
     </DocsContent>
   );
 }
+
+
