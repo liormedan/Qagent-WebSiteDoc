@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { DocsContent } from "@/components/layout/DocsContent";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
+import { ModuleAccordion } from "@/components/ui/ModuleAccordion";
 import { cn } from "@/lib/utils";
 
 type LifecycleNode = {
@@ -178,40 +179,18 @@ export default function ArchitecturePage() {
 
           <div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
             {moduleCards.map((module) => (
-              <Card
+              <ModuleAccordion
                 key={module.id}
-                id={module.anchorId}
-                className={cn(
-                  "scroll-mt-32 border bg-slate-950/30 transition-colors hover:bg-slate-950/55",
-                  module.type === "UI Gated" ? "border-amber-400/40" : "border-[var(--border)]",
-                )}
-              >
-                <CardHeader className="pb-1">
-                  <div className="flex items-center justify-between gap-3">
-                    <h3 className="truncate text-base font-semibold leading-tight">{module.name}</h3>
-                    <Badge className={cn("shrink-0 border text-[10px]", toneClass(module.type))}>{module.type}</Badge>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-0 text-sm">
-                  {[
-                    { label: "Purpose", value: module.purpose },
-                    { label: "Inputs", value: module.inputs },
-                    { label: "Outputs", value: module.outputs },
-                    { label: "Depends on", value: module.dependsOn },
-                  ].map((row, rowIndex) => (
-                    <div
-                      key={`${module.id}-${row.label}`}
-                      className={cn(
-                        "grid gap-1 py-2 md:grid-cols-[86px_minmax(0,1fr)] md:gap-3",
-                        rowIndex > 0 && "border-t border-[var(--border)]/70",
-                      )}
-                    >
-                      <p className="text-[11px] font-semibold tracking-wide text-slate-400 uppercase">{row.label}</p>
-                      <p className="text-slate-300 leading-6">{row.value}</p>
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
+                anchorId={module.anchorId}
+                number={module.id}
+                name={module.name}
+                role={module.type}
+                purpose={module.purpose}
+                inputs={module.inputs}
+                outputs={module.outputs}
+                dependsOn={module.dependsOn}
+                isPrimary={module.id === "01"}
+              />
             ))}
           </div>
         </section>

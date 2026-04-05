@@ -183,8 +183,64 @@ const pages: Record<string, DocPageContent> = {
   roadmap: roadmapContent,
 };
 
+const draftSkeletonSummaries: Record<string, string> = {
+  "audio-comparison": "Entry page for Audio Comparison references. Use the overview as the full source of truth.",
+  "audio-comparison/versioning": "Defines version lineage for comparisons at a high level.",
+  "audio-comparison/comparison-model": "Captures the high-level comparison record between base and candidate versions.",
+  "audio-comparison/difference-model": "Summarizes detected difference categories and impact levels.",
+  "audio-comparison/playback-modes": "Outlines A/B playback behaviors used during evaluation.",
+  "audio-comparison/canvas-ui": "Describes how comparison evidence is surfaced in the canvas at a high level.",
+  "audio-comparison/user-flow": "Summarizes the user comparison journey from review to decision.",
+
+  "recommendation-engine": "Entry page for recommendation references. Use the overview as the full source of truth.",
+  "recommendation-engine/recommendation-model": "Defines the recommendation object at a high level.",
+  "recommendation-engine/recommendation-sources": "Lists the key evidence sources used to generate recommendations.",
+  "recommendation-engine/tradeoffs": "Summarizes key tradeoffs that should be shown before approval.",
+  "recommendation-engine/recommendation-flow": "Describes the recommendation lifecycle at a high level.",
+  "recommendation-engine/integration-with-comparison": "Explains how comparison evidence informs recommendation quality.",
+  "recommendation-engine/ux-presentation": "Summarizes user-facing recommendation presentation and actions.",
+
+  "execution-runtime": "Entry page for runtime references. Use the overview as the full source of truth.",
+  "execution-runtime/execution-contracts": "High-level summary of runtime request/progress/result contracts.",
+  "execution-runtime/runtime-states": "High-level runtime state model and transition intent.",
+  "execution-runtime/progress-feedback": "Summarizes progress and user feedback behavior during execution.",
+  "execution-runtime/output-versioning": "Summarizes output version creation after execution.",
+  "execution-runtime/runtime-integration": "High-level integration path between runtime and orchestration subsystems.",
+  "execution-runtime/error-handling": "Summarizes runtime failure categories and handling boundaries.",
+  "execution-runtime/cancellation-and-retry": "Summarizes cancellation and retry behavior at a high level.",
+
+  lifecycle: "Entry page for lifecycle references. Use the overview as the full source of truth.",
+  "lifecycle/session-model": "Summarizes session state ownership and transitions.",
+  "lifecycle/interaction-loop": "Summarizes repeated user-system interaction cycles in one session.",
+  "lifecycle/version-lifecycle": "Summarizes version states from original to accepted or rejected.",
+  "lifecycle/system-events": "Summarizes core lifecycle events used for traceability.",
+  "lifecycle/end-states": "Summarizes how sessions conclude and what state is persisted.",
+};
+
+function asDraftSkeleton(page: DocPageContent, summary: string): DocPageContent {
+  const status = "Status: Draft - full spec coming later.";
+  const description = page.description ? `${page.description} ${status}` : status;
+
+  return {
+    ...page,
+    description,
+    sections: [
+      {
+        title: page.title,
+        body: [summary, "Detailed Inputs / Outputs / Depends on will be added in a later pass."],
+      },
+    ],
+  };
+}
+
 export function getDocPage(slug: string): DocPageContent | undefined {
-  return pages[slug];
+  const page = pages[slug];
+  if (!page) return undefined;
+
+  const summary = draftSkeletonSummaries[slug];
+  if (!summary) return page;
+
+  return asDraftSkeleton(page, summary);
 }
 
 export function getAllDocPages(): DocPageContent[] {
