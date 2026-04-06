@@ -1,6 +1,8 @@
-﻿import Image from "next/image";
+import Image from "next/image";
+import { ChevronDown } from "lucide-react";
 import { notFound } from "next/navigation";
 import { DocsContent } from "@/components/layout/DocsContent";
+import { AnalyzerModuleDiagram } from "@/components/ui/AnalyzerModuleDiagram";
 import { DiagramComponentsAccordion } from "@/components/ui/DiagramComponentsAccordion";
 import FilesHandlerDiagram from "@/components/ui/FilesHandlerDiagram";
 import { LlmInterfaceDiagram } from "@/components/ui/LlmInterfaceDiagram";
@@ -330,13 +332,14 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
               title={primarySection.title}
               body={primarySection.body}
               collapsible
+              plainStructured
             />
           ) : null}
           <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
             <details className="group/details" name="docs-primary-accordion">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
-                <h2 className="text-lg font-semibold md:text-xl">Architecture Diagram</h2>
-                <span className="text-slate-400 transition-transform group-open/details:rotate-180">▾</span>
+                <h2 className="text-base font-semibold md:text-lg">Architecture Diagram</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
               </summary>
               <div className="mt-3 space-y-3">
                 <p className="text-sm leading-6 text-slate-300">
@@ -352,7 +355,7 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
                 <details className="group/details rounded-lg border border-[var(--border)] bg-slate-950/40 p-3">
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-2 text-sm font-semibold text-slate-100 [&::-webkit-details-marker]:hidden">
                     <span>Diagram Components</span>
-                    <span className="text-slate-400 transition-transform group-open/details:rotate-180">▾</span>
+                    <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
                   </summary>
                   <div className="mt-3">
                     <DiagramComponentsAccordion />
@@ -389,8 +392,8 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
           <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
             <details className="group/details" name="docs-primary-accordion">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
-                <h2 className="text-lg font-semibold md:text-xl">Architecture Diagram</h2>
-                <span className="text-slate-400 transition-transform group-open/details:rotate-180">▾</span>
+                <h2 className="text-base font-semibold md:text-lg">Architecture Diagram</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
               </summary>
               <div className="mt-3">
                 <FilesHandlerDiagram />
@@ -401,13 +404,13 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
           <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
             <details className="group/details" name="docs-primary-accordion">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
-                <h2 className="text-lg font-semibold md:text-xl">Files Handler Overview</h2>
-                <span className="text-slate-400 transition-transform group-open/details:rotate-180">▾</span>
+                <h2 className="text-base font-semibold md:text-lg">Files Handler Overview</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
               </summary>
               <div className="mt-3 space-y-2">
                 {filesHandlerOverviewBody.map((line, index) =>
                   line.startsWith("### ") ? (
-                    <h3 key={`files-handler-overview-heading-${index}`} className="pt-2 text-base font-semibold text-slate-100">
+                    <h3 key={`files-handler-overview-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
                       {line.replace(/^###\s+/, "").trim()}
                     </h3>
                   ) : (
@@ -437,13 +440,13 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
           <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
             <details className="group/details" name="docs-primary-accordion">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
-                <h2 className="text-lg font-semibold md:text-xl">Input Gateway</h2>
-                <span className="text-slate-400 transition-transform group-open/details:rotate-180">▾</span>
+                <h2 className="text-base font-semibold md:text-lg">Input Gateway</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
               </summary>
               <div className="mt-3 space-y-2">
                 {inputGatewaySpecificationBody.map((line, index) =>
                   line.startsWith("### ") ? (
-                    <h3 key={`input-gateway-heading-${index}`} className="pt-2 text-base font-semibold text-slate-100">
+                    <h3 key={`input-gateway-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
                       {line.replace(/^###\s+/, "").trim()}
                     </h3>
                   ) : (
@@ -458,13 +461,13 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
           <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
             <details className="group/details" name="docs-primary-accordion">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
-                <h2 className="text-lg font-semibold md:text-xl">File Validator</h2>
-                <span className="text-slate-400 transition-transform group-open/details:rotate-180">▾</span>
+                <h2 className="text-base font-semibold md:text-lg">File Validator</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
               </summary>
               <div className="mt-3 space-y-2">
                 {fileValidatorSpecificationBody.map((line, index) =>
                   line.startsWith("### ") ? (
-                    <h3 key={`file-validator-heading-${index}`} className="pt-2 text-base font-semibold text-slate-100">
+                    <h3 key={`file-validator-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
                       {line.replace(/^###\s+/, "").trim()}
                     </h3>
                   ) : (
@@ -479,13 +482,13 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
           <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
             <details className="group/details" name="docs-primary-accordion">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
-                <h2 className="text-lg font-semibold md:text-xl">File Normalizer</h2>
-                <span className="text-slate-400 transition-transform group-open/details:rotate-180">▾</span>
+                <h2 className="text-base font-semibold md:text-lg">File Normalizer</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
               </summary>
               <div className="mt-3 space-y-2">
                 {fileNormalizerSpecificationBody.map((line, index) =>
                   line.startsWith("### ") ? (
-                    <h3 key={`file-normalizer-heading-${index}`} className="pt-2 text-base font-semibold text-slate-100">
+                    <h3 key={`file-normalizer-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
                       {line.replace(/^###\s+/, "").trim()}
                     </h3>
                   ) : (
@@ -500,13 +503,13 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
           <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
             <details className="group/details" name="docs-primary-accordion">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
-                <h2 className="text-lg font-semibold md:text-xl">File Metadata Extractor</h2>
-                <span className="text-slate-400 transition-transform group-open/details:rotate-180">▾</span>
+                <h2 className="text-base font-semibold md:text-lg">File Metadata Extractor</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
               </summary>
               <div className="mt-3 space-y-2">
                 {fileMetadataExtractorSpecificationBody.map((line, index) =>
                   line.startsWith("### ") ? (
-                    <h3 key={`file-metadata-extractor-heading-${index}`} className="pt-2 text-base font-semibold text-slate-100">
+                    <h3 key={`file-metadata-extractor-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
                       {line.replace(/^###\s+/, "").trim()}
                     </h3>
                   ) : (
@@ -521,13 +524,13 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
           <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
             <details className="group/details" name="docs-primary-accordion">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
-                <h2 className="text-lg font-semibold md:text-xl">File Storage Manager</h2>
-                <span className="text-slate-400 transition-transform group-open/details:rotate-180">▾</span>
+                <h2 className="text-base font-semibold md:text-lg">File Storage Manager</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
               </summary>
               <div className="mt-3 space-y-2">
                 {fileStorageManagerSpecificationBody.map((line, index) =>
                   line.startsWith("### ") ? (
-                    <h3 key={`file-storage-manager-heading-${index}`} className="pt-2 text-base font-semibold text-slate-100">
+                    <h3 key={`file-storage-manager-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
                       {line.replace(/^###\s+/, "").trim()}
                     </h3>
                   ) : (
@@ -542,13 +545,13 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
           <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
             <details className="group/details" name="docs-primary-accordion">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
-                <h2 className="text-lg font-semibold md:text-xl">File Registry</h2>
-                <span className="text-slate-400 transition-transform group-open/details:rotate-180">▾</span>
+                <h2 className="text-base font-semibold md:text-lg">File Registry</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
               </summary>
               <div className="mt-3 space-y-2">
                 {fileRegistrySpecificationBody.map((line, index) =>
                   line.startsWith("### ") ? (
-                    <h3 key={`file-registry-heading-${index}`} className="pt-2 text-base font-semibold text-slate-100">
+                    <h3 key={`file-registry-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
                       {line.replace(/^###\s+/, "").trim()}
                     </h3>
                   ) : (
@@ -565,18 +568,39 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
     );
   }
 
+  if (module === "analyzer") {
+    return (
+      <DocsContent>
+        <PageTitle title="Analyzer" description="" />
+        <div className="flex flex-col gap-5">
+          <SectionBlock title="Architecture Diagram" body={[]} collapsible>
+            <AnalyzerModuleDiagram />
+          </SectionBlock>
+          {placeholderSections.map((sectionTitle) => (
+            <SectionBlock
+              key={sectionTitle}
+              title={sectionTitle}
+              body={[]}
+              collapsible
+            />
+          ))}
+        </div>
+      </DocsContent>
+    );
+  }
+
   return (
     <DocsContent>
       <PageTitle
         title={title}
-        description="Architecture placeholder page. Sections are prepared for documentation authoring."
+        description=""
       />
       <div className="flex flex-col gap-5">
         {placeholderSections.map((sectionTitle) => (
           <SectionBlock
             key={sectionTitle}
             title={sectionTitle}
-            body={["Pending documentation content for this module."]}
+            body={[]}
             collapsible
           />
         ))}
@@ -584,4 +608,6 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
     </DocsContent>
   );
 }
+
+
 

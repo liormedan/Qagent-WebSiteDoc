@@ -11,6 +11,7 @@ export function SectionBlock({
   childrenFirst = false,
   collapsible = false,
   tocHidden = false,
+  plainStructured = false,
 }: {
   id?: string;
   title: string;
@@ -19,12 +20,13 @@ export function SectionBlock({
   childrenFirst?: boolean;
   collapsible?: boolean;
   tocHidden?: boolean;
+  plainStructured?: boolean;
 }) {
   const hasStructuredHeadings = body.some((line) => line.startsWith("### "));
   const summaryLines = body.slice(0, 2);
   const detailLines = body.slice(2);
-  const hasTechnicalDetails = !hasStructuredHeadings && (detailLines.length > 0 || Boolean(children));
-  const heading = <h2 data-toc-title={title} data-toc-hidden={tocHidden ? "true" : undefined} className="break-words text-xl font-semibold leading-tight md:text-2xl">{linkConcepts(title, 1)}</h2>;
+  const hasTechnicalDetails = !hasStructuredHeadings && detailLines.length > 0;
+  const heading = <h2 data-toc-title={title} data-toc-hidden={tocHidden ? "true" : undefined} className="break-words text-lg font-semibold leading-tight md:text-xl">{linkConcepts(title, 1)}</h2>;
   const content = (
     <>
       {hasStructuredHeadings ? (
@@ -48,10 +50,27 @@ export function SectionBlock({
 
             if (current) groups.push(current);
 
+            if (plainStructured) {
+              return groups.map((group, index) => (
+                <div key={`${title}-group-${index}`} className="rounded-lg border border-[var(--border)] bg-slate-950/30 px-3 py-2">
+                  <h3 data-toc-title={group.heading} className="text-sm font-semibold text-slate-100 md:text-base">
+                    {linkConcepts(group.heading, 1)}
+                  </h3>
+                  <div className="mt-2 space-y-2">
+                    {group.lines.map((line, lineIndex) => (
+                      <p key={`${title}-structured-${index}-${lineIndex}`} className="break-words text-sm leading-6 text-slate-100">
+                        {linkConcepts(line)}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              ));
+            }
+
             return groups.map((group, index) => (
               <details key={`${title}-group-${index}`} className="group/details rounded-lg border border-[var(--border)] bg-slate-950/30 px-3 py-2">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
-                  <h3 data-toc-title={group.heading} className="text-base font-semibold text-slate-100 md:text-lg">
+                  <h3 data-toc-title={group.heading} className="text-sm font-semibold text-slate-100 md:text-base">
                     {linkConcepts(group.heading, 1)}
                   </h3>
                   <ChevronRight className="h-4 w-4 shrink-0 text-slate-400 transition-transform group-open/details:rotate-90" />
@@ -76,6 +95,8 @@ export function SectionBlock({
             </p>
           ))}
         </div>
+      ) : children ? (
+        <div className="space-y-2">{children}</div>
       ) : (
         <p className="text-sm text-slate-400">No summary available.</p>
       )}
@@ -92,7 +113,6 @@ export function SectionBlock({
                 {linkConcepts(line)}
               </p>
             ))}
-            {children}
           </div>
         </details>
       ) : null}

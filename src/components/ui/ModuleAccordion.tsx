@@ -41,7 +41,7 @@ export function ModuleAccordion({
         onClick={() => setOpen((v) => !v)}
         className="flex w-full items-center justify-between gap-3 px-4 py-3 text-start"
       >
-        <p className="truncate text-base font-semibold leading-tight">{name}</p>
+        <p className="truncate text-[13.5px] font-semibold leading-tight">{name}</p>
         <div className="flex shrink-0 items-center gap-2">
           <Badge className="border border-[var(--border)] bg-slate-900 text-[10px] text-slate-100">{role}</Badge>
           <ChevronDown className={cn("h-4 w-4 text-slate-400 transition-transform", open && "rotate-180")} />

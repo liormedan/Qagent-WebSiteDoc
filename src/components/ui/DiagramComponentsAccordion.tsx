@@ -1,5 +1,7 @@
 "use client";
 
+import { ChevronDown } from "lucide-react";
+
 const items = [
   {
     title: "QCore Engine",
@@ -36,9 +38,9 @@ export function DiagramComponentsAccordion() {
     <div className="space-y-2">
       {items.map((item) => (
         <details key={item.title} className="group/item rounded-md border border-[var(--border)] bg-slate-900/40 px-3 py-2">
-          <summary className="flex cursor-pointer list-none items-center justify-between gap-2 text-sm font-semibold text-slate-100 [&::-webkit-details-marker]:hidden">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-2 text-[13.5px] font-semibold text-slate-100 [&::-webkit-details-marker]:hidden">
             <span>{item.title}</span>
-            <span className="text-slate-400 transition-transform group-open/item:rotate-180">▾</span>
+            <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/item:rotate-180" />
           </summary>
           <p className="mt-2 text-sm leading-6 text-slate-300">{item.description}</p>
         </details>

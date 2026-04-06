@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ChevronDown } from "lucide-react";
 import { DocsContent } from "@/components/layout/DocsContent";
 import { DiagramComponentsAccordion } from "@/components/ui/DiagramComponentsAccordion";
 import { LlmInterfaceDiagram } from "@/components/ui/LlmInterfaceDiagram";
@@ -30,8 +31,8 @@ export default function QCorePage() {
         <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
           <details className="group/details" name="docs-primary-accordion">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
-              <h2 className="text-lg font-semibold md:text-xl">Architecture Diagram</h2>
-              <span className="text-slate-400 transition-transform group-open/details:rotate-180">▾</span>
+              <h2 className="text-base font-semibold md:text-lg">Architecture Diagram</h2>
+              <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
             </summary>
             <div className="mt-3 space-y-3">
               <p className="text-sm leading-6 text-slate-300">
@@ -53,7 +54,7 @@ export default function QCorePage() {
               <details className="group/details rounded-lg border border-[var(--border)] bg-slate-950/40 p-3">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-2 text-sm font-semibold text-slate-100 [&::-webkit-details-marker]:hidden">
                   <span>Diagram Components</span>
-                  <span className="text-slate-400 transition-transform group-open/details:rotate-180">▾</span>
+                  <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
                 </summary>
                 <div className="mt-3">
                   <DiagramComponentsAccordion />
@@ -78,3 +79,4 @@ export default function QCorePage() {
     </DocsContent>
   );
 }
+
