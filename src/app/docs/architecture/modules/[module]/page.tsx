@@ -3,8 +3,10 @@ import { ChevronDown } from "lucide-react";
 import { notFound } from "next/navigation";
 import { DocsContent } from "@/components/layout/DocsContent";
 import { AnalyzerModuleDiagram } from "@/components/ui/AnalyzerModuleDiagram";
+import { DalModuleDiagram } from "@/components/ui/DalModuleDiagram";
 import { DiagramComponentsAccordion } from "@/components/ui/DiagramComponentsAccordion";
 import FilesHandlerDiagram from "@/components/ui/FilesHandlerDiagram";
+import { IntentClarificationDiagram } from "@/components/ui/IntentClarificationDiagram";
 import { LlmInterfaceDiagram } from "@/components/ui/LlmInterfaceDiagram";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { QCoreInternalDiagram } from "@/components/ui/QCoreInternalDiagram";
@@ -546,6 +548,491 @@ const structureBuilderBody = [
   "Structure Builder is the final stage of Analyzer, transforming extracted and enriched data into a unified representation that enables effective reasoning and decision-making by QCore.",
 ] as const;
 
+const intentClarificationBody = [
+  "### Goal",
+  "Define Intent + Clarification as the reasoning interface responsible for interpreting user intent and resolving ambiguity before planning and execution.",
+  "### Overview",
+  "Intent + Clarification is the first reasoning stage in the system.",
+  "It receives structured analysis from Analyzer and determines what the user wants, what action is required, and whether intent is clear or ambiguous.",
+  "When ambiguity exists, the layer produces clarification requests before progression.",
+  "### Module Type",
+  "Reasoning Preparation Layer serving as the intent resolution system.",
+  "### Purpose",
+  "Interpret user intent from input and context, map intent to actionable goals, detect ambiguity or missing information, generate clarifications when needed, and ensure readiness for DAL.",
+  "### Internal Structure",
+  "Intent Resolver: performs intent classification, goal identification, and mapping of input to action types.",
+  "Context Interpreter: combines analyzer output with memory, session, and context signals.",
+  "Ambiguity Detector: detects missing parameters, conflicting signals, and multi-interpretation cases.",
+  "Clarification Generator: produces missing-data questions, user options, and structured prompts.",
+  "Intent Validator: checks completeness, consistency, and compatibility with system capabilities.",
+  "Intent Structurer: emits structured intent object, goal definition, and required parameters.",
+  "### Flow",
+  "Analyzer Output + User Input -> Intent Resolver -> Context Interpreter -> Ambiguity Detection -> Clarification (if needed) -> Intent Validation -> Intent Structuring -> Structured Intent Output -> DAL.",
+  "### Inputs",
+  "Analyzer structured output, user input, memory and history, and session context.",
+  "### Outputs",
+  "Structured intent object, identified goal, required parameters, and clarification request when needed.",
+  "### Control Boundary",
+  "This layer interprets intent and prepares it for decision-making. It does not execute actions.",
+  "### Non Responsibilities",
+  "Tool execution, flow control, DSP processing, and UI rendering.",
+  "### System Behavior",
+  "The layer must guarantee clear intent before planning, resolve ambiguity early, produce consistent structured intent, and remain ready for DAL ingestion.",
+  "### Failure Handling",
+  "Unclear intent triggers clarification, conflicting signals trigger resolution or clarification, and missing data triggers explicit input requests.",
+  "### Architectural Summary",
+  "Intent + Clarification is the reasoning-preparation stage of QAgent, translating user input and analyzed data into clear, structured, actionable intent before planning and execution.",
+  "### Validation",
+  "Intent resolution, ambiguity handling, clarification support, structured output readiness, and DAL readiness are all defined.",
+  "### Deep Insight",
+  "System quality depends on this boundary: when ambiguity is resolved before planning, downstream orchestration becomes deterministic instead of reactive.",
+] as const;
+
+const intentResolverBody = [
+  "### Module Type",
+  "Intent Interpretation Component as an Intent + Clarification submodule.",
+  "### Purpose",
+  "Identify and classify user intent, define the underlying goal, and map input into actionable system-level action types.",
+  "### Overview",
+  "Intent Resolver translates user input and analyzed data into a clear structured intent.",
+  "It determines what the user is trying to achieve and aligns that intent with system capabilities through defined action categories.",
+  "This is the first step in transforming input into executable logic.",
+  "### Responsibilities",
+  "Perform intent classification.",
+  "Identify user goals.",
+  "Map input to action types.",
+  "Interpret high-level user requests.",
+  "Prepare intent for validation and clarification.",
+  "### Core Capabilities",
+  "Intent Classification: categorize user intent into predefined types such as analyze, transform, enhance, generate, and modify.",
+  "Goal Identification: determine objective and desired outcomes behind each request.",
+  "Action Mapping: align intent with supported system action types and capabilities.",
+  "Multi-Intent Handling: detect multiple intents in one input and prioritize or split when needed.",
+  "### Flow",
+  "User Input + Analyzer Output -> Intent Classification -> Goal Identification -> Action Mapping -> Structured Intent Signal.",
+  "### Inputs",
+  "User input, analyzer structured data, optional context, and optional memory or history.",
+  "### Outputs",
+  "Intent type, identified goal, mapped action type, and structured intent signal.",
+  "### Control Boundary",
+  "Intent Resolver does not validate completeness, does not generate clarifications, and does not execute actions. It only identifies and maps intent.",
+  "### Non Responsibilities",
+  "Ambiguity resolution, tool selection, flow control, and execution.",
+  "### Architectural Summary",
+  "Intent Resolver is the core interpretation component of Intent + Clarification, converting input into structured intent signals through classification, goal identification, and action mapping.",
+] as const;
+
+const contextInterpreterBody = [
+  "### Module Type",
+  "Context Integration Component as an Intent + Clarification submodule.",
+  "### Purpose",
+  "Combine analyzer output with memory, session data, and contextual signals to produce unified context-aware input for intent resolution.",
+  "### Overview",
+  "Context Interpreter builds coherent situational understanding by merging multiple context sources.",
+  "It ensures user input is interpreted with prior interactions, session state, historical data, and relevant environment signals instead of isolation.",
+  "This improves intent interpretation accuracy and context awareness.",
+  "### Responsibilities",
+  "Merge analyzer output with contextual data.",
+  "Integrate memory and session history.",
+  "Align input with current system state.",
+  "Resolve contextual dependencies.",
+  "Prepare enriched context for intent resolution.",
+  "### Core Capabilities",
+  "Context Aggregation: combine analyzer output, memory, session data, and system state into one context view.",
+  "Session Awareness: track active session state and preserve continuity across interactions.",
+  "Memory Integration: retrieve relevant historical data and incorporate prior decisions and outputs.",
+  "Context Alignment: align new input with existing context, resolve inconsistencies, and preserve coherence.",
+  "Context Enrichment: add contextual signals to provide richer representation for intent processing.",
+  "### Flow",
+  "Analyzer Output + User Input -> Context Aggregation -> Memory Integration -> Session Awareness -> Context Alignment -> Unified Context Object.",
+  "### Inputs",
+  "Analyzer structured output, user input, memory data, session state, and system context.",
+  "### Outputs",
+  "Unified context object, enriched input representation, and context-aware data structure.",
+  "### Control Boundary",
+  "Context Interpreter does not classify intent, does not detect ambiguity, and does not generate clarification. It only builds context.",
+  "### Non Responsibilities",
+  "Decision-making, tool execution, flow control, and UI generation.",
+  "### Architectural Summary",
+  "Context Interpreter is the context-integration component of Intent + Clarification, merging analyzer output with memory and session signals to provide unified context-aware input for intent resolution.",
+] as const;
+
+const ambiguityDetectorBody = [
+  "### Module Type",
+  "Ambiguity Detection Component as an Intent + Clarification submodule.",
+  "### Purpose",
+  "Identify unclear, incomplete, or conflicting intent signals and determine whether clarification is required before progression.",
+  "### Overview",
+  "Ambiguity Detector prevents progression under uncertain understanding.",
+  "It evaluates resolved intent and context for missing parameters, conflicting signals, and multiple valid interpretations.",
+  "When ambiguity is detected, progression pauses and clarification is triggered.",
+  "### Responsibilities",
+  "Detect missing or incomplete input parameters.",
+  "Identify conflicting context or instruction signals.",
+  "Recognize multiple valid interpretations.",
+  "Evaluate intent clarity level.",
+  "Trigger clarification when necessary.",
+  "### Core Capabilities",
+  "Missing Parameter Detection: identify required but absent fields and incomplete instructions.",
+  "Conflict Detection: detect contradictions and incompatible instructions across input and context.",
+  "Multi-Interpretation Detection: flag cases where language or structure supports multiple interpretations.",
+  "Clarity Scoring: optionally assign confidence to intent clarity and support threshold-based clarification decisions.",
+  "### Flow",
+  "Structured Intent + Context -> Parameter Check -> Conflict Detection -> Multi-Interpretation Detection -> Clarity Evaluation -> Clear or Ambiguous Decision.",
+  "### Inputs",
+  "Structured intent signal, unified context object, analyzer output, and memory/session data.",
+  "### Outputs",
+  "Ambiguity status, missing parameters, detected conflicts, interpretation candidates, and clarification trigger signal.",
+  "### Control Boundary",
+  "Ambiguity Detector does not resolve ambiguity, does not generate clarification content, and does not execute actions. It only detects and flags.",
+  "### Non Responsibilities",
+  "Intent classification, tool selection, flow control, and execution.",
+  "### Architectural Summary",
+  "Ambiguity Detector is the validation component of Intent + Clarification, ensuring the system does not proceed without clear and complete intent understanding.",
+] as const;
+
+const clarificationGeneratorBody = [
+  "### Module Type",
+  "User Interaction Component as an Intent + Clarification submodule.",
+  "### Purpose",
+  "Generate clear structured clarification prompts to resolve ambiguity by requesting missing information, presenting options, and guiding input completion.",
+  "### Overview",
+  "Clarification Generator is activated when ambiguity is detected.",
+  "It converts ambiguity signals into actionable questions and structured prompts so users can provide required missing information.",
+  "This ensures progression only with complete and accurate intent.",
+  "### Responsibilities",
+  "Generate questions for missing parameters.",
+  "Present options for ambiguous interpretations.",
+  "Create structured clarification prompts.",
+  "Guide user input toward completeness.",
+  "Enable controlled user interaction for intent completion.",
+  "### Core Capabilities",
+  "Missing Data Questions: produce targeted questions for required parameters and essential missing fields.",
+  "Option Generation: present multiple valid interpretations and support explicit user selection.",
+  "Structured Prompt Creation: keep prompt format consistent, clear, and simple for reliable responses.",
+  "Interaction Guidance: control presentation style, avoid overload, and prioritize usability and clarity.",
+  "### Flow",
+  "Ambiguity Detected -> Identify Missing or Conflicting Elements -> Generate Questions or Options -> Format Structured Prompt -> Send to User -> Receive Clarification -> Return to Intent Flow.",
+  "### Inputs",
+  "Ambiguity detection result, missing parameters, conflicting signals, interpretation candidates, and context data.",
+  "### Outputs",
+  "Clarification questions, selectable options, structured prompts, and user interaction payload.",
+  "### Control Boundary",
+  "Clarification Generator does not resolve ambiguity internally, does not decide final intent, and does not execute actions. It only communicates with the user.",
+  "### Non Responsibilities",
+  "Intent classification, decision-making, tool execution, and flow control.",
+  "### Architectural Summary",
+  "Clarification Generator is the user-interaction component of Intent + Clarification, converting ambiguity into structured prompts that enable complete and accurate intent resolution.",
+] as const;
+
+const intentValidatorBody = [
+  "### Module Type",
+  "Intent Validation Component as an Intent + Clarification submodule.",
+  "### Purpose",
+  "Ensure resolved intent is complete, consistent, and compatible with system capabilities before progression to planning in DAL.",
+  "### Overview",
+  "Intent Validator verifies that interpreted intent is valid and actionable.",
+  "It serves as the final checkpoint before transitioning from understanding to planning.",
+  "Only validated intents are allowed downstream.",
+  "### Responsibilities",
+  "Verify intent completeness.",
+  "Ensure internal consistency.",
+  "Validate compatibility with system capabilities.",
+  "Confirm readiness for planning.",
+  "Block invalid or unsupported intents.",
+  "### Core Capabilities",
+  "Completeness Check: verify required parameters exist, critical data is present, and input sufficiency is achieved.",
+  "Consistency Check: detect contradictions, validate logical coherence, and confirm alignment between context and intent.",
+  "Capability Validation: ensure requested actions are supported by available system tools and modules.",
+  "Readiness Verification: confirm ambiguity is resolved and intent is ready for DAL transition.",
+  "### Flow",
+  "Structured Intent -> Completeness Check -> Consistency Check -> Capability Validation -> Readiness Verification -> Valid or Invalid Decision.",
+  "### Inputs",
+  "Structured intent object, context data, system capabilities, and analyzer output.",
+  "### Outputs",
+  "Validation result, validation status, missing or invalid elements, and readiness signal for next stage.",
+  "### Control Boundary",
+  "Intent Validator does not resolve ambiguity, does not generate clarification, and does not execute actions. It only validates intent.",
+  "### Non Responsibilities",
+  "Intent classification, tool execution, flow control, and UI generation.",
+  "### Architectural Summary",
+  "Intent Validator is the final validation component of Intent + Clarification, ensuring intent is complete, consistent, and capability-compatible before progression to DAL planning.",
+] as const;
+
+const intentStructurerBody = [
+  "### Module Type",
+  "Intent Structuring Component as an Intent + Clarification submodule.",
+  "### Purpose",
+  "Transform validated intent into a structured standardized representation consumable by DAL for planning and execution.",
+  "### Overview",
+  "Intent Structurer converts validated intent into a well-defined machine-readable structure.",
+  "It organizes goal, parameters, and context in a consistent format for seamless transition to planning.",
+  "### Responsibilities",
+  "Build structured intent object.",
+  "Define clear goal representation.",
+  "Organize required parameters.",
+  "Normalize intent data.",
+  "Prepare output for DAL.",
+  "### Core Capabilities",
+  "Intent Object Construction: create standardized machine-readable intent object with consistent schema.",
+  "Goal Definition: translate user objective into actionable goal aligned with system capabilities.",
+  "Parameter Structuring: extract and organize required parameters for downstream planning use.",
+  "Schema Normalization: enforce unified structure, consistent field naming, and stable format across intent types.",
+  "Context Packaging: attach relevant analyzer and memory signals to preserve full intent scope.",
+  "### Flow",
+  "Validated Intent -> Goal Definition -> Parameter Structuring -> Schema Normalization -> Context Packaging -> Structured Intent Object -> DAL.",
+  "### Inputs",
+  "Validated intent, context data, parameters, analyzer output, and memory signals.",
+  "### Outputs",
+  "Structured intent object, goal definition, required parameters, and normalized intent schema.",
+  "### Control Boundary",
+  "Intent Structurer does not validate intent, does not perform reasoning, and does not execute actions. It only structures data.",
+  "### Non Responsibilities",
+  "Ambiguity detection, clarification generation, tool execution, and flow control.",
+  "### Architectural Summary",
+  "Intent Structurer is the final component of Intent + Clarification, converting validated intent into normalized structured representation for seamless DAL planning and execution.",
+] as const;
+
+const dalLayerBody = [
+  "### Goal",
+  "Define DAL as the planning layer that transforms structured intent into a system-executable plan composed of actions, tools, and UI representation.",
+  "### Overview",
+  "DAL is the system planning engine.",
+  "It receives structured intent from Intent Structurer and converts it into actionable steps, tool execution plan, and UI representation plan.",
+  "DAL defines what should be done and does not execute actions.",
+  "### Module Type",
+  "Planning Layer serving as the action abstraction system.",
+  "### Purpose",
+  "Translate intent into actionable plans, define execution steps, map actions to tools, build UI representation plan, and prepare the system for execution.",
+  "### Internal Structure",
+  "Action Planner: performs action breakdown, step sequencing, and goal decomposition.",
+  "Tool Mapper: maps planned actions to system tools and capabilities.",
+  "Execution Graph Builder: defines dependencies, order, and sequential or parallel structure.",
+  "UI Plan Generator: defines UI blocks, visual representation, and user interaction elements.",
+  "Constraint Resolver: enforces system limits, tool compatibility, and execution constraints.",
+  "Plan Formatter: emits structured DAL output with execution and UI planning integration.",
+  "### Flow",
+  "Structured Intent -> Action Planning -> Tool Mapping -> Execution Graph Building -> UI Plan Generation -> Constraint Resolution -> Plan Formatting -> DAL Output.",
+  "### Inputs",
+  "Structured intent object, goal definition, parameters, context, and system capabilities.",
+  "### Outputs",
+  "Action plan, tool mapping, execution graph, UI plan, and structured DAL object.",
+  "### Control Boundary",
+  "DAL defines what should happen and does not execute. It is planning-only.",
+  "### Non Responsibilities",
+  "Execution by DAgent, LLM reasoning decisions, state management, and UI rendering.",
+  "### System Behavior",
+  "DAL must ensure complete actionable plans, logical execution order, capability alignment, and execution readiness.",
+  "### Failure Handling",
+  "Unsupported action triggers plan adjustment, missing parameters trigger clarification request, and invalid mapping triggers fallback strategy.",
+  "### Architectural Summary",
+  "DAL is the planning engine of QAgent, converting structured intent into an actionable structured plan defining actions, execution model, and representation.",
+  "### Validation",
+  "Plan creation, action definition, tool mapping, execution graph building, and UI plan generation are all defined.",
+] as const;
+
+const actionPlannerBody = [
+  "### Module Type",
+  "Planning Component as a DAL submodule.",
+  "### Purpose",
+  "Decompose structured intent into a sequence of actionable steps that define how the system should achieve the user goal.",
+  "### Overview",
+  "Action Planner translates high-level intent into a structured action sequence.",
+  "It breaks goals into manageable steps, determines ordering, and defines logical progression for outcome delivery.",
+  "### Responsibilities",
+  "Perform action breakdown.",
+  "Define step-by-step execution plan.",
+  "Decompose goals into smaller tasks.",
+  "Establish logical sequencing.",
+  "Prepare actions for tool mapping.",
+  "### Core Capabilities",
+  "Action Breakdown: split high-level intent into discrete operations and ensure full action coverage.",
+  "Step Sequencing: define execution order, dependencies, and sequential versus parallel flow.",
+  "Goal Decomposition: break complex goals into actionable sub-goals while preserving alignment to overall objective.",
+  "Dependency Identification: map inter-action relationships and prevent invalid transition ordering.",
+  "### Flow",
+  "Structured Intent -> Goal Decomposition -> Action Breakdown -> Dependency Identification -> Step Sequencing -> Action Plan.",
+  "### Inputs",
+  "Structured intent object, goal definition, parameters, and context.",
+  "### Outputs",
+  "Action list, step sequence, sub-goals, dependency map, and structured action plan.",
+  "### Control Boundary",
+  "Action Planner does not execute actions, does not select tools, and does not generate UI. It only defines what must be done.",
+  "### Non Responsibilities",
+  "Tool execution, UI rendering, flow control, and reasoning decisions.",
+  "### Architectural Summary",
+  "Action Planner is the core decomposition engine of DAL, transforming goals into structured ordered actions that define how outcomes are achieved.",
+] as const;
+
+const toolMapperBody = [
+  "### Module Type",
+  "Mapping Component as a DAL submodule.",
+  "### Purpose",
+  "Map planned actions to concrete system tools and capabilities so each action is executable within system boundaries.",
+  "### Overview",
+  "Tool Mapper translates abstract actions into executable operations.",
+  "It aligns each planned action with the right tool, validates compatibility, and prepares action-to-tool definitions for execution.",
+  "### Responsibilities",
+  "Map actions to system tools.",
+  "Align actions with available capabilities.",
+  "Ensure tool compatibility.",
+  "Prepare tool-level execution definitions.",
+  "Validate mapping feasibility.",
+  "### Core Capabilities",
+  "Action-to-Tool Mapping: match each planned action to the appropriate tool and keep mapping consistency.",
+  "Capability Alignment: verify tool support for required actions and match requirements to capabilities.",
+  "Tool Selection Logic: choose best tool when alternatives exist, using context, constraints, performance, and fallback strategy.",
+  "Execution Preparation: define tool usage model, prepare tool-level parameters, and structure execution-ready instructions.",
+  "### Flow",
+  "Action Plan -> Action-to-Tool Mapping -> Capability Alignment -> Tool Selection -> Execution Preparation -> Mapped Tool Plan.",
+  "### Inputs",
+  "Action plan, system capabilities, available tools, and context.",
+  "### Outputs",
+  "Mapped tools, per-action tool assignments, execution-ready definitions, and tool-mapping structure.",
+  "### Control Boundary",
+  "Tool Mapper does not execute tools, does not define action logic, and does not control flow. It only maps actions to tools.",
+  "### Non Responsibilities",
+  "Action planning, UI generation, execution by DAgent, and reasoning.",
+  "### Architectural Summary",
+  "Tool Mapper is the DAL mapping component that converts planned actions into executable operations by aligning them with tools and capabilities.",
+] as const;
+
+const executionGraphBuilderBody = [
+  "### Module Type",
+  "Execution Structuring Component as a DAL submodule.",
+  "### Purpose",
+  "Define execution structure of planned actions by establishing dependencies, execution order, and sequential versus parallel behavior.",
+  "### Overview",
+  "Execution Graph Builder organizes mapped actions into a structured execution graph.",
+  "It determines action relationships, ordering, and concurrency boundaries to enable correct and efficient DAgent execution.",
+  "### Responsibilities",
+  "Define dependencies between actions.",
+  "Establish execution order.",
+  "Determine sequential versus parallel execution.",
+  "Build execution graph structure.",
+  "Ensure logical and valid execution flow.",
+  "### Core Capabilities",
+  "Dependency Definition: identify prerequisites and prevent invalid execution sequences.",
+  "Order Structuring: define valid progression aligned with the action plan.",
+  "Parallelization Logic: detect actions that can run concurrently while preserving safety constraints.",
+  "Graph Construction: represent actions as nodes and dependencies as edges in execution-ready format.",
+  "### Flow",
+  "Mapped Tool Plan -> Dependency Analysis -> Order Structuring -> Parallelization Detection -> Graph Construction -> Execution Graph.",
+  "### Inputs",
+  "Mapped tool plan, action plan, dependencies, and system constraints.",
+  "### Outputs",
+  "Execution graph, action dependencies, execution order, and parallel execution groups.",
+  "### Control Boundary",
+  "Execution Graph Builder does not execute actions, does not select tools, and does not perform reasoning. It only structures execution.",
+  "### Non Responsibilities",
+  "Action planning, tool execution, UI generation, and flow control.",
+  "### Architectural Summary",
+  "Execution Graph Builder is the DAL structural component that organizes actions into dependency-aware execution graphs defining how and when each action runs.",
+] as const;
+
+const uiPlanGeneratorBody = [
+  "### Module Type",
+  "UI Planning Component as a DAL submodule.",
+  "### Purpose",
+  "Define how planned actions and execution flow are represented visually to users through UI blocks and interaction elements.",
+  "### Overview",
+  "UI Plan Generator translates execution logic into visual and interactive representation.",
+  "It defines how state, actions, and outcomes appear in the Canvas so users can understand, interact with, and control process progression.",
+  "### Responsibilities",
+  "Define UI blocks from action plan.",
+  "Create visual representation of execution flow.",
+  "Design user interaction elements.",
+  "Align UI with system state and actions.",
+  "Prepare UI structure for rendering.",
+  "### Core Capabilities",
+  "UI Block Definition: map actions to visual blocks and define component layout structure.",
+  "Visual Representation: render execution steps, action relationships, system state, and progress indicators in plan form.",
+  "Interaction Design: define controls such as buttons, sliders, and inputs for guided user interaction.",
+  "State Visualization: represent execution status and user-facing progress feedback.",
+  "UI Structure Mapping: map execution graph semantics into consistent UI layout model.",
+  "### Flow",
+  "Execution Graph -> UI Block Definition -> Visual Representation Mapping -> Interaction Design -> UI Structure Assembly -> UI Plan.",
+  "### Inputs",
+  "Execution graph, action plan, system state, and context.",
+  "### Outputs",
+  "UI blocks, layout structure, interaction elements, and UI plan object.",
+  "### Control Boundary",
+  "UI Plan Generator does not render UI, does not execute actions, and does not control flow. It only defines UI.",
+  "### Non Responsibilities",
+  "UI rendering by UAgent, tool execution, reasoning, and state management.",
+  "### Architectural Summary",
+  "UI Plan Generator is the DAL visual-planning component that converts execution logic into structured UI representations for transparency and user interaction.",
+] as const;
+
+const constraintResolverBody = [
+  "### Module Type",
+  "Constraint Validation Component as a DAL submodule.",
+  "### Purpose",
+  "Ensure generated execution plans comply with system limits, tool compatibility, and operational constraints before execution.",
+  "### Overview",
+  "Constraint Resolver validates execution-plan feasibility.",
+  "It checks planned actions, tool mappings, and execution structures against system constraints to ensure plans are safe, valid, and executable.",
+  "### Responsibilities",
+  "Enforce system limits.",
+  "Validate tool compatibility.",
+  "Ensure execution feasibility.",
+  "Detect constraint violations.",
+  "Adjust or reject invalid plans.",
+  "### Core Capabilities",
+  "System Limit Enforcement: validate resource usage, execution time, and concurrency boundaries.",
+  "Tool Compatibility Validation: ensure chosen tools support required actions and data combinations.",
+  "Execution Constraint Checking: validate dependencies, sequencing conditions, and safe parallel execution readiness.",
+  "Plan Adjustment: apply fallback strategies and simplify or modify plan where needed.",
+  "Constraint Violation Detection: detect invalid configurations, flag critical issues, and block unsafe execution.",
+  "### Flow",
+  "Execution Plan -> System Limit Check -> Tool Compatibility Check -> Execution Constraint Validation -> Valid Continue or Invalid Adjust/Reject -> Validated Plan.",
+  "### Inputs",
+  "Execution plan, tool mappings, execution graph, system capabilities, and constraint definitions.",
+  "### Outputs",
+  "Validated plan, adjusted plan when needed, constraint validation result, and constraint violation report.",
+  "### Control Boundary",
+  "Constraint Resolver does not execute actions, does not define intent, and does not generate UI. It only validates and adjusts plans.",
+  "### Non Responsibilities",
+  "Action planning, tool execution, UI rendering, and reasoning.",
+  "### Architectural Summary",
+  "Constraint Resolver is the DAL validation component that ensures execution plans are feasible, safe, and compliant before downstream execution.",
+] as const;
+
+const planFormatterBody = [
+  "### Module Type",
+  "Output Structuring Component as a DAL submodule.",
+  "### Purpose",
+  "Generate unified structured DAL output that integrates execution planning and UI planning into a single machine-readable format.",
+  "### Overview",
+  "Plan Formatter is the final stage of DAL.",
+  "It consolidates action plan, tool mappings, execution graph, and UI plan into one standardized structure.",
+  "This output is consumed by downstream modules such as UAgent for UI handling and DAgent for execution.",
+  "### Responsibilities",
+  "Aggregate all DAL components.",
+  "Normalize plan structure.",
+  "Integrate execution and UI planning.",
+  "Ensure consistency and completeness.",
+  "Prepare final DAL output.",
+  "### Core Capabilities",
+  "Plan Aggregation: combine outputs from Action Planner, Tool Mapper, Execution Graph Builder, UI Plan Generator, and Constraint Resolver.",
+  "Structure Normalization: enforce unified schema, consistent naming, and alignment between execution and UI structures.",
+  "Execution Integration: embed execution graph with action definitions and tool mappings for execution readiness.",
+  "UI Plan Integration: attach UI representation with blocks and interaction elements aligned to execution steps.",
+  "Output Validation: validate completeness, internal consistency, and downstream readiness.",
+  "### Flow",
+  "DAL Components Output -> Plan Aggregation -> Structure Normalization -> Execution Integration -> UI Plan Integration -> Output Validation -> Structured DAL Output.",
+  "### Inputs",
+  "Action plan, tool mappings, execution graph, UI plan, and validated constraints.",
+  "### Outputs",
+  "Structured DAL object, execution plan, UI plan, and integrated system plan.",
+  "### Control Boundary",
+  "Plan Formatter does not execute actions, does not perform reasoning, and does not render UI. It only formats final output.",
+  "### Non Responsibilities",
+  "Action planning, tool execution, UI rendering, and flow control.",
+  "### Architectural Summary",
+  "Plan Formatter is the final DAL component, consolidating all planning outputs into a unified structured representation that integrates execution and UI planning for downstream processing.",
+] as const;
+
 export function generateStaticParams() {
   return Object.keys(architectureModuleTitles).map((module) => ({ module }));
 }
@@ -961,6 +1448,332 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
                     </h3>
                   ) : (
                     <p key={`structure-builder-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+        </div>
+      </DocsContent>
+    );
+  }
+
+  if (module === "intent-clarification") {
+    return (
+      <DocsContent>
+        <PageTitle
+          title="Intent + Clarification"
+          description="Reasoning preparation layer that resolves user intent and ambiguity before DAL planning and execution."
+        />
+        <div className="flex flex-col gap-5">
+          <SectionBlock title="Architecture Diagram" body={[]} collapsible>
+            <IntentClarificationDiagram />
+          </SectionBlock>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Intent + Clarification Layer</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {intentClarificationBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`intent-clarification-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`intent-clarification-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Intent Resolver</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {intentResolverBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`intent-resolver-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`intent-resolver-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Context Interpreter</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {contextInterpreterBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`context-interpreter-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`context-interpreter-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Ambiguity Detector</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {ambiguityDetectorBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`ambiguity-detector-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`ambiguity-detector-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Clarification Generator</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {clarificationGeneratorBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`clarification-generator-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`clarification-generator-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Intent Validator</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {intentValidatorBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`intent-validator-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`intent-validator-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Intent Structurer</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {intentStructurerBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`intent-structurer-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`intent-structurer-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+        </div>
+      </DocsContent>
+    );
+  }
+
+  if (module === "dal") {
+    return (
+      <DocsContent>
+        <PageTitle
+          title="DAL"
+          description="Decision Abstraction Layer that converts structured intent into actionable execution and UI plans."
+        />
+        <div className="flex flex-col gap-5">
+          <SectionBlock title="Architecture Diagram" body={[]} collapsible>
+            <DalModuleDiagram />
+          </SectionBlock>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Decision Abstraction Layer</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {dalLayerBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`dal-layer-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`dal-layer-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Action Planner</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {actionPlannerBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`action-planner-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`action-planner-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Tool Mapper</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {toolMapperBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`tool-mapper-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`tool-mapper-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Execution Graph Builder</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {executionGraphBuilderBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`execution-graph-builder-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`execution-graph-builder-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">UI Plan Generator</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {uiPlanGeneratorBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`ui-plan-generator-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`ui-plan-generator-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Constraint Resolver</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {constraintResolverBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`constraint-resolver-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`constraint-resolver-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Plan Formatter</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {planFormatterBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`plan-formatter-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`plan-formatter-line-${index}`} className="text-sm leading-6 text-slate-300">
                       {line}
                     </p>
                   ),
