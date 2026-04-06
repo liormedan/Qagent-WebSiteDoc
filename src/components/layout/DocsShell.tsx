@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { DocsHeader } from "@/components/layout/DocsHeader";
 import { DocsPager } from "@/components/layout/DocsPager";
@@ -11,6 +11,7 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileTocOpen, setMobileTocOpen] = useState(false);
+  const mainRef = useRef<HTMLElement | null>(null);
 
   return (
     <div className="h-screen overflow-hidden bg-[var(--bg)] text-[var(--text)]">
@@ -21,12 +22,19 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
           <DocsSidebar className="h-full overflow-y-auto" />
         </div>
 
-        <main className="docs-main-scroll min-h-0 min-w-0 overflow-y-auto px-4 py-4 md:px-8 md:py-6">
+        <main ref={mainRef} className="docs-main-scroll min-h-0 min-w-0 overflow-y-auto px-4 py-4 md:px-8 md:py-6">
           {children}
           <DocsPager />
         </main>
 
-        <div className="hidden min-h-0 overflow-hidden border-l border-[var(--border)] px-5 py-6 xl:block">
+        <div
+          className="hidden min-h-0 overflow-hidden border-l border-[var(--border)] px-5 py-6 xl:block"
+          onWheel={(event) => {
+            if (!mainRef.current) return;
+            event.preventDefault();
+            mainRef.current.scrollBy({ top: event.deltaY });
+          }}
+        >
           <DocsToc className="h-full overflow-hidden" />
         </div>
       </div>

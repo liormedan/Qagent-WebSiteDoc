@@ -69,6 +69,15 @@ export function DocsToc({ className }: { className?: string }) {
     setHeadings(nextHeadings);
   }, []);
 
+  const closeAllAccordions = useCallback(() => {
+    const root = document.querySelector("[data-docs-content]");
+    if (!(root instanceof HTMLElement)) return;
+    const allDetails = Array.from(root.querySelectorAll("details")) as HTMLDetailsElement[];
+    allDetails.forEach((detailsEl) => {
+      detailsEl.open = false;
+    });
+  }, []);
+
   useEffect(() => {
     const frame = window.requestAnimationFrame(collectHeadings);
 
@@ -158,6 +167,7 @@ export function DocsToc({ className }: { className?: string }) {
                   return;
                 }
 
+                closeAllAccordions();
                 const detailsParent = target.closest("details");
                 if (detailsParent instanceof HTMLDetailsElement) {
                   detailsParent.open = true;

@@ -103,7 +103,7 @@ export function SectionBlock({
     <section id={id} className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
       <div className="space-y-3">
         {collapsible ? (
-          <details className="group/details">
+          <details className="group/details" name="docs-primary-accordion">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
               {heading}
               <ChevronRight className="h-5 w-5 shrink-0 text-slate-400 transition-transform group-open/details:rotate-90" />
