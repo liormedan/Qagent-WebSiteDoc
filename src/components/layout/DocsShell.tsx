@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { DocsHeader } from "@/components/layout/DocsHeader";
 import { DocsPager } from "@/components/layout/DocsPager";
@@ -12,6 +12,37 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileTocOpen, setMobileTocOpen] = useState(false);
   const mainRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const onSummaryClick = (event: MouseEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (!target) return;
+
+      const summary = target.closest("summary");
+      if (!(summary instanceof HTMLElement)) return;
+      const details = summary.parentElement;
+      if (!(details instanceof HTMLDetailsElement)) return;
+      if (details.getAttribute("name") !== "docs-primary-accordion") return;
+
+      event.preventDefault();
+
+      if (details.open) {
+        details.open = false;
+        return;
+      }
+
+      const allPrimary = Array.from(document.querySelectorAll("details[name='docs-primary-accordion']"));
+      allPrimary.forEach((node) => {
+        if (node instanceof HTMLDetailsElement && node !== details) {
+          node.open = false;
+        }
+      });
+      details.open = true;
+    };
+
+    document.addEventListener("click", onSummaryClick);
+    return () => document.removeEventListener("click", onSummaryClick);
+  }, []);
 
   return (
     <div className="h-screen overflow-hidden bg-[var(--bg)] text-[var(--text)]">
