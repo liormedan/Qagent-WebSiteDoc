@@ -25,6 +25,17 @@ export function DocsToc({ className }: { className?: string }) {
   const [headings, setHeadings] = useState<TocHeading[]>([]);
   const [activeId, setActiveId] = useState<string>("");
 
+  const syncActiveSectionVisual = useCallback((nextActive: string) => {
+    const root = document.querySelector("[data-docs-content]");
+    if (!(root instanceof HTMLElement)) return;
+    const sections = Array.from(root.querySelectorAll("section"));
+    sections.forEach((section) => section.classList.remove("docs-section-active"));
+    if (!nextActive) return;
+    const headingEl = document.getElementById(nextActive);
+    const sectionEl = headingEl?.closest("section");
+    sectionEl?.classList.add("docs-section-active");
+  }, []);
+
   const collectHeadings = useCallback(() => {
     const root = document.querySelector("[data-docs-content]");
     if (!root) {
@@ -98,6 +109,7 @@ export function DocsToc({ className }: { className?: string }) {
         }
       }
 
+      syncActiveSectionVisual(nextActive);
       setActiveId((prev) => (prev === nextActive ? prev : nextActive));
     };
 
@@ -124,7 +136,7 @@ export function DocsToc({ className }: { className?: string }) {
       contentRoot?.removeEventListener("toggle", updateActiveHeading, true);
       contentRoot?.removeEventListener("transitionend", updateActiveHeading, true);
     };
-  }, [headings]);
+  }, [headings, syncActiveSectionVisual]);
 
   const hasHeadings = useMemo(() => headings.length > 0, [headings]);
 
@@ -137,7 +149,32 @@ export function DocsToc({ className }: { className?: string }) {
             <Link
               key={`${heading.id}-${index}`}
               href={`#${heading.id}`}
-              onClick={() => setActiveId(heading.id)}
+              onClick={(event) => {
+                event.preventDefault();
+                const target = document.getElementById(heading.id);
+                const scrollRoot = document.querySelector("main");
+                if (!(target instanceof HTMLElement) || !(scrollRoot instanceof HTMLElement)) {
+                  setActiveId(heading.id);
+                  return;
+                }
+
+                const detailsParent = target.closest("details");
+                if (detailsParent instanceof HTMLDetailsElement) {
+                  detailsParent.open = true;
+                }
+
+                const rootRect = scrollRoot.getBoundingClientRect();
+                const targetRect = target.getBoundingClientRect();
+                const top = targetRect.top - rootRect.top + scrollRoot.scrollTop - 24;
+                scrollRoot.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+
+                if (window.location.hash !== `#${heading.id}`) {
+                  window.history.replaceState(null, "", `#${heading.id}`);
+                }
+
+                syncActiveSectionVisual(heading.id);
+                setActiveId(heading.id);
+              }}
               className={cn(
                 "block rounded-md border-l-2 border-transparent px-3 py-1.5 text-sm text-slate-300 transition-all duration-150 hover:bg-slate-800 hover:text-white",
                 heading.id === activeId ? "translate-x-2 border-cyan-300 bg-slate-800/95 font-semibold text-white shadow-[0_0_0_1px_rgba(125,211,252,0.25)]" : "",

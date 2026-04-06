@@ -88,3 +88,8 @@ summary::-webkit-details-marker {
   width: 0;
   height: 0;
 }
+
+.docs-section-active {
+  box-shadow: 0 0 0 1px rgba(125, 211, 252, 0.28);
+  border-left: 2px solid #7dd3fc;
+}
