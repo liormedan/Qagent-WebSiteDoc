@@ -21,12 +21,12 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
           <DocsSidebar className="h-full overflow-y-auto" />
         </div>
 
-        <main className="min-w-0 overflow-y-auto px-4 py-4 md:px-8 md:py-6">
+        <main className="min-h-0 min-w-0 overflow-y-auto px-4 py-4 md:px-8 md:py-6">
           {children}
           <DocsPager />
         </main>
 
-        <div className="hidden border-l border-[var(--border)] px-5 py-6 xl:block">
+        <div className="hidden min-h-0 border-l border-[var(--border)] px-5 py-6 xl:block">
           <DocsToc className="h-full overflow-y-auto" />
         </div>
       </div>

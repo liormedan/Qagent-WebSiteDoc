@@ -63,6 +63,7 @@ import { orchestrationUiReflectionContent } from "@/content/orchestration-ui-ref
 import { overviewContent } from "@/content/overview";
 import { planningContent } from "@/content/planning";
 import { qAgentContent } from "@/content/q-agent";
+import { qcoreContent } from "@/content/qcore";
 import { recommendationEngineFlowContent } from "@/content/recommendation-engine-recommendation-flow";
 import { recommendationEngineModelContent } from "@/content/recommendation-engine-recommendation-model";
 import { recommendationEngineSourcesContent } from "@/content/recommendation-engine-recommendation-sources";
@@ -176,6 +177,7 @@ const pages: Record<string, DocPageContent> = {
   "audio-sandbox/state-flow": audioSandboxStateFlowContent,
   "audio-sandbox/scenario-examples": audioSandboxScenarioExamplesContent,
 
+  qcore: qcoreContent,
   "q-agent": qAgentContent,
   "audio-dal": audioDalContent,
   architecture: architectureContent,

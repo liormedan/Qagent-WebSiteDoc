@@ -27,6 +27,7 @@ const groupSlugs: Record<DocsNavGroup, string> = {
 
 export const docsNavigation: DocNavItem[] = [
   { title: "System Overview", description: "Understand the system mission and request lifecycle before technical details.", href: "/docs/overview", group: "AgentQ - stracture", recommendedFirst: true },
+  { title: "Main QAgent Core Structure", description: "Authoritative definition of QCore as the system runtime orchestrator and control center.", href: "/docs/qcore", group: "AgentQ - stracture" },
   { title: "System Map", description: "See how Q, orchestration, runtime, and memory connect as one system.", href: "/docs/architecture", group: "AgentQ - stracture" },
   { title: "One Request Journey", description: "Follow one complete request from input to versioned output and review.", href: "/docs/orchestration/orchestration-flow", group: "AgentQ - stracture" },
   { title: "Core Concepts", description: "Learn the contracts and terms that make the rest of the docs deterministic.", href: "/docs/contracts", group: "AgentQ - stracture" },
