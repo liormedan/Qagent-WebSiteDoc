@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 
 type TocHeading = {
@@ -25,9 +25,12 @@ export function DocsToc({ className }: { className?: string }) {
   const [headings, setHeadings] = useState<TocHeading[]>([]);
   const [activeId, setActiveId] = useState<string>("");
 
-  useEffect(() => {
+  const collectHeadings = useCallback(() => {
     const root = document.querySelector("[data-docs-content]");
-    if (!root) return;
+    if (!root) {
+      setHeadings([]);
+      return;
+    }
 
     const nodes = Array.from(root.querySelectorAll("h2")).filter(
       (node) => (node as HTMLHeadingElement).dataset.tocHidden !== "true",
@@ -52,29 +55,42 @@ export function DocsToc({ className }: { className?: string }) {
       });
     }
 
-    const frame = window.requestAnimationFrame(() => setHeadings(nextHeadings));
-    return () => window.cancelAnimationFrame(frame);
-  }, [pathname]);
+    setHeadings(nextHeadings);
+  }, []);
 
   useEffect(() => {
-    const scrollRoot = document.querySelector("main");
-    if (!(scrollRoot instanceof HTMLElement) || !headings.length) return;
+    const frame = window.requestAnimationFrame(collectHeadings);
 
-    const getTopRelativeToScrollRoot = (el: HTMLElement): number => {
-      const rootRect = scrollRoot.getBoundingClientRect();
-      const elRect = el.getBoundingClientRect();
-      return elRect.top - rootRect.top + scrollRoot.scrollTop;
+    const root = document.querySelector("[data-docs-content]");
+    if (!root) return () => window.cancelAnimationFrame(frame);
+    const observer = new MutationObserver(() => collectHeadings());
+    observer.observe(root, { subtree: true, attributes: true, attributeFilter: ["open"] });
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      observer.disconnect();
     };
+  }, [pathname, collectHeadings]);
+
+  useEffect(() => {
+    if (!headings.length) return;
+    let raf = 0;
+    const scrollRoot = document.querySelector("main");
+    if (!(scrollRoot instanceof HTMLElement)) return;
+    const contentRoot = document.querySelector("[data-docs-content]");
+    const markerOffset = 160;
 
     const updateActiveHeading = () => {
-      const markerLine = scrollRoot.scrollTop + 120;
+      const markerLine = scrollRoot.scrollTop + markerOffset;
       let nextActive = headings[0]?.id ?? "";
 
       for (const heading of headings) {
         const el = document.getElementById(heading.id);
         if (!el) continue;
         if (el.offsetParent === null) continue;
-        const top = getTopRelativeToScrollRoot(el);
+        const rootRect = scrollRoot.getBoundingClientRect();
+        const elRect = el.getBoundingClientRect();
+        const top = elRect.top - rootRect.top + scrollRoot.scrollTop;
         if (top <= markerLine) {
           nextActive = heading.id;
         } else {
@@ -85,20 +101,35 @@ export function DocsToc({ className }: { className?: string }) {
       setActiveId((prev) => (prev === nextActive ? prev : nextActive));
     };
 
+    const onScroll = () => {
+      if (raf) return;
+      raf = window.requestAnimationFrame(() => {
+        raf = 0;
+        updateActiveHeading();
+      });
+    };
+
     updateActiveHeading();
-    scrollRoot.addEventListener("scroll", updateActiveHeading, { passive: true });
+    scrollRoot.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", updateActiveHeading);
+    window.addEventListener("hashchange", updateActiveHeading);
+    contentRoot?.addEventListener("toggle", updateActiveHeading, true);
+    contentRoot?.addEventListener("transitionend", updateActiveHeading, true);
 
     return () => {
-      scrollRoot.removeEventListener("scroll", updateActiveHeading);
+      if (raf) window.cancelAnimationFrame(raf);
+      scrollRoot.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", updateActiveHeading);
+      window.removeEventListener("hashchange", updateActiveHeading);
+      contentRoot?.removeEventListener("toggle", updateActiveHeading, true);
+      contentRoot?.removeEventListener("transitionend", updateActiveHeading, true);
     };
   }, [headings]);
 
   const hasHeadings = useMemo(() => headings.length > 0, [headings]);
 
   return (
-    <aside className={cn("space-y-4", className)}>
+    <aside className={cn("space-y-4 overflow-hidden", className)}>
       <p className="text-xl font-semibold">On this page</p>
       {hasHeadings ? (
         <nav className="space-y-1">
@@ -106,6 +137,7 @@ export function DocsToc({ className }: { className?: string }) {
             <Link
               key={`${heading.id}-${index}`}
               href={`#${heading.id}`}
+              onClick={() => setActiveId(heading.id)}
               className={cn(
                 "block rounded-md border-l-2 border-transparent px-3 py-1.5 text-sm text-slate-300 transition-all duration-150 hover:bg-slate-800 hover:text-white",
                 heading.id === activeId ? "translate-x-2 border-cyan-300 bg-slate-800/95 font-semibold text-white shadow-[0_0_0_1px_rgba(125,211,252,0.25)]" : "",

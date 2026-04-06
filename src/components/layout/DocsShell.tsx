@@ -16,18 +16,18 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
     <div className="h-screen overflow-hidden bg-[var(--bg)] text-[var(--text)]">
       <DocsHeader key={pathname} onOpenMenu={() => setMobileMenuOpen(true)} onOpenToc={() => setMobileTocOpen(true)} />
 
-      <div className="mx-auto grid h-[calc(100vh-72px)] w-full max-w-[1800px] grid-cols-1 lg:grid-cols-[260px_minmax(0,1fr)] xl:grid-cols-[260px_minmax(0,1fr)_260px]">
+      <div className="mx-auto grid h-[calc(100vh-72px)] w-full max-w-[1800px] grid-cols-1 overflow-hidden lg:grid-cols-[260px_minmax(0,1fr)] xl:grid-cols-[260px_minmax(0,1fr)_260px]">
         <div className="hidden border-r border-[var(--border)] lg:block">
           <DocsSidebar className="h-full overflow-y-auto" />
         </div>
 
-        <main className="min-h-0 min-w-0 overflow-y-auto px-4 py-4 md:px-8 md:py-6">
+        <main className="docs-main-scroll min-h-0 min-w-0 overflow-y-auto px-4 py-4 md:px-8 md:py-6">
           {children}
           <DocsPager />
         </main>
 
-        <div className="hidden min-h-0 border-l border-[var(--border)] px-5 py-6 xl:block">
-          <DocsToc className="h-full overflow-y-auto" />
+        <div className="hidden min-h-0 overflow-hidden border-l border-[var(--border)] px-5 py-6 xl:block">
+          <DocsToc className="h-full overflow-hidden" />
         </div>
       </div>
 
