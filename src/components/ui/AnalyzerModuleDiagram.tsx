@@ -65,7 +65,7 @@ export function AnalyzerModuleDiagram() {
       <div className="mx-auto max-w-5xl">
         <div className="mb-6 text-center">
           <Badge className="mb-2 rounded-full bg-cyan-500/10 px-3 py-0.5 text-xs text-cyan-200">Analyzer Module</Badge>
-          <h2 className="text-2xl font-bold md:text-3xl">Analyzer</h2>
+          <p className="text-2xl font-bold md:text-3xl">Analyzer</p>
           <p className="mx-auto mt-2 max-w-xl text-xs text-slate-300 md:text-sm">
             Converts files into structured signals and contextual insights for QCore.
           </p>

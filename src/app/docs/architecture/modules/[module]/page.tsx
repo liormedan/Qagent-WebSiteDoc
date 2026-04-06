@@ -1,4 +1,4 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 import { notFound } from "next/navigation";
 import { DocsContent } from "@/components/layout/DocsContent";
@@ -304,6 +304,248 @@ const fileRegistrySpecificationBody = [
   "File Registry is the continuity anchor between ingestion and reasoning: when lineage is explicit, QCore can reason over file evolution, not only over isolated files.",
 ] as const;
 
+const analyzerModuleStructureBody = [
+  "### Goal",
+  "Analyzer is the module responsible for transforming raw inputs into structured, machine-usable representations.",
+  "It extracts meaning, structure, and features without making decisions or executing actions.",
+  "### Overview",
+  "Analyzer is the interpretation layer of the system.",
+  "It receives normalized input from Files Handler and converts it into structured data, detected features, and contextual signals that enable QCore reasoning.",
+  "### Module Type",
+  "Analysis Layer serving as the input interpretation system.",
+  "### Purpose",
+  "Understand input content, extract structure and meaning, detect relevant features, convert raw input into analysis-ready data, and prepare context for reasoning.",
+  "### Position in Flow",
+  "Files Handler -> Analyzer -> Intent + Clarification.",
+  "### Internal Structure",
+  "Content Scanner: text extraction, document scanning, basic summarization, and content segmentation.",
+  "Audio Recognizer: speech-to-text, segmentation by regions or events, signal detection, and audio feature extraction.",
+  "System Data Parser: metadata extraction, JSON/CSV parsing, structured format detection, and contextual attributes.",
+  "Knowledge Fetcher: contextual enrichment through related context retrieval and internal data querying.",
+  "Feature Extractor: entity extraction, pattern detection, anomaly detection, and relationship identification.",
+  "Structure Builder: unified output schema, normalized entities, and analysis-ready representation.",
+  "### Flow",
+  "Input from Files Handler passes through content/audio/data parsing, then feature extraction, then structure building, and exits as analyzer output for QCore.",
+  "### Inputs",
+  "Normalized file, metadata, file reference, and optional context.",
+  "### Outputs",
+  "Structured representation, extracted entities, detected features, segmentation data, and analysis metadata.",
+  "### Control Boundary",
+  "Analyzer interprets and structures information only. It does not decide, route, or execute actions.",
+  "### System Behavior",
+  "Must maintain consistent structure across input types, accurate key-feature extraction, modular analysis by content type, and readiness for downstream reasoning.",
+  "### Non Responsibilities",
+  "Does not perform reasoning decisions, select tools, control flow, or execute operations.",
+  "### Failure Handling",
+  "Unsupported format triggers partial analysis, missing data triggers fallback extraction, and noisy input triggers best-effort parsing.",
+  "### Architectural Summary",
+  "Analyzer is the interpretation engine of QAgent, converting raw inputs into structured and meaningful representations for downstream decision layers.",
+  "### Validation",
+  "Analysis definition, structure extraction, feature detection, and no-decision boundary are established and reasoning-ready.",
+  "### Deep Insight",
+  "Analyzer quality directly determines decision quality: when representation is stable and rich, downstream reasoning becomes safer, faster, and more deterministic.",
+] as const;
+
+const contentScannerBody = [
+  "### Module Type",
+  "Content Extraction Component as an Analyzer submodule.",
+  "### Purpose",
+  "Extract and interpret textual and structural information from input files, transforming raw content into analyzable segments.",
+  "### Overview",
+  "Content Scanner processes general file content and extracts meaningful textual and structural data.",
+  "It serves as the primary entry point for understanding non-audio inputs, enabling document-type identification, text extraction, and preparation for deeper analysis.",
+  "### Responsibilities",
+  "Extract text from files.",
+  "Perform document scanning, including OCR when needed.",
+  "Identify document type and structural layout.",
+  "Generate basic summaries.",
+  "Segment content into logical units.",
+  "### Core Capabilities",
+  "Text Extraction: extract raw text across multiple formats such as PDF, TXT, and DOC.",
+  "Document Scanning: analyze document structure, detect headings/sections/layout, and apply OCR for scanned inputs.",
+  "Basic Summarization: generate high-level summaries, identify key points, and provide fast context understanding.",
+  "Content Segmentation: split content into logical blocks such as paragraphs and sections for downstream analysis.",
+  "### Flow",
+  "Input File -> Text Extraction -> Document Scanning -> Summarization -> Content Segmentation -> Structured Output.",
+  "### Inputs",
+  "Normalized file from Files Handler, file metadata, and file reference.",
+  "### Outputs",
+  "Extracted text, document structure, summary, and segmented content blocks.",
+  "### Control Boundary",
+  "Content Scanner does not perform reasoning, does not decide actions, and does not execute processing. It is limited to extraction and structuring.",
+  "### Non Responsibilities",
+  "Audio processing, tool execution, decision-making, and flow control.",
+  "### Architectural Summary",
+  "Content Scanner is the foundational extraction component of Analyzer, converting raw document content into structured, segmented, and interpretable text for downstream analysis.",
+] as const;
+
+const audioRecognizerBody = [
+  "### Module Type",
+  "Audio Analysis Component as an Analyzer submodule.",
+  "### Purpose",
+  "Convert raw audio input into structured, analyzable data by extracting speech, detecting segments and events, and identifying meaningful audio features.",
+  "### Overview",
+  "Audio Recognizer interprets audio content and transforms raw signals into structured representations such as transcription, segmented regions, detected events, and extracted features.",
+  "This enables machine-readable understanding of audio for downstream modules.",
+  "### Responsibilities",
+  "Convert speech to text.",
+  "Segment audio into regions and events.",
+  "Detect relevant audio signals and patterns.",
+  "Extract measurable audio features for analysis.",
+  "Prepare structured audio data for downstream processing.",
+  "### Core Capabilities",
+  "Speech-to-Text: transcribe spoken content, support multi-speaker and continuous speech, and provide timestamps for alignment.",
+  "Audio Segmentation: divide audio into logical regions and identify silence, speech, music, transitions, and key events.",
+  "Signal Detection: identify peaks, noise, rhythm, anomalies, and other important acoustic markers.",
+  "Audio Feature Extraction: extract frequency bands, amplitude, tempo/BPM, and spectral characteristics.",
+  "### Flow",
+  "Audio Input -> Speech-to-Text -> Segmentation -> Signal Detection -> Feature Extraction -> Structured Audio Output.",
+  "### Inputs",
+  "Normalized audio file, audio metadata such as duration and sample rate, and file reference.",
+  "### Outputs",
+  "Transcription with timestamps, segmented regions, detected events, extracted audio features, and audio analysis metadata.",
+  "### Control Boundary",
+  "Audio Recognizer does not perform reasoning, does not decide actions, and does not execute DSP. It only analyzes and extracts.",
+  "### Non Responsibilities",
+  "UI generation, tool execution, flow control, and decision-making.",
+  "### Architectural Summary",
+  "Audio Recognizer is the audio interpretation component of Analyzer, transforming raw audio signals into structured, segmented, and feature-rich data for intelligent downstream processing.",
+] as const;
+
+const systemDataParserBody = [
+  "### Module Type",
+  "Structured Data Interpretation Component as an Analyzer submodule.",
+  "### Purpose",
+  "Interpret structured and semi-structured data formats, extract metadata, parse content, and identify contextual attributes for downstream analysis.",
+  "### Overview",
+  "System Data Parser is responsible for understanding structured inputs such as JSON, CSV, and system-generated data.",
+  "It converts raw structured data into normalized and interpretable representations so the system can extract meaning from metadata, schemas, and contextual attributes.",
+  "### Responsibilities",
+  "Extract metadata from files and systems.",
+  "Parse structured formats such as JSON and CSV.",
+  "Detect schemas and data structures.",
+  "Identify contextual attributes.",
+  "Normalize structured data for analysis.",
+  "### Core Capabilities",
+  "Metadata Extraction: extract timestamps, identifiers, format properties, and system-generated attributes.",
+  "Structured Data Parsing: parse JSON/CSV-like data, traverse nested structures, and convert raw data into normalized objects.",
+  "Format Detection: identify structure type automatically, detect schema patterns, and recognize organization models such as tables, trees, and key-value.",
+  "Contextual Attribute Detection: identify meaningful fields, extract semantic attributes, and map data to relevant system context.",
+  "### Flow",
+  "Structured Input -> Format Detection -> Metadata Extraction -> Data Parsing -> Attribute Detection -> Normalized Structured Output.",
+  "### Inputs",
+  "Structured files such as JSON and CSV, metadata, system-generated data, and file reference.",
+  "### Outputs",
+  "Parsed data structure, extracted metadata, detected schema, contextual attributes, and normalized data representation.",
+  "### Control Boundary",
+  "System Data Parser does not perform reasoning, does not decide actions, and does not execute processing. It is limited to parsing and structuring.",
+  "### Non Responsibilities",
+  "Audio processing, UI generation, tool execution, flow control, and decision-making.",
+  "### Architectural Summary",
+  "System Data Parser is the structured-data interpretation component of Analyzer, transforming raw structured inputs into normalized and meaningful representations for downstream reasoning and processing.",
+] as const;
+
+const knowledgeFetcherBody = [
+  "### Module Type",
+  "Context Enrichment Component as an Analyzer submodule.",
+  "### Purpose",
+  "Enhance analysis results by retrieving relevant contextual information from internal and external knowledge sources.",
+  "### Overview",
+  "Knowledge Fetcher enriches the analysis process with additional context retrieved from related data sources.",
+  "It enables deeper understanding for downstream modules without generating decisions.",
+  "### Responsibilities",
+  "Retrieve related contextual data.",
+  "Query internal knowledge sources.",
+  "Enrich analysis output with additional insights.",
+  "Provide relevant background information.",
+  "Support context-aware processing.",
+  "### Core Capabilities",
+  "Context Retrieval: identify relevant information from current input and fetch related content from memory or knowledge sources.",
+  "Internal Data Querying: query internal datasets, prior results, metadata, and structured historical records.",
+  "Context Enrichment: combine extracted signals with retrieved context to improve completeness of understanding.",
+  "Relevance Filtering: keep high-value context, suppress noise, and prioritize useful supporting information.",
+  "### Flow",
+  "Analyzer Input / Partial Output -> Context Matching -> Knowledge Retrieval -> Relevance Filtering -> Context Enrichment -> Enhanced Output.",
+  "### Inputs",
+  "Partial analysis output, extracted features, structured data, system context, and memory references.",
+  "### Outputs",
+  "Enriched context, related data, supporting information, and augmented analysis structure.",
+  "### Control Boundary",
+  "Knowledge Fetcher does not perform reasoning, does not decide actions, and does not execute tools. It only enriches context.",
+  "### Non Responsibilities",
+  "Decision-making, flow control, UI generation, and DSP execution.",
+  "### Architectural Summary",
+  "Knowledge Fetcher is the context-enrichment component of Analyzer, retrieving and integrating relevant context to strengthen analysis outputs and enable deeper system understanding.",
+] as const;
+
+const featureExtractorBody = [
+  "### Module Type",
+  "Core Analysis Component as an Analyzer submodule.",
+  "### Purpose",
+  "Identify and extract meaningful signals, entities, patterns, anomalies, and relationships from analyzed input data.",
+  "### Overview",
+  "Feature Extractor is the core intelligence component of Analyzer.",
+  "It processes structured outputs from prior analysis stages and turns them into high-level features for downstream reasoning, decision support, and execution planning.",
+  "This is the stage where structured data becomes interpretable insights.",
+  "### Responsibilities",
+  "Extract entities from content.",
+  "Detect recurring patterns and structures.",
+  "Identify anomalies and irregularities.",
+  "Discover relationships between elements.",
+  "Convert structured data into meaningful feature sets.",
+  "### Core Capabilities",
+  "Entity Extraction: identify key entities such as names, objects, labels, and audio elements like segments and voices.",
+  "Pattern Detection: detect repetitions, trends, sequences, and structural similarities.",
+  "Anomaly Detection: identify outliers, inconsistencies, and irregular events.",
+  "Relationship Identification: map dependencies, interactions, and relational context across entities.",
+  "### Flow",
+  "Structured Input -> Entity Extraction -> Pattern Detection -> Anomaly Detection -> Relationship Mapping -> Feature Set Output.",
+  "### Inputs",
+  "Structured analysis output, segmented data, metadata, and optional enriched context.",
+  "### Outputs",
+  "Extracted entities, detected patterns, identified anomalies, mapped relationships, and structured feature set.",
+  "### Control Boundary",
+  "Feature Extractor does not perform reasoning, does not decide actions, and does not execute operations. It only extracts meaning.",
+  "### Non Responsibilities",
+  "Tool execution, UI generation, flow control, and LLM reasoning.",
+  "### Architectural Summary",
+  "Feature Extractor is the core intelligence unit of Analyzer, transforming structured input into meaningful features that power higher-level reasoning and decision processes in QAgent.",
+] as const;
+
+const structureBuilderBody = [
+  "### Module Type",
+  "Output Structuring Component as an Analyzer submodule.",
+  "### Purpose",
+  "Unify all extracted analysis data into a consistent structured format ready for QCore reasoning and downstream processing.",
+  "### Overview",
+  "Structure Builder consolidates outputs from Analyzer submodules into a single normalized representation.",
+  "It transforms fragmented analysis results into coherent structure that QCore can consume for decision and orchestration.",
+  "### Responsibilities",
+  "Combine outputs from all Analyzer components.",
+  "Normalize data into a unified schema.",
+  "Organize entities, features, and context.",
+  "Ensure consistency and completeness.",
+  "Prepare final analysis output.",
+  "### Core Capabilities",
+  "Data Aggregation: collect outputs from Content Scanner, Audio Recognizer, System Data Parser, Knowledge Fetcher, and Feature Extractor.",
+  "Schema Normalization: convert data into one canonical structure with consistent field naming and aligned data types.",
+  "Entity and Feature Organization: group related entities, structure features, and organize relationships and patterns.",
+  "Context Integration: merge enriched context with extracted data while preserving continuity and logical coherence.",
+  "Output Preparation: format final payload for QCore, verify readiness, and confirm structural completeness.",
+  "### Flow",
+  "Analyzer Submodules Output -> Data Aggregation -> Schema Normalization -> Feature and Entity Organization -> Context Integration -> Final Structured Output -> QCore.",
+  "### Inputs",
+  "Extracted text and segments, audio analysis data, structured parsed data, enriched context, and extracted features.",
+  "### Outputs",
+  "Unified structured object, normalized entities, organized features, contextualized data, and analysis-ready representation.",
+  "### Control Boundary",
+  "Structure Builder does not perform reasoning, does not decide actions, and does not execute tools. It only prepares structured output.",
+  "### Non Responsibilities",
+  "LLM reasoning, flow control, UI generation, and execution logic.",
+  "### Architectural Summary",
+  "Structure Builder is the final stage of Analyzer, transforming extracted and enriched data into a unified representation that enables effective reasoning and decision-making by QCore.",
+] as const;
+
 export function generateStaticParams() {
   return Object.keys(architectureModuleTitles).map((module) => ({ module }));
 }
@@ -571,19 +813,161 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
   if (module === "analyzer") {
     return (
       <DocsContent>
-        <PageTitle title="Analyzer" description="" />
+        <PageTitle
+          title="Analyzer"
+          description="Interpretation module that transforms normalized inputs into structured, feature-rich representations for downstream reasoning."
+        />
         <div className="flex flex-col gap-5">
           <SectionBlock title="Architecture Diagram" body={[]} collapsible>
             <AnalyzerModuleDiagram />
           </SectionBlock>
-          {placeholderSections.map((sectionTitle) => (
-            <SectionBlock
-              key={sectionTitle}
-              title={sectionTitle}
-              body={[]}
-              collapsible
-            />
-          ))}
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Analyzer Module Structure</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {analyzerModuleStructureBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`analyzer-structure-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`analyzer-structure-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Content Scanner</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {contentScannerBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`content-scanner-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`content-scanner-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Audio Recognizer</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {audioRecognizerBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`audio-recognizer-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`audio-recognizer-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">System Data Parser</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {systemDataParserBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`system-data-parser-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`system-data-parser-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Knowledge Fetcher</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {knowledgeFetcherBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`knowledge-fetcher-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`knowledge-fetcher-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Feature Extractor</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {featureExtractorBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`feature-extractor-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`feature-extractor-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Structure Builder</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {structureBuilderBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`structure-builder-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`structure-builder-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
         </div>
       </DocsContent>
     );
@@ -608,6 +992,7 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
     </DocsContent>
   );
 }
+
 
 
 
