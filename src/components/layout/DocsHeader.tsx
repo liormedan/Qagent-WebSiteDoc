@@ -9,7 +9,7 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
     <header className="sticky top-0 z-30 h-[72px] border-b border-[var(--border)] bg-[#0b1020f2] backdrop-blur">
       <div className="flex h-full items-center px-3 md:px-6">
         <div className="flex w-full items-center gap-2 lg:gap-4">
-          <button type="button" onClick={onOpenMenu} className="rounded-md border border-[var(--border)] px-3 py-1.5 text-sm text-slate-200 lg:hidden">
+          <button type="button" onClick={onOpenMenu} className="rounded-md border border-[var(--border)] px-3 py-1.5 text-sm text-slate-200 md:hidden">
             Menu
           </button>
 
@@ -17,15 +17,15 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
             WaveQ Docs
           </Link>
 
-          <div className="ml-auto hidden w-full max-w-sm lg:block">
+          <div className="ml-auto hidden w-full max-w-sm md:block">
             <Input placeholder="Search Documentation" aria-label="Search Documentation" />
           </div>
 
-          <Button type="button" variant="ghost" size="sm" className="hidden lg:inline-flex">
+          <Button type="button" variant="ghost" size="sm" className="hidden md:inline-flex">
             Ask Q
           </Button>
 
-          <button type="button" onClick={onOpenToc} className="rounded-md border border-[var(--border)] px-3 py-1.5 text-sm text-slate-200 lg:hidden">
+          <button type="button" onClick={onOpenToc} className="rounded-md border border-[var(--border)] px-3 py-1.5 text-sm text-slate-200 md:hidden">
             On this page
           </button>
         </div>
