@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import type { DocsNavGroup } from "@/lib/navigation";
 
-export function NavCard({ title, description, href, section = "AgentQ - stracture" }: { title: string; description: string; href: string; section?: DocsNavGroup; icon?: string }) {
+export function NavCard({ title, description, href, section = "Architecture" }: { title: string; description: string; href: string; section?: DocsNavGroup; icon?: string }) {
   const isImplementation = section === "Implementation";
   const isDecision = section === "Decision System";
   const isAudio = section === "Audio Intelligence";

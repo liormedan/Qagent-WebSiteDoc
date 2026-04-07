@@ -6,7 +6,7 @@ export const executionRuntimeErrorHandlingContent: DocPageContent = {
   description: "",
   sections: [
     {
-      title: "AgentQ - stracture Execution Scope",
+      title: "QAgent - structure Execution Scope",
       body: [],
     },
     {

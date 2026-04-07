@@ -32,7 +32,7 @@ export function OrderedModuleSeed() {
       />
 
       <CardHeader className="relative mb-2 px-0 pt-0">
-        <h2 className="text-xl font-semibold md:text-2xl">AgentQ - stracture</h2>
+        <h2 className="text-xl font-semibold md:text-2xl">Architecture</h2>
       </CardHeader>
 
       <CardContent className="relative px-0 pb-0">

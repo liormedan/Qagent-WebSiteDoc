@@ -29,6 +29,66 @@ const architectureModuleTitles: Record<string, string> = {
   versioning: "Versioning",
 };
 
+const moduleWhy: Record<string, string[]> = {
+  "qagent-core": [
+    "QCore exists to keep control authority centralized and deterministic.",
+    "Without this layer, decision-making, routing, and validation would leak across modules and create inconsistent behavior.",
+  ],
+  "files-handler": [
+    "Files Handler exists to guarantee clean, validated inputs before interpretation begins.",
+    "It prevents downstream modules from handling malformed or unstable file states.",
+  ],
+  analyzer: [
+    "Analyzer exists to convert raw normalized inputs into meaningful structured signals.",
+    "It separates interpretation from decision logic so reasoning layers stay focused and predictable.",
+  ],
+  "intent-clarification": [
+    "Intent + Clarification exists to resolve ambiguity before planning and execution.",
+    "It protects the system from acting on unclear or conflicting user requests.",
+  ],
+  dal: [
+    "DAL exists to transform validated intent into executable and UI-consumable plans.",
+    "It keeps planning separate from execution and enforces structured action design.",
+  ],
+  uagent: [
+    "UAgent exists to present system state and plan interaction clearly to the user.",
+    "It keeps UI runtime concerns isolated from core reasoning and execution layers.",
+  ],
+  approval: [
+    "Approval exists to introduce explicit human control over critical transitions.",
+    "It ensures no sensitive or impactful execution proceeds without user authorization.",
+  ],
+  dagent: [
+    "DAgent exists to execute approved plans in a controlled runtime environment.",
+    "It isolates execution mechanics from orchestration and planning responsibilities.",
+  ],
+  versioning: [
+    "Versioning exists to preserve traceability, restore capability, and lifecycle continuity.",
+    "It turns execution outputs into immutable historical artifacts for compare and rollback workflows.",
+  ],
+};
+
+const moduleRelated: Record<string, string[]> = {
+  "qagent-core": ["Related Modules:", "- LLM Interface Layer", "- Flow Controller", "- State Manager"],
+  "files-handler": ["Related Modules:", "- Analyzer", "- QCore Engine", "- Versioning"],
+  analyzer: ["Related Modules:", "- Intent + Clarification", "- Files Handler", "- DAL"],
+  "intent-clarification": ["Related Modules:", "- Analyzer", "- DAL", "- QCore Engine"],
+  dal: ["Related Modules:", "- UAgent", "- Approval", "- DAgent"],
+  uagent: ["Related Modules:", "- DAL", "- Approval", "- QCore Engine"],
+  approval: ["Related Modules:", "- DAL", "- UAgent", "- DAgent"],
+  dagent: ["Related Modules:", "- DAL", "- Versioning", "- Approval"],
+  versioning: ["Related Modules:", "- DAgent", "- Restore Engine", "- Diff Engine"],
+};
+
+function ModuleContextBlocks({ moduleKey }: { moduleKey: string }) {
+  return (
+    <>
+      <SectionBlock title="Why this exists" body={moduleWhy[moduleKey] ?? []} collapsible />
+      <SectionBlock title="Related Modules" body={moduleRelated[moduleKey] ?? []} collapsible />
+    </>
+  );
+}
+
 const placeholderSections = [
   "Overview",
   "Purpose",
@@ -1865,6 +1925,7 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
               </div>
             </details>
           </section>
+          <ModuleContextBlocks moduleKey="qagent-core" />
           {primarySection ? (
             <SectionBlock
               key={primarySection.title}
@@ -1910,6 +1971,7 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
               </div>
             </details>
           </section>
+          <ModuleContextBlocks moduleKey="files-handler" />
 
           <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
             <details className="group/details" name="docs-primary-accordion">
@@ -2089,6 +2151,7 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
           <SectionBlock title="Architecture Diagram" body={[]} collapsible>
             <AnalyzerModuleDiagram />
           </SectionBlock>
+          <ModuleContextBlocks moduleKey="analyzer" />
           <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
             <details className="group/details" name="docs-primary-accordion">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
@@ -2252,6 +2315,7 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
           <SectionBlock title="Architecture Diagram" body={[]} collapsible>
             <IntentClarificationDiagram />
           </SectionBlock>
+          <ModuleContextBlocks moduleKey="intent-clarification" />
           <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
             <details className="group/details" name="docs-primary-accordion">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
@@ -2415,6 +2479,7 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
           <SectionBlock title="Architecture Diagram" body={[]} collapsible>
             <DalModuleDiagram />
           </SectionBlock>
+          <ModuleContextBlocks moduleKey="dal" />
           <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
             <details className="group/details" name="docs-primary-accordion">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
@@ -2578,6 +2643,7 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
           <SectionBlock title="Architecture Diagram" body={[]} collapsible>
             <UAgentModuleDiagram />
           </SectionBlock>
+          <ModuleContextBlocks moduleKey="uagent" />
           <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
             <details className="group/details" name="docs-primary-accordion">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
@@ -2741,6 +2807,7 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
           <SectionBlock title="Architecture Diagram" body={[]} collapsible>
             <ApprovalModuleDiagram />
           </SectionBlock>
+          <ModuleContextBlocks moduleKey="approval" />
           <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
             <details className="group/details" name="docs-primary-accordion">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
@@ -2883,6 +2950,7 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
           <SectionBlock title="Architecture Diagram" body={[]} collapsible>
             <DspEngineDiagram />
           </SectionBlock>
+          <ModuleContextBlocks moduleKey="dagent" />
           <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
             <details className="group/details" name="docs-primary-accordion">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
@@ -3046,6 +3114,7 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
           <SectionBlock title="Architecture Diagram" body={[]} collapsible>
             <VersioningModuleDiagram />
           </SectionBlock>
+          <ModuleContextBlocks moduleKey="versioning" />
           <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
             <details className="group/details" name="docs-primary-accordion">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">

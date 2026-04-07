@@ -6,7 +6,7 @@ export const audioComparisonOverviewContent: DocPageContent = {
   description: "",
   sections: [
     {
-      title: "AgentQ - stracture Analyzer Scope",
+      title: "QAgent - structure Analyzer Scope",
       body: [],
     },
     {

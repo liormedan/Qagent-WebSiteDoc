@@ -6,7 +6,7 @@ export const contractsContent: DocPageContent = {
   description: "",
   sections: [
     {
-      title: "AgentQ - stracture Contract Scope",
+      title: "QAgent - structure Contract Scope",
       body: [],
     },
     {

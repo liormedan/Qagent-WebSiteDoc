@@ -1,7 +1,6 @@
 import { apiContent } from "@/content/api";
 import { type FlowData } from "@/components/ui/FlowDiagram";
 import { type ProcessStep } from "@/components/ui/ProcessDiagram";
-import { architectureContent } from "@/content/architecture";
 import { audioComparisonModelContent } from "@/content/audio-comparison-comparison-model";
 import { audioComparisonCanvasUiContent } from "@/content/audio-comparison-canvas-ui";
 import { audioComparisonDifferenceModelContent } from "@/content/audio-comparison-difference-model";
@@ -180,7 +179,6 @@ const pages: Record<string, DocPageContent> = {
   qcore: qcoreContent,
   "q-agent": qAgentContent,
   "audio-dal": audioDalContent,
-  architecture: architectureContent,
   api: apiContent,
   roadmap: roadmapContent,
 };
@@ -228,8 +226,42 @@ function asDraftSkeleton(page: DocPageContent, summary: string): DocPageContent 
     description,
     sections: [
       {
-        title: page.title,
-        body: [summary, "Detailed Inputs / Outputs / Depends on will be added in a later pass."],
+        title: "Architecture Diagram",
+        body: [
+          "Draft placeholder for architecture visualization.",
+          "Final diagram will be added in a full completion pass.",
+        ],
+      },
+      {
+        title: "Overview",
+        body: [summary],
+      },
+      {
+        title: "Responsibilities",
+        body: ["Define module responsibilities and clear boundaries in the next documentation pass."],
+      },
+      {
+        title: "Core Capabilities",
+        body: ["Key capabilities are pending full specification and validation."],
+      },
+      {
+        title: "Flow",
+        body: ["Flow is partially documented and will be expanded into a deterministic step-by-step sequence."],
+      },
+      {
+        title: "Inputs / Outputs",
+        body: [
+          "Inputs: to be finalized with required and optional fields.",
+          "Outputs: to be finalized with structured response contracts.",
+        ],
+      },
+      {
+        title: "Control Boundary",
+        body: ["Boundary definition is pending completion to prevent responsibility overlap."],
+      },
+      {
+        title: "Summary",
+        body: ["This page is currently draft and marked as incomplete."],
       },
     ],
   };

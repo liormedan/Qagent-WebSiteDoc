@@ -13,8 +13,8 @@ export function DocsPager() {
 
   if (index < 0) return null;
 
-  const previous = navItem?.group === "Main Flow" ? flowNeighbors.previous : flowOrder[index - 1];
-  const next = navItem?.group === "Main Flow" ? flowNeighbors.next : flowOrder[index + 1];
+  const previous = navItem?.group === "Core Flow" ? flowNeighbors.previous : flowOrder[index - 1];
+  const next = navItem?.group === "Core Flow" ? flowNeighbors.next : flowOrder[index + 1];
 
   return (
     <div className="mt-10 flex justify-between gap-4 border-t border-[var(--border)] pt-6">

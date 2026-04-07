@@ -31,7 +31,7 @@ export default async function GroupSectionPage({ params }: { params: Promise<{ g
 
   const items = getNavigationByGroup(group);
   if (!items.length) return notFound();
-  const isEntryGroup = group === "AgentQ - stracture";
+  const isEntryGroup = group === "Architecture";
   const neighbors = getGroupNeighbors(group);
   const nextHref = neighbors.next ? getGroupHubHref(neighbors.next) : undefined;
   const previousHref = neighbors.previous ? getGroupHubHref(neighbors.previous) : undefined;

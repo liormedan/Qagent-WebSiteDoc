@@ -6,7 +6,7 @@ export const testingStrategyContent: DocPageContent = {
   description: "",
   sections: [
     {
-      title: "AgentQ - stracture Lifecycle Scope",
+      title: "QAgent - structure Lifecycle Scope",
       body: [],
     },
     {

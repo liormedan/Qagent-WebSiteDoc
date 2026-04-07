@@ -1,8 +1,10 @@
 export type DocsNavGroup =
-  | "AgentQ - stracture"
-  | "Main Flow"
+  | "Architecture"
+  | "Core Flow"
   | "Decision System"
-  | "Audio Intelligence"
+  | "Audio System"
+  | "Execution"
+  | "Versioning"
   | "Implementation";
 
 export type DocNavItem = {
@@ -16,102 +18,314 @@ export type DocNavItem = {
   flowHelper?: string;
 };
 
-const orderedGroups: DocsNavGroup[] = ["AgentQ - stracture", "Main Flow", "Decision System", "Audio Intelligence", "Implementation"];
+const orderedGroups: DocsNavGroup[] = ["Architecture", "Core Flow", "Decision System", "Audio System", "Execution", "Versioning", "Implementation"];
+
 const groupSlugs: Record<DocsNavGroup, string> = {
-  "AgentQ - stracture": "home",
-  "Main Flow": "main-flow",
+  Architecture: "architecture",
+  "Core Flow": "core-flow",
   "Decision System": "decision-system",
-  "Audio Intelligence": "audio-intelligence",
+  "Audio System": "audio-system",
+  Execution: "execution",
+  Versioning: "versioning",
   Implementation: "implementation",
 };
 
 export const docsNavigation: DocNavItem[] = [
-  { title: "System Overview", description: "Understand the system mission and request lifecycle before technical details.", href: "/docs/overview", group: "AgentQ - stracture", recommendedFirst: true },
-  { title: "Main QAgent Core Structure", description: "Authoritative definition of QCore as the system runtime orchestrator and control center.", href: "/docs/qcore", group: "AgentQ - stracture" },
-  { title: "System Map", description: "See how Q, orchestration, runtime, and memory connect as one system.", href: "/docs/architecture", group: "AgentQ - stracture" },
-  { title: "One Request Journey", description: "Follow one complete request from input to versioned output and review.", href: "/docs/orchestration/orchestration-flow", group: "AgentQ - stracture" },
-  { title: "Core Concepts", description: "Learn the contracts and terms that make the rest of the docs deterministic.", href: "/docs/contracts", group: "AgentQ - stracture" },
-
   {
-    title: "Input / Intent",
-    description: "Understand how Q classifies requests and chooses the first system route.",
-    href: "/docs/intents",
-    group: "Main Flow",
-    flowStep: 1,
-    flowTotal: 6,
-    flowHelper: "Identify user intent and route the request into the correct operational path.",
+    title: "Docs Home",
+    description: "Entry point for exploring architecture, flows, execution, and implementation.",
+    href: "/docs",
+    group: "Architecture",
+    recommendedFirst: true,
   },
   {
-    title: "Audio Sandbox Analysis",
-    description: "Understand how sandbox analysis builds evidence before any irreversible action.",
-    href: "/docs/audio-sandbox/overview",
-    group: "Main Flow",
+    title: "Getting Started",
+    description: "Non-technical onboarding to understand QAgent quickly.",
+    href: "/docs/getting-started",
+    group: "Architecture",
+  },
+  {
+    title: "System Flow",
+    description: "Simplified end-to-end flow from user request to output.",
+    href: "/docs/system-flow",
+    group: "Architecture",
+  },
+  {
+    title: "Terminology",
+    description: "Canonical terms used across architecture and implementation docs.",
+    href: "/docs/terminology",
+    group: "Architecture",
+  },
+  {
+    title: "System Map",
+    description: "Ordered modular architecture map from core to versioned output.",
+    href: "/docs/architecture",
+    group: "Architecture",
+  },
+  {
+    title: "Main QAgent Core Structure",
+    description: "Authoritative definition of QCore as runtime orchestrator and control center.",
+    href: "/docs/qcore",
+    group: "Architecture",
+  },
+  {
+    title: "Q Agent",
+    description: "Top-level mission and system boundaries.",
+    href: "/docs/q-agent",
+    group: "Architecture",
+  },
+  {
+    title: "Schema Registry",
+    description: "Canonical schema contracts for inter-module transitions.",
+    href: "/docs/architecture/contracts/schema-registry",
+    group: "Architecture",
+  },
+  {
+    title: "Lineage Model",
+    description: "End-to-end correlation IDs across request lifecycle.",
+    href: "/docs/architecture/contracts/lineage-model",
+    group: "Architecture",
+  },
+
+  {
+    title: "QCore Engine",
+    description: "Core orchestration runtime loop and control authority.",
+    href: "/docs/architecture/modules/qagent-core",
+    group: "Core Flow",
+    flowStep: 1,
+    flowTotal: 8,
+    flowHelper: "Start with runtime control and orchestration.",
+  },
+  {
+    title: "Files Handler",
+    description: "Input ingestion, validation, and normalization layer.",
+    href: "/docs/architecture/modules/files-handler",
+    group: "Core Flow",
     flowStep: 2,
-    flowTotal: 6,
-    flowHelper: "Analyze loaded audio context and extract query/feature evidence for decisions.",
+    flowTotal: 8,
+    flowHelper: "Prepare files into stable normalized representations.",
+  },
+  {
+    title: "Analyzer",
+    description: "Interpretation layer that extracts structure and features.",
+    href: "/docs/architecture/modules/analyzer",
+    group: "Core Flow",
+    flowStep: 3,
+    flowTotal: 8,
+    flowHelper: "Transform normalized input into analysis-ready output.",
+  },
+  {
+    title: "Intent + Clarification",
+    description: "Resolve intent and remove ambiguity before planning.",
+    href: "/docs/architecture/modules/intent-clarification",
+    group: "Core Flow",
+    flowStep: 4,
+    flowTotal: 8,
+    flowHelper: "Validate actionable intent before DAL planning.",
+  },
+  {
+    title: "DAL",
+    description: "Decision abstraction and plan synthesis layer.",
+    href: "/docs/architecture/modules/dal",
+    group: "Core Flow",
+    flowStep: 5,
+    flowTotal: 8,
+    flowHelper: "Convert intent into executable and UI plans.",
+  },
+  {
+    title: "UAgent",
+    description: "UI runtime that presents and mediates plan interaction.",
+    href: "/docs/architecture/modules/uagent",
+    group: "Core Flow",
+    flowStep: 6,
+    flowTotal: 8,
+    flowHelper: "Render plan state and capture user interaction.",
+  },
+  {
+    title: "Approval",
+    description: "User-gated checkpoint enforced by QCore.",
+    href: "/docs/architecture/modules/approval",
+    group: "Core Flow",
+    flowStep: 7,
+    flowTotal: 8,
+    flowHelper: "Gate execution through explicit approval.",
+  },
+  {
+    title: "DAgent",
+    description: "Execution module for approved operational graphs.",
+    href: "/docs/architecture/modules/dagent",
+    group: "Core Flow",
+    flowStep: 8,
+    flowTotal: 8,
+    flowHelper: "Run approved operations and produce output artifacts.",
+  },
+
+  {
+    title: "Orchestration Overview",
+    description: "Control loop, routing, and cross-module coordination.",
+    href: "/docs/orchestration/overview",
+    group: "Decision System",
+  },
+  {
+    title: "Routing Logic",
+    description: "How requests map to system paths and execution branches.",
+    href: "/docs/orchestration/routing-logic",
+    group: "Decision System",
+  },
+  {
+    title: "State Machine",
+    description: "Allowed transitions and guardrails.",
+    href: "/docs/orchestration/state-machine",
+    group: "Decision System",
+  },
+  {
+    title: "Failure Handling",
+    description: "Fallback and recovery behavior at orchestration level.",
+    href: "/docs/orchestration/failure-handling",
+    group: "Decision System",
+  },
+  {
+    title: "Control Policy Matrix",
+    description: "Authority matrix for trigger, validation, enforcement, and execution.",
+    href: "/docs/architecture/policies/control-policy-matrix",
+    group: "Decision System",
+  },
+  {
+    title: "Approval Modify Loop Contract",
+    description: "Deterministic loopback behavior for approval modify actions.",
+    href: "/docs/architecture/approval/modify-loop-contract",
+    group: "Decision System",
+  },
+
+  {
+    title: "Audio Sandbox",
+    description: "Audio context indexing, retrieval, and query operations.",
+    href: "/docs/audio-sandbox/overview",
+    group: "Audio System",
   },
   {
     title: "Audio Comparison",
-    description: "Understand how Q quantifies before/after differences for safe decision-making.",
+    description: "Difference modeling and A/B review workflows.",
     href: "/docs/audio-comparison/overview",
-    group: "Main Flow",
-    flowStep: 3,
-    flowTotal: 6,
-    flowHelper: "Compare candidate audio against the current version before recommending changes.",
+    group: "Audio System",
   },
   {
-    title: "Recommendation",
-    description: "Understand how Q turns evidence into ranked, explainable action suggestions.",
-    href: "/docs/recommendation-engine/overview",
-    group: "Main Flow",
-    flowStep: 4,
-    flowTotal: 6,
-    flowHelper: "Recommend next actions with confidence and tradeoffs before approval.",
+    title: "Audio Memory",
+    description: "Timeline and historical audio context continuity.",
+    href: "/docs/audio-memory",
+    group: "Audio System",
   },
   {
-    title: "Execution",
-    description: "Understand how approved decisions become runtime execution and new output versions.",
+    title: "Audio DAL",
+    description: "Planning model for audio-specific action orchestration.",
+    href: "/docs/audio-dal",
+    group: "Audio System",
+  },
+
+  {
+    title: "Execution Runtime",
+    description: "Runtime lifecycle, progress, and execution contracts.",
     href: "/docs/execution-runtime/overview",
-    group: "Main Flow",
-    flowStep: 5,
-    flowTotal: 6,
-    flowHelper: "Execute approved DAL actions and return result status plus output version links.",
+    group: "Execution",
   },
   {
-    title: "Lifecycle",
-    description: "Understand how sessions continue across repeated analyze-decide-execute cycles.",
-    href: "/docs/lifecycle/overview",
-    group: "Main Flow",
-    flowStep: 6,
-    flowTotal: 6,
-    flowHelper: "Continue, review, and persist the session state across multiple iterations.",
+    title: "Runtime Error Handling",
+    description: "Execution-level error taxonomy and handling path.",
+    href: "/docs/execution-runtime/error-handling",
+    group: "Execution",
+  },
+  {
+    title: "Cancellation and Retry",
+    description: "Operational controls for execution interruption and rerun.",
+    href: "/docs/execution-runtime/cancellation-and-retry",
+    group: "Execution",
+  },
+  {
+    title: "DSP Engine Abstraction",
+    description: "WebAudio baseline and future WASM/C++ engine abstraction contract.",
+    href: "/docs/architecture/dagent/dsp-engine-abstraction",
+    group: "Execution",
+  },
+  {
+    title: "Session Isolation Policy",
+    description: "Multi-user tenant/session isolation and ownership rules.",
+    href: "/docs/architecture/policies/session-isolation",
+    group: "Execution",
   },
 
-  { title: "Orchestration Overview", description: "Understand how orchestration unifies all subsystem actions into one control loop.", href: "/docs/orchestration/overview", group: "Decision System" },
-  { title: "Agent Roles", description: "Understand which component owns each decision and handoff.", href: "/docs/orchestration/agent-roles", group: "Decision System" },
-  { title: "Communication Model", description: "Understand the typed request/response contracts between agents.", href: "/docs/orchestration/communication-model", group: "Decision System" },
-  { title: "Routing Logic", description: "Understand exactly how intent maps to subsystem routing decisions.", href: "/docs/orchestration/routing-logic", group: "Decision System" },
-  { title: "Shared State", description: "Understand what shared state keeps all agents synchronized.", href: "/docs/orchestration/shared-state", group: "Decision System" },
-  { title: "Orchestration Flow", description: "Understand how evidence aggregates into one decision packet.", href: "/docs/orchestration/orchestration-flow", group: "Decision System" },
-  { title: "State Machine", description: "Understand allowed orchestration states and transition limits.", href: "/docs/orchestration/state-machine", group: "Decision System" },
-  { title: "Conflict Resolution", description: "Understand how the system resolves conflicting user/system signals.", href: "/docs/orchestration/conflict-resolution", group: "Decision System" },
-  { title: "Failure Handling", description: "Understand fallback behavior when one subsystem fails.", href: "/docs/orchestration/failure-handling", group: "Decision System" },
-  { title: "UI Reflection", description: "Understand how orchestration state appears in chat and canvas.", href: "/docs/orchestration/ui-reflection", group: "Decision System" },
+  {
+    title: "Versioning Module",
+    description: "Versioning layer for snapshots, history, restore, and traceability.",
+    href: "/docs/architecture/modules/versioning",
+    group: "Versioning",
+  },
+  {
+    title: "Version Manager",
+    description: "Lifecycle manager for version entity creation and state transitions.",
+    href: "/docs/architecture/modules/versioning/version-manager",
+    group: "Versioning",
+  },
+  {
+    title: "Diff Engine",
+    description: "Optional comparison engine for parameter, chain, and output deltas.",
+    href: "/docs/architecture/modules/versioning/diff-engine",
+    group: "Versioning",
+  },
+  {
+    title: "Execution Output Versioning",
+    description: "Runtime output to version lifecycle bridge.",
+    href: "/docs/execution-runtime/output-versioning",
+    group: "Versioning",
+  },
+  {
+    title: "Lifecycle Version States",
+    description: "Session-level version transitions and end-state handling.",
+    href: "/docs/lifecycle/version-lifecycle",
+    group: "Versioning",
+  },
+  {
+    title: "Failure Policy",
+    description: "Unified taxonomy, retry budgets, and fallback matrix.",
+    href: "/docs/architecture/policies/failure-policy",
+    group: "Versioning",
+  },
 
-  { title: "Comparison Overview", description: "Understand why comparison evidence is central to trustworthy recommendations.", href: "/docs/audio-comparison/overview", group: "Audio Intelligence" },
-  { title: "Versioning", description: "Understand how new outputs become traceable, comparable candidates.", href: "/docs/audio-comparison/versioning", group: "Audio Intelligence" },
-  { title: "Comparison Model", description: "Understand the exact fields used to bind A/B comparison records.", href: "/docs/audio-comparison/comparison-model", group: "Audio Intelligence" },
-  { title: "Difference Model", description: "Understand the exact metrics used to quantify audio changes.", href: "/docs/audio-comparison/difference-model", group: "Audio Intelligence" },
-  { title: "Playback Modes", description: "Understand how A/B playback exposes differences without bias.", href: "/docs/audio-comparison/playback-modes", group: "Audio Intelligence" },
-  { title: "Canvas UI", description: "Understand how comparison evidence is visualized for user review.", href: "/docs/audio-comparison/canvas-ui", group: "Audio Intelligence" },
-  { title: "User Flow", description: "Understand the comparison journey from upload to accept/revert.", href: "/docs/audio-comparison/user-flow", group: "Audio Intelligence" },
-
-  { title: "Implementation Map", description: "Understand where each spec concept lands in implementation modules.", href: "/docs/implementation-map", group: "Implementation" },
-  { title: "Runtime Flow Design", description: "Understand runtime branch behavior before writing production code.", href: "/docs/runtime-flow-design", group: "Implementation" },
-  { title: "Module Design", description: "Understand module ownership, IO, and failure boundaries.", href: "/docs/module-design", group: "Implementation" },
-  { title: "Function Contracts", description: "Understand the callable contract surface needed by developers.", href: "/docs/function-contracts", group: "Implementation" },
-  { title: "Development Phases", description: "Understand implementation sequencing and delivery checkpoints.", href: "/docs/development-phases", group: "Implementation" },
-  { title: "Testing Strategy", description: "Understand how to validate correctness across flows and edge cases.", href: "/docs/testing-strategy", group: "Implementation" },
+  {
+    title: "Implementation Map",
+    description: "Concept-to-code implementation guidance.",
+    href: "/docs/implementation-map",
+    group: "Implementation",
+  },
+  {
+    title: "Module Design",
+    description: "Module boundaries, ownership, and IO contracts.",
+    href: "/docs/module-design",
+    group: "Implementation",
+  },
+  {
+    title: "Function Contracts",
+    description: "Callable interfaces and expected behaviors.",
+    href: "/docs/function-contracts",
+    group: "Implementation",
+  },
+  {
+    title: "Testing Strategy",
+    description: "Validation strategy for architecture and flow correctness.",
+    href: "/docs/testing-strategy",
+    group: "Implementation",
+  },
+  {
+    title: "API",
+    description: "API-oriented documentation references.",
+    href: "/docs/api",
+    group: "Implementation",
+  },
+  {
+    title: "Implementation Baseline",
+    description: "Authoritative baseline freeze for implementation scope.",
+    href: "/docs/architecture/implementation-baseline",
+    group: "Implementation",
+  },
 ];
 
 export function getNavigationByGroup(group: DocsNavGroup): DocNavItem[] {
@@ -149,7 +363,7 @@ export function getGroupNeighbors(group: DocsNavGroup): { previous?: DocsNavGrou
 
 export function getFlowProgressByHref(href: string): { group: DocsNavGroup; step: number; total: number } | undefined {
   const item = getNavigationItemByHref(href);
-  if (!item || item.group !== "Main Flow" || !item.flowStep || !item.flowTotal) {
+  if (!item || item.group !== "Core Flow" || !item.flowStep || !item.flowTotal) {
     return undefined;
   }
   return { group: item.group, step: item.flowStep, total: item.flowTotal };
@@ -167,7 +381,7 @@ export function getFlowOrderedNavigation(): DocNavItem[] {
 }
 
 export function getFlowNeighborsByHref(href: string): { previous?: DocNavItem; next?: DocNavItem } {
-  const flowItems = getNavigationByGroup("Main Flow");
+  const flowItems = getNavigationByGroup("Core Flow");
   const index = flowItems.findIndex((item) => item.href === href);
   if (index < 0) {
     return {};
@@ -177,5 +391,3 @@ export function getFlowNeighborsByHref(href: string): { previous?: DocNavItem; n
     next: flowItems[index + 1],
   };
 }
-
-

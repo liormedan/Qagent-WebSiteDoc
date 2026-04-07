@@ -6,7 +6,7 @@ export const orchestrationRoutingLogicContent: DocPageContent = {
   description: "",
   sections: [
     {
-      title: "AgentQ - stracture QAgent Scope",
+      title: "QAgent - structure QAgent Scope",
       body: [],
     },
     {

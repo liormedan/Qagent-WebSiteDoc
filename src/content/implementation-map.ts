@@ -6,7 +6,7 @@ export const implementationMapContent: DocPageContent = {
   description: "",
   sections: [
     {
-      title: "AgentQ - stracture Scope",
+      title: "QAgent - structure Scope",
       body: [],
     },
     {

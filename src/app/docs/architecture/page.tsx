@@ -128,7 +128,7 @@ export default function ArchitecturePage() {
     <DocsContent>
       <PageTitle
         title="Architecture"
-        description="AgentQ runs an ordered modular flow for audio requests with deterministic routing, UI-gated approval, and versioned outputs."
+        description="QAgent runs an ordered modular flow for audio requests with deterministic routing, UI-gated approval, and versioned outputs."
       />
 
       <div className="flex flex-col gap-5">
