@@ -1,9 +1,9 @@
-import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 import { DocsContent } from "@/components/layout/DocsContent";
 import { DiagramComponentsAccordion } from "@/components/ui/DiagramComponentsAccordion";
 import { LlmInterfaceDiagram } from "@/components/ui/LlmInterfaceDiagram";
 import { PageTitle } from "@/components/ui/PageTitle";
+import { QCoreArchitectureDiagram } from "@/components/ui/QCoreArchitectureDiagram";
 import { QCoreInternalDiagram } from "@/components/ui/QCoreInternalDiagram";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 import { getDocPage } from "@/lib/docs";
@@ -20,14 +20,6 @@ export default function QCorePage() {
       <PageTitle title={page.title} description={page.description} />
 
       <div className="flex flex-col gap-5">
-        {primarySection ? (
-          <SectionBlock
-            key={primarySection.title}
-            title={primarySection.title}
-            body={primarySection.body}
-            collapsible
-          />
-        ) : null}
         <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
           <details className="group/details" name="docs-primary-accordion">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
@@ -42,15 +34,7 @@ export default function QCorePage() {
                 Terminology note: <span className="font-semibold text-slate-100">QAgent Core</span> is the top-level architectural scope, while
                 <span className="font-semibold text-slate-100"> QCore Engine</span> is the internal runtime component at its center.
               </p>
-              <div className="relative aspect-[16/10] w-full overflow-hidden rounded-lg border border-[var(--border)] bg-slate-900/40">
-                <Image
-                  src="/qcore-architecture-circle.png"
-                  alt="QCore central architecture diagram"
-                  fill
-                  className="object-contain"
-                  priority
-                />
-              </div>
+              <QCoreArchitectureDiagram />
               <details className="group/details rounded-lg border border-[var(--border)] bg-slate-950/40 p-3">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-2 text-sm font-semibold text-slate-100 [&::-webkit-details-marker]:hidden">
                   <span>Diagram Components</span>
@@ -63,6 +47,14 @@ export default function QCorePage() {
             </div>
           </details>
         </section>
+        {primarySection ? (
+          <SectionBlock
+            key={primarySection.title}
+            title={primarySection.title}
+            body={primarySection.body}
+            collapsible
+          />
+        ) : null}
         {otherSections.map((section) => (
           <SectionBlock
             key={section.title}

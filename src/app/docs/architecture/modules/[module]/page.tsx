@@ -1,4 +1,3 @@
-﻿import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 import { notFound } from "next/navigation";
 import { DocsContent } from "@/components/layout/DocsContent";
@@ -11,6 +10,7 @@ import FilesHandlerDiagram from "@/components/ui/FilesHandlerDiagram";
 import { IntentClarificationDiagram } from "@/components/ui/IntentClarificationDiagram";
 import { LlmInterfaceDiagram } from "@/components/ui/LlmInterfaceDiagram";
 import { PageTitle } from "@/components/ui/PageTitle";
+import { QCoreArchitectureDiagram } from "@/components/ui/QCoreArchitectureDiagram";
 import { QCoreInternalDiagram } from "@/components/ui/QCoreInternalDiagram";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 import { UAgentModuleDiagram } from "@/components/ui/UAgentModuleDiagram";
@@ -1678,6 +1678,144 @@ const versioningLayerBody = [
   "Version creation, state persistence, history tracking, restore support, and full traceability are defined.",
 ] as const;
 
+const snapshotBuilderBody = [
+  "### Module Type",
+  "State Capture Component in Versioning submodule.",
+  "### Purpose",
+  "Capture complete and consistent system snapshot including audio output, DSP configuration, parameters, and metadata at a specific point in time.",
+  "### Overview",
+  "Snapshot Builder creates a full representation of runtime state after execution.",
+  "It aggregates audio artifact, DSP chain, parameters, and metadata into structured snapshot for storage, restore, and comparison workflows.",
+  "This snapshot is the foundation of version lifecycle.",
+  "### Responsibilities",
+  "Capture audio output.",
+  "Capture DSP chain configuration.",
+  "Capture parameters and settings.",
+  "Capture metadata.",
+  "Build unified snapshot object.",
+  "### Core Capabilities",
+  "Audio Capture: capture processed output and preserve reliable reference to AudioBuffer, Blob, or file artifact.",
+  "DSP Chain Capture: preserve executed node sequence and parameters to guarantee reproducibility.",
+  "Parameter Capture: capture user-defined values and UI-controlled settings to preserve full state.",
+  "Metadata Capture: include contextual attributes such as timestamp, user, execution type, and related version identifier.",
+  "Snapshot Structuring: combine all captured elements into one consistent schema ready for Version Manager.",
+  "### Flow",
+  "Execution Result -> Capture Audio Output -> Capture DSP Chain -> Capture Parameters -> Capture Metadata -> Build Snapshot Object -> Pass to Version Manager.",
+  "### Inputs",
+  "Processed audio output, DSP chain, parameters, and execution metadata.",
+  "### Outputs",
+  "Snapshot object, audio reference, and structured state representation.",
+  "### Control Boundary",
+  "Snapshot Builder does not manage version lifecycle, does not store data, and does not restore state. It only captures state.",
+  "### Non Responsibilities",
+  "Execution, storage, UI rendering, and planning.",
+  "### Architectural Summary",
+  "Snapshot Builder is the state-capture component of Versioning, responsible for creating complete state representations that enable version tracking, reliable restoration, and meaningful comparison.",
+] as const;
+
+const storageLayerBody = [
+  "### Module Type",
+  "Persistence Component in Versioning submodule.",
+  "### Purpose",
+  "Persist audio artifacts and structured metadata records in reliable scalable storage.",
+  "### Overview",
+  "Storage Layer stores all version-related data including audio outputs, metadata records, and snapshot references.",
+  "It preserves durability, accessibility, and integrity so versions can be retrieved, restored, and tracked over time.",
+  "### Responsibilities",
+  "Store audio blobs and files.",
+  "Store structured metadata records.",
+  "Maintain references between stored assets.",
+  "Ensure persistence and durability.",
+  "Provide retrieval access.",
+  "### Core Capabilities",
+  "Audio Storage: store WAV and future audio formats through blob or file persistence with stable URL or ID references.",
+  "Metadata Storage: store structured JSON metadata including DSP chain, parameters, version details, and timestamps.",
+  "Data Linking: link stored audio and metadata so full snapshot reconstruction remains consistent.",
+  "Retrieval Support: fetch audio and metadata for restore and playback workflows.",
+  "Storage Abstraction: keep backend abstracted to support local development storage and cloud production storage.",
+  "### Flow",
+  "Snapshot Object -> Store Audio Blob -> Store Metadata Record -> Link Data -> Persist Storage -> Return Storage References.",
+  "### Inputs",
+  "Snapshot object, audio blob or file artifact, and structured metadata JSON.",
+  "### Outputs",
+  "Storage references such as IDs or URLs, persisted records, and retrieval handles.",
+  "### Control Boundary",
+  "Storage Layer does not manage version lifecycle, does not capture state, and does not render UI. It only stores and retrieves data.",
+  "### Non Responsibilities",
+  "Execution, DSP processing, planning, and UI handling.",
+  "### Architectural Summary",
+  "Storage Layer persists audio artifacts and structured metadata to enable reliable storage, retrieval, and full state reconstruction across version history.",
+] as const;
+
+const historyTrackerBody = [
+  "### Module Type",
+  "Timeline Management Component in Versioning submodule.",
+  "### Purpose",
+  "Maintain structured timeline of versions with sequence order, timestamps, and action history across system lifecycle.",
+  "### Overview",
+  "History Tracker organizes all versions into coherent timeline.",
+  "It tracks creation time, action context behind each version, and relationships between versions to expose how the system evolves over time.",
+  "This enables reliable traceability, navigation, and lifecycle comprehension.",
+  "### Responsibilities",
+  "Maintain version sequence.",
+  "Track timestamps.",
+  "Record action history.",
+  "Organize timeline structure.",
+  "Enable historical navigation.",
+  "### Core Capabilities",
+  "Timeline Sequencing: maintain ordered version list and preserve chronological integrity.",
+  "Timestamp Tracking: record creation time and support temporal queries.",
+  "Action History Logging: keep audit trail for DSP changes, parameter updates, and relevant user interactions.",
+  "Version Linking: maintain parent-child relationships and prepare for future branching support.",
+  "Navigation Support: support previous and next traversal, direct jump to version, and timeline browsing.",
+  "### Flow",
+  "Version Created -> Assign Timestamp -> Record Action Context -> Insert into Timeline -> Update Version Sequence -> History Updated.",
+  "### Inputs",
+  "Version ID, snapshot metadata, action context, and timestamps.",
+  "### Outputs",
+  "Version timeline, ordered history list, action logs, and navigation references.",
+  "### Control Boundary",
+  "History Tracker does not store files, does not manage version lifecycle, and does not capture state. It only organizes history.",
+  "### Non Responsibilities",
+  "Execution, UI rendering, DSP processing, and planning.",
+  "### Architectural Summary",
+  "History Tracker is the timeline-management component of Versioning, organizing versions with timestamps and action history to enable traceability and navigation through system evolution.",
+] as const;
+
+const restoreEngineBody = [
+  "### Module Type",
+  "State Restoration Component (Versioning Submodule).",
+  "### Purpose",
+  "Load a selected version and restore the full system state, including DSP chain, parameters, and UI context.",
+  "### Overview",
+  "The Restore Engine is responsible for reconstructing a previous system state from a stored version.",
+  "It retrieves snapshot data, restores the DSP configuration, and rehydrates the UI so the user can continue working from that exact point.",
+  "### Responsibilities",
+  "Load version data.",
+  "Restore DSP chain.",
+  "Restore parameters and settings.",
+  "Restore UI state context.",
+  "Reconstruct working environment.",
+  "### Core Capabilities",
+  "Version Loading: retrieve version by ID and fetch snapshot, metadata, and audio reference.",
+  "DSP Chain Restoration: rebuild DSP chain from snapshot, restore node sequence and parameters, and ensure compatibility with DSP Engine.",
+  "Parameter Restoration: restore all user-defined parameters, reapply UI-controlled values, and ensure consistency across system.",
+  "UI State Rehydration: restore UI layout and state, reconstruct canvas elements, and sync UI with restored data.",
+  "Context Reconstruction: restore execution context, align system state with restored version, and enable seamless continuation.",
+  "### Flow",
+  "User Selects Version -> Load Version Data -> Retrieve Snapshot -> Restore DSP Chain -> Restore Parameters -> Rehydrate UI State -> System Restored.",
+  "### Inputs",
+  "Version ID, snapshot data, stored metadata, and audio reference.",
+  "### Outputs",
+  "Restored DSP chain, restored parameters, restored UI state, and reconstructed system context.",
+  "### Control Boundary",
+  "Restore Engine does not execute DSP, does not modify version history, and does not plan actions. It only restores state.",
+  "### Non Responsibilities",
+  "Execution, storage, UI rendering logic, and planning.",
+  "### Architectural Summary",
+  "The Restore Engine is the state restoration component of the Versioning layer, responsible for loading and reconstructing previous system states, enabling users to return to and continue from any point in the workflow.",
+] as const;
+
 export function generateStaticParams() {
   return Object.keys(architectureModuleTitles).map((module) => ({ module }));
 }
@@ -1700,15 +1838,6 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
       <DocsContent>
         <PageTitle title={page.title} description={page.description} />
         <div className="flex flex-col gap-5">
-          {primarySection ? (
-            <SectionBlock
-              key={primarySection.title}
-              title={primarySection.title}
-              body={primarySection.body}
-              collapsible
-              plainStructured
-            />
-          ) : null}
           <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
             <details className="group/details" name="docs-primary-accordion">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
@@ -1723,9 +1852,7 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
                   Terminology note: <span className="font-semibold text-slate-100">QAgent Core</span> is the top-level architectural scope, while
                   <span className="font-semibold text-slate-100"> QCore Engine</span> is the internal runtime component at its center.
                 </p>
-                <div className="relative aspect-[16/10] w-full overflow-hidden rounded-lg border border-[var(--border)] bg-slate-900/40">
-                  <Image src="/qcore-architecture-circle.png" alt="QCore central architecture diagram" fill className="object-contain" priority />
-                </div>
+                <QCoreArchitectureDiagram />
                 <details className="group/details rounded-lg border border-[var(--border)] bg-slate-950/40 p-3">
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-2 text-sm font-semibold text-slate-100 [&::-webkit-details-marker]:hidden">
                     <span>Diagram Components</span>
@@ -1738,6 +1865,15 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
               </div>
             </details>
           </section>
+          {primarySection ? (
+            <SectionBlock
+              key={primarySection.title}
+              title={primarySection.title}
+              body={primarySection.body}
+              collapsible
+              plainStructured
+            />
+          ) : null}
           {otherSections.map((section) => (
             <SectionBlock
               key={section.title}
@@ -2445,7 +2581,7 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
           <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
             <details className="group/details" name="docs-primary-accordion">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
-                <h2 className="text-base font-semibold md:text-lg">UAgent — UI Runtime Layer</h2>
+                <h2 className="text-base font-semibold md:text-lg">UAgent � UI Runtime Layer</h2>
                 <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
               </summary>
               <div className="mt-3 space-y-2">
@@ -2924,6 +3060,90 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
                     </h3>
                   ) : (
                     <p key={`versioning-layer-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Snapshot Builder</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {snapshotBuilderBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`snapshot-builder-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`snapshot-builder-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Storage Layer</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {storageLayerBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`storage-layer-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`storage-layer-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">History Tracker</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {historyTrackerBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`history-tracker-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`history-tracker-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Restore Engine</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {restoreEngineBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`restore-engine-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`restore-engine-line-${index}`} className="text-sm leading-6 text-slate-300">
                       {line}
                     </p>
                   ),
