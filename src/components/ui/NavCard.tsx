@@ -7,8 +7,8 @@ import type { DocsNavGroup } from "@/lib/navigation";
 export function NavCard({ title, description, href, section = "Architecture" }: { title: string; description: string; href: string; section?: DocsNavGroup; icon?: string }) {
   const isImplementation = section === "Implementation";
   const isDecision = section === "Decision System";
-  const isAudio = section === "Audio Intelligence";
-  const isMainFlow = section === "Main Flow";
+  const isAudio = section === "Audio System";
+  const isMainFlow = section === "Core Flow";
   const [shortDescription, ...rest] = description.split(". ");
   const fullDescription = rest.length > 0 ? `${shortDescription}. ${rest.join(". ")}` : description;
 
