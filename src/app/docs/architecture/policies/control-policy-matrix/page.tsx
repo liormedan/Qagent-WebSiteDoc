@@ -1,6 +1,7 @@
 import { DocsContent } from "@/components/layout/DocsContent";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
+import { QAGENT_CANONICAL_FLOW } from "@/lib/qagent-canonical";
 
 const matrix = [
   "file intake | trigger: QCore | validate: Files Handler | enforce: QCore | block: Files Handler/QCore | execute: Files Handler",
@@ -8,8 +9,8 @@ const matrix = [
   "intent | trigger: QCore | validate: Intent Validator | enforce: QCore | block: Ambiguity Detector | execute: Intent + Clarification",
   "planning | trigger: QCore | validate: Constraint Resolver | enforce: QCore | block: DAL | execute: DAL",
   "UI generation | trigger: DAL plan handoff | validate: UAgent component registry | enforce: QCore policy | block: UAgent | execute: UAgent",
-  "approval | trigger: Approval Triggering | validate: User Confirmation Handling + approval state checks | enforce: QCore Core Enforcement | block: Core Enforcement | execute: Approval layer",
-  "execution | trigger: approved plan | validate: DAgent preflight validation | enforce: QCore + Flow Controller | block: Core Enforcement/DAgent | execute: DAgent",
+  "approval | trigger: Approval Triggering | validate: User Confirmation Handling + approval state checks | enforce: QCore Enforcement | block: QCore Enforcement | execute: Approval layer",
+  "execution | trigger: approved plan | validate: DAgent preflight validation | enforce: QCore + Flow Controller | block: QCore Enforcement/DAgent | execute: DAgent",
   "versioning | trigger: DAgent result | validate: Version Manager + Storage validation | enforce: QCore policy | block: Versioning integrity guard | execute: Versioning",
   "restore | trigger: user restore request | validate: Restore Engine + state validation | enforce: QCore | block: Restore Engine | execute: Restore Engine",
 ];
@@ -45,6 +46,7 @@ export default function ControlPolicyMatrixPage() {
           body={matrix}
           collapsible
         />
+        <SectionBlock title="Canonical Flow" body={[QAGENT_CANONICAL_FLOW]} collapsible />
         <SectionBlock
           title="Summary"
           body={[

@@ -80,6 +80,11 @@ summary::-webkit-details-marker {
 }
 
 
+[data-docs-content] pre {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 280px;
+}
+
 .docs-section-active {
   box-shadow: 0 0 0 1px rgba(125, 211, 252, 0.28);
   border-left: 2px solid #7dd3fc;

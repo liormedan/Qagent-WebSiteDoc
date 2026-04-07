@@ -2,11 +2,11 @@ import type { DocPageContent } from "@/lib/docs";
 
 export const qcoreContent: DocPageContent = {
   slug: "qcore",
-  title: "Main QAgent Core Structure",
+  title: "Main QCore Structure",
   description: "Authoritative architectural definition of the QAgent runtime core structure.",
   sections: [
     {
-      title: "Main QAgent Core Structure",
+      title: "Main QCore Structure",
       body: [
         "### Overview",
         "QCore is the architectural center of QAgent: a state-aware runtime orchestrator and loop controller.",

@@ -12,8 +12,8 @@ const page = getDocPage("qcore");
 
 export default function QCorePage() {
   if (!page) return null;
-  const primarySection = page.sections.find((section) => section.title === "Main QAgent Core Structure");
-  const otherSections = page.sections.filter((section) => section.title !== "Main QAgent Core Structure");
+  const primarySection = page.sections.find((section) => section.title === "Main QCore Structure");
+  const otherSections = page.sections.filter((section) => section.title !== "Main QCore Structure");
 
   return (
     <DocsContent>
@@ -31,8 +31,8 @@ export default function QCorePage() {
                 Circle-based architecture infographic with QCore as the center node and surrounding system layers.
               </p>
               <p className="rounded-md border border-[var(--border)] bg-slate-900/50 px-3 py-2 text-xs leading-5 text-slate-300">
-                Terminology note: <span className="font-semibold text-slate-100">QAgent Core</span> is the top-level architectural scope, while
-                <span className="font-semibold text-slate-100"> QCore Engine</span> is the internal runtime component at its center.
+                Terminology note: <span className="font-semibold text-slate-100">QCore</span> is the canonical orchestrator node name, while
+                <span className="font-semibold text-slate-100"> QCore Engine</span> is the internal runtime component inside QCore.
               </p>
               <QCoreArchitectureDiagram />
               <details className="group/details rounded-lg border border-[var(--border)] bg-slate-950/40 p-3">

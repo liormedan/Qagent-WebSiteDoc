@@ -36,6 +36,16 @@ export default function ImplementationBaselinePage() {
           collapsible
         />
         <SectionBlock
+          title="Documentation Governance (Source of Truth)"
+          body={[
+            "Structural source of truth: rendered architecture docs under /src/app/docs/architecture/* plus /docs/system-flow.",
+            "Secondary content source: /src/content/* is non-authoritative support content and may contain placeholders.",
+            "Rule: if a statement in /src/content/* conflicts with /src/app/docs/architecture/*, the architecture page is authoritative.",
+            "Future updates must modify authoritative architecture pages first; supporting content may then be synchronized.",
+          ]}
+          collapsible
+        />
+        <SectionBlock
           title="Authoritative Baseline"
           body={[
             "/docs/architecture/modules/qagent-core",
@@ -51,6 +61,7 @@ export default function ImplementationBaselinePage() {
             "/docs/architecture/modules/versioning/diff-engine",
             "/docs/architecture/contracts/schema-registry",
             "/docs/architecture/contracts/lineage-model",
+            "/docs/architecture/contracts/client-qagent-id-mapping",
             "/docs/architecture/policies/failure-policy",
             "/docs/architecture/policies/control-policy-matrix",
             "/docs/architecture/policies/session-isolation",

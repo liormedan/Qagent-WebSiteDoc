@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { startTransition, useCallback, useEffect, useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 
 type TocHeading = {
@@ -39,7 +39,7 @@ export function DocsToc({ className }: { className?: string }) {
   const collectHeadings = useCallback(() => {
     const root = document.querySelector("[data-docs-content]");
     if (!root) {
-      setHeadings([]);
+      startTransition(() => setHeadings([]));
       return;
     }
 
@@ -57,7 +57,9 @@ export function DocsToc({ className }: { className?: string }) {
       const seen = idCounts.get(baseId) ?? 0;
       const uniqueId = seen === 0 ? baseId : `${baseId}-${seen + 1}`;
       idCounts.set(baseId, seen + 1);
-      node.id = uniqueId;
+      if (node.id !== uniqueId) {
+        node.id = uniqueId;
+      }
 
       nextHeadings.push({
         id: uniqueId,
@@ -66,7 +68,9 @@ export function DocsToc({ className }: { className?: string }) {
       });
     }
 
-    setHeadings(nextHeadings);
+    startTransition(() => {
+      setHeadings(nextHeadings);
+    });
   }, []);
 
   const closeAllAccordions = useCallback(() => {
@@ -83,11 +87,24 @@ export function DocsToc({ className }: { className?: string }) {
 
     const root = document.querySelector("[data-docs-content]");
     if (!root) return () => window.cancelAnimationFrame(frame);
-    const observer = new MutationObserver(() => collectHeadings());
+
+    let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+    const scheduleCollectFromObserver = () => {
+      if (debounceTimer !== null) clearTimeout(debounceTimer);
+      debounceTimer = window.setTimeout(() => {
+        debounceTimer = null;
+        window.requestAnimationFrame(() => {
+          collectHeadings();
+        });
+      }, 48);
+    };
+
+    const observer = new MutationObserver(scheduleCollectFromObserver);
     observer.observe(root, { subtree: true, attributes: true, attributeFilter: ["open"] });
 
     return () => {
       window.cancelAnimationFrame(frame);
+      if (debounceTimer !== null) clearTimeout(debounceTimer);
       observer.disconnect();
     };
   }, [pathname, collectHeadings]);

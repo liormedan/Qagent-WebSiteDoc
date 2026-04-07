@@ -1,15 +1,15 @@
-"use client";
+﻿"use client";
 
 import { ArrowDown, CornerLeftUp } from "lucide-react";
 
 const flowSteps = [
-  "QAgent Core",
+  "QCore",
   "Files Handler",
   "Analyzer",
   "Intent + Clarification",
   "DAL (Decision Abstraction Layer)",
   "UAgent (UI Plan Generation)",
-  "Approval (User Confirmation)",
+  "Approval (UI-triggered, enforced by QCore)",
   "DAgent (Execution)",
   "Versioning (Result & State Update)",
 ];
@@ -21,7 +21,7 @@ export function QAgentArchitectureLinearDiagram() {
         <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-300/80">Architecture Flow</p>
         <h3 className="mt-2 text-2xl font-semibold text-white md:text-3xl">QAgent Ordered Module Flow</h3>
         <p className="mt-2 text-sm text-slate-300">
-          Deterministic routing from QAgent Core through approval-gated execution and versioned outputs.
+          Deterministic routing from QCore through approval-gated execution and versioned outputs.
         </p>
       </div>
 
@@ -45,3 +45,4 @@ export function QAgentArchitectureLinearDiagram() {
     </div>
   );
 }
+

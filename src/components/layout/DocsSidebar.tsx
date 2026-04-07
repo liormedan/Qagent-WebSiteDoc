@@ -21,9 +21,10 @@ const qagentSections: SidebarSection[] = [
       { label: "System Flow", href: "/docs/system-flow" },
       { label: "Terminology", href: "/docs/terminology" },
       { label: "Architecture", href: "/docs/architecture" },
-      { label: "Main QAgent Core Structure", href: "/docs/qcore" },
+      { label: "Main QCore Structure", href: "/docs/qcore" },
       { label: "Schema Registry", href: "/docs/architecture/contracts/schema-registry" },
       { label: "Lineage Model", href: "/docs/architecture/contracts/lineage-model" },
+      { label: "Client–QAgent ID Mapping", href: "/docs/architecture/contracts/client-qagent-id-mapping" },
       { label: "Control Policy Matrix", href: "/docs/architecture/policies/control-policy-matrix" },
       { label: "Failure Policy", href: "/docs/architecture/policies/failure-policy" },
       { label: "Session Isolation", href: "/docs/architecture/policies/session-isolation" },
@@ -35,7 +36,7 @@ const qagentSections: SidebarSection[] = [
   {
     title: "Core Flow",
     items: [
-      { label: "QCore Engine", href: "/docs/architecture/modules/qagent-core" },
+      { label: "QCore", href: "/docs/architecture/modules/qagent-core" },
       { label: "Files Handler", href: "/docs/architecture/modules/files-handler" },
       { label: "Analyzer", href: "/docs/architecture/modules/analyzer" },
       { label: "Intent + Clarification", href: "/docs/architecture/modules/intent-clarification" },

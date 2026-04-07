@@ -1,6 +1,7 @@
 import { DocsContent } from "@/components/layout/DocsContent";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
+import { QAGENT_CANONICAL_FLOW } from "@/lib/qagent-canonical";
 
 export default function GettingStartedPage() {
   return (
@@ -21,7 +22,7 @@ export default function GettingStartedPage() {
         <SectionBlock
           title="How it works (high-level)"
           body={[
-            "User -> QCore -> System Modules -> Output.",
+            QAGENT_CANONICAL_FLOW,
             "QCore orchestrates the flow, modules do specialized work, and Versioning preserves results for compare/restore.",
           ]}
           collapsible

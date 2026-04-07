@@ -1,8 +1,22 @@
 import { DocsContent } from "@/components/layout/DocsContent";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
+import { QAGENT_CANONICAL_FLOW } from "@/lib/qagent-canonical";
 
 const contracts = [
+  {
+    title: "QCore -> Files Handler",
+    body: [
+      "Schema Name: qcore_to_files_handler_v1",
+      "Schema Purpose: hand off from QCore intake to Files Handler after User Input (handoff complete).",
+      "Required Fields: request_id, session_id, correlation_id, user_input_handoff_complete, file_artifact_refs.",
+      "Optional Fields: client_event_id, prior_context_ref, user_locale, device_caps.",
+      "Validation Rules: user_input_handoff_complete must be true; request_id must be bound to correlation_id at intake; session_id must match active session scope; file_artifact_refs may be empty only when the flow explicitly allows no-file requests.",
+      "Producer Module: QCore.",
+      "Consumer Module: Files Handler.",
+      "Schema Version ID: REG-QC-FH-1.0.0.",
+    ],
+  },
   {
     title: "Files Handler -> Analyzer",
     body: [
@@ -143,6 +157,7 @@ export default function SchemaRegistryPage() {
           ]}
           collapsible
         />
+        <SectionBlock title="Canonical Flow" body={[QAGENT_CANONICAL_FLOW]} collapsible />
         {contracts.map((contract) => (
           <SectionBlock key={contract.title} title={contract.title} body={contract.body} collapsible />
         ))}
