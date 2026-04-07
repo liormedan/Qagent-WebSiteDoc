@@ -1,4 +1,4 @@
-import { DocsContent } from "@/components/layout/DocsContent";
+﻿import { DocsContent } from "@/components/layout/DocsContent";
 import { CodeExample } from "@/components/ui/CodeExample";
 import { InfoCard } from "@/components/ui/InfoCard";
 import { PageTitle } from "@/components/ui/PageTitle";
@@ -18,6 +18,13 @@ export default function QAgentPage() {
       <DeprecationBanner replacementHref="/docs/overview" replacementLabel="/docs/overview" />
       <PageTitle title={page.title} description={page.description} />
       <div className="flex flex-col gap-5">
+        <section className="rounded-md border border-emerald-400/30 bg-emerald-500/10 px-3 py-2 text-xs leading-5 text-emerald-100 md:text-sm">
+          QAgent Layer — LOCKED
+          <br />
+          Version: v1.0
+          <br />
+          Status: Production-ready (documentation)
+        </section>
         {page.sections.map((section) => (
           <SectionBlock key={section.title} title={section.title} body={section.body}>
             {section.code ? <CodeExample code={section.code} /> : null}
@@ -32,5 +39,6 @@ export default function QAgentPage() {
     </DocsContent>
   );
 }
+
 
 

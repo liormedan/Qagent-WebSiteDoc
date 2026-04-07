@@ -1,4 +1,4 @@
-import { ChevronDown } from "lucide-react";
+﻿import { ChevronDown } from "lucide-react";
 import { notFound } from "next/navigation";
 import { DocsContent } from "@/components/layout/DocsContent";
 import { AnalyzerModuleDiagram } from "@/components/ui/AnalyzerModuleDiagram";
@@ -16,15 +16,16 @@ import { SectionBlock } from "@/components/ui/SectionBlock";
 import { UAgentModuleDiagram } from "@/components/ui/UAgentModuleDiagram";
 import { VersioningModuleDiagram } from "@/components/ui/VersioningModuleDiagram";
 import { getDocPage } from "@/lib/docs";
+import { QAGENT_CANONICAL_FLOW } from "@/lib/qagent-canonical";
 
 const architectureModuleTitles: Record<string, string> = {
-  "qagent-core": "QAgent Core",
+  "qagent-core": "QCore",
   "files-handler": "Files Handler",
   analyzer: "Analyzer",
   "intent-clarification": "Intent + Clarification",
   dal: "DAL",
   uagent: "UAgent",
-  approval: "Approval (UI-triggered, Core-enforced)",
+  approval: "Approval (UI-triggered, enforced by QCore)",
   dagent: "DAgent",
   versioning: "Versioning",
 };
@@ -111,7 +112,8 @@ const filesHandlerOverviewBody = [
   "### Purpose",
   "Accept files from multiple sources, enforce integrity/format validation, normalize structure, organize file records, and provide clean references for downstream modules.",
   "### Position in System Flow",
-  "QAgent Core -> Files Handler -> Analyzer. Files Handler is the first operational module after input.",
+  QAGENT_CANONICAL_FLOW,
+  "Files Handler is the first module after QCore in the canonical sequence above; Analyzer follows Files Handler.",
   "### Internal Structure",
   "Input Gateway: supports local uploads, drag & drop, external links, and previously stored files.",
   "File Validator: checks type, size, format compatibility, and integrity/corruption.",
@@ -1267,7 +1269,7 @@ const approvalLayerBody = [
   "### Core Capabilities",
   "Approval Triggering: identify approval-required actions, trigger approval UI, and surface relevant plan details.",
   "User Confirmation Handling: capture approve, reject, and modify decisions.",
-  "Core Enforcement: prevent execution without authorization and block unauthorized transitions.",
+  "QCore Enforcement: prevent execution without authorization and block unauthorized transitions.",
   "Approval State Tracking: track status per action, store approval history, and support multi-step approvals.",
   "Conditional Approval Logic: define when approval is mandatory through rule-based levels.",
   "### Flow",
@@ -1362,7 +1364,7 @@ const coreEnforcementBody = [
   "### Purpose",
   "Enforce execution control by preventing unauthorized actions and blocking transitions that were not explicitly approved.",
   "### Overview",
-  "Core Enforcement ensures no execution occurs without valid authorization.",
+  "QCore Enforcement ensures no execution occurs without valid authorization.",
   "It operates inside QCore as final gatekeeper before execution, validating approvals and allowed transitions to preserve safety and integrity.",
   "### Responsibilities",
   "Prevent execution without approval.",
@@ -1387,7 +1389,7 @@ const coreEnforcementBody = [
   "### Non Responsibilities",
   "UI interaction, decision capture, action planning, and execution runtime.",
   "### Architectural Summary",
-  "Core Enforcement is the final QCore control gate ensuring no action or transition executes without proper authorization, preserving system integrity and user control.",
+  "QCore Enforcement is the final QCore control gate ensuring no action or transition executes without proper authorization, preserving system integrity and user control.",
 ] as const;
 
 const approvalStateTrackingBody = [
@@ -1891,8 +1893,8 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
   if (module === "qagent-core") {
     const page = getDocPage("qcore");
     if (!page) return notFound();
-    const primarySection = page.sections.find((section) => section.title === "Main QAgent Core Structure");
-    const otherSections = page.sections.filter((section) => section.title !== "Main QAgent Core Structure");
+    const primarySection = page.sections.find((section) => section.title === "Main QCore Structure");
+    const otherSections = page.sections.filter((section) => section.title !== "Main QCore Structure");
 
     return (
       <DocsContent>
@@ -1909,8 +1911,8 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
                   Circle-based architecture infographic with QCore as the center node and surrounding system layers.
                 </p>
                 <p className="rounded-md border border-[var(--border)] bg-slate-900/50 px-3 py-2 text-xs leading-5 text-slate-300">
-                  Terminology note: <span className="font-semibold text-slate-100">QAgent Core</span> is the top-level architectural scope, while
-                  <span className="font-semibold text-slate-100"> QCore Engine</span> is the internal runtime component at its center.
+                  Terminology note: <span className="font-semibold text-slate-100">QCore</span> is the canonical orchestrator node name, while
+                  <span className="font-semibold text-slate-100"> QCore Engine</span> is the internal runtime component inside QCore.
                 </p>
                 <QCoreArchitectureDiagram />
                 <details className="group/details rounded-lg border border-[var(--border)] bg-slate-950/40 p-3">
@@ -2647,7 +2649,7 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
           <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
             <details className="group/details" name="docs-primary-accordion">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
-                <h2 className="text-base font-semibold md:text-lg">UAgent � UI Runtime Layer</h2>
+                <h2 className="text-base font-semibold md:text-lg">UAgent ן¿½ UI Runtime Layer</h2>
                 <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
               </summary>
               <div className="mt-3 space-y-2">
@@ -2874,7 +2876,7 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
           <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
             <details className="group/details" name="docs-primary-accordion">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
-                <h2 className="text-base font-semibold md:text-lg">Core Enforcement</h2>
+                <h2 className="text-base font-semibold md:text-lg">QCore Enforcement</h2>
                 <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
               </summary>
               <div className="mt-3 space-y-2">
@@ -3244,6 +3246,7 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
     </DocsContent>
   );
 }
+
 
 
 

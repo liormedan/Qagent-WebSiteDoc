@@ -14,7 +14,7 @@ export function QCoreArchitectureDiagram() {
         <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-300/80">QCore Topology</p>
         <h3 className="mt-2 text-2xl font-semibold text-white md:text-3xl">QCore Central Architecture</h3>
         <p className="mt-2 text-sm text-slate-300">
-          QAgent Core is the top-level scope. QCore Engine is the internal runtime component at the center.
+          QCore is the canonical orchestrator node. QCore Engine is the internal runtime component at the center.
         </p>
       </div>
 

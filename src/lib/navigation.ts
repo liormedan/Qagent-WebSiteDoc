@@ -1,4 +1,4 @@
-export type DocsNavGroup =
+﻿export type DocsNavGroup =
   | "Architecture"
   | "Core Flow"
   | "Decision System"
@@ -63,7 +63,7 @@ export const docsNavigation: DocNavItem[] = [
     group: "Architecture",
   },
   {
-    title: "Main QAgent Core Structure",
+    title: "Main QCore Structure",
     description: "Authoritative definition of QCore as runtime orchestrator and control center.",
     href: "/docs/qcore",
     group: "Architecture",
@@ -86,9 +86,15 @@ export const docsNavigation: DocNavItem[] = [
     href: "/docs/architecture/contracts/lineage-model",
     group: "Architecture",
   },
+  {
+    title: "Client-QAgent ID Mapping",
+    description: "Mapping rules between Client correlation/session IDs and QAgent lineage IDs.",
+    href: "/docs/architecture/contracts/client-qagent-id-mapping",
+    group: "Architecture",
+  },
 
   {
-    title: "QCore Engine",
+    title: "QCore",
     description: "Core orchestration runtime loop and control authority.",
     href: "/docs/architecture/modules/qagent-core",
     group: "Core Flow",
@@ -391,3 +397,4 @@ export function getFlowNeighborsByHref(href: string): { previous?: DocNavItem; n
     next: flowItems[index + 1],
   };
 }
+

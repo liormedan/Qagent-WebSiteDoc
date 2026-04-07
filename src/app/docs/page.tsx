@@ -1,7 +1,8 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { DocsContent } from "@/components/layout/DocsContent";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { QAGENT_CANONICAL_FLOW } from "@/lib/qagent-canonical";
 
 type HubLink = { label: string; href: string };
 type Hub = {
@@ -22,7 +23,7 @@ const hubs: Hub[] = [
     ],
     secondary: [
       { label: "Terminology", href: "/docs/terminology" },
-      { label: "Main QAgent Core Structure", href: "/docs/qcore" },
+      { label: "Main QCore Structure", href: "/docs/qcore" },
       { label: "Q Agent", href: "/docs/q-agent" },
       { label: "Schema Registry", href: "/docs/architecture/contracts/schema-registry" },
       { label: "Lineage Model", href: "/docs/architecture/contracts/lineage-model" },
@@ -32,7 +33,7 @@ const hubs: Hub[] = [
     title: "Core Flow",
     description: "Ordered module pipeline from QCore through execution and versioning.",
     featured: [
-      { label: "QCore Engine", href: "/docs/architecture/modules/qagent-core" },
+      { label: "QCore", href: "/docs/architecture/modules/qagent-core" },
       { label: "Approval", href: "/docs/architecture/modules/approval" },
     ],
     secondary: [
@@ -140,7 +141,7 @@ const commonPaths = [
     title: "Learn the architecture",
     links: [
       { label: "System Map", href: "/docs/architecture" },
-      { label: "Main QAgent Core Structure", href: "/docs/qcore" },
+      { label: "Main QCore Structure", href: "/docs/qcore" },
     ],
   },
   {
@@ -178,8 +179,18 @@ export default function DocsIndexPage() {
           </div>
 
           <h1 className="mt-3 text-3xl font-semibold leading-tight md:text-[2.15rem]">QAgent Documentation</h1>
+          <p className="mt-3 rounded-md border border-emerald-400/30 bg-emerald-500/10 px-3 py-2 text-xs leading-5 text-emerald-100 md:text-sm">
+            QAgent Layer — LOCKED
+            <br />
+            Version: v1.0
+            <br />
+            Status: Production-ready (documentation)
+          </p>
           <p className="mt-3 max-w-4xl text-sm leading-6 text-slate-300 md:text-base">
             Explore architecture, orchestration, execution runtime, audio intelligence, and implementation references across one structured documentation system.
+          </p>
+          <p className="mt-2 max-w-4xl rounded-md border border-[var(--border)] bg-slate-900/40 px-3 py-2 text-xs leading-5 text-slate-300 md:text-sm">
+            Canonical flow: {QAGENT_CANONICAL_FLOW}
           </p>
 
           <div className="mt-4 flex flex-wrap gap-2">
@@ -291,3 +302,4 @@ export default function DocsIndexPage() {
     </DocsContent>
   );
 }
+

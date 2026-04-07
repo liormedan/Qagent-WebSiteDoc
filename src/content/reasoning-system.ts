@@ -1,4 +1,4 @@
-import type { DocPageContent } from "@/lib/docs";
+﻿import type { DocPageContent } from "@/lib/docs";
 
 export const reasoningSystemContent: DocPageContent = {
   slug: "reasoning-system",
@@ -22,10 +22,11 @@ export const reasoningSystemContent: DocPageContent = {
       body: [],
     },
     {
-      title: "Approval Gate (UI-triggered, Core-enforced)",
+      title: "Approval Gate (UI-triggered, enforced by QCore)",
       body: [],
     },
   ],
 };
+
 
 

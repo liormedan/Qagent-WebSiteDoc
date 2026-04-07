@@ -13,7 +13,7 @@ const seedNodes: SeedNode[] = [
   { id: "02", label: "Files Handler", className: "md:col-start-2 md:row-start-1" },
   { id: "08", label: "DAgent - SDP", className: "md:col-start-1 md:row-start-2" },
   { id: "03", label: "Analyzer", className: "md:col-start-3 md:row-start-2" },
-  { id: "01", label: "QAgent Core", tone: "primary", className: "md:col-start-2 md:row-start-3" },
+  { id: "01", label: "QCore", tone: "primary", className: "md:col-start-2 md:row-start-3" },
   { id: "06", label: "UAgent - Gen UI", className: "md:col-start-1 md:row-start-4" },
   { id: "04", label: "Intent + Clarification", className: "md:col-start-3 md:row-start-4" },
   { id: "05", label: "DAL", className: "md:col-start-2 md:row-start-5" },

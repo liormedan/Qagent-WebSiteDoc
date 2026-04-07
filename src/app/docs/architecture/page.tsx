@@ -1,7 +1,8 @@
-import { DocsContent } from "@/components/layout/DocsContent";
+﻿import { DocsContent } from "@/components/layout/DocsContent";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { QAgentArchitectureLinearDiagram } from "@/components/ui/QAgentArchitectureLinearDiagram";
 import { SectionBlock } from "@/components/ui/SectionBlock";
+import { QAGENT_CANONICAL_FLOW } from "@/lib/qagent-canonical";
 
 type ModuleChapter = {
   title: string;
@@ -14,7 +15,7 @@ type ModuleChapter = {
 
 const moduleChapters: ModuleChapter[] = [
   {
-    title: "QCore Engine",
+    title: "QCore",
     role: "Core",
     purpose: "Controls ordered module execution and enforces deterministic system rules.",
     inputs: "User request context, session state, and module responses.",
@@ -27,7 +28,7 @@ const moduleChapters: ModuleChapter[] = [
     purpose: "Loads, validates, and indexes user-provided files for analysis.",
     inputs: "Uploaded files and metadata.",
     outputs: "Normalized file references and access-safe handles.",
-    dependsOn: "QAgent Core request scope.",
+    dependsOn: "QCore request scope.",
   },
   {
     title: "Analyzer",
@@ -43,7 +44,7 @@ const moduleChapters: ModuleChapter[] = [
     purpose: "Resolves user intent and blocks ambiguous actions until clarified.",
     inputs: "User language intent and analyzer evidence.",
     outputs: "Confirmed intent state with explicit constraints.",
-    dependsOn: "QAgent Core and Analyzer evidence.",
+    dependsOn: "QCore and Analyzer evidence.",
   },
   {
     title: "DAL",
@@ -62,12 +63,12 @@ const moduleChapters: ModuleChapter[] = [
     dependsOn: "DAL output.",
   },
   {
-    title: "Approval (UI-triggered, Core-enforced)",
+    title: "Approval (UI-triggered, enforced by QCore)",
     role: "UI Gated",
     purpose: "Prevents execution until explicit user approval is captured and verified.",
     inputs: "User approval signal and DAL plan fingerprint.",
     outputs: "Approved or rejected execution gate state.",
-    dependsOn: "UAgent prompt delivery and QAgent Core validation.",
+    dependsOn: "UAgent prompt delivery and QCore validation.",
   },
   {
     title: "DAgent",
@@ -88,9 +89,9 @@ const moduleChapters: ModuleChapter[] = [
 ];
 
 function chapterBody(chapter: ModuleChapter): string[] {
-  if (chapter.title === "QCore Engine") {
+  if (chapter.title === "QCore") {
     return [
-      "### Main QAgent Core Structure",
+      "### Main QCore Structure",
       "Defines QCore as the architectural center that governs orchestration, state-aware routing, and system control boundaries.",
       "### QCore Engine",
       "Describes the internal runtime core that executes the agent loop and coordinates decision progression across stages.",
@@ -132,11 +133,21 @@ export default function ArchitecturePage() {
       />
 
       <div className="flex flex-col gap-5">
+        <section className="rounded-md border border-emerald-400/30 bg-emerald-500/10 px-3 py-2 text-xs leading-5 text-emerald-100 md:text-sm">
+          QAgent Layer — LOCKED
+          <br />
+          Version: v1.0
+          <br />
+          Status: Production-ready (documentation)
+        </section>
+
         <SectionBlock
           title="Architecture Diagram"
           body={[
             "### Overview",
             "Ordered modular flow from request intake to versioned output.",
+            "### Canonical Flow",
+            QAGENT_CANONICAL_FLOW,
             "### Structure",
             "The diagram is the single reference of module order in this page.",
           ]}
@@ -155,3 +166,5 @@ export default function ArchitecturePage() {
     </DocsContent>
   );
 }
+
+

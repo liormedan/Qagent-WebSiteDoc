@@ -1,6 +1,7 @@
 import { DocsContent } from "@/components/layout/DocsContent";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
+import { QAGENT_CANONICAL_FLOW } from "@/lib/qagent-canonical";
 
 export default function LineageModelPage() {
   return (
@@ -62,9 +63,8 @@ export default function LineageModelPage() {
         <SectionBlock
           title="Flow"
           body={[
-            "User Input -> QCore creates request_id and attaches session_id.",
-            "Intent produces decision_id -> DAL produces plan_id -> Approval produces approval_id -> DAgent produces execution_id -> Versioning produces version_id.",
-            "Restore requests reference version_id and spawn restore_id while keeping original request lineage.",
+            QAGENT_CANONICAL_FLOW,
+            "ID propagation: after User Input (handoff complete), QCore creates request_id and attaches session_id. Intent + Clarification creates decision_id after validation. DAL creates plan_id. Approval creates approval_id. DAgent creates execution_id at execution start. Versioning creates version_id. Restore requests reference version_id and spawn restore_id while keeping original request lineage.",
           ]}
           collapsible
         />

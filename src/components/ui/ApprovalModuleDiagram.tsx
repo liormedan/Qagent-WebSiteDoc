@@ -14,7 +14,7 @@ const nodes = [
     points: ["Approve", "Reject", "Modify"],
   },
   {
-    title: "Core Enforcement",
+    title: "QCore Enforcement",
     icon: Shield,
     points: ["No execution without approval", "Block unauthorized transitions", "Apply safety rules"],
   },
