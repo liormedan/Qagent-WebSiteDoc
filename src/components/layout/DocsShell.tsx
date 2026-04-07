@@ -11,6 +11,7 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileTocOpen, setMobileTocOpen] = useState(false);
+  const [viewportHeight, setViewportHeight] = useState<number | null>(null);
   const mainRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
@@ -44,11 +45,21 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
     return () => document.removeEventListener("click", onSummaryClick);
   }, []);
 
+  useEffect(() => {
+    const updateViewportHeight = () => setViewportHeight(window.innerHeight);
+    updateViewportHeight();
+    window.addEventListener("resize", updateViewportHeight);
+    return () => window.removeEventListener("resize", updateViewportHeight);
+  }, []);
+
   return (
-    <div className="h-screen overflow-hidden bg-[var(--bg)] text-[var(--text)]">
+    <div className="overflow-hidden bg-[var(--bg)] text-[var(--text)]" style={{ height: viewportHeight ? `${viewportHeight}px` : "100vh" }}>
       <DocsHeader key={pathname} onOpenMenu={() => setMobileMenuOpen(true)} onOpenToc={() => setMobileTocOpen(true)} />
 
-      <div className="mx-auto grid h-[calc(100vh-72px)] w-full max-w-[1800px] grid-cols-1 overflow-hidden lg:grid-cols-[220px_minmax(0,1fr)_210px] xl:grid-cols-[240px_minmax(0,1fr)_230px] 2xl:grid-cols-[260px_minmax(0,1fr)_260px]">
+      <div
+        className="mx-auto grid w-full max-w-[1800px] grid-cols-1 overflow-hidden lg:grid-cols-[220px_minmax(0,1fr)_210px] xl:grid-cols-[240px_minmax(0,1fr)_230px] 2xl:grid-cols-[260px_minmax(0,1fr)_260px]"
+        style={{ height: viewportHeight ? `${Math.max(viewportHeight - 72, 0)}px` : "calc(100vh - 72px)" }}
+      >
         <div className="hidden border-r border-[var(--border)] lg:block">
           <DocsSidebar className="h-full overflow-y-auto" />
         </div>
