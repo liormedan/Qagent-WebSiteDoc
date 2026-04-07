@@ -88,9 +88,9 @@ export function DocsToc({ className }: { className?: string }) {
     const root = document.querySelector("[data-docs-content]");
     if (!root) return () => window.cancelAnimationFrame(frame);
 
-    let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+    let debounceTimer: number | null = null;
     const scheduleCollectFromObserver = () => {
-      if (debounceTimer !== null) clearTimeout(debounceTimer);
+      if (debounceTimer !== null) window.clearTimeout(debounceTimer);
       debounceTimer = window.setTimeout(() => {
         debounceTimer = null;
         window.requestAnimationFrame(() => {
@@ -104,7 +104,7 @@ export function DocsToc({ className }: { className?: string }) {
 
     return () => {
       window.cancelAnimationFrame(frame);
-      if (debounceTimer !== null) clearTimeout(debounceTimer);
+      if (debounceTimer !== null) window.clearTimeout(debounceTimer);
       observer.disconnect();
     };
   }, [pathname, collectHeadings]);
