@@ -8,10 +8,11 @@ import { cn } from "@/lib/utils";
 
 type SidebarSection = {
   title: string;
+  href?: string;
   items: Array<{ label: string; href: string }>;
 };
 
-const sections: SidebarSection[] = [
+const qagentSections: SidebarSection[] = [
   {
     title: "QAgent",
     items: [
@@ -87,31 +88,180 @@ const sections: SidebarSection[] = [
       { label: "Module Design", href: "/docs/module-design" },
       { label: "Function Contracts", href: "/docs/function-contracts" },
       { label: "Testing Strategy", href: "/docs/testing-strategy" },
-      { label: "API", href: "/docs/api" },
+      { label: "API", href: "/docs/api-reference" },
     ],
   },
 ];
 
+const apiSections: SidebarSection[] = [
+  {
+    title: "Core Flow",
+    href: "/docs/api/core-flow",
+    items: [],
+  },
+  {
+    title: "Architecture",
+    href: "/docs/api/architecture",
+    items: [],
+  },
+  {
+    title: "Decision System",
+    href: "/docs/api/decision-system",
+    items: [],
+  },
+  {
+    title: "Execution",
+    href: "/docs/api/execution",
+    items: [],
+  },
+  {
+    title: "Versioning",
+    href: "/docs/api/versioning",
+    items: [],
+  },
+  {
+    title: "Implementation",
+    href: "/docs/api/implementation",
+    items: [],
+  },
+];
+
+const clientSections: SidebarSection[] = [
+  {
+    title: "Overview",
+    href: "/docs/client",
+    items: [],
+  },
+  {
+    title: "Chat UI",
+    href: "/docs/client/chat-ui",
+    items: [],
+  },
+  {
+    title: "Canvas UI",
+    href: "/docs/client/canvas-ui",
+    items: [],
+  },
+  {
+    title: "Workspace UI",
+    href: "/docs/client/workspace-ui",
+    items: [],
+  },
+  {
+    title: "Client Runtime",
+    href: "/docs/client/runtime",
+    items: [],
+  },
+  {
+    title: "State Model",
+    href: "/docs/client/state-model",
+    items: [],
+  },
+  {
+    title: "State Ownership",
+    href: "/docs/client/state-ownership",
+    items: [],
+  },
+  {
+    title: "Event Flow",
+    href: "/docs/client/event-flow",
+    items: [],
+  },
+  {
+    title: "Event Contract",
+    href: "/docs/client/event-contract",
+    items: [],
+  },
+  {
+    title: "Runtime Lifecycle",
+    href: "/docs/client/runtime-lifecycle",
+    items: [],
+  },
+  {
+    title: "Error Model",
+    href: "/docs/client/error-model",
+    items: [],
+  },
+  {
+    title: "Cross-Layer Contracts",
+    href: "/docs/client/contracts",
+    items: [],
+  },
+  {
+    title: "System Validation",
+    href: "/docs/client/system-validation",
+    items: [],
+  },
+  {
+    title: "Conformance Tests",
+    href: "/docs/client/conformance-tests",
+    items: [],
+  },
+  {
+    title: "Test Report",
+    href: "/docs/client/test-report",
+    items: [],
+  },
+  {
+    title: "UI Plan Contract",
+    href: "/docs/client/ui-plan-contract",
+    items: [],
+  },
+];
+
+function toQAgentHref(href: string): string {
+  if (!href.startsWith("/docs")) return href;
+  return `/docs/qagent${href.replace("/docs", "")}`;
+}
+
 export function DocsSidebar({ className, onNavigate }: { className?: string; onNavigate?: () => void }) {
   const pathname = usePathname();
   const [openSection, setOpenSection] = useState<string>("");
+  const clientContext = pathname.startsWith("/docs/client");
+  const apiContext = pathname.startsWith("/docs/api");
+  const singleLevelContext = apiContext || clientContext;
+  const sections = apiContext
+    ? apiSections
+    : clientContext
+      ? clientSections
+      : qagentSections.map((section) => ({
+          ...section,
+          items: section.items.map((item) => ({
+            ...item,
+            href: toQAgentHref(item.href),
+          })),
+        }));
 
   return (
     <aside className={cn("h-full min-h-0 overflow-y-scroll bg-black px-4 py-5", className)}>
       <nav className="space-y-4">
         {sections.map((section) => (
           <div key={section.title} className="space-y-1.5">
-            <button
-              type="button"
-              onClick={() => setOpenSection((current) => (current === section.title ? "" : section.title))}
-              className="flex w-full items-center justify-between rounded-md px-2 py-1 text-left text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 transition-colors hover:bg-slate-950/70 hover:text-slate-300"
-              aria-expanded={openSection === section.title}
-            >
-              <span>{section.title}</span>
-              <ChevronRight className={cn("h-4 w-4 shrink-0 transition-transform", openSection === section.title ? "rotate-90 text-slate-300" : "text-slate-500")} />
-            </button>
+            {singleLevelContext && section.href ? (
+              <Link
+                href={section.href}
+                onClick={onNavigate}
+                className={cn(
+                  "group flex items-center justify-between rounded-md px-2 py-1 text-left text-xs font-semibold uppercase tracking-[0.14em] transition-colors",
+                  pathname === section.href ? "bg-slate-900 text-slate-100" : "text-slate-500 hover:bg-slate-950/70 hover:text-slate-300",
+                )}
+              >
+                <span>{section.title}</span>
+                <ChevronRight className={cn("h-4 w-4 shrink-0 transition-colors", pathname === section.href ? "text-slate-200" : "text-slate-500 group-hover:text-slate-300")} />
+              </Link>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setOpenSection((current) => (current === section.title ? "" : section.title))}
+                className="flex w-full items-center justify-between rounded-md px-2 py-1 text-left text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 transition-colors hover:bg-slate-950/70 hover:text-slate-300"
+                aria-expanded={openSection === section.title}
+              >
+                <span>{section.title}</span>
+                <ChevronRight className={cn("h-4 w-4 shrink-0 transition-transform", openSection === section.title ? "rotate-90 text-slate-300" : "text-slate-500")} />
+              </button>
+            )}
 
-            {openSection === section.title ? (
+            {!singleLevelContext && openSection === section.title ? (
               <div className="space-y-0.5">
                 {section.items.map((item) => {
                   const active = pathname === item.href;
