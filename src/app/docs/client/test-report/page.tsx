@@ -25,13 +25,13 @@ export default function TestReportPage() {
                 <tr className="border-t border-[var(--border)]">
                   <td className="px-3 py-2 font-mono">T-LINT-001</td>
                   <td className="px-3 py-2">pass</td>
-                  <td className="px-3 py-2">npm run lint -> eslint -> exit_code 0</td>
+                  <td className="px-3 py-2">npm run lint -&gt; eslint -&gt; exit_code 0</td>
                   <td className="px-3 py-2">2026-04-07T20:47Z</td>
                 </tr>
                 <tr className="border-t border-[var(--border)]">
                   <td className="px-3 py-2 font-mono">T-BUILD-001</td>
                   <td className="px-3 py-2">pass</td>
-                  <td className="px-3 py-2">npm run build -> next build -> compiled + generated docs routes</td>
+                  <td className="px-3 py-2">npm run build -&gt; next build -&gt; compiled + generated docs routes</td>
                   <td className="px-3 py-2">2026-04-07T20:49Z</td>
                 </tr>
                 <tr className="border-t border-[var(--border)]">
