@@ -95,7 +95,7 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
   const pathname = usePathname();
 
   return (
-    <aside className={cn("h-full overflow-y-auto bg-black px-4 py-5", className)}>
+    <aside className={cn("h-full min-h-0 overflow-y-scroll bg-black px-4 py-5", className)}>
       <nav className="space-y-4">
         {sections.map((section) => (
           <div key={section.title} className="space-y-1.5">

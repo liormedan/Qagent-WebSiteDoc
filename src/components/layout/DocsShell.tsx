@@ -51,8 +51,8 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
       <div
         className="mx-auto grid w-full max-w-[1800px] grid-cols-1 md:h-[calc(100dvh-72px)] md:grid-cols-[240px_minmax(0,1fr)] md:overflow-hidden xl:grid-cols-[240px_minmax(0,1fr)_230px] 2xl:grid-cols-[260px_minmax(0,1fr)_260px]"
       >
-        <aside className="hidden border-r border-[var(--border)] md:block">
-          <DocsSidebar className="h-full overflow-y-auto" />
+        <aside className="hidden border-r border-[var(--border)] md:block md:min-h-0 md:overflow-hidden">
+          <DocsSidebar className="h-full min-h-0" />
         </aside>
 
         <main ref={mainRef} className="docs-main-scroll min-h-screen min-w-0 overflow-y-visible px-4 py-4 md:min-h-0 md:overflow-y-auto md:px-6 md:py-6 xl:px-8">
@@ -84,7 +84,7 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
                 Close
               </button>
             </div>
-            <DocsSidebar className="h-[calc(100%-57px)] overflow-y-auto" onNavigate={() => setMobileMenuOpen(false)} />
+            <DocsSidebar className="h-[calc(100%-57px)] min-h-0" onNavigate={() => setMobileMenuOpen(false)} />
           </div>
         </div>
       ) : null}
