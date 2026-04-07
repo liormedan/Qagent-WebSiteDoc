@@ -3,14 +3,18 @@ import { ChevronDown } from "lucide-react";
 import { notFound } from "next/navigation";
 import { DocsContent } from "@/components/layout/DocsContent";
 import { AnalyzerModuleDiagram } from "@/components/ui/AnalyzerModuleDiagram";
+import { ApprovalModuleDiagram } from "@/components/ui/ApprovalModuleDiagram";
 import { DalModuleDiagram } from "@/components/ui/DalModuleDiagram";
 import { DiagramComponentsAccordion } from "@/components/ui/DiagramComponentsAccordion";
+import { DspEngineDiagram } from "@/components/ui/DspEngineDiagram";
 import FilesHandlerDiagram from "@/components/ui/FilesHandlerDiagram";
 import { IntentClarificationDiagram } from "@/components/ui/IntentClarificationDiagram";
 import { LlmInterfaceDiagram } from "@/components/ui/LlmInterfaceDiagram";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { QCoreInternalDiagram } from "@/components/ui/QCoreInternalDiagram";
 import { SectionBlock } from "@/components/ui/SectionBlock";
+import { UAgentModuleDiagram } from "@/components/ui/UAgentModuleDiagram";
+import { VersioningModuleDiagram } from "@/components/ui/VersioningModuleDiagram";
 import { getDocPage } from "@/lib/docs";
 
 const architectureModuleTitles: Record<string, string> = {
@@ -1033,6 +1037,647 @@ const planFormatterBody = [
   "Plan Formatter is the final DAL component, consolidating all planning outputs into a unified structured representation that integrates execution and UI planning for downstream processing.",
 ] as const;
 
+const uAgentLayerBody = [
+  "### Goal",
+  "Define UAgent as the runtime layer responsible for rendering, managing, and updating UI based on DAL output.",
+  "### Overview",
+  "UAgent is the system UI execution layer.",
+  "It receives UI plan from DAL and turns it into a live interactive Canvas where users can view system actions, interact with flow, adjust parameters, and approve or refine operations.",
+  "### Module Type",
+  "UI Runtime Layer serving as the UI Execution Agent.",
+  "### Purpose",
+  "Render UI from DAL plan, manage interactive components, reflect real-time system state, enable user control, and bridge users with execution system.",
+  "### Internal Structure",
+  "UI Renderer: renders UI blocks, generates layout, and instantiates components.",
+  "Interaction Handler: captures clicks, sliders, inputs, and user adjustments.",
+  "State Sync Layer: synchronizes UI with runtime state through refresh and real-time reflection logic.",
+  "Event Dispatcher: sends interaction events, parameter updates, and approval signals back to QCore.",
+  "Component Registry: maintains available UI blocks, component definitions, and UI-plan-to-component mapping.",
+  "Feedback Layer: surfaces loading states, execution progress, and error messages to users.",
+  "### Flow",
+  "DAL Output (UI Plan) -> UI Renderer -> Rendered Interface -> User Interaction -> Interaction Handler -> Event Dispatcher -> QCore.",
+  "### Inputs",
+  "UI plan from DAL, execution state, system context, and updates from QCore.",
+  "### Outputs",
+  "Rendered UI, user interaction events, updated parameters, and approval signals.",
+  "### Control Boundary",
+  "UAgent does not decide and does not execute logic. It only presents and mediates interaction.",
+  "### Non Responsibilities",
+  "Reasoning, action planning, tool execution, and source-of-truth state management.",
+  "### System Behavior",
+  "UAgent must keep UI aligned with real system state, keep interactions responsive and clear, capture user actions reliably, and synchronize updates with execution.",
+  "### Failure Handling",
+  "Missing UI elements trigger fallback rendering, interaction errors return user feedback, and state mismatches trigger resynchronization.",
+  "### Architectural Summary",
+  "UAgent is QAgent UI runtime agent, responsible for rendering and managing interface, enabling user interaction, and bridging planning output with user control during execution.",
+] as const;
+
+const uIRendererBody = [
+  "### Module Type",
+  "Rendering Component as a UAgent submodule.",
+  "### Purpose",
+  "Render UI blocks, generate layout structure, and instantiate components based on DAL UI plan.",
+  "### Overview",
+  "UI Renderer transforms abstract UI plan definitions into concrete visual interface.",
+  "It converts planned UI definitions into Canvas components while preserving layout structure, hierarchy, and visual consistency.",
+  "### Responsibilities",
+  "Render UI blocks.",
+  "Generate layout structure.",
+  "Instantiate UI components.",
+  "Align UI with plan definitions.",
+  "Ensure visual consistency.",
+  "### Core Capabilities",
+  "UI Block Rendering: render planned blocks, map block types to components, and keep visual representation accurate.",
+  "Layout Generation: build layout from plan structure, position elements, and preserve hierarchy and relationships.",
+  "Component Instantiation: dynamically instantiate components, bind data, and initialize component state.",
+  "Plan-to-UI Mapping: translate UI plan schema into renderable component tree aligned with intended output.",
+  "Visual Consistency Enforcement: keep styling, structure, and behavior uniform across components.",
+  "### Flow",
+  "UI Plan -> UI Block Mapping -> Layout Generation -> Component Instantiation -> Rendered UI.",
+  "### Inputs",
+  "UI plan from DAL, component definitions, and system state.",
+  "### Outputs",
+  "Rendered UI components, layout structure, and initialized UI elements.",
+  "### Control Boundary",
+  "UI Renderer does not handle interactions, does not manage source-of-truth state, and does not execute actions. It only renders UI.",
+  "### Non Responsibilities",
+  "Interaction handling, event dispatching, reasoning, and execution.",
+  "### Architectural Summary",
+  "UI Renderer is the UAgent rendering component that converts UI plans into structured visual interfaces through layout generation and component instantiation.",
+] as const;
+
+const interactionHandlerBody = [
+  "### Module Type",
+  "Interaction Management Component as a UAgent submodule.",
+  "### Purpose",
+  "Capture and process user interactions such as clicks, sliders, inputs, and adjustments, and translate them into structured interaction events.",
+  "### Overview",
+  "Interaction Handler manages all user interactions within the UI runtime.",
+  "It listens to user actions, interprets their meaning, and converts them into structured signals for dispatch back to QCore.",
+  "### Responsibilities",
+  "Capture user interactions.",
+  "Interpret interaction intent.",
+  "Normalize interaction data.",
+  "Prepare interaction events.",
+  "Enable real-time user control.",
+  "### Core Capabilities",
+  "Interaction Capture: capture clicks, sliders, text inputs, toggles, and drag-and-drop events.",
+  "Event Interpretation: map UI actions to system signals and identify affected parameters.",
+  "Input Normalization: convert raw UI input into consistent structured event format.",
+  "Parameter Update Handling: detect parameter changes and package user adjustments for downstream state updates.",
+  "Real-Time Interaction Support: support immediate responses and continuous interactions such as slider movement.",
+  "### Flow",
+  "User Interaction -> Event Capture -> Event Interpretation -> Input Normalization -> Structured Interaction Event -> Event Dispatcher.",
+  "### Inputs",
+  "User actions, UI components, and current UI state.",
+  "### Outputs",
+  "Structured interaction events, parameter updates, and user input signals.",
+  "### Control Boundary",
+  "Interaction Handler does not execute actions, does not make decisions, and does not manage source-of-truth system state. It only captures and translates interactions.",
+  "### Non Responsibilities",
+  "UI rendering, reasoning, tool execution, and flow control.",
+  "### Architectural Summary",
+  "Interaction Handler is the UAgent interaction-management component that captures user actions and converts them into structured events for system updates and execution pathways.",
+] as const;
+
+const stateSyncLayerBody = [
+  "### Module Type",
+  "State Synchronization Component as a UAgent submodule.",
+  "### Purpose",
+  "Synchronize UI with runtime system state to ensure accurate real-time reflection of execution, data, and context changes.",
+  "### Overview",
+  "State Sync Layer keeps UI aligned with actual runtime behavior.",
+  "It ensures changes in execution, data, and context are reflected immediately so the user-facing interface remains consistent with backend reality.",
+  "### Responsibilities",
+  "Synchronize UI with runtime state.",
+  "Reflect real-time system updates.",
+  "Trigger UI refresh on state changes.",
+  "Maintain consistency between UI and backend.",
+  "Handle state updates across components.",
+  "### Core Capabilities",
+  "Real-Time State Reflection: update UI from system state changes and reflect progress and outcomes.",
+  "UI Refresh Logic: trigger re-rendering only when needed and optimize refresh frequency.",
+  "State Binding: bind components to state values and maintain reactive data flow behavior.",
+  "Consistency Enforcement: prevent UI-state mismatches and maintain cross-module synchronization coherence.",
+  "Incremental Updates: apply partial updates to reduce render overhead and improve responsiveness.",
+  "### Flow",
+  "System State Change -> State Sync Layer -> Update Detection -> UI Binding Update -> UI Refresh -> Synchronized UI.",
+  "### Inputs",
+  "Runtime state updates, execution status, context changes, and parameter updates.",
+  "### Outputs",
+  "Updated UI state, refreshed components, and synchronized visual representation.",
+  "### Control Boundary",
+  "State Sync Layer does not initiate actions, does not perform reasoning, and does not execute tools. It only synchronizes UI.",
+  "### Non Responsibilities",
+  "UI rendering by UI Renderer, interaction capture, decision-making, and execution.",
+  "### Architectural Summary",
+  "State Sync Layer is the UAgent synchronization component ensuring real-time alignment between runtime state and UI for consistent and accurate user experience.",
+] as const;
+
+const eventDispatcherBody = [
+  "### Overview",
+  "Event Dispatcher sends interaction events, parameter updates, and approval signals back to QCore.",
+] as const;
+
+const componentRegistryBody = [
+  "### Overview",
+  "Component Registry maintains available UI blocks, component definitions, and UI-plan-to-component mapping.",
+] as const;
+
+const feedbackLayerBody = [
+  "### Overview",
+  "Feedback Layer surfaces loading states, execution progress, and error messages to users.",
+] as const;
+
+const approvalLayerBody = [
+  "### Module Type",
+  "Control Gate Layer serving as user-controlled execution guard.",
+  "### Purpose",
+  "Ensure critical actions are explicitly approved by the user through UI, while enforcement remains in QCore for safe controlled execution.",
+  "### Overview",
+  "Approval introduces human validation into execution flow.",
+  "Users review planned actions from DAL/UI and explicitly approve, reject, or modify before execution.",
+  "Approval interaction is triggered in UI, but enforcement is strictly handled by QCore.",
+  "### Responsibilities",
+  "Present approval requests to users.",
+  "Capture user approval or rejection.",
+  "Block execution until approval is granted.",
+  "Enforce approval logic at core level.",
+  "Maintain control over sensitive or impactful actions.",
+  "### Core Capabilities",
+  "Approval Triggering: identify approval-required actions, trigger approval UI, and surface relevant plan details.",
+  "User Confirmation Handling: capture approve, reject, and modify decisions.",
+  "Core Enforcement: prevent execution without authorization and block unauthorized transitions.",
+  "Approval State Tracking: track status per action, store approval history, and support multi-step approvals.",
+  "Conditional Approval Logic: define when approval is mandatory through rule-based levels.",
+  "### Flow",
+  "DAL Output / UI Plan -> Approval Trigger -> User Review -> User Decision -> QCore Enforcement -> Proceed / Block / Adjust.",
+  "### Inputs",
+  "Execution plan, UI plan, system rules, and user interaction.",
+  "### Outputs",
+  "Approval status, user decision, execution permission signal, and updated plan when modified.",
+  "### Control Boundary",
+  "UI triggers approval and QCore enforces approval, preserving strict separation between interaction and control.",
+  "### Non Responsibilities",
+  "Action planning, tool execution, UI rendering by UAgent, and reasoning.",
+  "### System Behavior",
+  "No critical action executes without approval, user visibility remains clear, approval flow stays consistent, and control remains with user.",
+  "### Failure Handling",
+  "Missing approval blocks execution, rejection cancels or adjusts plan, and unclear decision triggers clarification request.",
+  "### Architectural Summary",
+  "Approval is the control gate of QAgent, ensuring critical actions are explicitly authorized by user while enforcement remains in QCore for integrity and safety.",
+] as const;
+
+const approvalTriggeringBody = [
+  "### Module Type",
+  "Trigger Component as an Approval submodule.",
+  "### Purpose",
+  "Identify actions requiring user approval, trigger approval interface, and surface relevant plan details for informed decision-making.",
+  "### Overview",
+  "Approval Triggering detects where approval is needed within execution plans.",
+  "It identifies sensitive or impactful actions, initiates approval flow in UI, and exposes the relevant context for user review.",
+  "### Responsibilities",
+  "Identify approval-required actions.",
+  "Trigger approval UI.",
+  "Surface relevant plan details.",
+  "Prepare approval context.",
+  "Initiate approval flow.",
+  "### Core Capabilities",
+  "Approval Requirement Detection: detect actions requiring approval through rules, thresholds, and risk or impact profile.",
+  "Approval UI Trigger: activate approval interface in UAgent and initiate user-visible interaction flow.",
+  "Plan Detail Surfacing: highlight key actions, impacts, and plan sections for decision clarity.",
+  "Context Preparation: package actions, parameters, and expected outcomes into structured approval payload.",
+  "Conditional Trigger Logic: support dynamic approval rules and multiple approval levels.",
+  "### Flow",
+  "Execution Plan -> Approval Requirement Detection -> Approval Context Preparation -> Trigger Approval UI -> Display Plan Details to User.",
+  "### Inputs",
+  "Execution plan, UI plan, system rules, and action metadata.",
+  "### Outputs",
+  "Approval request, approval context payload, and UI trigger signal.",
+  "### Control Boundary",
+  "Approval Triggering does not enforce approval, does not capture user decision, and does not execute actions. It only triggers approval.",
+  "### Non Responsibilities",
+  "Approval enforcement by QCore, interaction handling by UAgent, execution, and planning.",
+  "### Architectural Summary",
+  "Approval Triggering is responsible for detecting when user approval is required and initiating approval flow by activating UI and surfacing relevant execution context.",
+] as const;
+
+const userConfirmationHandlingBody = [
+  "### Module Type",
+  "Interaction Processing Component as an Approval submodule.",
+  "### Purpose",
+  "Capture and interpret user decisions during approval flow, including approve, reject, and modify actions, and convert them into structured signals for QCore.",
+  "### Overview",
+  "User Confirmation Handling processes user responses to approval requests.",
+  "It captures user decisions and translates them into structured signals that determine whether execution proceeds, stops, or is adjusted.",
+  "### Responsibilities",
+  "Capture user decisions.",
+  "Interpret approval responses.",
+  "Normalize decision data.",
+  "Prepare decision signals for QCore.",
+  "Enable controlled execution flow.",
+  "### Core Capabilities",
+  "Decision Capture: capture user actions such as approve, reject, and modify.",
+  "Decision Interpretation: determine outcome of user decisions and identify impact on execution flow.",
+  "Input Normalization: convert user input into standardized format and ensure consistent decision structure.",
+  "Modification Handling: capture user changes to plan, identify updated parameters, and prepare updates for re-processing.",
+  "Decision Signal Emission: emit structured decision object enabling QCore enforcement.",
+  "### Flow",
+  "Approval UI -> User Decision (Approve / Reject / Modify) -> Decision Capture -> Decision Interpretation -> Input Normalization -> Structured Decision Signal -> QCore.",
+  "### Inputs",
+  "User interaction from approval UI, approval request context, and execution plan.",
+  "### Outputs",
+  "Decision signal, updated parameters when modified, and structured decision object.",
+  "### Control Boundary",
+  "User Confirmation Handling does not enforce execution, does not plan actions, and does not render UI. It only captures and translates user decisions.",
+  "### Non Responsibilities",
+  "Approval triggering, DAgent execution, reasoning, and flow control.",
+  "### Architectural Summary",
+  "User Confirmation Handling captures and structures user decisions during approval process, enabling controlled system progression based on explicit user intent.",
+] as const;
+
+const coreEnforcementBody = [
+  "### Module Type",
+  "Control Enforcement Component in Approval submodule with QCore integration.",
+  "### Purpose",
+  "Enforce execution control by preventing unauthorized actions and blocking transitions that were not explicitly approved.",
+  "### Overview",
+  "Core Enforcement ensures no execution occurs without valid authorization.",
+  "It operates inside QCore as final gatekeeper before execution, validating approvals and allowed transitions to preserve safety and integrity.",
+  "### Responsibilities",
+  "Prevent execution without approval.",
+  "Block unauthorized transitions.",
+  "Enforce approval requirements.",
+  "Validate execution permissions.",
+  "Maintain system control integrity.",
+  "### Core Capabilities",
+  "Authorization Enforcement: verify approval status per action and block execution when missing.",
+  "Transition Control: validate allowed transitions and prevent unauthorized progression.",
+  "Execution Gatekeeping: act as final checkpoint that allows or blocks execution signals.",
+  "Approval State Verification: validate approval completeness including multi-step approval paths.",
+  "Security and Integrity Protection: prevent unauthorized operations and enforce defined system rules.",
+  "### Flow",
+  "Execution Request -> Approval State Check -> Transition Validation -> Authorization Verification -> Approved Allow or Not Approved Block -> Execution Decision.",
+  "### Inputs",
+  "Execution request, approval status, system state, and flow rules.",
+  "### Outputs",
+  "Execution permission decision, enforcement result, and violation signal when blocked.",
+  "### Control Boundary",
+  "UI triggers approval, user provides decision, and QCore enforces. Enforcement exists only in QCore.",
+  "### Non Responsibilities",
+  "UI interaction, decision capture, action planning, and execution runtime.",
+  "### Architectural Summary",
+  "Core Enforcement is the final QCore control gate ensuring no action or transition executes without proper authorization, preserving system integrity and user control.",
+] as const;
+
+const approvalStateTrackingBody = [
+  "### Module Type",
+  "State Management Component as an Approval submodule.",
+  "### Purpose",
+  "Track approval state per action, maintain approval history, and support multi-step approval workflows across the system.",
+  "### Overview",
+  "Approval State Tracking manages the lifecycle of approvals.",
+  "It preserves persistent state per action, records historical decisions, and supports dependent multi-step approval flows for traceability and control.",
+  "### Responsibilities",
+  "Track approval status per action.",
+  "Store approval history.",
+  "Manage multi-step approval flows.",
+  "Maintain approval state consistency.",
+  "Provide approval data to QCore.",
+  "### Core Capabilities",
+  "Per-Action State Tracking: maintain states including pending, approved, rejected, and modified.",
+  "Approval History Logging: store decision timeline for traceability and auditing.",
+  "Multi-Step Approval Support: handle conditional or sequential approval dependencies.",
+  "State Consistency Management: synchronize approval states with QCore and Flow Controller and prevent invalid transitions.",
+  "Approval Data Access: provide current approval state to QCore for validation and enforcement decisions.",
+  "### Flow",
+  "Approval Trigger -> User Decision -> Update Approval State -> Store in History -> Update System State -> Provide State to QCore.",
+  "### Inputs",
+  "Approval requests, user decisions, execution plan, and system context.",
+  "### Outputs",
+  "Approval state per action, approval history, approval status signals, and state updates.",
+  "### Control Boundary",
+  "Approval State Tracking does not enforce execution, does not generate approval requests, and does not perform reasoning. It only tracks and manages approval state.",
+  "### Non Responsibilities",
+  "Approval triggering, decision capture, execution, and planning.",
+  "### Architectural Summary",
+  "Approval State Tracking manages approval states across the system, ensuring accurate tracking, historical logging, and support for complex approval workflows.",
+] as const;
+
+const conditionalApprovalLogicBody = [
+  "### Module Type",
+  "Rule-Based Control Component as an Approval submodule.",
+  "### Purpose",
+  "Define when user approval is required by applying rule-based logic that evaluates action sensitivity, system impact, and execution context.",
+  "### Overview",
+  "Conditional Approval Logic determines whether each action requires user approval.",
+  "It applies configurable rules and thresholds to classify operations by risk, impact, and importance so only critical actions trigger approval.",
+  "### Responsibilities",
+  "Define approval rules.",
+  "Determine when approval is mandatory.",
+  "Classify actions by sensitivity level.",
+  "Apply rule-based decision logic.",
+  "Enable dynamic approval conditions.",
+  "### Core Capabilities",
+  "Rule Definition: configure approval conditions and flexible policy logic.",
+  "Sensitivity Classification: classify actions into levels such as low, medium, and high with corresponding approval strictness.",
+  "Context-Aware Evaluation: evaluate approval needs by action type, data sensitivity, and current system state.",
+  "Dynamic Approval Levels: support multiple approval tiers and scenario-specific requirements.",
+  "Threshold-Based Logic: apply thresholds such as resource usage, execution complexity, and potential impact.",
+  "### Flow",
+  "Execution Plan -> Rule Evaluation -> Sensitivity Classification -> Context Analysis -> Approval Decision -> Trigger or Skip Approval.",
+  "### Inputs",
+  "Execution plan, action metadata, system rules, and context data.",
+  "### Outputs",
+  "Approval requirement decision, approval level, and approval trigger signal.",
+  "### Control Boundary",
+  "Conditional Approval Logic does not trigger UI directly, does not enforce approval, and does not execute actions. It only decides if approval is needed.",
+  "### Non Responsibilities",
+  "Approval triggering, user interaction, execution, and planning.",
+  "### Architectural Summary",
+  "Conditional Approval Logic determines when user approval is required by rule-based evaluation so only appropriate operations enter approval flow.",
+] as const;
+
+const dspEngineDocBody = [
+  "### Goal",
+  "Define the DSP Engine inside DAgent as a Web Audio based execution engine for DAL DSP chains.",
+  "It supports real-time preview through AudioContext and offline export rendering through OfflineAudioContext.",
+  "### Overview",
+  "DSP Engine maps abstract DAL actions into concrete audio processing nodes and executes chain-based processing in browser runtime.",
+  "It prepares processed audio for playback and file export without backend dependency.",
+  "### Runtime Context",
+  "Input: DAL execution plan containing DSP chain.",
+  "Runtime: browser in Next.js frontend.",
+  "Engine: pure Web Audio API.",
+  "Modes: real-time preview and offline export rendering.",
+  "### Core Architecture",
+  "DSP Chain Interpreter: parses chain, validates nodes, and prepares normalized node configuration.",
+  "Node Factory: maps DSP types to Web Audio nodes (low_shelf/high_shelf/peaking to BiquadFilter, gain to GainNode, compressor to DynamicsCompressor).",
+  "Graph Builder: constructs sequential audio graph from AudioBufferSource through DSP nodes to destination.",
+  "Execution Modes: real-time mode with AudioContext and export mode with OfflineAudioContext.",
+  "Renderer: executes graph and returns processed buffer.",
+  "Output Adapter: converts processed AudioBuffer into exportable WAV/Blob output.",
+  "### Execution Flow",
+  "DAL DSP Chain -> DSP Chain Interpreter -> Node Factory -> Graph Builder -> Execution Mode -> Renderer -> Processed AudioBuffer -> Output Adapter -> Final Output.",
+  "### Implementation Scope",
+  "Module path: src/shared/lib/audio-engine.",
+  "Files: dsp-engine.ts, node-factory.ts, graph-builder.ts, renderer.ts, export-adapter.ts.",
+  "### Validation Scenarios",
+  "Verify EQ chain behavior, multi-node chaining, real-time preview, offline export, and invalid-node fallback behavior.",
+  "### Constraints",
+  "No backend, no external DSP libraries, pure Web Audio API, integrated with existing WaveQ flow.",
+  "### Future Architecture",
+  "Design remains extensible for future premium engine split: WebAudioEngine as default and WASM-based engine as advanced path.",
+  "### Architectural Summary",
+  "DSP Engine is DAgent audio execution subsystem that converts DAL DSP plans into executable browser audio graphs for preview and export while preserving modular runtime architecture.",
+] as const;
+
+const dspChainInterpreterBody = [
+  "### Module Type",
+  "Interpretation Component in DAgent DSP submodule.",
+  "### Purpose",
+  "Parse DSP chain from DAL, validate node definitions, and convert chain into normalized execution-ready configuration.",
+  "### Overview",
+  "DSP Chain Interpreter transforms abstract DSP instructions into structured validated format for DSP Engine runtime.",
+  "It bridges planning output from DAL to executable configuration in DAgent.",
+  "### Responsibilities",
+  "Parse DSP chain input.",
+  "Validate node definitions.",
+  "Normalize node configuration.",
+  "Ensure compatibility with DSP engine capabilities.",
+  "Prepare execution-ready structure.",
+  "### Core Capabilities",
+  "Chain Parsing: read chain from DAL, extract node definitions, and determine processing sequence.",
+  "Node Validation: validate node types, required parameters, and supported DSP operations.",
+  "Configuration Normalization: standardize parameter naming, apply defaults, and unify structure across node types.",
+  "Compatibility Enforcement: ensure nodes match available capabilities and reject unsupported configurations.",
+  "Error Detection: detect malformed nodes, missing parameters, and emit structured error output.",
+  "### Flow",
+  "DAL DSP Chain -> Chain Parsing -> Node Validation -> Configuration Normalization -> Compatibility Check -> Normalized DSP Chain.",
+  "### Inputs",
+  "DSP chain from DAL, system capabilities, and supported node types.",
+  "### Outputs",
+  "Normalized DSP chain, validated node configurations, and error report when invalid.",
+  "### Control Boundary",
+  "DSP Chain Interpreter does not execute DSP, does not build graph, and does not render audio. It only prepares configuration.",
+  "### Non Responsibilities",
+  "Node creation in Node Factory, graph building, audio rendering, and execution.",
+  "### Architectural Summary",
+  "DSP Chain Interpreter is the DSP Engine entry component that converts abstract DSP instructions into validated normalized configuration ready for execution.",
+] as const;
+
+const nodeFactoryBody = [
+  "### Module Type",
+  "Node Creation Component in DAgent DSP submodule.",
+  "### Purpose",
+  "Map normalized DSP node types into concrete Web Audio API nodes and instantiate them with correct configuration.",
+  "### Overview",
+  "Node Factory converts abstract normalized DSP definitions into executable Web Audio nodes.",
+  "It creates and configures filters, gain, compressors, and other supported nodes from interpreter output.",
+  "### Responsibilities",
+  "Map DSP types to Web Audio nodes.",
+  "Instantiate audio nodes.",
+  "Apply node parameters.",
+  "Ensure correct node configuration.",
+  "Support extensible node mapping.",
+  "### Core Capabilities",
+  "DSP Type Mapping: low_shelf, high_shelf, and peaking map to BiquadFilterNode; gain maps to GainNode; compressor maps to DynamicsCompressorNode with proper parameter fields.",
+  "Node Instantiation: create nodes using AudioContext or OfflineAudioContext and initialize consistently.",
+  "Parameter Application: apply normalized configuration to frequency, gain, Q, threshold, ratio, and related fields.",
+  "Context Compatibility: support realtime AudioContext and export OfflineAudioContext.",
+  "Extensibility: maintain mapping registry for new DSP types and future WASM/C++ extensions.",
+  "### Flow",
+  "Normalized DSP Node -> Type Mapping -> Node Creation -> Parameter Application -> Configured Audio Node.",
+  "### Inputs",
+  "Normalized DSP node, audio context, and node configuration.",
+  "### Outputs",
+  "Configured Web Audio node instance ready for graph assembly.",
+  "### Control Boundary",
+  "Node Factory does not connect nodes, does not execute audio, and does not manage graph. It only creates nodes.",
+  "### Non Responsibilities",
+  "Graph building, DSP execution, audio rendering, and plan interpretation.",
+  "### Architectural Summary",
+  "Node Factory translates normalized DSP definitions into concrete Web Audio nodes enabling DSP Engine graph construction and execution.",
+] as const;
+
+const graphBuilderBody = [
+  "### Module Type",
+  "Graph Construction Component in DAgent DSP submodule.",
+  "### Purpose",
+  "Construct sequential audio processing graph by connecting AudioBufferSource through DSP nodes to final destination.",
+  "### Overview",
+  "Graph Builder assembles audio processing pipeline from instantiated nodes.",
+  "It connects node chain into valid signal flow from input source to realtime or offline destination.",
+  "### Responsibilities",
+  "Construct audio processing graph.",
+  "Connect nodes in correct order.",
+  "Define signal flow from source to destination.",
+  "Ensure valid node connections.",
+  "Prepare graph for execution.",
+  "### Core Capabilities",
+  "Source Initialization: create AudioBufferSourceNode, attach input buffer, and prepare source for playback or rendering.",
+  "Sequential Node Connection: connect source and DSP nodes in chain order.",
+  "Destination Routing: connect final node to AudioContext.destination or OfflineAudioContext.destination depending on mode.",
+  "Dynamic Chain Handling: support variable-length chains including empty and single-node scenarios.",
+  "Connection Validation: prevent disconnected graphs and validate signal continuity.",
+  "### Flow",
+  "AudioBuffer -> Create Source Node -> Connect DSP Nodes Sequentially -> Connect to Destination -> Constructed Audio Graph.",
+  "### Inputs",
+  "Audio buffer, instantiated DSP nodes, and audio context.",
+  "### Outputs",
+  "Connected audio graph, execution-ready node chain, and source node for start control.",
+  "### Control Boundary",
+  "Graph Builder does not create nodes, does not execute audio, and does not render output. It only builds graph.",
+  "### Non Responsibilities",
+  "DSP interpretation, node instantiation, audio rendering, and execution control.",
+  "### Architectural Summary",
+  "Graph Builder constructs source-to-destination DSP signal flow by connecting nodes into valid executable audio graph.",
+] as const;
+
+const executionModesBody = [
+  "### Module Type",
+  "Execution Strategy Component in DAgent DSP submodule.",
+  "### Purpose",
+  "Define and manage execution modes for DSP processing, supporting both real-time playback and offline rendering for export.",
+  "### Overview",
+  "Execution Modes decides how DSP graph is executed according to intent and context.",
+  "It separates realtime interaction from offline rendering to optimize performance and output quality.",
+  "### Responsibilities",
+  "Select execution mode.",
+  "Initialize appropriate audio context.",
+  "Configure mode-specific graph execution.",
+  "Ensure mode-specific behavior.",
+  "Optimize performance per mode.",
+  "### Core Capabilities",
+  "Real-Time Mode: use AudioContext, start playback immediately, and support live parameter updates for preview and interactive adjustment.",
+  "Offline Mode: use OfflineAudioContext, render full buffer, and produce high-quality processed output for export.",
+  "Mode Selection Logic: choose mode based on user action, system request, and performance constraints.",
+  "Context Initialization: initialize AudioContext or OfflineAudioContext according to selected mode.",
+  "Execution Optimization: prioritize low latency in realtime mode and high accuracy in offline mode.",
+  "### Realtime Flow",
+  "AudioContext -> Build Graph -> Start Source -> Real-Time Playback.",
+  "### Offline Flow",
+  "OfflineAudioContext -> Build Graph -> Start Source -> Render Audio -> Processed Buffer.",
+  "### Unified Flow",
+  "Execution Request -> Mode Selection -> Initialize Context -> Build Graph -> Execute -> Output.",
+  "### Inputs",
+  "DSP graph, execution request, audio buffer, and runtime parameters.",
+  "### Outputs",
+  "Real-time playback in AudioContext mode and processed buffer in OfflineAudioContext mode.",
+  "### Control Boundary",
+  "Execution Modes does not build graph, does not create nodes, and does not export files. It only controls execution mode.",
+  "### Non Responsibilities",
+  "DSP interpretation, node creation, graph construction, and file export.",
+  "### Architectural Summary",
+  "Execution Modes enables flexible DSP runtime behavior by supporting both interactive realtime processing and accurate offline rendering for final outputs.",
+] as const;
+
+const rendererBody = [
+  "### Module Type",
+  "Execution Component in DAgent DSP submodule.",
+  "### Purpose",
+  "Execute constructed audio graph and return processed audio output as AudioBuffer.",
+  "### Overview",
+  "Renderer runs DSP graph using selected execution mode.",
+  "It triggers processing pipeline, manages rendering lifecycle, and returns final processed result for realtime playback or offline export.",
+  "### Responsibilities",
+  "Execute audio graph.",
+  "Start audio processing.",
+  "Manage rendering lifecycle.",
+  "Return processed output.",
+  "Support both execution modes.",
+  "### Core Capabilities",
+  "Graph Execution: start processing pipeline after verifying graph connectivity and source readiness.",
+  "Real-Time Execution: use AudioContext, start source immediately, and maintain continuous playback processing.",
+  "Offline Rendering: use OfflineAudioContext and render complete processed buffer.",
+  "Execution Lifecycle Management: initialize, start, monitor, and complete execution flow.",
+  "Output Handling: return processed AudioBuffer for playback system or export adapter.",
+  "### Flow",
+  "Constructed Graph -> Select Execution Mode -> Start Source Node -> Execute Audio Processing -> Realtime Playback or Offline Render -> Processed AudioBuffer.",
+  "### Inputs",
+  "Constructed audio graph, audio context, source node, and execution mode.",
+  "### Outputs",
+  "Processed AudioBuffer, realtime playback result, and offline rendered buffer.",
+  "### Control Boundary",
+  "Renderer does not build graph, does not create nodes, and does not export files. It only executes DSP graph.",
+  "### Non Responsibilities",
+  "DSP interpretation, node instantiation, graph construction, and file encoding.",
+  "### Architectural Summary",
+  "Renderer is the DSP Engine execution component responsible for running audio processing graph and producing final processed audio output.",
+] as const;
+
+const outputAdapterBody = [
+  "### Module Type",
+  "Output Conversion Component in DAgent DSP submodule.",
+  "### Purpose",
+  "Convert processed AudioBuffer into exportable file format such as WAV or Blob for download, storage, and downstream processing.",
+  "### Overview",
+  "Output Adapter transforms raw processed buffer into standard exportable artifact.",
+  "It encodes AudioBuffer into WAV and produces Blob or URL for playback, download, and versioned output handling.",
+  "### Responsibilities",
+  "Convert AudioBuffer to file format.",
+  "Encode audio data into WAV.",
+  "Generate Blob output.",
+  "Provide downloadable file reference.",
+  "Prepare output for Versioning.",
+  "### Core Capabilities",
+  "AudioBuffer Encoding: convert channel data to PCM and merge channels where required.",
+  "WAV Encoding: build WAV header with sample rate, bit depth, and channel count then append PCM payload.",
+  "Blob Generation: package encoded byte data into audio Blob object.",
+  "URL Creation: produce object URL for download or preview workflows.",
+  "Format Extensibility: maintain architecture path for future codecs including MP3, AAC, and FLAC.",
+  "### Flow",
+  "Processed AudioBuffer -> Extract Channel Data -> PCM Conversion -> WAV Encoding -> Blob Creation -> Exportable Output.",
+  "### Inputs",
+  "Processed AudioBuffer, sample rate, and channel data.",
+  "### Outputs",
+  "WAV Blob, downloadable URL, and encoded audio payload.",
+  "### Control Boundary",
+  "Output Adapter does not execute DSP, does not build graph, and does not manage playback. It only converts output.",
+  "### Non Responsibilities",
+  "DSP processing, execution control, UI rendering, and planning.",
+  "### Architectural Summary",
+  "Output Adapter converts processed audio into standard export format enabling reliable download, storage, and result lifecycle integration.",
+] as const;
+
+const versioningLayerBody = [
+  "### Goal",
+  "Define Versioning as system layer responsible for tracking, storing, and managing execution results, states, and history across workflow lifecycle.",
+  "### Overview",
+  "Versioning manages lifecycle of outputs and states.",
+  "It ensures each execution result including audio, parameters, and decisions is saved, traceable, reversible, and comparable.",
+  "This enables navigation between versions, restore of prior states, and visibility into system evolution.",
+  "### Module Type",
+  "State Persistence and History Layer.",
+  "### Purpose",
+  "Store execution outputs, track version history, support rollback and restore, maintain traceability, and enable version comparison.",
+  "### Internal Structure",
+  "Version Manager: create, update, and delete version lifecycle entries.",
+  "Snapshot Builder: capture audio output, parameters, DSP chain, and metadata state snapshot.",
+  "Storage Layer: persist audio blobs and structured metadata records.",
+  "History Tracker: maintain timeline sequence, timestamps, and action history.",
+  "Restore Engine: load version and restore DSP chain plus UI state context.",
+  "Diff Engine: optional comparison for parameter changes, DSP chain differences, and audio deltas.",
+  "### Flow",
+  "Execution Result -> Snapshot Builder -> Version Manager -> Storage Layer -> History Tracker -> Version Stored.",
+  "### Inputs",
+  "Processed AudioBuffer or file, DSP chain, parameters, and execution metadata.",
+  "### Outputs",
+  "Version object, stored file reference, history record, and version ID.",
+  "### Control Boundary",
+  "Versioning does not execute DSP, does not plan actions, and does not render UI. It only manages state over time.",
+  "### Non Responsibilities",
+  "DAgent execution, UAgent rendering, and QCore reasoning.",
+  "### System Behavior",
+  "Each execution must create immutable traceable version entries, preserve consistent history, and support reliable restore.",
+  "### Failure Handling",
+  "Failed save triggers retry or fallback path, corrupted version is isolated, and missing data triggers partial restore strategy.",
+  "### Architectural Summary",
+  "Versioning captures, stores, and manages system states and outputs to provide traceability, recovery, and iterative workflows across QAgent.",
+  "### Validation",
+  "Version creation, state persistence, history tracking, restore support, and full traceability are defined.",
+] as const;
+
 export function generateStaticParams() {
   return Object.keys(architectureModuleTitles).map((module) => ({ module }));
 }
@@ -1774,6 +2419,511 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
                     </h3>
                   ) : (
                     <p key={`plan-formatter-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+        </div>
+      </DocsContent>
+    );
+  }
+
+  if (module === "uagent") {
+    return (
+      <DocsContent>
+        <PageTitle
+          title="UAgent"
+          description="UI runtime agent that renders DAL UI plans, captures interactions, and synchronizes live interface with execution state."
+        />
+        <div className="flex flex-col gap-5">
+          <SectionBlock title="Architecture Diagram" body={[]} collapsible>
+            <UAgentModuleDiagram />
+          </SectionBlock>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">UAgent — UI Runtime Layer</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {uAgentLayerBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`uagent-layer-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`uagent-layer-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">UI Renderer</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {uIRendererBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`ui-renderer-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`ui-renderer-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Interaction Handler</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {interactionHandlerBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`interaction-handler-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`interaction-handler-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">State Sync Layer</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {stateSyncLayerBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`state-sync-layer-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`state-sync-layer-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Event Dispatcher</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {eventDispatcherBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`event-dispatcher-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`event-dispatcher-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Component Registry</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {componentRegistryBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`component-registry-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`component-registry-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Feedback Layer</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {feedbackLayerBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`feedback-layer-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`feedback-layer-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+        </div>
+      </DocsContent>
+    );
+  }
+
+  if (module === "approval") {
+    return (
+      <DocsContent>
+        <PageTitle
+          title="Approval"
+          description="Control gate layer that requires explicit user authorization for critical actions, with enforcement handled by QCore."
+        />
+        <div className="flex flex-col gap-5">
+          <SectionBlock title="Architecture Diagram" body={[]} collapsible>
+            <ApprovalModuleDiagram />
+          </SectionBlock>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Approval Layer</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {approvalLayerBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`approval-layer-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`approval-layer-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Approval Triggering</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {approvalTriggeringBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`approval-triggering-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`approval-triggering-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">User Confirmation Handling</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {userConfirmationHandlingBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`user-confirmation-handling-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`user-confirmation-handling-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Core Enforcement</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {coreEnforcementBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`core-enforcement-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`core-enforcement-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Approval State Tracking</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {approvalStateTrackingBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`approval-state-tracking-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`approval-state-tracking-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Conditional Approval Logic</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {conditionalApprovalLogicBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`conditional-approval-logic-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`conditional-approval-logic-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+        </div>
+      </DocsContent>
+    );
+  }
+
+  if (module === "dagent") {
+    return (
+      <DocsContent>
+        <PageTitle
+          title="DAgent"
+          description="Execution module responsible for running approved plans, including DSP chain execution and output generation."
+        />
+        <div className="flex flex-col gap-5">
+          <SectionBlock title="Architecture Diagram" body={[]} collapsible>
+            <DspEngineDiagram />
+          </SectionBlock>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">DSP Engine (Web Audio Implementation)</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {dspEngineDocBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`dsp-engine-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`dsp-engine-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">DSP Chain Interpreter</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {dspChainInterpreterBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`dsp-chain-interpreter-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`dsp-chain-interpreter-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Node Factory</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {nodeFactoryBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`node-factory-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`node-factory-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Graph Builder</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {graphBuilderBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`graph-builder-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`graph-builder-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Execution Modes</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {executionModesBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`execution-modes-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`execution-modes-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Renderer</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {rendererBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`renderer-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`renderer-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Output Adapter</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {outputAdapterBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`output-adapter-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`output-adapter-line-${index}`} className="text-sm leading-6 text-slate-300">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            </details>
+          </section>
+        </div>
+      </DocsContent>
+    );
+  }
+
+  if (module === "versioning") {
+    return (
+      <DocsContent>
+        <PageTitle
+          title="Versioning"
+          description="State persistence and history layer for storing execution outputs, tracking versions, and enabling restore across workflow iterations."
+        />
+        <div className="flex flex-col gap-5">
+          <SectionBlock title="Architecture Diagram" body={[]} collapsible>
+            <VersioningModuleDiagram />
+          </SectionBlock>
+          <section className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
+            <details className="group/details" name="docs-primary-accordion">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+                <h2 className="text-base font-semibold md:text-lg">Versioning Layer</h2>
+                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-2">
+                {versioningLayerBody.map((line, index) =>
+                  line.startsWith("### ") ? (
+                    <h3 key={`versioning-layer-heading-${index}`} className="pt-2 text-sm font-semibold text-slate-100">
+                      {line.replace(/^###\s+/, "").trim()}
+                    </h3>
+                  ) : (
+                    <p key={`versioning-layer-line-${index}`} className="text-sm leading-6 text-slate-300">
                       {line}
                     </p>
                   ),
