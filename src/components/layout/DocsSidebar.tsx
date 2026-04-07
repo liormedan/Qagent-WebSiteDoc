@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -94,15 +94,7 @@ const sections: SidebarSection[] = [
 
 export function DocsSidebar({ className, onNavigate }: { className?: string; onNavigate?: () => void }) {
   const pathname = usePathname();
-  const defaultSection = useMemo(() => {
-    const activeIndex = sections.findIndex((section) => section.items.some((item) => item.href === pathname));
-    return activeIndex >= 0 ? sections[activeIndex].title : sections[0].title;
-  }, [pathname]);
-  const [openSection, setOpenSection] = useState<string>(defaultSection);
-
-  useEffect(() => {
-    setOpenSection(defaultSection);
-  }, [defaultSection]);
+  const [openSection, setOpenSection] = useState<string>("");
 
   return (
     <aside className={cn("h-full min-h-0 overflow-y-scroll bg-black px-4 py-5", className)}>
