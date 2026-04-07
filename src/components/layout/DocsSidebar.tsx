@@ -109,11 +109,11 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
                     href={item.href}
                     onClick={onNavigate}
                     className={cn(
-                      "group flex items-center justify-between rounded-md px-2.5 py-1.5 text-[14px] leading-6 transition-colors",
+                      "group flex items-center justify-between overflow-hidden rounded-md px-2.5 py-1.5 text-[14px] leading-6 transition-colors",
                       active ? "bg-slate-900 text-slate-50" : "text-slate-300 hover:bg-slate-950 hover:text-slate-100",
                     )}
                   >
-                    <span className="pe-3">{item.label}</span>
+                    <span className="flex-1 truncate pe-3">{item.label}</span>
                     <ChevronRight className={cn("h-4 w-4 shrink-0 text-slate-500 transition-colors group-hover:text-slate-300", active ? "text-slate-200" : "")} />
                   </Link>
                 );
