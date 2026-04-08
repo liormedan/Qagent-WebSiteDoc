@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -96,6 +96,11 @@ const qagentSections: SidebarSection[] = [
 
 const apiSections: SidebarSection[] = [
   {
+    title: "API SERVER",
+    href: "/docs/api",
+    items: [],
+  },
+  {
     title: "Core Flow",
     href: "/docs/api/core-flow",
     items: [],
@@ -103,6 +108,31 @@ const apiSections: SidebarSection[] = [
   {
     title: "Architecture",
     href: "/docs/api/architecture",
+    items: [],
+  },
+  {
+    title: "API Gateway Layer",
+    href: "/docs/api/architecture#api-gateway-layer",
+    items: [],
+  },
+  {
+    title: "Request Handling",
+    href: "/docs/api/architecture#request-handling",
+    items: [],
+  },
+  {
+    title: "Job Orchestration",
+    href: "/docs/api/architecture#job-orchestration",
+    items: [],
+  },
+  {
+    title: "Execution Layer",
+    href: "/docs/api/architecture#execution-layer",
+    items: [],
+  },
+  {
+    title: "Responsibilities",
+    href: "/docs/api/architecture#responsibilities",
     items: [],
   },
   {
@@ -217,7 +247,17 @@ function toQAgentHref(href: string): string {
 
 export function DocsSidebar({ className, onNavigate }: { className?: string; onNavigate?: () => void }) {
   const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
   const [openSection, setOpenSection] = useState<string>("");
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return <aside className={cn("h-full min-h-0 overflow-y-scroll bg-black px-4 py-5", className)} />;
+  }
+
   const clientContext = pathname.startsWith("/docs/client");
   const apiContext = pathname.startsWith("/docs/api");
   const singleLevelContext = apiContext || clientContext;
@@ -237,18 +277,25 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
     <aside className={cn("h-full min-h-0 overflow-y-scroll bg-black px-4 py-5", className)}>
       <nav className="space-y-4">
         {sections.map((section) => (
-          <div key={section.title} className="space-y-1.5">
+          <div key={section.href ?? section.title} className="space-y-1.5">
             {singleLevelContext && section.href ? (
               <Link
                 href={section.href}
                 onClick={onNavigate}
                 className={cn(
                   "group flex items-center justify-between rounded-md px-2 py-1 text-left text-xs font-semibold uppercase tracking-[0.14em] transition-colors",
-                  pathname === section.href ? "bg-slate-900 text-slate-100" : "text-slate-500 hover:bg-slate-950/70 hover:text-slate-300",
+                  !section.href.includes("#") && pathname === section.href.split("#")[0]
+                    ? "bg-slate-900 text-slate-100"
+                    : "text-slate-500 hover:bg-slate-950/70 hover:text-slate-300",
                 )}
               >
                 <span>{section.title}</span>
-                <ChevronRight className={cn("h-4 w-4 shrink-0 transition-colors", pathname === section.href ? "text-slate-200" : "text-slate-500 group-hover:text-slate-300")} />
+                <ChevronRight
+                  className={cn(
+                    "h-4 w-4 shrink-0 transition-colors",
+                    !section.href.includes("#") && pathname === section.href.split("#")[0] ? "text-slate-200" : "text-slate-500 group-hover:text-slate-300",
+                  )}
+                />
               </Link>
             ) : (
               <button
