@@ -15,7 +15,9 @@ export default function ClientRuntimePage() {
       <section className="space-y-2">
         <h2 className="text-2xl font-semibold">Role in System</h2>
         <ClientRuntimeFlowDiagram />
-        <p className="text-[var(--muted)]">Power responsive local interactions and short-cycle feedback while synchronizing authoritative state with QAgent and backend systems.</p>
+        <p className="text-[var(--muted)]">
+          Power responsive local interactions and short-cycle feedback while synchronizing authoritative state with QAgent and API Server systems.
+        </p>
       </section>
 
       <section className="space-y-2">
@@ -31,7 +33,7 @@ export default function ClientRuntimePage() {
       <section className="space-y-2">
         <h2 className="text-2xl font-semibold">Boundaries (Does Not Do)</h2>
         <ul className="list-disc space-y-1 pl-6 text-[var(--muted)]">
-          <li>Does not replace backend processing or exports</li>
+          <li>Does not replace API Server processing or exports</li>
           <li>Does not own queue-backed execution guarantees</li>
           <li>Does not determine business intent or approval policy</li>
           <li>Does not perform server-side orchestration</li>

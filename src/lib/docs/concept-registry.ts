@@ -106,7 +106,7 @@ export const CONCEPTS: ConceptDefinition[] = [
   },
   {
     id: "q-agent",
-    label: "Q Agent",
+    label: "QAgent",
     href: "/docs/q-agent",
     description: "Planning and orchestration layer translating user requests into deterministic actions.",
     priority: 1,

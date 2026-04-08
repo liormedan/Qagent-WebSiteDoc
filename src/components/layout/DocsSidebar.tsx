@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -16,10 +16,6 @@ const qagentSections: SidebarSection[] = [
   {
     title: "QAgent",
     items: [
-      { label: "Docs Home", href: "/docs" },
-      { label: "Getting Started", href: "/docs/getting-started" },
-      { label: "System Flow", href: "/docs/system-flow" },
-      { label: "Terminology", href: "/docs/terminology" },
       { label: "Architecture", href: "/docs/architecture" },
       { label: "Main QCore Structure", href: "/docs/qcore" },
       { label: "Schema Registry", href: "/docs/architecture/contracts/schema-registry" },
@@ -89,14 +85,13 @@ const qagentSections: SidebarSection[] = [
       { label: "Module Design", href: "/docs/module-design" },
       { label: "Function Contracts", href: "/docs/function-contracts" },
       { label: "Testing Strategy", href: "/docs/testing-strategy" },
-      { label: "API", href: "/docs/api-reference" },
     ],
   },
 ];
 
 const apiSections: SidebarSection[] = [
   {
-    title: "API SERVER",
+    title: "API Server Layer",
     href: "/docs/api",
     items: [],
   },
@@ -122,12 +117,12 @@ const apiSections: SidebarSection[] = [
   },
   {
     title: "Job Orchestration",
-    href: "/docs/api/architecture#job-orchestration",
+    href: "/docs/api/job-orchestration",
     items: [],
   },
   {
     title: "Execution Layer",
-    href: "/docs/api/architecture#execution-layer",
+    href: "/docs/api/execution",
     items: [],
   },
   {
@@ -138,11 +133,6 @@ const apiSections: SidebarSection[] = [
   {
     title: "Decision System",
     href: "/docs/api/decision-system",
-    items: [],
-  },
-  {
-    title: "Execution",
-    href: "/docs/api/execution",
     items: [],
   },
   {
@@ -240,31 +230,72 @@ const clientSections: SidebarSection[] = [
   },
 ];
 
+const systemSections: SidebarSection[] = [
+  {
+    title: "System Overview",
+    href: "/docs/system",
+    items: [],
+  },
+  {
+    title: "Client / Frontend Layer",
+    href: "/docs/system/client-frontend-layer",
+    items: [],
+  },
+  {
+    title: "QAgent Layer",
+    href: "/docs/system/qagent-layer",
+    items: [],
+  },
+  {
+    title: "API Server Layer",
+    href: "/docs/system/api-server-layer",
+    items: [],
+  },
+  {
+    title: "DSP / Processing Layer",
+    href: "/docs/system/dsp-processing-layer",
+    items: [],
+  },
+  {
+    title: "Data Layer",
+    href: "/docs/system/data-layer",
+    items: [],
+  },
+  {
+    title: "Infrastructure Layer",
+    href: "/docs/system/infrastructure-layer",
+    items: [],
+  },
+  {
+    title: "Auth & Security Layer",
+    href: "/docs/system/auth-security-layer",
+    items: [],
+  },
+  {
+    title: "End-to-End Flow",
+    href: "/docs/system/end-to-end-flow",
+    items: [],
+  },
+];
+
 function toQAgentHref(href: string): string {
-  if (!href.startsWith("/docs")) return href;
-  return `/docs/qagent${href.replace("/docs", "")}`;
+  return href;
 }
 
 export function DocsSidebar({ className, onNavigate }: { className?: string; onNavigate?: () => void }) {
   const pathname = usePathname();
-  const [mounted, setMounted] = useState(false);
   const [openSection, setOpenSection] = useState<string>("");
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return <aside className={cn("h-full min-h-0 overflow-y-scroll bg-black px-4 py-5", className)} />;
-  }
 
   const clientContext = pathname.startsWith("/docs/client");
   const apiContext = pathname.startsWith("/docs/api");
-  const singleLevelContext = apiContext || clientContext;
+  const systemContext = pathname.startsWith("/docs/system");
+  const singleLevelContext = apiContext || clientContext || systemContext;
   const sections = apiContext
     ? apiSections
     : clientContext
       ? clientSections
+      : systemContext
+        ? systemSections
       : qagentSections.map((section) => ({
           ...section,
           items: section.items.map((item) => ({

@@ -24,7 +24,7 @@ const hubs: Hub[] = [
     secondary: [
       { label: "Terminology", href: "/docs/terminology" },
       { label: "Main QCore Structure", href: "/docs/qcore" },
-      { label: "Q Agent", href: "/docs/q-agent" },
+      { label: "QAgent", href: "/docs/q-agent" },
       { label: "Schema Registry", href: "/docs/architecture/contracts/schema-registry" },
       { label: "Lineage Model", href: "/docs/architecture/contracts/lineage-model" },
     ],

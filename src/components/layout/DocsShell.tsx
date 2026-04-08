@@ -11,7 +11,11 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileTocOpen, setMobileTocOpen] = useState(false);
+  const [sidebarWidth, setSidebarWidth] = useState(240);
+  const [viewportWidth, setViewportWidth] = useState(0);
   const mainRef = useRef<HTMLElement | null>(null);
+  const resizeStartXRef = useRef(0);
+  const resizeStartWidthRef = useRef(240);
 
   useEffect(() => {
     const onSummaryClick = (event: MouseEvent) => {
@@ -44,15 +48,62 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
     return () => document.removeEventListener("click", onSummaryClick);
   }, []);
 
+  useEffect(() => {
+    const onResize = () => setViewportWidth(window.innerWidth);
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  const startSidebarResize = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (viewportWidth < 768) return;
+
+    resizeStartXRef.current = event.clientX;
+    resizeStartWidthRef.current = sidebarWidth;
+
+    const onMouseMove = (moveEvent: MouseEvent) => {
+      const delta = moveEvent.clientX - resizeStartXRef.current;
+      const next = Math.min(420, Math.max(200, resizeStartWidthRef.current + delta));
+      setSidebarWidth(next);
+    };
+
+    const onMouseUp = () => {
+      document.body.style.userSelect = "";
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mouseup", onMouseUp);
+    };
+
+    document.body.style.userSelect = "none";
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mouseup", onMouseUp);
+  };
+
+  const gridTemplateColumns =
+    viewportWidth >= 1536
+      ? `${sidebarWidth}px minmax(0,1fr) 260px`
+      : viewportWidth >= 1280
+        ? `${sidebarWidth}px minmax(0,1fr) 230px`
+        : viewportWidth >= 768
+          ? `${sidebarWidth}px minmax(0,1fr)`
+          : undefined;
+
   return (
     <div className="bg-[var(--bg)] text-[var(--text)]">
       <DocsHeader key={pathname} onOpenMenu={() => setMobileMenuOpen(true)} onOpenToc={() => setMobileTocOpen(true)} />
 
       <div
         className="mx-auto grid w-full max-w-[1800px] grid-cols-1 md:h-[calc(100dvh-72px)] md:grid-cols-[240px_minmax(0,1fr)] md:overflow-hidden xl:grid-cols-[240px_minmax(0,1fr)_230px] 2xl:grid-cols-[260px_minmax(0,1fr)_260px]"
+        style={gridTemplateColumns ? { gridTemplateColumns } : undefined}
       >
-        <aside className="hidden border-r border-[var(--border)] md:block md:min-h-0 md:overflow-hidden">
+        <aside className="relative hidden border-r border-[var(--border)] md:block md:min-h-0 md:overflow-hidden">
           <DocsSidebar className="h-full min-h-0" />
+          <div
+            role="separator"
+            aria-orientation="vertical"
+            aria-label="Resize left navigation"
+            onMouseDown={startSidebarResize}
+            className="absolute right-0 top-0 hidden h-full w-2 translate-x-1/2 cursor-col-resize bg-transparent md:block"
+          />
         </aside>
 
         <main ref={mainRef} className="docs-main-scroll min-h-screen min-w-0 overflow-y-visible px-4 py-4 md:min-h-0 md:overflow-y-auto md:px-6 md:py-6 xl:px-8">

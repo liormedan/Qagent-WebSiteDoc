@@ -9,7 +9,8 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
   const pathname = usePathname();
   const clientActive = pathname.startsWith("/docs/client");
   const apiActive = pathname.startsWith("/docs/api");
-  const qagentActive = !apiActive && !clientActive;
+  const systemActive = pathname.startsWith("/docs/system");
+  const qagentActive = !apiActive && !clientActive && !systemActive;
 
   return (
     <header className="sticky top-0 z-30 h-[72px] border-b border-[var(--border)] bg-[#0b1020f2] backdrop-blur">
@@ -25,7 +26,13 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
 
           <nav className="ml-4 hidden items-center gap-6 sm:flex" aria-label="Docs sections">
             <Link
-              href="/docs/qagent"
+              href="/docs/system"
+              className={`text-sm font-medium transition-colors ${systemActive ? "text-slate-100" : "text-slate-400 hover:text-slate-200"}`}
+            >
+              System
+            </Link>
+            <Link
+              href="/docs"
               className={`text-sm font-medium transition-colors ${qagentActive ? "text-slate-100" : "text-slate-400 hover:text-slate-200"}`}
             >
               QAgent

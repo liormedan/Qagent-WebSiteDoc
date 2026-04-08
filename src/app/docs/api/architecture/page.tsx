@@ -1,5 +1,12 @@
 import { ApiArchitectureLayersDiagram } from "@/components/ui/ApiArchitectureLayersDiagram";
-import { API_SERVER_CANONICAL_NAME, API_SERVER_CANONICAL_FLOW, API_SERVER_DOC_SOURCE_OF_TRUTH } from "@/lib/api-server-canonical";
+import {
+  API_SERVER_CANONICAL_NAME,
+  API_SERVER_CANONICAL_FLOW,
+  API_SERVER_DOC_SOURCE_OF_TRUTH,
+  EXECUTION_LAYER_CANONICAL_FLOW,
+  EXECUTION_LAYER_DOC_SOURCE_OF_TRUTH,
+  JOB_ORCHESTRATION_DOC_SOURCE_OF_TRUTH,
+} from "@/lib/api-server-canonical";
 
 export default function ApiArchitecturePage() {
   return (
@@ -59,11 +66,20 @@ export default function ApiArchitecturePage() {
       <section className="space-y-2">
         <h2 id="job-orchestration" className="text-2xl font-semibold">Job Orchestration</h2>
         <p className="text-[var(--muted)]">Manages queue, job lifecycle, worker assignment, and status tracking as the orchestration control surface.</p>
+        <p className="text-[var(--muted)]">
+          Canonical governance for this module is centralized at{" "}
+          <span className="font-semibold text-slate-100">{JOB_ORCHESTRATION_DOC_SOURCE_OF_TRUTH.canonicalLocation}</span>.
+        </p>
       </section>
 
       <section className="space-y-2">
         <h2 id="execution-layer" className="text-2xl font-semibold">Execution Layer</h2>
         <p className="text-[var(--muted)]">Coordinates executable plan interpretation, dispatch, and result collection from runtime processing.</p>
+        <p className="text-[var(--muted)]">
+          Canonical governance for this module is centralized at{" "}
+          <span className="font-semibold text-slate-100">{EXECUTION_LAYER_DOC_SOURCE_OF_TRUTH.canonicalLocation}</span>.
+        </p>
+        <p className="rounded-md border border-[var(--border)] bg-slate-950/40 p-4 text-sm text-slate-200">{EXECUTION_LAYER_CANONICAL_FLOW}</p>
       </section>
 
       <section className="space-y-2">
@@ -87,6 +103,10 @@ export default function ApiArchitecturePage() {
           Canonical location: <span className="font-semibold text-slate-100">{API_SERVER_DOC_SOURCE_OF_TRUTH.canonicalLocation}</span>
         </p>
         <p className="text-[var(--muted)]">{API_SERVER_DOC_SOURCE_OF_TRUTH.rule}</p>
+        <p className="text-[var(--muted)]">
+          Execution Layer canonical location:{" "}
+          <span className="font-semibold text-slate-100">{EXECUTION_LAYER_DOC_SOURCE_OF_TRUTH.canonicalLocation}</span>
+        </p>
       </section>
     </main>
   );

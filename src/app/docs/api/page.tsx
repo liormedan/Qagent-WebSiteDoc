@@ -5,7 +5,11 @@ import {
   API_SERVER_DOC_SOURCE_OF_TRUTH,
   API_SERVER_FLOW_SEGMENTS,
   API_SERVER_FORBIDDEN_TERMS,
+  EXECUTION_LAYER_DOC_SOURCE_OF_TRUTH,
   EXECUTION_REQUEST_ENVELOPE,
+  JOB_ORCHESTRATION_DOC_SOURCE_OF_TRUTH,
+  QAGENT_API_HANDOFF_BRIDGE,
+  QAGENT_API_JOB_STATUS_BRIDGE,
 } from "@/lib/api-server-canonical";
 
 const endpointSurface = [
@@ -90,6 +94,28 @@ export default function ApiPage() {
       </section>
 
       <section className="space-y-2">
+        <h2 className="text-2xl font-semibold">QAgent to API Handoff Bridge</h2>
+        <p className="text-[var(--muted)]">{QAGENT_API_HANDOFF_BRIDGE.purpose}</p>
+        <ul className="list-disc space-y-1 pl-6 text-[var(--muted)]">
+          {QAGENT_API_HANDOFF_BRIDGE.fieldMapping.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+        <p className="text-[var(--muted)]">{QAGENT_API_HANDOFF_BRIDGE.rule}</p>
+      </section>
+
+      <section className="space-y-2">
+        <h2 className="text-2xl font-semibold">QAgent and /jobs Status Bridge</h2>
+        <p className="text-[var(--muted)]">{QAGENT_API_JOB_STATUS_BRIDGE.purpose}</p>
+        <ul className="list-disc space-y-1 pl-6 text-[var(--muted)]">
+          {QAGENT_API_JOB_STATUS_BRIDGE.mapping.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+        <p className="text-[var(--muted)]">{QAGENT_API_JOB_STATUS_BRIDGE.rule}</p>
+      </section>
+
+      <section className="space-y-2">
         <h2 className="text-2xl font-semibold">Flow Segmentation</h2>
         <div className="space-y-2 text-[var(--muted)]">
           {API_SERVER_FLOW_SEGMENTS.map((segment) => (
@@ -121,6 +147,14 @@ export default function ApiPage() {
           Canonical location: <span className="font-semibold text-slate-100">{API_SERVER_DOC_SOURCE_OF_TRUTH.canonicalLocation}</span>
         </p>
         <p className="text-[var(--muted)]">{API_SERVER_DOC_SOURCE_OF_TRUTH.rule}</p>
+        <p className="text-[var(--muted)]">
+          Job Orchestration canonical location:{" "}
+          <span className="font-semibold text-slate-100">{JOB_ORCHESTRATION_DOC_SOURCE_OF_TRUTH.canonicalLocation}</span>
+        </p>
+        <p className="text-[var(--muted)]">
+          Execution Layer canonical location:{" "}
+          <span className="font-semibold text-slate-100">{EXECUTION_LAYER_DOC_SOURCE_OF_TRUTH.canonicalLocation}</span>
+        </p>
       </section>
     </main>
   );

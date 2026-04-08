@@ -6,7 +6,7 @@ const layers = [
   "Frontend Layer: Chat, Canvas, Workspace UI",
   "QAgent Layer: Intent, Planning, Approval, Execution Bridge",
   "API Server Layer: Intake, Queue, Workers, Execution Engine",
-  "Processing Layer: Client Preview DSP + Backend DSP",
+  "Processing Layer: Client Preview DSP + API Server DSP",
   "Data Layer: Users, Sessions, Files, Jobs, Results",
   "Infrastructure Layer: Vercel, Cloud Run, Firestore, Storage/Queue",
   "Documentation Layer: QAgent Docs + API Server Docs",

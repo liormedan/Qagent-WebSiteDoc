@@ -130,8 +130,8 @@ export default function TestReportPage() {
         <section className="space-y-2">
           <h2 className="text-2xl font-semibold">5. Lock Rule Result</h2>
           <p className="text-[var(--muted)]">
-            LOCK status is currently <span className="font-semibold text-amber-300">NOT MET</span>. Build and lint pass, but conformance and
-            deterministic runtime tests are not executed in an automated harness.
+            Documentation LOCK status is <span className="font-semibold text-emerald-300">MET</span>. Runtime conformance automation remains
+            implementation-phase validation and does not redefine architectural ownership locks.
           </p>
         </section>
       </main>

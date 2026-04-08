@@ -55,6 +55,9 @@ export default function ApiDecisionSystemPage() {
         <p className="text-[var(--muted)]">
           Receives approved execution handoff from QAgent, emits control decisions to Job Orchestration, and evaluates execution outcomes from the Execution Layer.
         </p>
+        <p className="text-[var(--muted)]">
+          Job Orchestration must execute Decision System output without changing priority, retry behavior, or execution interpretation.
+        </p>
       </section>
     </main>
   );

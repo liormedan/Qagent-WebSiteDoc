@@ -2,17 +2,18 @@ import { DocsContent } from "@/components/layout/DocsContent";
 import { ClientCapabilitiesDiagram } from "@/components/ui/ClientCapabilitiesDiagram";
 import { ClientLayerDiagram } from "@/components/ui/ClientLayerDiagram";
 import { ClientSurfaceDiagram } from "@/components/ui/ClientSurfaceDiagram";
+import { CLIENT_LAYER_CANONICAL_NAME, CLIENT_LAYER_DOC_SOURCE_OF_TRUTH } from "@/lib/client-canonical";
 
 export default function ClientOverviewPage() {
   return (
     <DocsContent>
     <main className="space-y-8">
       <section className="space-y-2">
-        <h1 className="text-3xl font-semibold">Client Layer — Overview</h1>
+        <h1 className="text-3xl font-semibold">{CLIENT_LAYER_CANONICAL_NAME} - Overview</h1>
         <p className="text-base text-[var(--muted)]">
-          The Client Layer is the user-facing interface of WaveQ.
+          {CLIENT_LAYER_CANONICAL_NAME} is the user-facing interface of WaveQ.
         </p>
-        <p className="text-sm text-[var(--muted)]">Status: 🚧 In Progress</p>
+        <p className="text-sm text-emerald-300">Status: LOCKED (structure)</p>
       </section>
 
       <section className="space-y-2">
@@ -30,9 +31,9 @@ export default function ClientOverviewPage() {
         <h2 className="text-2xl font-semibold">Role in the System</h2>
         <p className="text-[var(--muted)]">WaveQ is composed of three main layers:</p>
         <ul className="list-disc space-y-1 pl-6 text-[var(--muted)]">
-          <li>Client Layer: User experience</li>
+          <li>{CLIENT_LAYER_CANONICAL_NAME}: User experience</li>
           <li>QAgent Layer: Decision making (Brain)</li>
-          <li>API Server Layer: Execution</li>
+          <li>API Server Layer: Execution orchestration</li>
         </ul>
         <p className="text-[var(--muted)]">The Client Layer acts as the bridge between user intent and system intelligence.</p>
       </section>
@@ -189,6 +190,14 @@ export default function ClientOverviewPage() {
           <li>Mixing DSP logic inside UI</li>
           <li>Letting Canvas decide structure</li>
         </ul>
+      </section>
+
+      <section className="space-y-2">
+        <h2 className="text-2xl font-semibold">Source of Truth</h2>
+        <p className="text-[var(--muted)]">
+          Canonical location: <span className="font-semibold text-slate-100">{CLIENT_LAYER_DOC_SOURCE_OF_TRUTH.canonicalLocation}</span>
+        </p>
+        <p className="text-[var(--muted)]">{CLIENT_LAYER_DOC_SOURCE_OF_TRUTH.rule}</p>
       </section>
     </main>
     </DocsContent>

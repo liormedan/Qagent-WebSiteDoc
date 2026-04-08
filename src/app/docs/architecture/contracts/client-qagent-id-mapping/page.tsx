@@ -2,6 +2,7 @@ import { DocsContent } from "@/components/layout/DocsContent";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 import { QAGENT_CANONICAL_FLOW } from "@/lib/qagent-canonical";
+import { QAGENT_API_HANDOFF_BRIDGE, QAGENT_API_JOB_STATUS_BRIDGE } from "@/lib/api-server-canonical";
 
 export default function ClientQAgentIdMappingPage() {
   return (
@@ -44,6 +45,8 @@ export default function ClientQAgentIdMappingPage() {
           ]}
           collapsible
         />
+        <SectionBlock title="QAgent -> API /run Handoff (Canonical Bridge)" body={[QAGENT_API_HANDOFF_BRIDGE.purpose, ...QAGENT_API_HANDOFF_BRIDGE.fieldMapping, QAGENT_API_HANDOFF_BRIDGE.rule]} collapsible />
+        <SectionBlock title="API /jobs -> QAgent Lineage Bridge" body={[QAGENT_API_JOB_STATUS_BRIDGE.purpose, ...QAGENT_API_JOB_STATUS_BRIDGE.mapping, QAGENT_API_JOB_STATUS_BRIDGE.rule]} collapsible />
       </div>
     </DocsContent>
   );

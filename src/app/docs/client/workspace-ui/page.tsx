@@ -62,7 +62,7 @@ export default function ClientWorkspaceUiPage() {
           <li>Interpret user intent</li>
           <li>Generate UI dynamically (Canvas responsibility)</li>
           <li>Execute processing</li>
-          <li>Manage backend jobs</li>
+          <li>Manage API Server jobs</li>
           <li>Contain business logic</li>
         </ul>
         <p className="text-[var(--muted)]">It is purely structural and coordinative.</p>

@@ -69,7 +69,7 @@ export const docsNavigation: DocNavItem[] = [
     group: "Architecture",
   },
   {
-    title: "Q Agent",
+    title: "QAgent",
     description: "Top-level mission and system boundaries.",
     href: "/docs/q-agent",
     group: "Architecture",

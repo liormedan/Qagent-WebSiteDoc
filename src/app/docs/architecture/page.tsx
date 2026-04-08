@@ -2,7 +2,7 @@
 import { PageTitle } from "@/components/ui/PageTitle";
 import { QAgentArchitectureLinearDiagram } from "@/components/ui/QAgentArchitectureLinearDiagram";
 import { SectionBlock } from "@/components/ui/SectionBlock";
-import { QAGENT_CANONICAL_FLOW } from "@/lib/qagent-canonical";
+import { QAGENT_CANONICAL_FLOW, QAGENT_DOC_SOURCE_OF_TRUTH } from "@/lib/qagent-canonical";
 
 type ModuleChapter = {
   title: string;
@@ -73,18 +73,18 @@ const moduleChapters: ModuleChapter[] = [
   {
     title: "DAgent",
     role: "Execution",
-    purpose: "Executes approved DSP operations exactly as defined by the DAL plan.",
-    inputs: "Approved execution graph and media context.",
-    outputs: "Processed artifacts, logs, and status outcomes.",
-    dependsOn: "Approval gate and DAL integrity.",
+    purpose: "Builds the execution bridge from approved DAL intent to API Server runnable execution context.",
+    inputs: "Approved execution graph, media context, and lineage identifiers.",
+    outputs: "Execution Request Envelope handoff and execution bridge metadata.",
+    dependsOn: "Approval gate, DAL integrity, and API Server /run contract.",
   },
   {
     title: "Versioning",
     role: "State",
-    purpose: "Persists final outputs as traceable versions for compare/revert workflows.",
-    inputs: "Execution artifacts and session lineage data.",
-    outputs: "Version snapshots and lifecycle transition records.",
-    dependsOn: "DAgent execution result.",
+    purpose: "Maintains QAgent-side version lineage and references from API execution outputs for compare/revert workflows.",
+    inputs: "Execution Result Package references and session lineage data.",
+    outputs: "Version references, snapshots, and lifecycle transition records.",
+    dependsOn: "API /jobs result publication and DAgent bridge lineage.",
   },
 ];
 
@@ -162,6 +162,15 @@ export default function ArchitecturePage() {
         {moduleChapters.map((chapter) => (
           <SectionBlock key={chapter.title} title={chapter.title} body={chapterBody(chapter)} collapsible />
         ))}
+
+        <SectionBlock
+          title="Source of Truth"
+          body={[
+            `Canonical location: ${QAGENT_DOC_SOURCE_OF_TRUTH.canonicalLocation}`,
+            QAGENT_DOC_SOURCE_OF_TRUTH.rule,
+          ]}
+          collapsible
+        />
       </div>
     </DocsContent>
   );

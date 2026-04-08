@@ -1,4 +1,4 @@
-import { API_SERVER_CANONICAL_NAME, API_SERVER_DOC_SOURCE_OF_TRUTH } from "@/lib/api-server-canonical";
+import { API_SERVER_CANONICAL_NAME, API_SERVER_DOC_SOURCE_OF_TRUTH, JOB_ORCHESTRATION_DOC_SOURCE_OF_TRUTH } from "@/lib/api-server-canonical";
 
 export default function ApiImplementationPage() {
   return (
@@ -31,6 +31,10 @@ export default function ApiImplementationPage() {
         <h2 className="text-2xl font-semibold">Freeze Policy</h2>
         <p className="text-[var(--muted)]">
           Implementation follows locked naming, canonical flow, and envelope definitions. Any divergence requires explicit architecture update before coding.
+        </p>
+        <p className="text-[var(--muted)]">
+          Job orchestration governance is frozen under{" "}
+          <span className="font-semibold text-slate-100">{JOB_ORCHESTRATION_DOC_SOURCE_OF_TRUTH.canonicalLocation}</span>.
         </p>
       </section>
     </main>

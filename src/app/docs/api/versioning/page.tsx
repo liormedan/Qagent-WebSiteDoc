@@ -26,7 +26,12 @@ export default function ApiVersioningPage() {
 
       <section className="space-y-2">
         <h2 className="text-2xl font-semibold">Non-Ownership</h2>
-        <p className="text-[var(--muted)]">API Server versioning does not own user-facing content history and does not replace QAgent decision lineage.</p>
+        <p className="text-[var(--muted)]">
+          API Server versioning does not own user-facing content history and does not replace QAgent decision lineage.
+        </p>
+        <p className="text-[var(--muted)]">
+          Authority split: API Server owns execution publication lineage for /jobs results; QAgent owns user-facing version references and decision-context history.
+        </p>
       </section>
     </main>
   );
