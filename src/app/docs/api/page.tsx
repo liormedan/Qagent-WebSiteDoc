@@ -57,16 +57,28 @@ export default function ApiPage() {
         </p>
       </section>
 
-      <section className="space-y-2">
+      <section className="space-y-4">
         <h2 className="text-2xl font-semibold">Layer Purpose and Role</h2>
-        <p className="text-[var(--muted)]">
-          {API_SERVER_CANONICAL_NAME} is the execution orchestration boundary between QAgent decisions and runtime execution. It accepts workload, orchestrates jobs and
-          workers, and exposes status and results.
-        </p>
-        <p className="text-[var(--muted)]">
-          It does not decide intent, does not build plans, and does not own UI or approval logic.
-        </p>
+        <div className="space-y-3 text-[var(--muted)]">
+          <p>
+            {API_SERVER_CANONICAL_NAME} is the execution orchestration boundary between QAgent decisions and runtime execution. It accepts workload, orchestrates jobs and
+            workers, and exposes status and results.
+          </p>
+          <div className="rounded-md border border-amber-900/40 bg-amber-950/20 p-4">
+            <h3 className="text-sm font-bold text-amber-400 uppercase tracking-widest mb-1">Structural Boundary (API Gateway)</h3>
+            <p className="text-sm">
+              The entry sub-layer (API Gateway) acts as a strictly structural shell. It **MUST NOT** interpret plans or modify execution semantics. Its scope is limited to validation, normalization, and routing.
+            </p>
+            <a href="/docs/api/gateway" className="inline-block mt-2 text-xs font-bold text-amber-400 underline underline-offset-4 hover:text-amber-300">
+              View authoritative Gateway Structural Lock →
+            </a>
+          </div>
+          <p>
+            The layer as a whole does not decide intent, does not build plans, and does not own UI or approval logic.
+          </p>
+        </div>
       </section>
+
 
       <section className="space-y-2">
         <h2 className="text-2xl font-semibold">Canonical Flow</h2>

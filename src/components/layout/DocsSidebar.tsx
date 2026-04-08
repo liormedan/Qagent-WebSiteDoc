@@ -117,7 +117,7 @@ const apiSections: SidebarSection[] = [
   },
   {
     title: "Request Handling",
-    href: "/docs/api/architecture#request-handling",
+    href: "/docs/api/request-handling",
     items: [],
   },
   {

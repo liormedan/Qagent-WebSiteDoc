@@ -47,13 +47,30 @@ export default function ApiArchitecturePage() {
       </section>
 
       <section className="space-y-2">
-        <h2 id="api-gateway-layer" className="text-2xl font-semibold">API Gateway Layer</h2>
+        <h2 id="api-gateway-layer" className="text-2xl font-semibold flex items-center gap-3">
+          API Gateway Layer
+          <a href="/docs/api/gateway" className="text-xs font-bold text-sky-400 border border-sky-400/30 px-2 py-0.5 rounded hover:bg-sky-400/10 transition-colors uppercase tracking-widest">
+            Structural Lock Source of Truth
+          </a>
+        </h2>
         <p className="text-[var(--muted)]">Owns the endpoint surface (`/run`, `/jobs`, `/files`, `/health`) and accepts external requests into API Server Layer.</p>
+        <p className="text-sm text-[var(--muted)] italic">
+          Defines the legal entry boundary, structural validation rules, and the immutable handoff context.
+        </p>
       </section>
 
+
       <section className="space-y-2">
-        <h2 id="request-handling" className="text-2xl font-semibold">Request Handling</h2>
+        <h2 id="request-handling" className="text-2xl font-semibold flex items-center gap-3">
+          Request Handling
+          <a href="/docs/api/request-handling" className="text-xs font-bold text-sky-400 border border-sky-400/30 px-2 py-0.5 rounded hover:bg-sky-400/10 transition-colors uppercase tracking-widest">
+            Structural Lock Source of Truth
+          </a>
+        </h2>
         <p className="text-[var(--muted)]">Applies validation, authentication/authorization, rate/load handling, and routing before orchestration.</p>
+        <p className="text-sm text-[var(--muted)] italic">
+          Acts as the deterministic technical gatekeeper between the Gateway and the Decision System.
+        </p>
       </section>
 
       <section className="space-y-2">

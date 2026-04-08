@@ -15,8 +15,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="he" dir="ltr" data-scroll-behavior="smooth" suppressHydrationWarning className={`${GeistSans.className} ${GeistMono.variable}`}>
-      <body>
+    <html lang="he" dir="ltr" data-scroll-behavior="smooth" suppressHydrationWarning>
+      <body className={`${GeistSans.className} ${GeistMono.variable} antialiased`}>
         <Providers>{children}</Providers>
       </body>
     </html>
