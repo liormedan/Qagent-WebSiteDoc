@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { DocsContent } from "@/components/layout/DocsContent";
 import { PageTitle } from "@/components/ui/PageTitle";
+import { QAgentCanonicalFlowDiagram } from "@/components/ui/QAgentCanonicalFlowDiagram";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 import { QAGENT_CANONICAL_FLOW, QAGENT_DOC_SOURCE_OF_TRUTH } from "@/lib/qagent-canonical";
 
@@ -62,10 +63,7 @@ export default function QAgentPage() {
     <DocsContent>
       <PageTitle title="QAgent Layer" description="Canonical layer page for QAgent responsibilities, gates, and execution handoff semantics." />
       <section className="mt-4 rounded-md border border-cyan-400/30 bg-cyan-500/10 p-4 text-sm text-cyan-100">
-        <p><span className="font-semibold">What it does:</span> Converts user goals into approved execution-ready handoff artifacts.</p>
-        <p><span className="font-semibold">What it receives:</span> Client context, intent signals, and internal analysis evidence.</p>
-        <p><span className="font-semibold">What it returns:</span> Approved execution request handoff and lineage references.</p>
-        <p><span className="font-semibold">Owner:</span> QAgent Layer.</p>
+        <p>QAgent is the canonical intent-to-plan layer that converts user goals into approved execution handoff for API Server processing.</p>
       </section>
 
       <div className="flex flex-col gap-5">
@@ -145,7 +143,17 @@ export default function QAgentPage() {
           ]}
         />
 
-        <SectionBlock title="Canonical Flow" body={[QAGENT_CANONICAL_FLOW]} />
+        <SectionBlock
+          title="Canonical Flow"
+          body={[
+            "This flow is defined once in the QAgent canonical model and consumed by child pages.",
+            QAGENT_CANONICAL_FLOW,
+          ]}
+        />
+
+        <SectionBlock title="Canonical Flow Diagram" body={[]}>
+          <QAgentCanonicalFlowDiagram />
+        </SectionBlock>
 
         {qagentSubsections.map((section) => (
           <SectionBlock key={section.title} title={section.title} body={section.lines} />

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { DocsContent } from "@/components/layout/DocsContent";
+import { EndToEndSequenceDiagram } from "@/components/ui/EndToEndSequenceDiagram";
 import { PageTitle } from "@/components/ui/PageTitle";
 
 const layerTitles: Record<string, string> = {
@@ -162,14 +163,11 @@ export default async function SystemLayerPage({ params }: { params: Promise<{ la
 
         <section className="space-y-2">
           <h2 className="text-base font-semibold text-slate-100">Responsibilities</h2>
-          <div className="space-y-1">
+          <ul className="list-disc space-y-1 pl-5">
             {systemView.responsibilities.map((item) => (
-              <div key={item} className="flex items-start gap-2">
-                <span className="mt-1 text-slate-200">•</span>
-                <p>{item}</p>
-              </div>
+              <li key={item}>{item}</li>
             ))}
-          </div>
+          </ul>
         </section>
 
         <section className="space-y-2">
@@ -183,6 +181,13 @@ export default async function SystemLayerPage({ params }: { params: Promise<{ la
             Explore in detail
           </Link>
         </section>
+
+        {layer === "end-to-end-flow" ? (
+          <section className="space-y-2">
+            <h2 className="text-base font-semibold text-slate-100">End-to-End Sequence Diagram</h2>
+            <EndToEndSequenceDiagram />
+          </section>
+        ) : null}
       </div>
     </DocsContent>
   );
