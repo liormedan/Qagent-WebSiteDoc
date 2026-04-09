@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type SidebarSection = {
   title: string;
   href?: string;
+  level?: "primary" | "secondary";
   items: Array<{ label: string; href: string }>;
 };
 
@@ -16,13 +17,15 @@ const qagentSections: SidebarSection[] = [
   {
     title: "Overview",
     items: [
+      { label: "QAgent Overview", href: "/docs/q-agent" },
       { label: "Architecture", href: "/docs/architecture" },
-      { label: "Main QCore Structure", href: "/docs/qcore" }
+      { label: "Concept Registry", href: "/docs/concepts" },
     ],
   },
   {
-    title: "Core Structure",
+    title: "Core Modules",
     items: [
+      { label: "Main QCore Structure", href: "/docs/qcore" },
       { label: "QCore", href: "/docs/architecture/modules/qagent-core" },
       { label: "Files Handler", href: "/docs/architecture/modules/files-handler" },
       { label: "Analyzer", href: "/docs/architecture/modules/analyzer" },
@@ -75,56 +78,61 @@ const apiSections: SidebarSection[] = [
   {
     title: "API Server Layer",
     href: "/docs/api",
+    level: "primary",
     items: [],
   },
   {
     title: "Core Flow",
     href: "/docs/api/core-flow",
+    level: "secondary",
     items: [],
   },
   {
     title: "Architecture",
     href: "/docs/api/architecture",
+    level: "secondary",
     items: [],
   },
   {
     title: "API Gateway Layer",
-    href: "/docs/api/architecture#api-gateway-layer",
+    href: "/docs/api/gateway",
+    level: "secondary",
     items: [],
   },
   {
     title: "Request Handling",
-    href: "/docs/api/architecture#request-handling",
+    href: "/docs/api/request-handling",
+    level: "secondary",
     items: [],
   },
   {
     title: "Job Orchestration",
     href: "/docs/api/job-orchestration",
+    level: "secondary",
     items: [],
   },
   {
     title: "Execution Layer",
     href: "/docs/api/execution",
-    items: [],
-  },
-  {
-    title: "Responsibilities",
-    href: "/docs/api/architecture#responsibilities",
+    level: "secondary",
     items: [],
   },
   {
     title: "Decision System",
     href: "/docs/api/decision-system",
+    level: "secondary",
     items: [],
   },
   {
     title: "Versioning",
     href: "/docs/api/versioning",
+    level: "secondary",
     items: [],
   },
   {
     title: "Implementation",
     href: "/docs/api/implementation",
+    level: "secondary",
     items: [],
   },
 ];
@@ -235,27 +243,27 @@ const systemSections: SidebarSection[] = [
   },
   {
     title: "DSP / Processing Layer",
-    href: "/docs/system/dsp-processing-layer",
+    href: "/docs/dsp-layer",
     items: [],
   },
   {
     title: "Data Layer",
-    href: "/docs/system/data-layer",
+    href: "/docs/data-layer",
     items: [],
   },
   {
     title: "Infrastructure Layer",
-    href: "/docs/system/infrastructure-layer",
+    href: "/docs/infrastructure-layer",
     items: [],
   },
   {
     title: "Auth & Security Layer",
-    href: "/docs/system/auth-security-layer",
+    href: "/docs/auth-security",
     items: [],
   },
   {
-    title: "End-to-End Flow",
-    href: "/docs/system/end-to-end-flow",
+    title: "End-to-End Flow (cross-layer flow)",
+    href: "/docs/system-flow",
     items: [],
   },
 ];
@@ -264,13 +272,30 @@ function toQAgentHref(href: string): string {
   return href;
 }
 
+function useHydrated() {
+  return useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+}
+
 export function DocsSidebar({ className, onNavigate }: { className?: string; onNavigate?: () => void }) {
   const pathname = usePathname();
+  const hydrated = useHydrated();
   const [openSection, setOpenSection] = useState<string>("");
+  const safePathname = hydrated ? pathname : "";
 
-  const clientContext = pathname.startsWith("/docs/client");
-  const apiContext = pathname.startsWith("/docs/api");
-  const systemContext = pathname.startsWith("/docs/system");
+  const clientContext = safePathname.startsWith("/docs/client");
+  const apiContext = safePathname.startsWith("/docs/api");
+  const systemContext =
+    safePathname === "/docs" ||
+    safePathname.startsWith("/docs/system") ||
+    safePathname.startsWith("/docs/system-flow") ||
+    safePathname.startsWith("/docs/dsp-layer") ||
+    safePathname.startsWith("/docs/data-layer") ||
+    safePathname.startsWith("/docs/auth-security") ||
+    safePathname.startsWith("/docs/infrastructure-layer");
   const singleLevelContext = apiContext || clientContext || systemContext;
   const sections = apiContext
     ? apiSections
@@ -296,8 +321,10 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
                 href={section.href}
                 onClick={onNavigate}
                 className={cn(
-                  "group flex items-center justify-between rounded-md px-2 py-1 text-left text-xs font-semibold uppercase tracking-[0.14em] transition-colors",
-                  !section.href.includes("#") && pathname === section.href.split("#")[0]
+                  "group flex items-center justify-between rounded-md px-2 py-1 text-left text-xs uppercase tracking-[0.14em] transition-colors",
+                  apiContext && section.level === "primary" ? "font-bold text-slate-200" : "font-semibold",
+                  apiContext && section.level === "secondary" ? "pl-5" : "",
+                  !section.href.includes("#") && safePathname === section.href.split("#")[0]
                     ? "bg-slate-900 text-slate-100"
                     : "text-slate-500 hover:bg-slate-950/70 hover:text-slate-300",
                 )}
@@ -306,7 +333,7 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
                 <ChevronRight
                   className={cn(
                     "h-4 w-4 shrink-0 transition-colors",
-                    !section.href.includes("#") && pathname === section.href.split("#")[0] ? "text-slate-200" : "text-slate-500 group-hover:text-slate-300",
+                    !section.href.includes("#") && safePathname === section.href.split("#")[0] ? "text-slate-200" : "text-slate-500 group-hover:text-slate-300",
                   )}
                 />
               </Link>
@@ -325,7 +352,7 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
             {!singleLevelContext && openSection === section.title ? (
               <div className="space-y-0.5">
                 {section.items.map((item) => {
-                  const active = pathname === item.href;
+                  const active = safePathname === item.href;
                   return (
                     <Link
                       key={item.href}

@@ -1,4 +1,4 @@
-﻿import { DocsContent } from "@/components/layout/DocsContent";
+import { DocsContent } from "@/components/layout/DocsContent";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { QAgentArchitectureLinearDiagram } from "@/components/ui/QAgentArchitectureLinearDiagram";
 import { SectionBlock } from "@/components/ui/SectionBlock";
@@ -135,11 +135,11 @@ export default function ArchitecturePage() {
 
       <div className="flex flex-col gap-5">
         <section className="rounded-md border border-emerald-400/30 bg-emerald-500/10 px-3 py-2 text-xs leading-5 text-emerald-100 md:text-sm">
-          QAgent Layer — LOCKED
+          QAgent Layer
           <br />
           Version: v1.0
           <br />
-          Status: Production-ready (documentation)
+          Status: Ready for Implementation
         </section>
 
         <SectionBlock
@@ -186,5 +186,6 @@ export default function ArchitecturePage() {
     </DocsContent>
   );
 }
+
 
 

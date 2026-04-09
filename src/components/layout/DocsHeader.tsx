@@ -2,15 +2,43 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSyncExternalStore } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
+function useHydrated() {
+  return useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+}
+
 export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; onOpenToc: () => void }) {
   const pathname = usePathname();
-  const clientActive = pathname.startsWith("/docs/client");
-  const apiActive = pathname.startsWith("/docs/api");
-  const systemActive = pathname.startsWith("/docs/system");
-  const qagentActive = !apiActive && !clientActive && !systemActive;
+  const hydrated = useHydrated();
+  const safePathname = hydrated ? pathname : "";
+
+  const clientActive = safePathname.startsWith("/docs/client");
+  const apiActive = safePathname.startsWith("/docs/api");
+  const systemActive =
+    safePathname === "/docs" ||
+    safePathname.startsWith("/docs/system") ||
+    safePathname.startsWith("/docs/system-flow") ||
+    safePathname.startsWith("/docs/dsp-layer") ||
+    safePathname.startsWith("/docs/data-layer") ||
+    safePathname.startsWith("/docs/auth-security") ||
+    safePathname.startsWith("/docs/infrastructure-layer");
+  const qagentActive =
+    safePathname.startsWith("/docs/q-agent") ||
+    safePathname.startsWith("/docs/architecture") ||
+    safePathname.startsWith("/docs/orchestration") ||
+    safePathname.startsWith("/docs/qcore") ||
+    safePathname.startsWith("/docs/module-design") ||
+    safePathname.startsWith("/docs/function-contracts") ||
+    safePathname.startsWith("/docs/testing-strategy") ||
+    safePathname.startsWith("/docs/implementation-map") ||
+    safePathname.startsWith("/docs/concepts");
 
   return (
     <header className="sticky top-0 z-30 h-[72px] border-b border-[var(--border)] bg-[#0b1020f2] backdrop-blur">
@@ -51,13 +79,20 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
             </Link>
           </nav>
 
-          {clientActive ? <p className="hidden text-xs font-medium text-slate-400 md:block">Client Layer — User Interface</p> : null}
+          {clientActive ? <p className="hidden text-xs font-medium text-slate-400 md:block">Client Layer - User Interface</p> : null}
 
           <div className="ml-auto hidden w-full max-w-sm md:block">
             <Input placeholder="Search Documentation" aria-label="Search Documentation" />
           </div>
 
-          <Button type="button" variant="ghost" size="sm" className="hidden md:inline-flex">
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            className="hidden md:inline-flex"
+            title="Ask anything about WaveQ..."
+            aria-label="Ask anything about WaveQ..."
+          >
             Ask Q
           </Button>
 

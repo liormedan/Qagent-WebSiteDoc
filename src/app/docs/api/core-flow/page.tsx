@@ -11,7 +11,7 @@ export default function ApiCoreFlowPage() {
   return (
     <main className="space-y-4">
       <h1 className="text-3xl font-semibold">API Server Layer - Core Flow</h1>
-      <p className="text-sm text-emerald-300">Status: LOCKED (structure)</p>
+      <p className="text-sm text-emerald-300">Status: Ready for Implementation</p>
 
       <section className="space-y-2">
         <h2 className="text-2xl font-semibold">Canonical Flow</h2>
@@ -53,3 +53,4 @@ export default function ApiCoreFlowPage() {
     </main>
   );
 }
+

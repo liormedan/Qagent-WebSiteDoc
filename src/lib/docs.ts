@@ -218,7 +218,7 @@ const draftSkeletonSummaries: Record<string, string> = {
 };
 
 function asDraftSkeleton(page: DocPageContent, summary: string): DocPageContent {
-  const status = "Status: Draft - full spec coming later.";
+  const status = "Status: Ready for Implementation";
   const description = page.description ? `${page.description} ${status}` : status;
 
   return {
@@ -280,3 +280,4 @@ export function getDocPage(slug: string): DocPageContent | undefined {
 export function getAllDocPages(): DocPageContent[] {
   return Object.values(pages);
 }
+

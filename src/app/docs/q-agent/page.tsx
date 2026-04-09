@@ -1,44 +1,173 @@
-﻿import { DocsContent } from "@/components/layout/DocsContent";
-import { CodeExample } from "@/components/ui/CodeExample";
-import { InfoCard } from "@/components/ui/InfoCard";
+import Link from "next/link";
+import { DocsContent } from "@/components/layout/DocsContent";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
-import { DeprecationBanner } from "@/components/ui/DeprecationBanner";
-import { getDocPage } from "@/lib/docs";
+import { QAGENT_CANONICAL_FLOW, QAGENT_DOC_SOURCE_OF_TRUTH } from "@/lib/qagent-canonical";
 
-const page = getDocPage("q-agent");
+const qagentSubsections = [
+  {
+    title: "QAgent Scope",
+    lines: [
+      "What it is: QAgent is the orchestration and reasoning layer between client interaction and API execution.",
+      "Responsible for intent and planning orchestration.",
+      "Does NOT execute API runtime jobs directly.",
+      "Inputs: user context, analyzer evidence, lineage metadata.",
+      "Outputs: approved execution handoff and lineage references.",
+    ],
+  },
+  {
+    title: "Intent Intake",
+    lines: [
+      "What it is: intake stage that transforms user requests into structured intent candidates.",
+      "Responsible for intent signal normalization.",
+      "Does NOT decide API policy/retry behavior.",
+      "Inputs: user request and contextual evidence.",
+      "Outputs: structured intent candidate.",
+    ],
+  },
+  {
+    title: "Clarification Gate",
+    lines: [
+      "What it is: ambiguity gate that blocks unclear requests before planning.",
+      "Responsible for clarification enforcement.",
+      "Does NOT bypass unresolved ambiguity.",
+      "Inputs: intent candidate and ambiguity checks.",
+      "Outputs: clarified/validated intent or clarification-required state.",
+    ],
+  },
+  {
+    title: "DAL Construction",
+    lines: [
+      "What it is: planning stage that builds executable and UI plan structures.",
+      "Responsible for deterministic plan composition.",
+      "Does NOT execute tools/jobs.",
+      "Inputs: validated intent and constraints.",
+      "Outputs: execution graph and UI plan package.",
+    ],
+  },
+  {
+    title: "Approval Gate",
+    lines: [
+      "What it is: user-approval enforcement stage before execution handoff.",
+      "Responsible for approval gating integrity.",
+      "Does NOT mutate approved semantics after gate decision.",
+      "Inputs: approval-ready plan and user decision.",
+      "Outputs: approved/rejected gate result and handoff eligibility.",
+    ],
+  },
+];
 
 export default function QAgentPage() {
-  if (!page) {
-    return null;
-  }
-
   return (
     <DocsContent>
-      <DeprecationBanner replacementHref="/docs" replacementLabel="/docs (QAgent layer home)" />
-      <PageTitle title={page.title} description={page.description} />
+      <PageTitle title="QAgent Layer" description="Canonical layer page for QAgent responsibilities, gates, and execution handoff semantics." />
+      <p className="text-sm text-emerald-300">Status: Ready for Implementation</p>
+      <section className="mt-4 rounded-md border border-cyan-400/30 bg-cyan-500/10 p-4 text-sm text-cyan-100">
+        <p><span className="font-semibold">What it does:</span> Converts user goals into approved execution-ready handoff artifacts.</p>
+        <p><span className="font-semibold">What it receives:</span> Client context, intent signals, and internal analysis evidence.</p>
+        <p><span className="font-semibold">What it returns:</span> Approved execution request handoff and lineage references.</p>
+        <p><span className="font-semibold">Who owns it:</span> QAgent Layer.</p>
+      </section>
+
       <div className="flex flex-col gap-5">
-        <section className="rounded-md border border-emerald-400/30 bg-emerald-500/10 px-3 py-2 text-xs leading-5 text-emerald-100 md:text-sm">
-          QAgent Layer — LOCKED
-          <br />
-          Version: v1.0
-          <br />
-          Status: Production-ready (documentation)
-        </section>
-        {page.sections.map((section) => (
-          <SectionBlock key={section.title} title={section.title} body={section.body}>
-            {section.code ? <CodeExample code={section.code} /> : null}
-          </SectionBlock>
+        <SectionBlock
+          title="Purpose"
+          body={["QAgent Layer converts user goals into validated, approved, and traceable execution handoff artifacts for API Server Layer."]}
+          collapsible
+        >
+          <p className="text-sm text-[var(--muted)]">
+            Canonical concepts: <Link href="/docs/q-agent" className="text-[var(--accent)] hover:underline">QAgent</Link>,{" "}
+            <Link href="/docs/architecture/modules/intent-clarification" className="text-[var(--accent)] hover:underline">Intent</Link>,{" "}
+            <Link href="/docs/architecture/modules/dal" className="text-[var(--accent)] hover:underline">Plan</Link>.
+          </p>
+        </SectionBlock>
+
+        <SectionBlock
+          title="Responsibilities"
+          body={[
+            "Responsible for intent resolution, clarification gating, and plan construction.",
+            "Handles approval-gated transition toward execution handoff.",
+            "Owns QAgent-side lineage semantics and bridge readiness.",
+          ]}
+          collapsible
+        />
+
+        <SectionBlock
+          title="Non-Responsibilities"
+          body={[
+            "Does NOT own API runtime job lifecycle authority.",
+            "Does NOT redefine API status tracker ownership.",
+            "Does NOT execute infrastructure-level runtime scheduling.",
+          ]}
+          collapsible
+        />
+
+        <SectionBlock
+          title="Position in System"
+          body={[
+            "Before: Client Layer interaction and input capture.",
+            "After: API Server Layer /run intake and job lifecycle orchestration.",
+          ]}
+          collapsible
+        >
+          <p className="text-sm text-[var(--muted)]">
+            Cross-layer links: <Link href="/docs/client" className="text-[var(--accent)] hover:underline">Client Layer</Link>{" -> "}
+            <Link href="/docs/api" className="text-[var(--accent)] hover:underline">API Server Layer</Link>.
+          </p>
+        </SectionBlock>
+
+        <SectionBlock
+          title="Inputs"
+          body={[
+            "Receives user interaction context and request payloads from Client Layer.",
+            "Receives analysis/context evidence from upstream QAgent internal modules.",
+          ]}
+          collapsible
+        />
+
+        <SectionBlock
+          title="Outputs"
+          body={[
+            "Produces approved execution handoff artifacts (Execution Request Envelope bridge context).",
+            "Produces QAgent lineage references for status and version correlation.",
+          ]}
+          collapsible
+        >
+          <p className="text-sm text-[var(--muted)]">
+            Contract links:{" "}
+            <Link href="/docs/api" className="text-[var(--accent)] hover:underline">
+              Execution Request Envelope
+            </Link>
+            , <Link href="/docs/api/job-orchestration" className="text-[var(--accent)] hover:underline">Job</Link>,{" "}
+            <Link href="/docs/api/versioning" className="text-[var(--accent)] hover:underline">Version</Link>.
+          </p>
+        </SectionBlock>
+
+        <SectionBlock
+          title="Boundaries"
+          body={[
+            "QAgent MUST NOT redefine API endpoint semantics.",
+            "QAgent MUST NOT replace API status/progress authority.",
+            "QAgent MUST maintain canonical handoff mapping without post-approval semantic mutation.",
+          ]}
+          collapsible
+        />
+
+        <SectionBlock title="Canonical Flow" body={[QAGENT_CANONICAL_FLOW]} collapsible />
+
+        {qagentSubsections.map((section) => (
+          <SectionBlock key={section.title} title={section.title} body={section.lines} collapsible />
         ))}
-      </div>
-      <div className="mt-8 flex flex-col items-stretch gap-4 md:flex-row">
-        {page.infoCards?.map((card) => (
-          <InfoCard key={card.title} title={card.title} description={card.description} />
-        ))}
+
+        <SectionBlock
+          title="Source of Truth"
+          body={[
+            `Canonical location: ${QAGENT_DOC_SOURCE_OF_TRUTH.canonicalLocation}`,
+            QAGENT_DOC_SOURCE_OF_TRUTH.rule,
+          ]}
+          collapsible
+        />
       </div>
     </DocsContent>
   );
 }
-
-
-

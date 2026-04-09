@@ -14,7 +14,7 @@ export default function ApiDecisionSystemPage() {
     <main className="space-y-6">
       <section className="space-y-2">
         <h1 className="text-3xl font-semibold">{API_SERVER_CANONICAL_NAME} - Decision System</h1>
-        <p className="text-sm text-emerald-300">Status: LOCKED (structure)</p>
+        <p className="text-sm text-emerald-300">Status: Ready for Implementation</p>
       </section>
 
       <section className="space-y-2">
@@ -62,3 +62,4 @@ export default function ApiDecisionSystemPage() {
     </main>
   );
 }
+

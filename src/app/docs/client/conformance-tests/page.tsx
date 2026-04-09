@@ -131,10 +131,11 @@ export default function ConformanceTestsPage() {
         <section className="space-y-2">
           <h2 className="text-2xl font-semibold">5. Lock Validation Rule</h2>
           <p className="text-[var(--muted)]">
-            System is considered LOCKED only if all tests pass, no undefined behavior exists, and no state divergence occurs.
+            System is considered implementation-ready only if all tests pass, no undefined behavior exists, and no state divergence occurs.
           </p>
         </section>
       </main>
     </DocsContent>
   );
 }
+

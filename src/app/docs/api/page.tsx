@@ -1,144 +1,128 @@
+import Link from "next/link";
 import {
-  API_SERVER_ALLOWED_ALIASES,
-  API_SERVER_CANONICAL_FLOW,
   API_SERVER_CANONICAL_NAME,
   API_SERVER_DOC_SOURCE_OF_TRUTH,
-  API_SERVER_FLOW_SEGMENTS,
-  API_SERVER_FORBIDDEN_TERMS,
-  EXECUTION_LAYER_DOC_SOURCE_OF_TRUTH,
   EXECUTION_REQUEST_ENVELOPE,
-  JOB_ORCHESTRATION_DOC_SOURCE_OF_TRUTH,
-  QAGENT_API_HANDOFF_BRIDGE,
-  QAGENT_API_JOB_STATUS_BRIDGE,
 } from "@/lib/api-server-canonical";
 
-const endpointSurface = [
+const quickNav = [
+  { label: "Core Flow", href: "/docs/api/core-flow" },
+  { label: "Architecture", href: "/docs/api/architecture" },
+  { label: "Gateway", href: "/docs/api/gateway" },
+  { label: "Request Handling", href: "/docs/api/request-handling" },
+  { label: "Job Orchestration", href: "/docs/api/job-orchestration" },
+  { label: "Execution Layer", href: "/docs/api/execution" },
+  { label: "Decision System", href: "/docs/api/decision-system" },
+  { label: "Versioning", href: "/docs/api/versioning" },
+];
+
+const subsystemBlocks = [
   {
-    endpoint: "/run",
-    represents: "Execution intake boundary for approved QAgent handoff.",
-    inbound: "Execution Request Envelope",
-    returns: "Job acceptance with job identity and initial queued status.",
+    title: "API Gateway",
+    description: "Handles incoming execution requests and entry validation.",
+    href: "/docs/api/gateway",
   },
   {
-    endpoint: "/jobs",
-    represents: "Job lifecycle visibility boundary.",
-    inbound: "Job lookup context (job identity and optional query filters).",
-    returns: "Job status, progress, and result or failure outcome.",
+    title: "Request Handling",
+    description: "Validates request shape and admission requirements.",
+    href: "/docs/api/request-handling",
   },
   {
-    endpoint: "/files",
-    represents: "Execution-related file exchange boundary.",
-    inbound: "File references and file transfer context tied to execution.",
-    returns: "File operation outcome and file reference state.",
+    title: "Job Orchestration",
+    description: "Creates jobs, queues work, and tracks lifecycle state.",
+    href: "/docs/api/job-orchestration",
   },
   {
-    endpoint: "/health",
-    represents: "Service liveness/readiness boundary.",
-    inbound: "Health probe request.",
-    returns: "Operational health projection.",
+    title: "Execution Layer",
+    description: "Runs executable plans and gathers execution outputs.",
+    href: "/docs/api/execution",
+  },
+  {
+    title: "Decision System",
+    description: "Owns policy decisions for admission and retry behavior.",
+    href: "/docs/api/decision-system",
+  },
+  {
+    title: "Versioning",
+    description: "Stores versioned outputs and stable result references.",
+    href: "/docs/api/versioning",
   },
 ];
 
 export default function ApiPage() {
   return (
-    <main className="space-y-8">
+    <main className="space-y-6">
       <section className="space-y-2">
-        <h1 className="text-3xl font-semibold">{API_SERVER_CANONICAL_NAME} - Overview</h1>
-        <p className="text-sm text-emerald-300">Status: LOCKED (structure)</p>
+        <h1 className="text-3xl font-semibold">{API_SERVER_CANONICAL_NAME}</h1>
+        <p className="text-sm text-emerald-300">Status: Ready for Implementation</p>
+        <p className="text-[var(--muted)]">Execution orchestration layer that receives plans, manages jobs, and executes workflows.</p>
       </section>
 
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Canonical Naming</h2>
-        <p className="text-[var(--muted)]">
-          Canonical layer name: <span className="font-semibold text-slate-100">{API_SERVER_CANONICAL_NAME}</span>
-        </p>
-        <p className="text-[var(--muted)]">
-          Allowed aliases:{" "}
-          <span className="font-semibold text-slate-100">{API_SERVER_ALLOWED_ALIASES.length ? API_SERVER_ALLOWED_ALIASES.join(", ") : "none"}</span>
-        </p>
-        <p className="text-[var(--muted)]">
-          Forbidden terms: <span className="font-semibold text-slate-100">{API_SERVER_FORBIDDEN_TERMS.join(", ")}</span>
-        </p>
-      </section>
-
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Layer Purpose and Role</h2>
-        <p className="text-[var(--muted)]">
-          {API_SERVER_CANONICAL_NAME} is the execution orchestration boundary between QAgent decisions and runtime execution. It accepts workload, orchestrates jobs and
-          workers, and exposes status and results.
-        </p>
-        <p className="text-[var(--muted)]">
-          It does not decide intent, does not build plans, and does not own UI or approval logic.
-        </p>
-      </section>
-
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Canonical Flow</h2>
-        <p className="rounded-md border border-[var(--border)] bg-slate-950/40 p-4 text-sm text-slate-200">{API_SERVER_CANONICAL_FLOW}</p>
-      </section>
-
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Execution Request Envelope</h2>
-        <p className="text-[var(--muted)]">
-          <span className="font-semibold text-slate-100">{EXECUTION_REQUEST_ENVELOPE.name}</span>: {EXECUTION_REQUEST_ENVELOPE.represents}
-        </p>
-        <p className="text-[var(--muted)]">{EXECUTION_REQUEST_ENVELOPE.relationToQAgent}</p>
-        <div className="space-y-1">
-          <p className="text-sm font-semibold text-slate-100">Required conceptual fields</p>
-          <ul className="list-disc space-y-1 pl-6 text-[var(--muted)]">
-            {EXECUTION_REQUEST_ENVELOPE.requiredConceptualFields.map((field) => (
-              <li key={field}>{field}</li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">QAgent to API Handoff Bridge</h2>
-        <p className="text-[var(--muted)]">{QAGENT_API_HANDOFF_BRIDGE.purpose}</p>
-        <ul className="list-disc space-y-1 pl-6 text-[var(--muted)]">
-          {QAGENT_API_HANDOFF_BRIDGE.fieldMapping.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
+      <section className="rounded-md border border-cyan-400/30 bg-cyan-500/10 p-4 text-sm text-cyan-100">
+        <h2 className="text-lg font-semibold">What happens here?</h2>
+        <ul className="mt-2 list-disc space-y-1 pl-6">
+          <li>QAgent sends execution requests.</li>
+          <li>API validates and queues jobs.</li>
+          <li>Workers execute plans.</li>
+          <li>Results are returned to QAgent.</li>
         </ul>
-        <p className="text-[var(--muted)]">{QAGENT_API_HANDOFF_BRIDGE.rule}</p>
       </section>
 
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">QAgent and /jobs Status Bridge</h2>
-        <p className="text-[var(--muted)]">{QAGENT_API_JOB_STATUS_BRIDGE.purpose}</p>
-        <ul className="list-disc space-y-1 pl-6 text-[var(--muted)]">
-          {QAGENT_API_JOB_STATUS_BRIDGE.mapping.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
-        <p className="text-[var(--muted)]">{QAGENT_API_JOB_STATUS_BRIDGE.rule}</p>
-      </section>
-
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Flow Segmentation</h2>
-        <div className="space-y-2 text-[var(--muted)]">
-          {API_SERVER_FLOW_SEGMENTS.map((segment) => (
-            <p key={segment.stage}>
-              <span className="font-semibold text-slate-100">{segment.stage}</span>: {segment.modules.join(", ")}
-            </p>
+      <section className="space-y-3">
+        <h2 className="text-2xl font-semibold">Explore API Layer</h2>
+        <div className="grid gap-3 md:grid-cols-2">
+          {quickNav.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="rounded-md border border-[var(--border)] bg-slate-950/30 px-4 py-3 text-sm font-medium text-slate-100 transition-colors hover:border-cyan-400/60 hover:text-cyan-200"
+            >
+              {item.label}
+            </Link>
           ))}
         </div>
       </section>
 
       <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Contract Surface</h2>
+        <h2 className="text-2xl font-semibold">Execution Flow</h2>
+        <ol className="space-y-2 rounded-md border border-[var(--border)] bg-slate-950/40 p-4 text-sm text-slate-200">
+          <li>1. QAgent sends approved execution request.</li>
+          <li>2. API Gateway receives request at `/run`.</li>
+          <li>3. Request Handling validates input.</li>
+          <li>4. Job Orchestration creates and queues job.</li>
+          <li>5. Execution Layer executes plan.</li>
+          <li>6. Results are exposed via `/jobs`.</li>
+          <li>7. QAgent consumes results.</li>
+        </ol>
+      </section>
+
+      <section className="rounded-md border border-cyan-400/30 bg-cyan-500/10 p-4 text-sm text-cyan-100">
+        <h2 className="text-lg font-semibold">API at a Glance</h2>
+        <ul className="mt-2 list-disc space-y-1 pl-6">
+          <li>Input: {EXECUTION_REQUEST_ENVELOPE.name}</li>
+          <li>Output: Job + Status</li>
+          <li>Core Endpoints: `/run`, `/jobs`, `/files`, `/health`</li>
+        </ul>
+      </section>
+
+      <section className="space-y-3">
+        <h2 className="text-2xl font-semibold">Subsystems</h2>
         <div className="space-y-3">
-          {endpointSurface.map((item) => (
-            <div key={item.endpoint} className="rounded-md border border-[var(--border)] bg-slate-950/30 p-3 text-sm">
-              <p>
-                <span className="font-semibold text-slate-100">{item.endpoint}</span>: {item.represents}
-              </p>
-              <p className="text-[var(--muted)]">Inbound: {item.inbound}</p>
-              <p className="text-[var(--muted)]">Returns: {item.returns}</p>
+          {subsystemBlocks.map((block) => (
+            <div key={block.href} className="rounded-md border border-[var(--border)] bg-slate-950/30 p-3">
+              <p className="font-semibold text-slate-100">{block.title}</p>
+              <p className="text-sm text-[var(--muted)]">{block.description}</p>
+              <Link href={block.href} className="mt-1 inline-block text-sm font-medium text-[var(--accent)] hover:underline">
+                Go to {block.title}
+              </Link>
             </div>
           ))}
         </div>
+      </section>
+
+      <section className="rounded-md border border-[var(--border)] bg-slate-950/30 p-4 text-sm">
+        <h2 className="text-lg font-semibold text-slate-100">Where this fits in the system</h2>
+        <p className="mt-2 text-[var(--muted)]">Client -&gt; QAgent -&gt; API Server -&gt; Execution -&gt; Versioning</p>
       </section>
 
       <section className="space-y-2">
@@ -147,14 +131,6 @@ export default function ApiPage() {
           Canonical location: <span className="font-semibold text-slate-100">{API_SERVER_DOC_SOURCE_OF_TRUTH.canonicalLocation}</span>
         </p>
         <p className="text-[var(--muted)]">{API_SERVER_DOC_SOURCE_OF_TRUTH.rule}</p>
-        <p className="text-[var(--muted)]">
-          Job Orchestration canonical location:{" "}
-          <span className="font-semibold text-slate-100">{JOB_ORCHESTRATION_DOC_SOURCE_OF_TRUTH.canonicalLocation}</span>
-        </p>
-        <p className="text-[var(--muted)]">
-          Execution Layer canonical location:{" "}
-          <span className="font-semibold text-slate-100">{EXECUTION_LAYER_DOC_SOURCE_OF_TRUTH.canonicalLocation}</span>
-        </p>
       </section>
     </main>
   );

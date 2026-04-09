@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   API_SERVER_CANONICAL_NAME,
   EXECUTION_LAYER_AUTHORITY_MODEL,
@@ -35,7 +36,7 @@ export default function ApiExecutionPage() {
     <main className="space-y-6">
       <section className="space-y-2">
         <h1 className="text-3xl font-semibold">{API_SERVER_CANONICAL_NAME} - Execution Layer</h1>
-        <p className="text-sm text-emerald-300">Status: LOCKED (deep structural definition)</p>
+        <p className="text-sm text-emerald-300">Status: Ready for Implementation</p>
       </section>
 
       <section className="space-y-2">
@@ -90,6 +91,16 @@ export default function ApiExecutionPage() {
       </section>
 
       <section className="space-y-2">
+        <h2 className="text-2xl font-semibold">Concept Links</h2>
+        <p className="text-sm text-[var(--muted)]">
+          Related canonical concepts: <Link href="/docs/architecture/modules/dal" className="text-[var(--accent)] hover:underline">Plan</Link>,{" "}
+          <Link href="/docs/api" className="text-[var(--accent)] hover:underline">Execution Request Envelope</Link>,{" "}
+          <Link href="/docs/api/job-orchestration" className="text-[var(--accent)] hover:underline">Job</Link>,{" "}
+          <Link href="/docs/api/versioning" className="text-[var(--accent)] hover:underline">Version</Link>.
+        </p>
+      </section>
+
+      <section className="space-y-2">
         <h2 className="text-2xl font-semibold">Boundaries</h2>
         <p className="text-[var(--muted)]">Job Orchestration -{">"} Execution Layer: {EXECUTION_LAYER_BOUNDARY_RULES.jobOrchestrationToExecution}</p>
         <p className="text-[var(--muted)]">Execution Layer -{">"} Runtime / Worker Execution: {EXECUTION_LAYER_BOUNDARY_RULES.executionToRuntimeWorkers}</p>
@@ -141,3 +152,4 @@ export default function ApiExecutionPage() {
     </main>
   );
 }
+

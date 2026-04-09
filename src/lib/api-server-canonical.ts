@@ -191,7 +191,7 @@ export const QAGENT_API_JOB_STATUS_BRIDGE = {
 export const API_SERVER_DOC_SOURCE_OF_TRUTH = {
   canonicalLocation: "/docs/api",
   rule:
-    "Definitions in /docs/api are authoritative. Secondary pages may reference but must not redefine canonical name, canonical flow, execution request envelope, or stage mapping.",
+    "Definitions in /docs/api are authoritative for API Server Layer definition, execution flow, Execution Request Envelope, and endpoint surface (/run, /jobs, /files, /health). Secondary pages may reference but must not redefine these semantics.",
 } as const;
 
 export const JOB_ORCHESTRATION_DOC_SOURCE_OF_TRUTH = {
