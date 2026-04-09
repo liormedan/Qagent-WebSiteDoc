@@ -61,19 +61,17 @@ export default function QAgentPage() {
   return (
     <DocsContent>
       <PageTitle title="QAgent Layer" description="Canonical layer page for QAgent responsibilities, gates, and execution handoff semantics." />
-      <p className="text-sm text-emerald-300">Status: Ready for Implementation</p>
       <section className="mt-4 rounded-md border border-cyan-400/30 bg-cyan-500/10 p-4 text-sm text-cyan-100">
         <p><span className="font-semibold">What it does:</span> Converts user goals into approved execution-ready handoff artifacts.</p>
         <p><span className="font-semibold">What it receives:</span> Client context, intent signals, and internal analysis evidence.</p>
         <p><span className="font-semibold">What it returns:</span> Approved execution request handoff and lineage references.</p>
-        <p><span className="font-semibold">Who owns it:</span> QAgent Layer.</p>
+        <p><span className="font-semibold">Owner:</span> QAgent Layer.</p>
       </section>
 
       <div className="flex flex-col gap-5">
         <SectionBlock
           title="Purpose"
           body={["QAgent Layer converts user goals into validated, approved, and traceable execution handoff artifacts for API Server Layer."]}
-          collapsible
         >
           <p className="text-sm text-[var(--muted)]">
             Canonical concepts: <Link href="/docs/q-agent" className="text-[var(--accent)] hover:underline">QAgent</Link>,{" "}
@@ -89,7 +87,6 @@ export default function QAgentPage() {
             "Handles approval-gated transition toward execution handoff.",
             "Owns QAgent-side lineage semantics and bridge readiness.",
           ]}
-          collapsible
         />
 
         <SectionBlock
@@ -99,7 +96,6 @@ export default function QAgentPage() {
             "Does NOT redefine API status tracker ownership.",
             "Does NOT execute infrastructure-level runtime scheduling.",
           ]}
-          collapsible
         />
 
         <SectionBlock
@@ -108,7 +104,6 @@ export default function QAgentPage() {
             "Before: Client Layer interaction and input capture.",
             "After: API Server Layer /run intake and job lifecycle orchestration.",
           ]}
-          collapsible
         >
           <p className="text-sm text-[var(--muted)]">
             Cross-layer links: <Link href="/docs/client" className="text-[var(--accent)] hover:underline">Client Layer</Link>{" -> "}
@@ -122,7 +117,6 @@ export default function QAgentPage() {
             "Receives user interaction context and request payloads from Client Layer.",
             "Receives analysis/context evidence from upstream QAgent internal modules.",
           ]}
-          collapsible
         />
 
         <SectionBlock
@@ -131,7 +125,6 @@ export default function QAgentPage() {
             "Produces approved execution handoff artifacts (Execution Request Envelope bridge context).",
             "Produces QAgent lineage references for status and version correlation.",
           ]}
-          collapsible
         >
           <p className="text-sm text-[var(--muted)]">
             Contract links:{" "}
@@ -150,22 +143,22 @@ export default function QAgentPage() {
             "QAgent MUST NOT replace API status/progress authority.",
             "QAgent MUST maintain canonical handoff mapping without post-approval semantic mutation.",
           ]}
-          collapsible
         />
 
-        <SectionBlock title="Canonical Flow" body={[QAGENT_CANONICAL_FLOW]} collapsible />
+        <SectionBlock title="Canonical Flow" body={[QAGENT_CANONICAL_FLOW]} />
 
         {qagentSubsections.map((section) => (
-          <SectionBlock key={section.title} title={section.title} body={section.lines} collapsible />
+          <SectionBlock key={section.title} title={section.title} body={section.lines} />
         ))}
 
         <SectionBlock
           title="Source of Truth"
           body={[
-            `Canonical location: ${QAGENT_DOC_SOURCE_OF_TRUTH.canonicalLocation}`,
+            `Canonical layer page: ${QAGENT_DOC_SOURCE_OF_TRUTH.canonicalLocation}.`,
+            "This page is authoritative for QAgent layer role, boundaries, and canonical flow.",
+            "Subpages and module pages are child specifications and must not redefine this layer contract.",
             QAGENT_DOC_SOURCE_OF_TRUTH.rule,
           ]}
-          collapsible
         />
       </div>
     </DocsContent>

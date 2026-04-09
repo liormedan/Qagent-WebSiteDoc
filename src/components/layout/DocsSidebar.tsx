@@ -272,6 +272,18 @@ function toQAgentHref(href: string): string {
   return href;
 }
 
+function normalizePath(path: string): string {
+  if (!path) return "";
+  return path.length > 1 && path.endsWith("/") ? path.slice(0, -1) : path;
+}
+
+function isSectionActive(pathname: string, href: string): boolean {
+  const path = normalizePath(pathname);
+  const target = normalizePath(href.split("#")[0] ?? href);
+  if (!target) return false;
+  return path === target || path.startsWith(`${target}/`);
+}
+
 function useHydrated() {
   return useSyncExternalStore(
     () => () => {},
@@ -324,7 +336,7 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
                   "group flex items-center justify-between rounded-md px-2 py-1 text-left text-xs uppercase tracking-[0.14em] transition-colors",
                   apiContext && section.level === "primary" ? "font-bold text-slate-200" : "font-semibold",
                   apiContext && section.level === "secondary" ? "pl-5" : "",
-                  !section.href.includes("#") && safePathname === section.href.split("#")[0]
+                  isSectionActive(safePathname, section.href)
                     ? "bg-slate-900 text-slate-100"
                     : "text-slate-500 hover:bg-slate-950/70 hover:text-slate-300",
                 )}
@@ -333,7 +345,7 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
                 <ChevronRight
                   className={cn(
                     "h-4 w-4 shrink-0 transition-colors",
-                    !section.href.includes("#") && safePathname === section.href.split("#")[0] ? "text-slate-200" : "text-slate-500 group-hover:text-slate-300",
+                    isSectionActive(safePathname, section.href) ? "text-slate-200" : "text-slate-500 group-hover:text-slate-300",
                   )}
                 />
               </Link>

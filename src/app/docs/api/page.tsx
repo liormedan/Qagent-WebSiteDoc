@@ -54,7 +54,6 @@ export default function ApiPage() {
     <main className="space-y-6">
       <section className="space-y-2">
         <h1 className="text-3xl font-semibold">{API_SERVER_CANONICAL_NAME}</h1>
-        <p className="text-sm text-emerald-300">Status: Ready for Implementation</p>
         <p className="text-[var(--muted)]">Execution orchestration layer that receives plans, manages jobs, and executes workflows.</p>
       </section>
 
@@ -102,6 +101,7 @@ export default function ApiPage() {
           <li>Input: {EXECUTION_REQUEST_ENVELOPE.name}</li>
           <li>Output: Job + Status</li>
           <li>Core Endpoints: `/run`, `/jobs`, `/files`, `/health`</li>
+          <li>Owner: API Server Layer</li>
         </ul>
       </section>
 

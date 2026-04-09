@@ -143,7 +143,6 @@ export default async function SystemLayerPage({ params }: { params: Promise<{ la
   return (
     <DocsContent>
       <PageTitle title={`${title} - System View`} description="System-level summary for this layer in the WaveQ architecture map." />
-      <p className="text-sm text-emerald-300">Status: Ready for Implementation</p>
 
       <div className="mt-4 space-y-4 rounded-md border border-[var(--border)] bg-slate-900/30 p-4 text-sm text-slate-300">
         <section className="space-y-2">

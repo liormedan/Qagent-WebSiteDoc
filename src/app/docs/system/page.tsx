@@ -146,7 +146,6 @@ export default function SystemPage() {
   return (
     <DocsContent>
       <PageTitle title="WaveQ System Structure" description="This page presents the full architecture of WaveQ as a unified system." />
-      <p className="text-sm text-emerald-300">Status: Ready for Implementation</p>
 
       <section className="mt-4 space-y-3 rounded-md border border-cyan-400/30 bg-cyan-500/10 p-4">
         <h2 className="text-lg font-semibold text-cyan-100">Start Exploring</h2>
