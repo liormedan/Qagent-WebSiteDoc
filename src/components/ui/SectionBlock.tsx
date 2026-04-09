@@ -4,10 +4,7 @@ import { ChevronRight } from "lucide-react";
 import { linkConcepts } from "@/lib/docs/auto-link";
 
 function renderLines(lines: readonly string[], keyPrefix: string, muted = false) {
-  type Block =
-    | { type: "p"; lines: string[] }
-    | { type: "ul"; lines: string[] }
-    | { type: "ol"; lines: string[] };
+  type Block = { type: "p" | "ul" | "ol"; lines: string[] };
 
   const blocks: Block[] = [];
   const pushLine = (type: Block["type"], value: string) => {
@@ -20,18 +17,23 @@ function renderLines(lines: readonly string[], keyPrefix: string, muted = false)
   };
 
   lines.forEach((raw) => {
-    const line = raw.trim();
+    let line = raw.trim();
     if (!line) return;
 
-    const unordered = line.match(/^[-*•]\s+(.+)$/);
-    if (unordered) {
-      pushLine("ul", unordered[1]);
+    const orderedInsideBullet = line.match(/^[-*•]\s*(\d+[.)]\s+.+)$/);
+    if (orderedInsideBullet) {
+      line = orderedInsideBullet[1];
+    }
+
+    const ordered = line.match(/^(\d+)[.)]\s+(.+)$/);
+    if (ordered) {
+      pushLine("ol", ordered[2]);
       return;
     }
 
-    const ordered = line.match(/^\d+[.)]\s+(.+)$/);
-    if (ordered) {
-      pushLine("ol", ordered[1]);
+    const unordered = line.match(/^[-*•]\s*(?:[-*•]\s*)?(.+)$/);
+    if (unordered) {
+      pushLine("ul", unordered[1]);
       return;
     }
 
@@ -40,6 +42,7 @@ function renderLines(lines: readonly string[], keyPrefix: string, muted = false)
 
   return blocks.map((block, blockIndex) => {
     const key = `${keyPrefix}-${block.type}-${blockIndex}`;
+
     if (block.type === "ul") {
       return (
         <ul key={key} className={muted ? "list-disc space-y-1 pl-5 text-sm leading-6 text-slate-300" : "list-disc space-y-1 pl-5 text-sm leading-6 text-slate-100"}>
@@ -94,8 +97,14 @@ export function SectionBlock({
   const hasStructuredHeadings = body.some((line) => line.startsWith("### "));
   const summaryLines = body.slice(0, 2);
   const detailLines = body.slice(2);
-  const hasTechnicalDetails = !hasStructuredHeadings && detailLines.length > 0;
-  const heading = <h2 data-toc-title={title} data-toc-hidden={tocHidden ? "true" : undefined} className="break-words text-lg font-semibold leading-tight md:text-xl">{linkConcepts(title, 1)}</h2>;
+  const hasTechnicalDetails = !hasStructuredHeadings && detailLines.some((line) => line.trim().length > 0);
+
+  const heading = (
+    <h2 data-toc-title={title} data-toc-hidden={tocHidden ? "true" : undefined} className="break-words text-lg font-semibold leading-tight md:text-xl">
+      {linkConcepts(title, 1)}
+    </h2>
+  );
+
   const content = (
     <>
       {hasStructuredHeadings ? (
@@ -112,7 +121,7 @@ export function SectionBlock({
                 return;
               }
               if (!current) {
-                current = { heading: "Details", lines: [] };
+                current = { heading: "", lines: [] };
               }
               current.lines.push(line);
             });
@@ -122,9 +131,11 @@ export function SectionBlock({
             if (plainStructured) {
               return groups.map((group, index) => (
                 <div key={`${title}-group-${index}`} className="rounded-lg border border-[var(--border)] bg-slate-950/30 px-3 py-2">
-                  <h3 data-toc-title={group.heading} className="text-sm font-semibold text-slate-100 md:text-base">
-                    {linkConcepts(group.heading, 1)}
-                  </h3>
+                  {group.heading ? (
+                    <h3 data-toc-title={group.heading} className="text-sm font-semibold text-slate-100 md:text-base">
+                      {linkConcepts(group.heading, 1)}
+                    </h3>
+                  ) : null}
                   <div className="mt-2 space-y-2">{renderLines(group.lines, `${title}-structured-plain-${index}`)}</div>
                 </div>
               ));
@@ -133,14 +144,16 @@ export function SectionBlock({
             return groups.map((group, index) => (
               <details key={`${title}-group-${index}`} className="group/details rounded-lg border border-[var(--border)] bg-slate-950/30 px-3 py-2">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
-                  <h3 data-toc-title={group.heading} className="text-sm font-semibold text-slate-100 md:text-base">
-                    {linkConcepts(group.heading, 1)}
-                  </h3>
+                  {group.heading ? (
+                    <h3 data-toc-title={group.heading} className="text-sm font-semibold text-slate-100 md:text-base">
+                      {linkConcepts(group.heading, 1)}
+                    </h3>
+                  ) : (
+                    <span className="text-sm font-semibold text-slate-100 md:text-base">More</span>
+                  )}
                   <ChevronRight className="h-4 w-4 shrink-0 text-slate-400 transition-transform group-open/details:rotate-90" />
                 </summary>
-                <div className="mt-2 space-y-2">
-                  {renderLines(group.lines, `${title}-structured-${index}`)}
-                </div>
+                <div className="mt-2 space-y-2">{renderLines(group.lines, `${title}-structured-${index}`)}</div>
               </details>
             ));
           })()}
@@ -150,9 +163,7 @@ export function SectionBlock({
         <div className="space-y-2">{renderLines(summaryLines, `${title}-summary`)}</div>
       ) : children ? (
         <div className="space-y-2">{children}</div>
-      ) : (
-        <></>
-      )}
+      ) : null}
 
       {hasTechnicalDetails ? (
         <details className="group/details">
