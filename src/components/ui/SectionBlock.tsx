@@ -3,6 +3,75 @@
 import { ChevronRight } from "lucide-react";
 import { linkConcepts } from "@/lib/docs/auto-link";
 
+function renderLines(lines: readonly string[], keyPrefix: string, muted = false) {
+  type Block =
+    | { type: "p"; lines: string[] }
+    | { type: "ul"; lines: string[] }
+    | { type: "ol"; lines: string[] };
+
+  const blocks: Block[] = [];
+  const pushLine = (type: Block["type"], value: string) => {
+    const last = blocks[blocks.length - 1];
+    if (last && last.type === type) {
+      last.lines.push(value);
+      return;
+    }
+    blocks.push({ type, lines: [value] });
+  };
+
+  lines.forEach((raw) => {
+    const line = raw.trim();
+    if (!line) return;
+
+    const unordered = line.match(/^[-*•]\s+(.+)$/);
+    if (unordered) {
+      pushLine("ul", unordered[1]);
+      return;
+    }
+
+    const ordered = line.match(/^\d+[.)]\s+(.+)$/);
+    if (ordered) {
+      pushLine("ol", ordered[1]);
+      return;
+    }
+
+    pushLine("p", line);
+  });
+
+  return blocks.map((block, blockIndex) => {
+    const key = `${keyPrefix}-${block.type}-${blockIndex}`;
+    if (block.type === "ul") {
+      return (
+        <ul key={key} className={muted ? "list-disc space-y-1 pl-5 text-sm leading-6 text-slate-300" : "list-disc space-y-1 pl-5 text-sm leading-6 text-slate-100"}>
+          {block.lines.map((item, itemIndex) => (
+            <li key={`${key}-li-${itemIndex}`}>{linkConcepts(item)}</li>
+          ))}
+        </ul>
+      );
+    }
+
+    if (block.type === "ol") {
+      return (
+        <ol key={key} className={muted ? "list-decimal space-y-1 pl-5 text-sm leading-6 text-slate-300" : "list-decimal space-y-1 pl-5 text-sm leading-6 text-slate-100"}>
+          {block.lines.map((item, itemIndex) => (
+            <li key={`${key}-li-${itemIndex}`}>{linkConcepts(item)}</li>
+          ))}
+        </ol>
+      );
+    }
+
+    return (
+      <div key={key} className="space-y-2">
+        {block.lines.map((item, itemIndex) => (
+          <p key={`${key}-p-${itemIndex}`} className={muted ? "text-sm leading-7 text-slate-300" : "break-words text-sm leading-6 text-slate-100"}>
+            {linkConcepts(item)}
+          </p>
+        ))}
+      </div>
+    );
+  });
+}
+
 export function SectionBlock({
   id,
   title,
@@ -56,13 +125,7 @@ export function SectionBlock({
                   <h3 data-toc-title={group.heading} className="text-sm font-semibold text-slate-100 md:text-base">
                     {linkConcepts(group.heading, 1)}
                   </h3>
-                  <div className="mt-2 space-y-2">
-                    {group.lines.map((line, lineIndex) => (
-                      <p key={`${title}-structured-${index}-${lineIndex}`} className="break-words text-sm leading-6 text-slate-100">
-                        {linkConcepts(line)}
-                      </p>
-                    ))}
-                  </div>
+                  <div className="mt-2 space-y-2">{renderLines(group.lines, `${title}-structured-plain-${index}`)}</div>
                 </div>
               ));
             }
@@ -76,11 +139,7 @@ export function SectionBlock({
                   <ChevronRight className="h-4 w-4 shrink-0 text-slate-400 transition-transform group-open/details:rotate-90" />
                 </summary>
                 <div className="mt-2 space-y-2">
-                  {group.lines.map((line, lineIndex) => (
-                    <p key={`${title}-structured-${index}-${lineIndex}`} className="break-words text-sm leading-6 text-slate-100">
-                      {linkConcepts(line)}
-                    </p>
-                  ))}
+                  {renderLines(group.lines, `${title}-structured-${index}`)}
                 </div>
               </details>
             ));
@@ -88,32 +147,20 @@ export function SectionBlock({
           {!childrenFirst && children ? <div className="pt-2">{children}</div> : null}
         </div>
       ) : summaryLines.length > 0 ? (
-        <div className="space-y-2">
-          {summaryLines.map((line, index) => (
-            <p key={`${title}-summary-${index}`} className="break-words text-sm leading-6 text-slate-100">
-              {linkConcepts(line)}
-            </p>
-          ))}
-        </div>
+        <div className="space-y-2">{renderLines(summaryLines, `${title}-summary`)}</div>
       ) : children ? (
         <div className="space-y-2">{children}</div>
       ) : (
-        <p className="text-sm text-slate-400">No summary available.</p>
+        <></>
       )}
 
       {hasTechnicalDetails ? (
         <details className="group/details">
           <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
-            <span className="text-sm font-semibold text-[var(--muted)] hover:text-slate-200">Technical Details</span>
+            <span className="text-sm font-semibold text-[var(--muted)] hover:text-slate-200">Details</span>
             <ChevronRight className="h-4 w-4 shrink-0 text-slate-400 transition-transform group-open/details:rotate-90" />
           </summary>
-          <div className="mt-3 space-y-3">
-            {detailLines.map((line, index) => (
-              <p key={`${title}-details-${index}`} className="text-sm leading-7 text-slate-300">
-                {linkConcepts(line)}
-              </p>
-            ))}
-          </div>
+          <div className="mt-3 space-y-3">{renderLines(detailLines, `${title}-details`, true)}</div>
         </details>
       ) : null}
     </>
