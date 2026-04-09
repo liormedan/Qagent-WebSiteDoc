@@ -21,11 +21,13 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
 
   const clientActive = safePathname.startsWith("/docs/client");
   const apiActive = safePathname.startsWith("/docs/api");
+  const dspActive =
+    safePathname.startsWith("/docs/dsp-layer") ||
+    safePathname.startsWith("/docs/architecture/dagent/dsp-engine-abstraction");
   const systemActive =
     safePathname === "/docs" ||
     safePathname.startsWith("/docs/system") ||
     safePathname.startsWith("/docs/system-flow") ||
-    safePathname.startsWith("/docs/dsp-layer") ||
     safePathname.startsWith("/docs/data-layer") ||
     safePathname.startsWith("/docs/auth-security") ||
     safePathname.startsWith("/docs/infrastructure-layer");
@@ -76,6 +78,12 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
               className={`text-sm font-medium transition-colors ${apiActive ? "text-slate-100" : "text-slate-400 hover:text-slate-200"}`}
             >
               API Server
+            </Link>
+            <Link
+              href="/docs/dsp-layer"
+              className={`text-sm font-medium transition-colors ${dspActive ? "text-slate-100" : "text-slate-400 hover:text-slate-200"}`}
+            >
+              DSP
             </Link>
           </nav>
 
