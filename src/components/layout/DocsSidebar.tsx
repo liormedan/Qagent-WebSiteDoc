@@ -243,27 +243,27 @@ const systemSections: SidebarSection[] = [
   },
   {
     title: "DSP / Processing Layer",
-    href: "/docs/dsp-layer",
+    href: "/docs/system/dsp-processing-layer",
     items: [],
   },
   {
     title: "Data Layer",
-    href: "/docs/data-layer",
+    href: "/docs/system/data-layer",
     items: [],
   },
   {
     title: "Infrastructure Layer",
-    href: "/docs/infrastructure-layer",
+    href: "/docs/system/infrastructure-layer",
     items: [],
   },
   {
     title: "Auth & Security Layer",
-    href: "/docs/auth-security",
+    href: "/docs/system/auth-security-layer",
     items: [],
   },
   {
     title: "End-to-End Flow (cross-layer flow)",
-    href: "/docs/system-flow",
+    href: "/docs/system/end-to-end-flow",
     items: [],
   },
 ];
