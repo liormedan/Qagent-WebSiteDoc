@@ -268,6 +268,34 @@ const systemSections: SidebarSection[] = [
   },
 ];
 
+const dspSections: SidebarSection[] = [
+  {
+    title: "Overview",
+    href: "/docs/dsp-layer",
+    items: [],
+  },
+  {
+    title: "Core Specification",
+    href: "/docs/dsp-layer/core-specification",
+    items: [],
+  },
+  {
+    title: "Contracts",
+    href: "/docs/dsp-layer/contracts",
+    items: [],
+  },
+  {
+    title: "Processing Engine",
+    href: "/docs/dsp-layer/processing-engine",
+    items: [],
+  },
+  {
+    title: "System Integration",
+    href: "/docs/dsp-layer/system-integration",
+    items: [],
+  },
+];
+
 function toQAgentHref(href: string): string {
   return href;
 }
@@ -281,6 +309,9 @@ function isSectionActive(pathname: string, href: string): boolean {
   const path = normalizePath(pathname);
   const target = normalizePath(href.split("#")[0] ?? href);
   if (!target) return false;
+  if (target === "/docs/dsp-layer") {
+    return path === target;
+  }
   return path === target || path.startsWith(`${target}/`);
 }
 
@@ -295,33 +326,39 @@ function useHydrated() {
 export function DocsSidebar({ className, onNavigate }: { className?: string; onNavigate?: () => void }) {
   const pathname = usePathname();
   const hydrated = useHydrated();
-  const [openSection, setOpenSection] = useState<string>("");
+  const [openSection, setOpenSection] = useState<string>("Core Specification");
   const safePathname = hydrated ? pathname : "";
 
   const clientContext = safePathname.startsWith("/docs/client");
   const apiContext = safePathname.startsWith("/docs/api");
+  const dspContext =
+    safePathname.startsWith("/docs/dsp-layer") ||
+    safePathname.startsWith("/docs/architecture/dagent/dsp-engine-abstraction");
   const systemContext =
     safePathname === "/docs" ||
     safePathname.startsWith("/docs/system") ||
     safePathname.startsWith("/docs/system-flow") ||
-    safePathname.startsWith("/docs/dsp-layer") ||
     safePathname.startsWith("/docs/data-layer") ||
     safePathname.startsWith("/docs/auth-security") ||
     safePathname.startsWith("/docs/infrastructure-layer");
-  const singleLevelContext = apiContext || clientContext || systemContext;
+  const singleLevelContext = apiContext || clientContext || systemContext || dspContext;
   const sections = apiContext
     ? apiSections
     : clientContext
       ? clientSections
+      : dspContext
+        ? dspSections
       : systemContext
         ? systemSections
-      : qagentSections.map((section) => ({
+        : qagentSections.map((section) => ({
           ...section,
           items: section.items.map((item) => ({
             ...item,
             href: toQAgentHref(item.href),
           })),
         }));
+
+  const activeOpenSection = openSection;
 
   return (
     <aside className={cn("h-full min-h-0 overflow-y-scroll bg-black px-4 py-5", className)}>
@@ -352,19 +389,19 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
             ) : (
               <button
                 type="button"
-                onClick={() => setOpenSection((current) => (current === section.title ? "" : section.title))}
+                onClick={() => setOpenSection(activeOpenSection === section.title ? "" : section.title)}
                 className="flex w-full items-center justify-between rounded-md px-2.5 py-2 text-left text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 transition-colors hover:bg-slate-950/70 hover:text-slate-300"
-                aria-expanded={openSection === section.title}
+                aria-expanded={activeOpenSection === section.title}
               >
                 <span className="pe-3 whitespace-normal leading-5">{section.title}</span>
-                <ChevronRight className={cn("h-4 w-4 shrink-0 transition-transform", openSection === section.title ? "rotate-90 text-slate-300" : "text-slate-500")} />
+                <ChevronRight className={cn("h-4 w-4 shrink-0 transition-transform", activeOpenSection === section.title ? "rotate-90 text-slate-300" : "text-slate-500")} />
               </button>
             )}
 
-            {!singleLevelContext && openSection === section.title ? (
+            {!singleLevelContext && activeOpenSection === section.title ? (
               <div className="space-y-0.5">
                 {section.items.map((item) => {
-                  const active = safePathname === item.href;
+                  const active = isSectionActive(safePathname, item.href);
                   return (
                     <Link
                       key={item.href}
