@@ -3,6 +3,7 @@ import { PageTitle } from "@/components/ui/PageTitle";
 import { QAgentArchitectureLinearDiagram } from "@/components/ui/QAgentArchitectureLinearDiagram";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 import { QAGENT_CANONICAL_FLOW, QAGENT_DOC_SOURCE_OF_TRUTH } from "@/lib/qagent-canonical";
+import { SYSTEM_DOC_SOURCE_OF_TRUTH, SYSTEM_RUNTIME_LIFECYCLE } from "@/lib/system-canonical";
 
 type ModuleChapter = {
   title: string;
@@ -162,6 +163,16 @@ export default function ArchitecturePage() {
         {moduleChapters.map((chapter) => (
           <SectionBlock key={chapter.title} title={chapter.title} body={chapterBody(chapter)} collapsible />
         ))}
+
+        <SectionBlock
+          title="System-Level Canonical References"
+          body={[
+            `Primary system entry: ${SYSTEM_DOC_SOURCE_OF_TRUTH.canonicalLocation}`,
+            `Canonical runtime lifecycle reference: ${SYSTEM_RUNTIME_LIFECYCLE}`,
+            "This page references system-level declarations and does not redefine them.",
+          ]}
+          collapsible
+        />
 
         <SectionBlock
           title="Source of Truth"

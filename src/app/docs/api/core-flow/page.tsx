@@ -5,6 +5,7 @@ import {
   EXECUTION_LAYER_DOC_SOURCE_OF_TRUTH,
   JOB_ORCHESTRATION_CANONICAL_FLOW,
 } from "@/lib/api-server-canonical";
+import { SYSTEM_DOC_SOURCE_OF_TRUTH, SYSTEM_RUNTIME_LIFECYCLE } from "@/lib/system-canonical";
 
 export default function ApiCoreFlowPage() {
   return (
@@ -40,6 +41,14 @@ export default function ApiCoreFlowPage() {
           Canonical reference location:{" "}
           <span className="font-semibold text-slate-100">{EXECUTION_LAYER_DOC_SOURCE_OF_TRUTH.canonicalLocation}</span>
         </p>
+      </section>
+
+      <section className="space-y-2">
+        <h2 className="text-2xl font-semibold">System Lifecycle Reference</h2>
+        <p className="text-[var(--muted)]">
+          Canonical system location: <span className="font-semibold text-slate-100">{SYSTEM_DOC_SOURCE_OF_TRUTH.canonicalLocation}</span>
+        </p>
+        <p className="rounded-md border border-[var(--border)] bg-slate-950/40 p-4 text-sm text-slate-200">{SYSTEM_RUNTIME_LIFECYCLE}</p>
       </section>
     </main>
   );

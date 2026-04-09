@@ -14,23 +14,14 @@ type SidebarSection = {
 
 const qagentSections: SidebarSection[] = [
   {
-    title: "QAgent",
+    title: "Overview",
     items: [
       { label: "Architecture", href: "/docs/architecture" },
-      { label: "Main QCore Structure", href: "/docs/qcore" },
-      { label: "Schema Registry", href: "/docs/architecture/contracts/schema-registry" },
-      { label: "Lineage Model", href: "/docs/architecture/contracts/lineage-model" },
-      { label: "Client–QAgent ID Mapping", href: "/docs/architecture/contracts/client-qagent-id-mapping" },
-      { label: "Control Policy Matrix", href: "/docs/architecture/policies/control-policy-matrix" },
-      { label: "Failure Policy", href: "/docs/architecture/policies/failure-policy" },
-      { label: "Session Isolation", href: "/docs/architecture/policies/session-isolation" },
-      { label: "Approval Modify Contract", href: "/docs/architecture/approval/modify-loop-contract" },
-      { label: "DSP Engine Abstraction", href: "/docs/architecture/dagent/dsp-engine-abstraction" },
-      { label: "Implementation Baseline", href: "/docs/architecture/implementation-baseline" },
+      { label: "Main QCore Structure", href: "/docs/qcore" }
     ],
   },
   {
-    title: "Core Flow",
+    title: "Core Structure",
     items: [
       { label: "QCore", href: "/docs/architecture/modules/qagent-core" },
       { label: "Files Handler", href: "/docs/architecture/modules/files-handler" },
@@ -40,55 +31,46 @@ const qagentSections: SidebarSection[] = [
       { label: "UAgent", href: "/docs/architecture/modules/uagent" },
       { label: "Approval", href: "/docs/architecture/modules/approval" },
       { label: "DAgent", href: "/docs/architecture/modules/dagent" },
-      { label: "Versioning", href: "/docs/architecture/modules/versioning" },
+      { label: "Versioning", href: "/docs/architecture/modules/versioning" }
     ],
   },
   {
-    title: "Decision System",
+    title: "Contracts",
     items: [
-      { label: "Orchestration Overview", href: "/docs/orchestration/overview" },
+      { label: "Schema Registry", href: "/docs/architecture/contracts/schema-registry" },
+      { label: "Client-QAgent ID Mapping", href: "/docs/architecture/contracts/client-qagent-id-mapping" },
+      { label: "Lineage Model", href: "/docs/architecture/contracts/lineage-model" },
+      { label: "Approval Modify Contract", href: "/docs/architecture/approval/modify-loop-contract" }
+    ],
+  },
+  {
+    title: "Policies",
+    items: [
+      { label: "Control Policy Matrix", href: "/docs/architecture/policies/control-policy-matrix" },
+      { label: "Failure Policy", href: "/docs/architecture/policies/failure-policy" },
+      { label: "Session Isolation", href: "/docs/architecture/policies/session-isolation" }
+    ],
+  },
+  {
+    title: "System Flow",
+    items: [
+      { label: "QAgent Flow", href: "/docs/system-flow" },
+      { label: "Orchestration Flow", href: "/docs/orchestration/orchestration-flow" },
       { label: "Routing Logic", href: "/docs/orchestration/routing-logic" },
-      { label: "State Machine", href: "/docs/orchestration/state-machine" },
-      { label: "Failure Handling", href: "/docs/orchestration/failure-handling" },
-    ],
-  },
-  {
-    title: "Audio System",
-    items: [
-      { label: "Audio Sandbox", href: "/docs/audio-sandbox/overview" },
-      { label: "Audio Comparison", href: "/docs/audio-comparison/overview" },
-      { label: "Audio Memory", href: "/docs/audio-memory" },
-      { label: "Audio DAL", href: "/docs/audio-dal" },
-    ],
-  },
-  {
-    title: "Execution",
-    items: [
-      { label: "Execution Runtime", href: "/docs/execution-runtime/overview" },
-      { label: "Runtime Error Handling", href: "/docs/execution-runtime/error-handling" },
-      { label: "Cancellation and Retry", href: "/docs/execution-runtime/cancellation-and-retry" },
-    ],
-  },
-  {
-    title: "Versioning",
-    items: [
-      { label: "Versioning Module", href: "/docs/architecture/modules/versioning" },
-      { label: "Version Manager", href: "/docs/architecture/modules/versioning/version-manager" },
-      { label: "Diff Engine", href: "/docs/architecture/modules/versioning/diff-engine" },
-      { label: "Output Versioning", href: "/docs/execution-runtime/output-versioning" },
+      { label: "State Machine", href: "/docs/orchestration/state-machine" }
     ],
   },
   {
     title: "Implementation",
     items: [
+      { label: "Implementation Baseline", href: "/docs/architecture/implementation-baseline" },
       { label: "Implementation Map", href: "/docs/implementation-map" },
-      { label: "Module Design", href: "/docs/module-design" },
+      { label: "Implementation Notes", href: "/docs/module-design" },
       { label: "Function Contracts", href: "/docs/function-contracts" },
-      { label: "Testing Strategy", href: "/docs/testing-strategy" },
+      { label: "Testing Strategy", href: "/docs/testing-strategy" }
     ],
   },
 ];
-
 const apiSections: SidebarSection[] = [
   {
     title: "API Server Layer",
@@ -367,3 +349,4 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
     </aside>
   );
 }
+

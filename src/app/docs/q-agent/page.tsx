@@ -15,7 +15,7 @@ export default function QAgentPage() {
 
   return (
     <DocsContent>
-      <DeprecationBanner replacementHref="/docs/overview" replacementLabel="/docs/overview" />
+      <DeprecationBanner replacementHref="/docs" replacementLabel="/docs (QAgent layer home)" />
       <PageTitle title={page.title} description={page.description} />
       <div className="flex flex-col gap-5">
         <section className="rounded-md border border-emerald-400/30 bg-emerald-500/10 px-3 py-2 text-xs leading-5 text-emerald-100 md:text-sm">

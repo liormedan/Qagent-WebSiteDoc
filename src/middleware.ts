@@ -5,14 +5,14 @@ export function middleware(request: NextRequest) {
 
   if (pathname === "/docs/qagent") {
     const url = request.nextUrl.clone();
-    url.pathname = "/docs";
+    url.pathname = "/docs/q-agent";
     return NextResponse.redirect(url, 308);
   }
 
   if (pathname.startsWith("/docs/qagent/")) {
     const suffix = pathname.replace("/docs/qagent", "");
     const url = request.nextUrl.clone();
-    url.pathname = `/docs${suffix}`;
+    url.pathname = `/docs/q-agent${suffix}`;
     return NextResponse.redirect(url, 308);
   }
 

@@ -32,7 +32,7 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
               System
             </Link>
             <Link
-              href="/docs"
+              href="/docs/q-agent"
               className={`text-sm font-medium transition-colors ${qagentActive ? "text-slate-100" : "text-slate-400 hover:text-slate-200"}`}
             >
               QAgent
