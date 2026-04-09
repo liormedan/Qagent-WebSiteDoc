@@ -11,10 +11,10 @@ const quickActions = [
 ];
 
 const readingPath = [
-  { step: "System", href: "/docs/system", description: "Understand structure." },
-  { step: "Client", href: "/docs/client", description: "Understand UI layer." },
-  { step: "QAgent", href: "/docs/q-agent", description: "Understand logic layer." },
-  { step: "API", href: "/docs/api", description: "Understand execution layer." },
+  { step: "System", href: "/docs/system", description: "Understand the complete system map, major layers, and cross-layer flow." },
+  { step: "Client", href: "/docs/client", description: "Understand the user-facing interface, interaction model, and UI boundaries." },
+  { step: "QAgent", href: "/docs/q-agent", description: "Understand intent interpretation, planning, clarification, and approval logic." },
+  { step: "API", href: "/docs/api", description: "Understand execution contracts, orchestration flow, and runtime boundaries." },
 ];
 
 export default function DocsIndexPage() {
@@ -24,7 +24,6 @@ export default function DocsIndexPage() {
         title="WaveQ"
         description="WaveQ is an AI-powered audio workflow system that connects user intent to audio execution."
       />
-      <p className="text-sm text-emerald-300">Status: Ready for Implementation</p>
 
       <div className="flex flex-col gap-5">
         <SectionBlock title="Quick Actions" body={[]} collapsible>
@@ -41,7 +40,10 @@ export default function DocsIndexPage() {
           </div>
         </SectionBlock>
 
-        <SectionBlock title="Recommended Reading Path" body={[]} collapsible>
+        <SectionBlock title="Recommended Reading Path" body={[]}>
+          <p className="text-sm text-[var(--muted)]">
+            This path gives new readers the quickest way to understand WaveQ from high-level system structure to runtime execution.
+          </p>
           <ol className="space-y-3 text-sm text-[var(--muted)]">
             {readingPath.map((item, index) => (
               <li key={item.href} className="rounded-md border border-[var(--border)] bg-slate-950/30 px-3 py-2">
@@ -53,6 +55,12 @@ export default function DocsIndexPage() {
               </li>
             ))}
           </ol>
+          <Link
+            href="/docs/system"
+            className="inline-flex w-fit rounded-md border border-cyan-400/40 bg-cyan-500/10 px-3 py-2 text-sm font-semibold text-cyan-100 transition-colors hover:border-cyan-300/70 hover:bg-cyan-500/20"
+          >
+            Start with System
+          </Link>
         </SectionBlock>
       </div>
     </DocsContent>

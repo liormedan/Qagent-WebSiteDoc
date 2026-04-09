@@ -26,6 +26,7 @@ const layerCanonicalLinks: Record<string, string> = {
 };
 
 type LayerSystemView = {
+  summary: string;
   explanation: [string, string];
   responsibilities: [string, string, string];
   position: string;
@@ -33,6 +34,7 @@ type LayerSystemView = {
 
 const layerSystemViews: Record<string, LayerSystemView> = {
   "client-frontend-layer": {
+    summary: "System view for the user-facing layer that captures interaction and projects runtime output.",
     explanation: [
       "Client Layer is the user-facing runtime where users interact with chat, canvas, and workspace surfaces.",
       "It translates user actions into structured requests and presents status and result updates from downstream layers.",
@@ -45,6 +47,7 @@ const layerSystemViews: Record<string, LayerSystemView> = {
     position: "Receives input from users. Sends structured requests to QAgent and presents returned status/results.",
   },
   "qagent-layer": {
+    summary: "System view for the planning and decision layer that prepares approved execution handoff.",
     explanation: [
       "QAgent Layer is the decision and planning center of WaveQ.",
       "It interprets intent, builds execution-ready plans, and enforces approval gates before execution handoff.",
@@ -57,6 +60,7 @@ const layerSystemViews: Record<string, LayerSystemView> = {
     position: "Receives requests from Client Layer. Sends approved execution handoff artifacts to API Server Layer.",
   },
   "api-server-layer": {
+    summary: "System view for the execution orchestration layer that validates, queues, and publishes job outcomes.",
     explanation: [
       "API Server Layer is the orchestration boundary for execution requests from QAgent.",
       "It validates requests, manages asynchronous job pipelines, and publishes status and results.",
@@ -69,6 +73,7 @@ const layerSystemViews: Record<string, LayerSystemView> = {
     position: "Receives approved handoff from QAgent. Sends execution outcomes back to QAgent through status/result APIs.",
   },
   "dsp-processing-layer": {
+    summary: "System view for the processing layer that performs signal-level transformations in execution pipelines.",
     explanation: [
       "DSP / Processing Layer performs audio transformations and signal-level operations during execution.",
       "It provides specialized processing capabilities used by execution pipelines.",
@@ -81,6 +86,7 @@ const layerSystemViews: Record<string, LayerSystemView> = {
     position: "Receives processing tasks from execution pipelines. Sends processed artifacts onward to output and storage flows.",
   },
   "data-layer": {
+    summary: "System view for the canonical storage layer that preserves schemas, artifacts, and lineage records.",
     explanation: [
       "Data Layer provides canonical storage, schema governance, and lineage traceability for system entities.",
       "It preserves structured artifacts and historical references across system runs.",
@@ -93,6 +99,7 @@ const layerSystemViews: Record<string, LayerSystemView> = {
     position: "Receives entities and artifacts from runtime layers. Sends stable references for retrieval, traceability, and version linkage.",
   },
   "infrastructure-layer": {
+    summary: "System view for the runtime platform layer that hosts, scales, and stabilizes system services.",
     explanation: [
       "Infrastructure Layer supplies the runtime environment that hosts and scales WaveQ services.",
       "It provides platform-level support for reliability, deployment, and operational execution.",
@@ -105,6 +112,7 @@ const layerSystemViews: Record<string, LayerSystemView> = {
     position: "Receives operational requirements from all layers. Supports runtime delivery across Client, QAgent, and API services.",
   },
   "auth-security-layer": {
+    summary: "System view for the security layer that enforces authentication, authorization, and isolation boundaries.",
     explanation: [
       "Auth & Security Layer enforces identity, access control, and isolation boundaries.",
       "It protects system resources and ensures secure interaction across layers.",
@@ -117,6 +125,7 @@ const layerSystemViews: Record<string, LayerSystemView> = {
     position: "Receives access and session requests from runtime flows. Applies controls before protected operations continue.",
   },
   "end-to-end-flow": {
+    summary: "System view for the cross-layer request-to-output path across Client, QAgent, API, Execution, and Versioning.",
     explanation: [
       "End-to-End Flow represents the cross-layer path from request to final output.",
       "It connects client interaction, planning, orchestration, execution, and versioning as one system journey.",
@@ -142,7 +151,7 @@ export default async function SystemLayerPage({ params }: { params: Promise<{ la
 
   return (
     <DocsContent>
-      <PageTitle title={`${title} - System View`} description="System-level summary for this layer in the WaveQ architecture map." />
+      <PageTitle title={`${title} - System View`} description={systemView.summary} />
 
       <div className="mt-4 space-y-4 rounded-md border border-[var(--border)] bg-slate-900/30 p-4 text-sm text-slate-300">
         <section className="space-y-2">
@@ -153,11 +162,14 @@ export default async function SystemLayerPage({ params }: { params: Promise<{ la
 
         <section className="space-y-2">
           <h2 className="text-base font-semibold text-slate-100">Responsibilities</h2>
-          <ul className="list-disc space-y-1 pl-5">
-            <li>{systemView.responsibilities[0]}</li>
-            <li>{systemView.responsibilities[1]}</li>
-            <li>{systemView.responsibilities[2]}</li>
-          </ul>
+          <div className="space-y-1">
+            {systemView.responsibilities.map((item) => (
+              <div key={item} className="flex items-start gap-2">
+                <span className="mt-1 text-slate-200">•</span>
+                <p>{item}</p>
+              </div>
+            ))}
+          </div>
         </section>
 
         <section className="space-y-2">

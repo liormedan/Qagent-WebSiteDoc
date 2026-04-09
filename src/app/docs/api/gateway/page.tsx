@@ -14,6 +14,9 @@ export default function ApiGatewayPage() {
         <p><span className="font-semibold">Owner:</span> API Server Layer.</p>
       </section>
 
+      <p className="text-sm text-[var(--muted)]">
+        Architecture reference points to the canonical API architecture section that defines gateway boundaries and placement in the full API flow.
+      </p>
       <Link href="/docs/api/architecture#api-gateway-layer" className="inline-block text-sm font-medium text-[var(--accent)] hover:underline">
         Open architecture reference
       </Link>

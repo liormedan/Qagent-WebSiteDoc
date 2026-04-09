@@ -6,8 +6,8 @@ export const QAGENT_CANONICAL_FLOW =
   "User Input (handoff complete) -> QCore -> Files Handler -> Analyzer -> Intent + Clarification -> DAL -> UAgent -> Approval (UI-triggered, enforced by QCore) -> DAgent (execution bridge) -> Execution Request Envelope -> API Server Layer (/run -> Job Orchestration -> Execution Layer -> /jobs) -> Versioned Result Reference.";
 
 export const QAGENT_DOC_SOURCE_OF_TRUTH = {
-  canonicalLocation: "/docs/architecture",
+  canonicalLocation: "/docs/q-agent",
   rule:
-    "Definitions in /docs/architecture are authoritative for QAgent layer module boundaries, lineage ownership, and QAgent-side flow semantics. Secondary pages may reference but must not redefine these rules.",
+    "Definitions in /docs/q-agent are authoritative for QAgent layer role, boundaries, and canonical flow semantics. Module pages are child specifications and must not redefine these layer rules.",
 } as const;
 

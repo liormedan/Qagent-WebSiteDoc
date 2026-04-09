@@ -15,7 +15,16 @@ export default function ApiCoreFlowPage() {
 
       <section className="space-y-2">
         <h2 className="text-2xl font-semibold">Canonical Flow</h2>
-        <p className="rounded-md border border-[var(--border)] bg-slate-950/40 p-4 text-sm text-slate-200">{API_SERVER_CANONICAL_FLOW}</p>
+        <ol className="space-y-2 rounded-md border border-[var(--border)] bg-slate-950/40 p-4 text-sm text-slate-200">
+          <li>1. QAgent sends approved execution request.</li>
+          <li>2. API Gateway receives request at `/run`.</li>
+          <li>3. Request Handling validates input.</li>
+          <li>4. Job Orchestration creates and queues job.</li>
+          <li>5. Execution Layer executes plan.</li>
+          <li>6. Results are exposed via `/jobs`.</li>
+          <li>7. QAgent consumes results.</li>
+        </ol>
+        <p className="text-xs text-[var(--muted)]">Canonical reference: {API_SERVER_CANONICAL_FLOW}</p>
       </section>
 
       <section className="space-y-2">
