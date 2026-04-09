@@ -35,6 +35,113 @@ const crossLayerFlow = {
   description: "High-level cross-layer path from request to final output.",
 };
 
+const layerNavigationCards: Array<{
+  order: number;
+  title: string;
+  href: string;
+  explanation: string[];
+  responsibilities: string[];
+}> = [
+  {
+    order: 1,
+    title: "Client Layer",
+    href: "/docs/client",
+    explanation: [
+      "Client Layer is the user-facing runtime where users interact with chat, canvas, and workspace surfaces.",
+      "It translates user actions into structured requests and presents status/result updates coming from downstream layers.",
+    ],
+    responsibilities: [
+      "Capture user input and interaction events.",
+      "Render runtime progress and final outputs.",
+      "Forward structured requests to QAgent.",
+    ],
+  },
+  {
+    order: 2,
+    title: "QAgent Layer",
+    href: "/docs/q-agent",
+    explanation: [
+      "QAgent Layer is the decision and planning center of WaveQ.",
+      "It interprets intent, builds execution-ready plans, and enforces approval gates before execution handoff.",
+    ],
+    responsibilities: [
+      "Resolve intent and clarification requirements.",
+      "Build plan and execution handoff artifacts.",
+      "Apply approval logic before API handoff.",
+    ],
+  },
+  {
+    order: 3,
+    title: "API Server Layer",
+    href: "/docs/api",
+    explanation: [
+      "API Server Layer is the orchestration boundary for execution requests from QAgent.",
+      "It validates requests, manages asynchronous job pipelines, and publishes status/results.",
+    ],
+    responsibilities: [
+      "Validate `/run` input contract.",
+      "Create and manage queued jobs.",
+      "Expose status/results through API endpoints.",
+    ],
+  },
+  {
+    order: 4,
+    title: "DSP / Processing Layer",
+    href: "/docs/dsp-layer",
+    explanation: [
+      "DSP / Processing Layer performs audio transformations and signal-level operations during execution.",
+      "It provides specialized processing capabilities used by execution pipelines.",
+    ],
+    responsibilities: [
+      "Run signal processing and audio transformations.",
+      "Support execution engine with processing primitives.",
+      "Produce processed audio outputs.",
+    ],
+  },
+  {
+    order: 5,
+    title: "Data Layer",
+    href: "/docs/data-layer",
+    explanation: [
+      "Data Layer provides canonical storage, schema governance, and lineage traceability for system entities.",
+      "It preserves structured artifacts and historical references across system runs.",
+    ],
+    responsibilities: [
+      "Store canonical records and artifacts.",
+      "Maintain schema consistency.",
+      "Track lineage and reference relationships.",
+    ],
+  },
+  {
+    order: 6,
+    title: "Infrastructure Layer",
+    href: "/docs/infrastructure-layer",
+    explanation: [
+      "Infrastructure Layer supplies the runtime environment that hosts and scales WaveQ services.",
+      "It provides platform-level support for reliability, deployment, and operational execution.",
+    ],
+    responsibilities: [
+      "Provide hosting and runtime environment.",
+      "Support scaling and deployment operations.",
+      "Stabilize execution conditions for system services.",
+    ],
+  },
+  {
+    order: 7,
+    title: "Auth & Security Layer",
+    href: "/docs/auth-security",
+    explanation: [
+      "Auth & Security Layer enforces identity, access control, and isolation boundaries.",
+      "It protects system resources and ensures secure interaction across layers.",
+    ],
+    responsibilities: [
+      "Authenticate identities and session context.",
+      "Authorize access to protected operations.",
+      "Enforce isolation and boundary security rules.",
+    ],
+  },
+];
+
 export default function SystemPage() {
   return (
     <DocsContent>
@@ -62,55 +169,29 @@ export default function SystemPage() {
       <section className="mt-4 space-y-3 rounded-md border border-[var(--border)] bg-slate-950/30 p-4">
         <h2 className="text-lg font-semibold text-slate-100">Layer Navigation</h2>
         <div className="space-y-3 text-sm text-[var(--muted)]">
-          <div className="rounded-md border border-[var(--border)] bg-slate-950/30 p-3">
-            <p className="font-semibold text-slate-100">1. Client Layer</p>
-            <p>User-facing interaction layer and UI runtime.</p>
-            <Link href="/docs/client" className="mt-1 inline-block font-medium text-[var(--accent)] hover:underline">Go to Client Layer</Link>
-          </div>
-          <div className="rounded-md border border-[var(--border)] bg-slate-950/30 p-3">
-            <p className="font-semibold text-slate-100">2. QAgent Layer</p>
-            <p>Decision-making layer that builds execution plans.</p>
-            <Link href="/docs/q-agent" className="mt-1 inline-block font-medium text-[var(--accent)] hover:underline">Go to QAgent Layer</Link>
-          </div>
-          <div className="rounded-md border border-[var(--border)] bg-slate-950/30 p-3">
-            <p className="font-semibold text-slate-100">3. API Server Layer</p>
-            <p>Execution orchestration and job system.</p>
-            <Link href="/docs/api" className="mt-1 inline-block font-medium text-[var(--accent)] hover:underline">Go to API Server Layer</Link>
-          </div>
-          <div className="rounded-md border border-[var(--border)] bg-slate-950/30 p-3">
-            <p className="font-semibold text-slate-100">4. DSP / Processing Layer</p>
-            <p>Processing and transformation layer for audio workloads.</p>
-            <Link href="/docs/dsp-layer" className="mt-1 inline-block font-medium text-[var(--accent)] hover:underline">Go to DSP / Processing Layer</Link>
-          </div>
-          <div className="rounded-md border border-[var(--border)] bg-slate-950/30 p-3">
-            <p className="font-semibold text-slate-100">5. Data Layer</p>
-            <p>Canonical storage and data model layer.</p>
-            <Link href="/docs/data-layer" className="mt-1 inline-block font-medium text-[var(--accent)] hover:underline">Go to Data Layer</Link>
-          </div>
-          <div className="rounded-md border border-[var(--border)] bg-slate-950/30 p-3">
-            <p className="font-semibold text-slate-100">6. Infrastructure Layer</p>
-            <p>Platform runtime and deployment support layer.</p>
-            <Link href="/docs/infrastructure-layer" className="mt-1 inline-block font-medium text-[var(--accent)] hover:underline">Go to Infrastructure Layer</Link>
-          </div>
-          <div className="rounded-md border border-[var(--border)] bg-slate-950/30 p-3">
-            <p className="font-semibold text-slate-100">7. Auth & Security Layer</p>
-            <p>Identity, access, and isolation boundary layer.</p>
-            <Link href="/docs/auth-security" className="mt-1 inline-block font-medium text-[var(--accent)] hover:underline">Go to Auth & Security Layer</Link>
-          </div>
-        </div>
-      </section>
-
-      <section className="mt-4 space-y-3 rounded-md border border-[var(--border)] bg-slate-950/30 p-4">
-        <h2 className="text-lg font-semibold text-slate-100">Layer Summaries</h2>
-        <div className="space-y-2 text-sm text-[var(--muted)]">
-          <p><span className="font-semibold text-slate-100">Client Layer:</span> User-facing interaction layer and UI runtime.</p>
-          <p><span className="font-semibold text-slate-100">QAgent Layer:</span> Decision-making layer that builds execution plans.</p>
-          <p><span className="font-semibold text-slate-100">API Server Layer:</span> Execution orchestration and job system.</p>
-          <p><span className="font-semibold text-slate-100">DSP / Processing Layer:</span> Processing and transformation layer for audio workloads.</p>
-          <p><span className="font-semibold text-slate-100">Data Layer:</span> Canonical storage and data model layer.</p>
-          <p><span className="font-semibold text-slate-100">Infrastructure Layer:</span> Platform runtime and deployment support layer.</p>
-          <p><span className="font-semibold text-slate-100">Auth & Security Layer:</span> Identity, access, and isolation boundary layer.</p>
-          <p><span className="font-semibold text-slate-100">End-to-End Flow:</span> Cross-layer path from request to output.</p>
+          {layerNavigationCards.map((layer) => (
+            <div key={layer.title} className="rounded-md border border-[var(--border)] bg-slate-950/30 p-3">
+              <p className="font-semibold text-slate-100">
+                {layer.order}. {layer.title}
+              </p>
+              <div className="mt-2 space-y-1">
+                {layer.explanation.map((line) => (
+                  <p key={line}>{line}</p>
+                ))}
+              </div>
+              <div className="mt-2 border-l border-cyan-400/40 pl-3">
+                <p className="font-medium text-slate-200">What it does:</p>
+                <ul className="mt-1 list-disc space-y-1 pl-5">
+                  {layer.responsibilities.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+              <Link href={layer.href} className="mt-3 inline-block font-medium text-[var(--accent)] hover:underline">
+                Explore in detail
+              </Link>
+            </div>
+          ))}
         </div>
       </section>
 
