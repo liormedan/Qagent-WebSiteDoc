@@ -68,7 +68,7 @@ export default function ClientChatUiPage() {
           <li>Perform intent detection</li>
           <li>Classify or interpret user requests</li>
           <li>Build execution plans</li>
-          <li>Dispatch backend execution jobs</li>
+          <li>Dispatch API Server execution jobs</li>
           <li>Contain business decision logic</li>
         </ul>
         <p className="text-[var(--muted)]">All logic is delegated to QAgent.</p>

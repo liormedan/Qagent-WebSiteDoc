@@ -1,196 +1,159 @@
+import Link from "next/link";
 import { DocsContent } from "@/components/layout/DocsContent";
-import { ClientCapabilitiesDiagram } from "@/components/ui/ClientCapabilitiesDiagram";
 import { ClientLayerDiagram } from "@/components/ui/ClientLayerDiagram";
-import { ClientSurfaceDiagram } from "@/components/ui/ClientSurfaceDiagram";
+import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
+import { PageTitle } from "@/components/ui/PageTitle";
+import { SectionBlock } from "@/components/ui/SectionBlock";
+import { CLIENT_LAYER_CANONICAL_NAME, CLIENT_LAYER_DOC_SOURCE_OF_TRUTH } from "@/lib/client-canonical";
+
+const normalizeListItem = (value: string) => value.replace(/^(?:[-*\u2022]\s*)+/, "").trim();
+
+const clientAreas = [
+  "user interaction surfaces",
+  "runtime status/result projection",
+  "UI state and event ownership",
+  "handoff signaling to QAgent",
+];
+
+const relatedBoundaries = [
+  "Client Layer = user interaction and UI state authority",
+  "QAgent Layer = intent and planning authority",
+  "API Server Layer = job lifecycle and execution authority",
+  "Versioning = canonical output history authority",
+];
+
+const inPageLinks = [
+  { title: "Overview", subtitle: "Scope and ownership boundaries.", href: "#overview" },
+  { title: "Layer Structure Diagram", subtitle: "UI surfaces and runtime flow.", href: "#layer-structure-diagram" },
+  { title: "Layer Details", subtitle: "Responsibilities and boundaries.", href: "#layer-details" },
+  { title: "Related Docs", subtitle: "Canonical cross-layer references.", href: "#related-docs" },
+];
+
+const clientDetails = [
+  {
+    id: "interaction-surfaces",
+    title: "Interaction Surfaces",
+    subtitle: "Chat, Canvas, Workspace",
+    purpose: "Define user-facing interaction boundaries.",
+    defines: ["chat and prompt interaction", "canvas workspace interaction", "workspace navigation and control events"],
+    doesNotDefine: "intent policy decisions.",
+    href: "/docs/client/chat-ui",
+    linkLabel: "Related section",
+  },
+  {
+    id: "runtime-projection",
+    title: "Runtime Projection",
+    subtitle: "Status and result rendering",
+    purpose: "Define projection of progress and outcomes to UI.",
+    defines: ["status rendering", "result projection", "error display boundaries"],
+    doesNotDefine: "job lifecycle ownership.",
+    href: "/docs/client/runtime",
+    linkLabel: "Related section",
+  },
+  {
+    id: "state-ownership",
+    title: "State Ownership",
+    subtitle: "Client-owned state boundary",
+    purpose: "Define UI state ownership within Client Layer.",
+    defines: ["local UI state", "interaction event state", "view state transitions"],
+    doesNotDefine: "global API job status authority.",
+    href: "/docs/client/state-ownership",
+    linkLabel: "Related section",
+  },
+  {
+    id: "qagent-handoff",
+    title: "QAgent Handoff",
+    subtitle: "Structured request emission",
+    purpose: "Define how Client emits structured requests into QAgent.",
+    defines: ["request event emission", "payload shaping for QAgent", "handoff trigger boundaries"],
+    doesNotDefine: "QAgent planning semantics.",
+    href: "/docs/q-agent",
+    linkLabel: "Canonical page",
+  },
+] as const;
+
+const relatedDocs = [
+  "Client Layer = user interaction and UI runtime authority.",
+  "QAgent Layer = intent and planning authority.",
+  "API Server Layer = execution and job lifecycle authority.",
+  "System Flow = cross-layer transition authority.",
+];
 
 export default function ClientOverviewPage() {
   return (
     <DocsContent>
-    <main className="space-y-8">
-      <section className="space-y-2">
-        <h1 className="text-3xl font-semibold">Client Layer — Overview</h1>
-        <p className="text-base text-[var(--muted)]">
-          The Client Layer is the user-facing interface of WaveQ.
-        </p>
-        <p className="text-sm text-[var(--muted)]">Status: 🚧 In Progress</p>
-      </section>
+      <PageTitle title={CLIENT_LAYER_CANONICAL_NAME} description="Canonical layer page for user interaction boundaries, UI runtime ownership, and request handoff semantics." />
 
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Purpose</h2>
-        <ul className="list-disc space-y-1 pl-6 text-[var(--muted)]">
-          <li>Capturing user input</li>
-          <li>Displaying system state and feedback</li>
-          <li>Rendering audio workflows visually</li>
-          <li>Providing real-time interaction with the system</li>
-        </ul>
-        <p className="text-base text-[var(--muted)]">It is the layer where human ↔ system interaction happens.</p>
-      </section>
-
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Role in the System</h2>
-        <p className="text-[var(--muted)]">WaveQ is composed of three main layers:</p>
-        <ul className="list-disc space-y-1 pl-6 text-[var(--muted)]">
-          <li>Client Layer: User experience</li>
-          <li>QAgent Layer: Decision making (Brain)</li>
-          <li>API Server Layer: Execution</li>
-        </ul>
-        <p className="text-[var(--muted)]">The Client Layer acts as the bridge between user intent and system intelligence.</p>
-      </section>
-
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">System Interaction Flow</h2>
-        <ClientLayerDiagram />
-        <pre className="overflow-x-auto rounded-md border border-[var(--border)] bg-slate-950/40 p-4 text-sm text-slate-200">
-{`User -> Client (Chat / Canvas)
-        |
-     QAgent
-        |
-     API Server
-        |
-      Result
-        |
- Client (UI update)`}
-        </pre>
-      </section>
-
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Responsibilities</h2>
-        <div className="space-y-2 text-[var(--muted)]">
-          <p>
-            <span className="font-semibold text-slate-100">1. User Interaction</span>: receive user input (text, files, actions), provide Chat
-            interface, and support approvals/confirmations.
-          </p>
-          <p>
-            <span className="font-semibold text-slate-100">2. Visual Workflow Representation</span>: display audio pipeline, visual blocks, and
-            real-time state.
-          </p>
-          <p>
-            <span className="font-semibold text-slate-100">3. Real-time Feedback</span>: show loading/running/done states, progress indicators, and
-            instant system responses.
-          </p>
-          <p>
-            <span className="font-semibold text-slate-100">4. Audio Preview</span>: play processed audio in real-time for quick iteration before full
-            execution.
-          </p>
-          <p>
-            <span className="font-semibold text-slate-100">5. State Management</span>: maintain chat/canvas/selection state, sync with QAgent, and
-            preserve session continuity.
-          </p>
+      <section className="mt-4 rounded-md border border-cyan-400/30 bg-cyan-500/10 p-4 text-sm text-cyan-100">
+        <div className="grid gap-2 md:grid-cols-2">
+          <div className="rounded-md border border-cyan-300/30 bg-cyan-400/10 px-3 py-2">
+            <p className="text-xs font-semibold uppercase tracking-wide text-cyan-200">This page covers</p>
+            <p className="mt-1 text-sm">interaction surfaces, runtime projection, UI ownership boundaries, and QAgent handoff behavior.</p>
+          </div>
+          <div className="rounded-md border border-amber-300/30 bg-amber-400/10 px-3 py-2">
+            <p className="text-xs font-semibold uppercase tracking-wide text-amber-200">This page does not cover</p>
+            <p className="mt-1 text-sm">intent planning logic, API job orchestration, and runtime execution scheduling.</p>
+          </div>
         </div>
       </section>
 
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Non-Responsibilities (Boundaries)</h2>
-        <ul className="list-disc space-y-1 pl-6 text-[var(--muted)]">
-          <li>Perform intent detection</li>
-          <li>Build execution plans</li>
-          <li>Execute heavy processing</li>
-          <li>Manage job queues</li>
-          <li>Contain business logic</li>
-        </ul>
-        <p className="text-[var(--muted)]">These belong to QAgent and API Server.</p>
-      </section>
+      <div className="mt-5 flex flex-col gap-5">
+        <SectionBlock id="overview" title="Overview" body={[]}>
+          <p className="text-sm text-[var(--muted)]">
+            Client Layer is the user-facing boundary that captures interaction, projects runtime state, and presents final outputs.
+          </p>
+          <div className="mt-3">
+            <p className="text-sm font-semibold text-slate-100">Client areas</p>
+            <ul className="mt-1 list-disc space-y-1 pl-5 text-sm text-[var(--muted)]">
+              {clientAreas.map((item) => (
+                <li key={item}>{normalizeListItem(item)}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="mt-3 rounded-md border border-amber-400/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-100">
+            <span className="font-semibold">Out of Scope:</span> intent interpretation and API runtime orchestration decisions.
+          </div>
+          <div className="mt-3">
+            <p className="text-sm font-semibold text-slate-100">Related boundaries</p>
+            <ul className="mt-1 list-disc space-y-1 pl-5 text-sm text-[var(--muted)]">
+              {relatedBoundaries.map((item) => (
+                <li key={item}>{normalizeListItem(item)}</li>
+              ))}
+            </ul>
+          </div>
+        </SectionBlock>
 
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Design Principles</h2>
-        <ul className="list-disc space-y-1 pl-6 text-[var(--muted)]">
-          <li>Reactive UI: always reflects current system state</li>
-          <li>Separation from logic: decisions are delegated to QAgent</li>
-          <li>Real-time experience: immediate audio + visual feedback without blocking</li>
-          <li>Visual clarity: pipeline and actions remain visible and traceable</li>
-        </ul>
-      </section>
+        <SectionBlock id="in-this-page" title="In this page" body={[]}>
+          <div className="grid gap-2 text-sm md:grid-cols-2">
+            {inPageLinks.map((item) => (
+              <Link key={item.href} href={item.href} className="group rounded-md border border-[var(--border)] bg-slate-950/30 px-3 py-2 transition-colors hover:border-cyan-400/60">
+                <p className="font-semibold text-slate-100 group-hover:text-cyan-200">{item.title}</p>
+                <p className="text-xs text-slate-400">{item.subtitle}</p>
+              </Link>
+            ))}
+          </div>
+        </SectionBlock>
 
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Core Components</h2>
-        <ClientSurfaceDiagram />
-        <ul className="list-disc space-y-1 pl-6 text-[var(--muted)]">
-          <li>Chat UI: user input, conversation history, approval prompts, session context</li>
-          <li>Canvas UI: waveform view, pipeline blocks, execution state, export actions</li>
-          <li>Workspace UI: sidebar/header navigation, project/session switching, docs/tools access</li>
-          <li>Client Runtime: audio preview engine, canvas state, UI sync, auth session handling</li>
-        </ul>
-      </section>
+        <SectionBlock id="layer-structure-diagram" title="Layer Structure Diagram" body={[]}>
+          <ClientLayerDiagram />
+        </SectionBlock>
 
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Capabilities</h2>
-        <ClientCapabilitiesDiagram />
-        <ul className="list-disc space-y-1 pl-6 text-[var(--muted)]">
-          <li>Interactive chat-based control</li>
-          <li>Visual audio pipeline editing</li>
-          <li>Real-time audio preview</li>
-          <li>Dynamic UI updates</li>
-          <li>Session-based interaction</li>
-        </ul>
-      </section>
+        <SectionBlock id="layer-details" title="Layer Details" body={[]}>
+          <LayerSpecAccordion items={[...clientDetails]} />
+        </SectionBlock>
 
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Technologies</h2>
-        <div className="space-y-2 text-[var(--muted)]">
-          <p><span className="font-semibold text-slate-100">Frontend Framework</span>: React / Next.js</p>
-          <p><span className="font-semibold text-slate-100">UI System</span>: Tailwind CSS, shadcn/ui components</p>
-          <p><span className="font-semibold text-slate-100">State Management</span>: Zustand / React state</p>
-          <p><span className="font-semibold text-slate-100">Audio Processing (Client-side)</span>: Web Audio API, OfflineAudioContext</p>
-        </div>
-      </section>
-
-      <section className="space-y-3">
-        <h2 className="text-2xl font-semibold">Integration with QAgent</h2>
-        <div className="space-y-1">
-          <p className="text-sm font-semibold text-slate-100">Input to QAgent</p>
-          <pre className="overflow-x-auto rounded-md border border-[var(--border)] bg-slate-950/40 p-4 text-sm text-slate-200">{`{
-  "message": "...",
-  "files": [...]
-}`}</pre>
-        </div>
-        <div className="space-y-1">
-          <p className="text-sm font-semibold text-slate-100">Output from QAgent</p>
-          <pre className="overflow-x-auto rounded-md border border-[var(--border)] bg-slate-950/40 p-4 text-sm text-slate-200">{`{
-  "intent": "...",
-  "plan": [...],
-  "requiresApproval": true
-}`}</pre>
-        </div>
-        <p className="text-[var(--muted)]">
-          Behavior: sends user input to QAgent, receives structured response, updates UI accordingly, and triggers approval or execution flows.
-        </p>
-      </section>
-
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Mental Model</h2>
-        <p className="text-[var(--muted)]">
-          Think of the Client Layer as the Interface Brain Extension: it does not decide, it makes decisions visible, and allows users to interact
-          with them.
-        </p>
-      </section>
-
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Future Evolution</h2>
-        <ul className="list-disc space-y-1 pl-6 text-[var(--muted)]">
-          <li>Fully interactive audio canvas (editor-like)</li>
-          <li>Drag-and-drop pipeline editing</li>
-          <li>Real-time collaborative sessions</li>
-          <li>Voice interaction</li>
-          <li>AI-assisted UI suggestions</li>
-        </ul>
-      </section>
-
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Summary</h2>
-        <p className="text-[var(--muted)]">
-          The Client Layer is the user experience layer, the visual representation of the system, and the interaction point between human and AI.
-        </p>
-      </section>
-
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Anti-Patterns</h2>
-        <ul className="list-disc space-y-1 pl-6 text-[var(--muted)]">
-          <li>Rendering UI from execution plan</li>
-          <li>Mixing DSP logic inside UI</li>
-          <li>Letting Canvas decide structure</li>
-        </ul>
-      </section>
-    </main>
+        <SectionBlock id="related-docs" title="Related Docs" body={[]}>
+          <ul className="list-disc space-y-1 pl-5 text-sm text-[var(--muted)]">
+            {relatedDocs.map((item) => (
+              <li key={item}>{normalizeListItem(item)}</li>
+            ))}
+          </ul>
+          <p className="mt-3 text-sm text-[var(--muted)]">
+            Canonical location: <span className="font-semibold text-slate-100">{CLIENT_LAYER_DOC_SOURCE_OF_TRUTH.canonicalLocation}</span>
+          </p>
+          <p className="text-sm text-[var(--muted)]">{CLIENT_LAYER_DOC_SOURCE_OF_TRUTH.rule}</p>
+        </SectionBlock>
+      </div>
     </DocsContent>
   );
 }

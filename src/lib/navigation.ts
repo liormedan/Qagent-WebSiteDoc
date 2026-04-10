@@ -45,8 +45,8 @@ export const docsNavigation: DocNavItem[] = [
     group: "Architecture",
   },
   {
-    title: "System Flow",
-    description: "Simplified end-to-end flow from user request to output.",
+    title: "QAgent Flow",
+    description: "QAgent-layer flow from request to output.",
     href: "/docs/system-flow",
     group: "Architecture",
   },
@@ -57,9 +57,9 @@ export const docsNavigation: DocNavItem[] = [
     group: "Architecture",
   },
   {
-    title: "System Map",
-    description: "Ordered modular architecture map from core to versioned output.",
-    href: "/docs/architecture",
+    title: "System Structure",
+    description: "Primary WaveQ system entry and full layer map.",
+    href: "/docs/system",
     group: "Architecture",
   },
   {
@@ -69,8 +69,8 @@ export const docsNavigation: DocNavItem[] = [
     group: "Architecture",
   },
   {
-    title: "Q Agent",
-    description: "Top-level mission and system boundaries.",
+    title: "QAgent Layer",
+    description: "QAgent layer reference page.",
     href: "/docs/q-agent",
     group: "Architecture",
   },

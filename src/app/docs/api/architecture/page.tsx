@@ -1,110 +1,106 @@
-import { ApiArchitectureLayersDiagram } from "@/components/ui/ApiArchitectureLayersDiagram";
-import { API_SERVER_CANONICAL_NAME, API_SERVER_CANONICAL_FLOW, API_SERVER_DOC_SOURCE_OF_TRUTH } from "@/lib/api-server-canonical";
+import Link from "next/link";
+import { DocsContent } from "@/components/layout/DocsContent";
+import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
+import { PageTitle } from "@/components/ui/PageTitle";
+import { SectionBlock } from "@/components/ui/SectionBlock";
+import { API_SERVER_CANONICAL_NAME } from "@/lib/api-server-canonical";
+
+const architectureDetails = [
+  {
+    id: "gateway-layer",
+    title: "API Gateway Layer",
+    subtitle: "Endpoint entry surface",
+    purpose: "Define endpoint ownership and inbound request surface.",
+    defines: ["`/run`, `/jobs`, `/files`, `/health` endpoints", "entry boundary", "handoff to Request Handling"],
+    doesNotDefine: "policy decisions and runtime scheduling.",
+    href: "/docs/api/gateway",
+    linkLabel: "Related section",
+  },
+  {
+    id: "request-handling",
+    title: "Request Handling",
+    subtitle: "Validation and routing",
+    purpose: "Define validation and routing before orchestration.",
+    defines: ["validation", "auth checks", "request routing"],
+    doesNotDefine: "job lifecycle ownership.",
+    href: "/docs/api/request-handling",
+    linkLabel: "Related section",
+  },
+  {
+    id: "job-orchestration",
+    title: "Job Orchestration",
+    subtitle: "Queue and lifecycle",
+    purpose: "Define queue management and job lifecycle authority.",
+    defines: ["queue manager", "job manager", "worker manager", "status tracker"],
+    doesNotDefine: "execution action semantics.",
+    href: "/docs/api/job-orchestration",
+    linkLabel: "Related section",
+  },
+  {
+    id: "execution-layer",
+    title: "Execution Layer",
+    subtitle: "Runtime action execution",
+    purpose: "Define plan interpretation and action dispatch architecture.",
+    defines: ["execution engine", "plan interpreter", "action dispatcher", "result collector"],
+    doesNotDefine: "job status authority.",
+    href: "/docs/api/execution",
+    linkLabel: "Related section",
+  },
+] as const;
 
 export default function ApiArchitecturePage() {
   return (
-    <main className="space-y-6">
-      <section className="space-y-2">
-        <h1 className="text-3xl font-semibold">{API_SERVER_CANONICAL_NAME} - Architecture</h1>
-        <p className="text-sm text-emerald-300">Status: LOCKED (structure)</p>
+    <DocsContent>
+      <PageTitle title={`${API_SERVER_CANONICAL_NAME} - Architecture`} description="Canonical architecture map for API Server subsystems and responsibilities." />
+
+      <section className="mt-4 rounded-md border border-cyan-400/30 bg-cyan-500/10 p-4 text-sm text-cyan-100">
+        <div className="grid gap-2 md:grid-cols-2">
+          <div className="rounded-md border border-cyan-300/30 bg-cyan-400/10 px-3 py-2">
+            <p className="text-xs font-semibold uppercase tracking-wide text-cyan-200">This page covers</p>
+            <p className="mt-1 text-sm">API subsystem structure, module ownership, and responsibilities map.</p>
+          </div>
+          <div className="rounded-md border border-amber-300/30 bg-amber-400/10 px-3 py-2">
+            <p className="text-xs font-semibold uppercase tracking-wide text-amber-200">This page does not cover</p>
+            <p className="mt-1 text-sm">deep runtime implementation details and policy internals.</p>
+          </div>
+        </div>
       </section>
 
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Layer Tree (Canonical)</h2>
-        <pre className="overflow-x-auto rounded-md border border-[var(--border)] bg-slate-950/40 p-4 text-sm text-slate-200">
-{`API Server Layer
-├── API Gateway Layer
-│   ├── /run
-│   ├── /jobs
-│   ├── /files
-│   └── /health
-│
-├── Request Handling
-│   ├── Validation
-│   ├── Authentication / Authorization
-│   ├── Rate / Load Handling
-│   └── Request Routing
-│
-├── Job Orchestration
-│   ├── Queue Manager
-│   ├── Job Manager
-│   ├── Worker Manager
-│   └── Status Tracker
-│
-├── Execution Layer
-│   ├── Execution Engine
-│   ├── Plan Interpreter
-│   ├── Action Dispatcher
-│   └── Result Collector
-│
-└── Responsibilities
-    ├── Accept High Volume Requests
-    ├── Queue Jobs
-    ├── Manage Concurrency
-    ├── Dispatch Execution
-    └── Return Results / Status`}
-        </pre>
-      </section>
+      <div className="mt-5 flex flex-col gap-5">
+        <SectionBlock id="overview" title="Overview" body={[]}>
+          <p className="text-sm text-[var(--muted)]">API Architecture organizes gateway, validation, orchestration, and execution modules under one runtime contract surface.</p>
+          <div className="mt-3 rounded-md border border-amber-400/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-100"><span className="font-semibold">Out of Scope:</span> subsystem internal algorithms.</div>
+          <p className="mt-3 text-sm text-[var(--muted)]">Related boundaries: Architecture = module topology, subsystem pages = deep spec authority.</p>
+        </SectionBlock>
 
-      <section className="space-y-2">
-        <h2 id="api-gateway-layer" className="text-2xl font-semibold flex items-center gap-3">
-          API Gateway Layer
-          <a href="/docs/api/gateway" className="text-xs font-bold text-sky-400 border border-sky-400/30 px-2 py-0.5 rounded hover:bg-sky-400/10 transition-colors uppercase tracking-widest">
-            Structural Lock Source of Truth
-          </a>
-        </h2>
-        <p className="text-[var(--muted)]">Owns the endpoint surface (`/run`, `/jobs`, `/files`, `/health`) and accepts external requests into API Server Layer.</p>
-        <p className="text-sm text-[var(--muted)] italic">
-          Defines the legal entry boundary, structural validation rules, and the immutable handoff context.
-        </p>
-      </section>
+        <SectionBlock id="in-this-page" title="In this page" body={[]}>
+          <div className="grid gap-2 text-sm md:grid-cols-2">
+            <Link href="#overview" className="rounded-md border border-[var(--border)] bg-slate-950/30 px-3 py-2">Overview</Link>
+            <Link href="#architecture-structure-diagram" className="rounded-md border border-[var(--border)] bg-slate-950/30 px-3 py-2">Architecture Structure Diagram</Link>
+            <Link href="#architecture-details" className="rounded-md border border-[var(--border)] bg-slate-950/30 px-3 py-2">Architecture Details</Link>
+            <Link href="#related-docs" className="rounded-md border border-[var(--border)] bg-slate-950/30 px-3 py-2">Related Docs</Link>
+          </div>
+        </SectionBlock>
 
+        <SectionBlock id="architecture-structure-diagram" title="Architecture Structure Diagram" body={[]}>
+          <div className="rounded-md border border-[var(--border)] bg-slate-950/30 p-4">
+            <div className="mx-auto max-w-sm rounded-md border border-cyan-400/40 bg-cyan-500/10 px-3 py-2 text-center text-sm font-semibold text-cyan-100">API Server Layer</div>
+            <div className="mx-auto h-4 w-px bg-cyan-400/40" />
+            <div className="grid gap-3 md:grid-cols-2">
+              <div className="rounded-md border border-[var(--border)] bg-slate-950/40 p-3"><p className="text-xs font-semibold uppercase tracking-wide text-slate-300">Entry & Validation</p><ul className="mt-2 list-disc pl-5 text-sm text-[var(--muted)]"><li>API Gateway</li><li>Request Handling</li></ul></div>
+              <div className="rounded-md border border-[var(--border)] bg-slate-950/40 p-3"><p className="text-xs font-semibold uppercase tracking-wide text-slate-300">Runtime & Output</p><ul className="mt-2 list-disc pl-5 text-sm text-[var(--muted)]"><li>Job Orchestration</li><li>Execution Layer</li></ul></div>
+            </div>
+          </div>
+        </SectionBlock>
 
-      <section className="space-y-2">
-        <h2 id="request-handling" className="text-2xl font-semibold flex items-center gap-3">
-          Request Handling
-          <a href="/docs/api/request-handling" className="text-xs font-bold text-sky-400 border border-sky-400/30 px-2 py-0.5 rounded hover:bg-sky-400/10 transition-colors uppercase tracking-widest">
-            Structural Lock Source of Truth
-          </a>
-        </h2>
-        <p className="text-[var(--muted)]">Applies validation, authentication/authorization, rate/load handling, and routing before orchestration.</p>
-        <p className="text-sm text-[var(--muted)] italic">
-          Acts as the deterministic technical gatekeeper between the Gateway and the Decision System.
-        </p>
-      </section>
+        <SectionBlock id="architecture-details" title="Architecture Details" body={[]}>
+          <LayerSpecAccordion items={[...architectureDetails]} />
+        </SectionBlock>
 
-      <section className="space-y-2">
-        <h2 id="job-orchestration" className="text-2xl font-semibold">Job Orchestration</h2>
-        <p className="text-[var(--muted)]">Manages queue, job lifecycle, worker assignment, and status tracking as the orchestration control surface.</p>
-      </section>
-
-      <section className="space-y-2">
-        <h2 id="execution-layer" className="text-2xl font-semibold">Execution Layer</h2>
-        <p className="text-[var(--muted)]">Coordinates executable plan interpretation, dispatch, and result collection from runtime processing.</p>
-      </section>
-
-      <section className="space-y-2">
-        <h2 id="responsibilities" className="text-2xl font-semibold">Responsibilities</h2>
-        <p className="text-[var(--muted)]">Accept high-volume requests, queue jobs, manage concurrency, dispatch execution, and return results/status.</p>
-      </section>
-
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Canonical Flow</h2>
-        <p className="rounded-md border border-[var(--border)] bg-slate-950/40 p-4 text-sm text-slate-200">{API_SERVER_CANONICAL_FLOW}</p>
-      </section>
-
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">System Position</h2>
-        <ApiArchitectureLayersDiagram />
-      </section>
-
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Documentation Authority</h2>
-        <p className="text-[var(--muted)]">
-          Canonical location: <span className="font-semibold text-slate-100">{API_SERVER_DOC_SOURCE_OF_TRUTH.canonicalLocation}</span>
-        </p>
-        <p className="text-[var(--muted)]">{API_SERVER_DOC_SOURCE_OF_TRUTH.rule}</p>
-      </section>
-    </main>
+        <SectionBlock id="related-docs" title="Related Docs" body={[]}>
+          <ul className="list-disc pl-5 text-sm text-[var(--muted)]"><li>Architecture page = module topology authority.</li><li>Gateway/Request/Orchestration/Execution pages = deep specification authority.</li></ul>
+        </SectionBlock>
+      </div>
+    </DocsContent>
   );
 }

@@ -38,9 +38,11 @@ export default function ImplementationBaselinePage() {
         <SectionBlock
           title="Documentation Governance (Source of Truth)"
           body={[
-            "Structural source of truth: rendered architecture docs under /src/app/docs/architecture/* plus /docs/system-flow.",
+            "QAgent source of truth: /docs/architecture (plus /docs/system-flow for end-to-end flow reference).",
+            "Client source of truth: /docs/client.",
+            "API Server source of truth: /docs/api (with /docs/api/job-orchestration and /docs/api/execution as locked subsystem canonicals).",
             "Secondary content source: /src/content/* is non-authoritative support content and may contain placeholders.",
-            "Rule: if a statement in /src/content/* conflicts with /src/app/docs/architecture/*, the architecture page is authoritative.",
+            "Rule: if a statement in /src/content/* conflicts with canonical layer pages above, canonical layer pages are authoritative.",
             "Future updates must modify authoritative architecture pages first; supporting content may then be synchronized.",
           ]}
           collapsible

@@ -106,7 +106,7 @@ export const CONCEPTS: ConceptDefinition[] = [
   },
   {
     id: "q-agent",
-    label: "Q Agent",
+    label: "QAgent",
     href: "/docs/q-agent",
     description: "Planning and orchestration layer translating user requests into deterministic actions.",
     priority: 1,
@@ -277,3 +277,43 @@ function assertConceptRegistryConsistency(concepts: ConceptDefinition[]): void {
 }
 
 assertConceptRegistryConsistency(CONCEPTS);
+
+export interface CanonicalConceptRegistryItem {
+  concept: string;
+  description: string;
+  canonical_page: string;
+  owned_by: string;
+}
+
+export const CANONICAL_CONCEPT_REGISTRY: CanonicalConceptRegistryItem[] = [
+  { concept: "WaveQ System", description: "Unified multi-layer architecture and documentation model.", canonical_page: "/docs/system", owned_by: "System" },
+  { concept: "Layer", description: "Top-level bounded documentation and ownership domain.", canonical_page: "/docs/system", owned_by: "System" },
+  { concept: "Flow", description: "Ordered transition path between system stages.", canonical_page: "/docs/system-flow", owned_by: "System" },
+
+  { concept: "QAgent", description: "Reasoning and orchestration layer between client and API.", canonical_page: "/docs/q-agent", owned_by: "QAgent Layer" },
+  { concept: "QCore", description: "Central orchestrator module within QAgent core modules.", canonical_page: "/docs/architecture/modules/qagent-core", owned_by: "QAgent Layer" },
+  { concept: "Plan", description: "Structured executable action model prepared by QAgent planning stages.", canonical_page: "/docs/architecture/modules/dal", owned_by: "QAgent Layer" },
+  { concept: "Intent", description: "Structured user-goal interpretation used to drive planning.", canonical_page: "/docs/architecture/modules/intent-clarification", owned_by: "QAgent Layer" },
+  { concept: "Approval", description: "User-gated control boundary before execution handoff.", canonical_page: "/docs/architecture/modules/approval", owned_by: "QAgent Layer" },
+  { concept: "DAL", description: "Planning subsystem that converts validated intent into executable and UI plans.", canonical_page: "/docs/architecture/modules/dal", owned_by: "QAgent Layer" },
+  { concept: "UAgent", description: "UI-facing execution mediation module in QAgent flow.", canonical_page: "/docs/architecture/modules/uagent", owned_by: "QAgent Layer" },
+
+  { concept: "API Server Layer", description: "Execution orchestration boundary exposing API runtime surfaces.", canonical_page: "/docs/api", owned_by: "API Server Layer" },
+  { concept: "Execution Request Envelope", description: "Canonical request entity sent from QAgent to API /run.", canonical_page: "/docs/api", owned_by: "API Server Layer" },
+  { concept: "Job", description: "Tracked execution unit managed through orchestration lifecycle.", canonical_page: "/docs/api/job-orchestration", owned_by: "API Server Layer" },
+  { concept: "Job Lifecycle", description: "State progression model for job status and progress ownership.", canonical_page: "/docs/api/job-orchestration", owned_by: "API Server Layer" },
+  { concept: "Queue", description: "Orchestration staging mechanism for runnable job processing.", canonical_page: "/docs/api/job-orchestration", owned_by: "API Server Layer" },
+
+  { concept: "Execution Layer", description: "Subsystem that translates runnable context into runtime actions and result package.", canonical_page: "/docs/api/execution", owned_by: "API Server Layer" },
+  { concept: "Plan Interpreter", description: "Execution module that derives executable action sequence from immutable plan context.", canonical_page: "/docs/api/execution", owned_by: "Execution Layer" },
+  { concept: "Action Dispatcher", description: "Execution module that routes actions to runtime/worker executors.", canonical_page: "/docs/api/execution", owned_by: "Execution Layer" },
+  { concept: "Result Collector", description: "Execution module that emits the canonical Execution Result Package.", canonical_page: "/docs/api/execution", owned_by: "Execution Layer" },
+
+  { concept: "Versioning", description: "Version lifecycle ownership for result references and history.", canonical_page: "/docs/api/versioning", owned_by: "API Server Layer" },
+  { concept: "Version", description: "Immutable versioned output reference in lifecycle history.", canonical_page: "/docs/api/versioning", owned_by: "API Server Layer" },
+  { concept: "Artifact", description: "Produced execution output item included in result packaging/version records.", canonical_page: "/docs/api/execution", owned_by: "Execution Layer" },
+
+  { concept: "Client Layer", description: "User-facing layer for interaction and UI/runtime projection.", canonical_page: "/docs/client", owned_by: "Client Layer" },
+  { concept: "UI State", description: "Client-owned state model for deterministic interface rendering and updates.", canonical_page: "/docs/client/state-ownership", owned_by: "Client Layer" },
+  { concept: "Session", description: "Session-scoped interaction and state continuity context.", canonical_page: "/docs/client/state-ownership", owned_by: "Client Layer" },
+];

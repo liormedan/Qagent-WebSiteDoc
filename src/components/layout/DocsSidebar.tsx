@@ -2,40 +2,30 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type SidebarSection = {
   title: string;
   href?: string;
+  level?: "primary" | "secondary";
   items: Array<{ label: string; href: string }>;
 };
 
 const qagentSections: SidebarSection[] = [
   {
-    title: "QAgent",
+    title: "Overview",
     items: [
-      { label: "Docs Home", href: "/docs" },
-      { label: "Getting Started", href: "/docs/getting-started" },
-      { label: "System Flow", href: "/docs/system-flow" },
-      { label: "Terminology", href: "/docs/terminology" },
+      { label: "QAgent Overview", href: "/docs/q-agent" },
       { label: "Architecture", href: "/docs/architecture" },
-      { label: "Main QCore Structure", href: "/docs/qcore" },
-      { label: "Schema Registry", href: "/docs/architecture/contracts/schema-registry" },
-      { label: "Lineage Model", href: "/docs/architecture/contracts/lineage-model" },
-      { label: "Client–QAgent ID Mapping", href: "/docs/architecture/contracts/client-qagent-id-mapping" },
-      { label: "Control Policy Matrix", href: "/docs/architecture/policies/control-policy-matrix" },
-      { label: "Failure Policy", href: "/docs/architecture/policies/failure-policy" },
-      { label: "Session Isolation", href: "/docs/architecture/policies/session-isolation" },
-      { label: "Approval Modify Contract", href: "/docs/architecture/approval/modify-loop-contract" },
-      { label: "DSP Engine Abstraction", href: "/docs/architecture/dagent/dsp-engine-abstraction" },
-      { label: "Implementation Baseline", href: "/docs/architecture/implementation-baseline" },
+      { label: "Concept Registry", href: "/docs/concepts" },
     ],
   },
   {
-    title: "Core Flow",
+    title: "Core Modules",
     items: [
+      { label: "Main QCore Structure", href: "/docs/qcore" },
       { label: "QCore", href: "/docs/architecture/modules/qagent-core" },
       { label: "Files Handler", href: "/docs/architecture/modules/files-handler" },
       { label: "Analyzer", href: "/docs/architecture/modules/analyzer" },
@@ -44,115 +34,105 @@ const qagentSections: SidebarSection[] = [
       { label: "UAgent", href: "/docs/architecture/modules/uagent" },
       { label: "Approval", href: "/docs/architecture/modules/approval" },
       { label: "DAgent", href: "/docs/architecture/modules/dagent" },
-      { label: "Versioning", href: "/docs/architecture/modules/versioning" },
+      { label: "Versioning", href: "/docs/architecture/modules/versioning" }
     ],
   },
   {
-    title: "Decision System",
+    title: "Contracts",
     items: [
-      { label: "Orchestration Overview", href: "/docs/orchestration/overview" },
+      { label: "Schema Registry", href: "/docs/architecture/contracts/schema-registry" },
+      { label: "Client-QAgent ID Mapping", href: "/docs/architecture/contracts/client-qagent-id-mapping" },
+      { label: "Lineage Model", href: "/docs/architecture/contracts/lineage-model" },
+      { label: "Approval Modify Contract", href: "/docs/architecture/approval/modify-loop-contract" }
+    ],
+  },
+  {
+    title: "Policies",
+    items: [
+      { label: "Control Policy Matrix", href: "/docs/architecture/policies/control-policy-matrix" },
+      { label: "Failure Policy", href: "/docs/architecture/policies/failure-policy" },
+      { label: "Session Isolation", href: "/docs/architecture/policies/session-isolation" }
+    ],
+  },
+  {
+    title: "System Flow",
+    items: [
+      { label: "QAgent Flow", href: "/docs/system-flow" },
+      { label: "Orchestration Flow", href: "/docs/orchestration/orchestration-flow" },
       { label: "Routing Logic", href: "/docs/orchestration/routing-logic" },
-      { label: "State Machine", href: "/docs/orchestration/state-machine" },
-      { label: "Failure Handling", href: "/docs/orchestration/failure-handling" },
-    ],
-  },
-  {
-    title: "Audio System",
-    items: [
-      { label: "Audio Sandbox", href: "/docs/audio-sandbox/overview" },
-      { label: "Audio Comparison", href: "/docs/audio-comparison/overview" },
-      { label: "Audio Memory", href: "/docs/audio-memory" },
-      { label: "Audio DAL", href: "/docs/audio-dal" },
-    ],
-  },
-  {
-    title: "Execution",
-    items: [
-      { label: "Execution Runtime", href: "/docs/execution-runtime/overview" },
-      { label: "Runtime Error Handling", href: "/docs/execution-runtime/error-handling" },
-      { label: "Cancellation and Retry", href: "/docs/execution-runtime/cancellation-and-retry" },
-    ],
-  },
-  {
-    title: "Versioning",
-    items: [
-      { label: "Versioning Module", href: "/docs/architecture/modules/versioning" },
-      { label: "Version Manager", href: "/docs/architecture/modules/versioning/version-manager" },
-      { label: "Diff Engine", href: "/docs/architecture/modules/versioning/diff-engine" },
-      { label: "Output Versioning", href: "/docs/execution-runtime/output-versioning" },
+      { label: "State Machine", href: "/docs/orchestration/state-machine" }
     ],
   },
   {
     title: "Implementation",
     items: [
+      { label: "Implementation Baseline", href: "/docs/architecture/implementation-baseline" },
       { label: "Implementation Map", href: "/docs/implementation-map" },
-      { label: "Module Design", href: "/docs/module-design" },
+      { label: "Implementation Notes", href: "/docs/module-design" },
       { label: "Function Contracts", href: "/docs/function-contracts" },
-      { label: "Testing Strategy", href: "/docs/testing-strategy" },
-      { label: "API", href: "/docs/api-reference" },
+      { label: "Testing Strategy", href: "/docs/testing-strategy" }
     ],
   },
 ];
-
 const apiSections: SidebarSection[] = [
   {
-    title: "API SERVER",
+    title: "API Server Layer",
     href: "/docs/api",
+    level: "primary",
     items: [],
   },
   {
     title: "Core Flow",
     href: "/docs/api/core-flow",
+    level: "secondary",
     items: [],
   },
   {
     title: "Architecture",
     href: "/docs/api/architecture",
+    level: "secondary",
     items: [],
   },
   {
     title: "API Gateway Layer",
-    href: "/docs/api/architecture#api-gateway-layer",
+    href: "/docs/api/gateway",
+    level: "secondary",
     items: [],
   },
   {
     title: "Request Handling",
     href: "/docs/api/request-handling",
+    level: "secondary",
     items: [],
   },
   {
     title: "Job Orchestration",
-    href: "/docs/api/architecture#job-orchestration",
+    href: "/docs/api/job-orchestration",
+    level: "secondary",
     items: [],
   },
   {
     title: "Execution Layer",
-    href: "/docs/api/architecture#execution-layer",
-    items: [],
-  },
-  {
-    title: "Responsibilities",
-    href: "/docs/api/architecture#responsibilities",
+    href: "/docs/api/execution",
+    level: "secondary",
     items: [],
   },
   {
     title: "Decision System",
     href: "/docs/api/decision-system",
-    items: [],
-  },
-  {
-    title: "Execution",
-    href: "/docs/api/execution",
+    level: "secondary",
     items: [],
   },
   {
     title: "Versioning",
     href: "/docs/api/versioning",
+    level: "secondary",
     items: [],
   },
   {
     title: "Implementation",
     href: "/docs/api/implementation",
+    level: "secondary",
     items: [],
   },
 ];
@@ -240,38 +220,145 @@ const clientSections: SidebarSection[] = [
   },
 ];
 
+const systemSections: SidebarSection[] = [
+  {
+    title: "System Overview",
+    href: "/docs/system",
+    items: [],
+  },
+  {
+    title: "Client / Frontend Layer",
+    href: "/docs/system/client-frontend-layer",
+    items: [],
+  },
+  {
+    title: "QAgent Layer",
+    href: "/docs/system/qagent-layer",
+    items: [],
+  },
+  {
+    title: "API Server Layer",
+    href: "/docs/system/api-server-layer",
+    items: [],
+  },
+  {
+    title: "DSP / Processing Layer",
+    href: "/docs/system/dsp-processing-layer",
+    items: [],
+  },
+  {
+    title: "Data Layer",
+    href: "/docs/system/data-layer",
+    items: [],
+  },
+  {
+    title: "Infrastructure Layer",
+    href: "/docs/system/infrastructure-layer",
+    items: [],
+  },
+  {
+    title: "Auth & Security Layer",
+    href: "/docs/system/auth-security-layer",
+    items: [],
+  },
+  {
+    title: "End-to-End Flow (cross-layer flow)",
+    href: "/docs/system/end-to-end-flow",
+    items: [],
+  },
+];
+
+const dspSections: SidebarSection[] = [
+  {
+    title: "Overview",
+    href: "/docs/dsp-layer",
+    items: [],
+  },
+  {
+    title: "Core Specification",
+    href: "/docs/dsp-layer/core-specification",
+    items: [],
+  },
+  {
+    title: "Contracts",
+    href: "/docs/dsp-layer/contracts",
+    items: [],
+  },
+  {
+    title: "Processing Engine",
+    href: "/docs/dsp-layer/processing-engine",
+    items: [],
+  },
+  {
+    title: "System Integration",
+    href: "/docs/dsp-layer/system-integration",
+    items: [],
+  },
+];
+
 function toQAgentHref(href: string): string {
-  if (!href.startsWith("/docs")) return href;
-  return `/docs/qagent${href.replace("/docs", "")}`;
+  return href;
+}
+
+function normalizePath(path: string): string {
+  if (!path) return "";
+  return path.length > 1 && path.endsWith("/") ? path.slice(0, -1) : path;
+}
+
+function isSectionActive(pathname: string, href: string): boolean {
+  const path = normalizePath(pathname);
+  const target = normalizePath(href.split("#")[0] ?? href);
+  if (!target) return false;
+  if (target === "/docs/dsp-layer") {
+    return path === target;
+  }
+  return path === target || path.startsWith(`${target}/`);
+}
+
+function useHydrated() {
+  return useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 }
 
 export function DocsSidebar({ className, onNavigate }: { className?: string; onNavigate?: () => void }) {
   const pathname = usePathname();
-  const [mounted, setMounted] = useState(false);
-  const [openSection, setOpenSection] = useState<string>("");
+  const hydrated = useHydrated();
+  const [openSection, setOpenSection] = useState<string>("Core Specification");
+  const safePathname = hydrated ? pathname : "";
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return <aside className={cn("h-full min-h-0 overflow-y-scroll bg-black px-4 py-5", className)} />;
-  }
-
-  const clientContext = pathname.startsWith("/docs/client");
-  const apiContext = pathname.startsWith("/docs/api");
-  const singleLevelContext = apiContext || clientContext;
+  const clientContext = safePathname.startsWith("/docs/client");
+  const apiContext = safePathname.startsWith("/docs/api");
+  const dspContext =
+    safePathname.startsWith("/docs/dsp-layer") ||
+    safePathname.startsWith("/docs/architecture/dagent/dsp-engine-abstraction");
+  const systemContext =
+    safePathname === "/docs" ||
+    safePathname.startsWith("/docs/system") ||
+    safePathname.startsWith("/docs/system-flow") ||
+    safePathname.startsWith("/docs/data-layer") ||
+    safePathname.startsWith("/docs/auth-security") ||
+    safePathname.startsWith("/docs/infrastructure-layer");
+  const singleLevelContext = apiContext || clientContext || systemContext || dspContext;
   const sections = apiContext
     ? apiSections
     : clientContext
       ? clientSections
-      : qagentSections.map((section) => ({
+      : dspContext
+        ? dspSections
+      : systemContext
+        ? systemSections
+        : qagentSections.map((section) => ({
           ...section,
           items: section.items.map((item) => ({
             ...item,
             href: toQAgentHref(item.href),
           })),
         }));
+
+  const activeOpenSection = openSection;
 
   return (
     <aside className={cn("h-full min-h-0 overflow-y-scroll bg-black px-4 py-5", className)}>
@@ -283,8 +370,10 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
                 href={section.href}
                 onClick={onNavigate}
                 className={cn(
-                  "group flex items-center justify-between rounded-md px-2 py-1 text-left text-xs font-semibold uppercase tracking-[0.14em] transition-colors",
-                  !section.href.includes("#") && pathname === section.href.split("#")[0]
+                  "group flex items-center justify-between rounded-md px-2 py-1 text-left text-xs uppercase tracking-[0.14em] transition-colors",
+                  apiContext && section.level === "primary" ? "font-bold text-slate-200" : "font-semibold",
+                  apiContext && section.level === "secondary" ? "pl-5" : "",
+                  isSectionActive(safePathname, section.href)
                     ? "bg-slate-900 text-slate-100"
                     : "text-slate-500 hover:bg-slate-950/70 hover:text-slate-300",
                 )}
@@ -293,37 +382,37 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
                 <ChevronRight
                   className={cn(
                     "h-4 w-4 shrink-0 transition-colors",
-                    !section.href.includes("#") && pathname === section.href.split("#")[0] ? "text-slate-200" : "text-slate-500 group-hover:text-slate-300",
+                    isSectionActive(safePathname, section.href) ? "text-slate-200" : "text-slate-500 group-hover:text-slate-300",
                   )}
                 />
               </Link>
             ) : (
               <button
                 type="button"
-                onClick={() => setOpenSection((current) => (current === section.title ? "" : section.title))}
-                className="flex w-full items-center justify-between rounded-md px-2 py-1 text-left text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 transition-colors hover:bg-slate-950/70 hover:text-slate-300"
-                aria-expanded={openSection === section.title}
+                onClick={() => setOpenSection(activeOpenSection === section.title ? "" : section.title)}
+                className="flex w-full items-center justify-between rounded-md px-2.5 py-2 text-left text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 transition-colors hover:bg-slate-950/70 hover:text-slate-300"
+                aria-expanded={activeOpenSection === section.title}
               >
-                <span>{section.title}</span>
-                <ChevronRight className={cn("h-4 w-4 shrink-0 transition-transform", openSection === section.title ? "rotate-90 text-slate-300" : "text-slate-500")} />
+                <span className="pe-3 whitespace-normal leading-5">{section.title}</span>
+                <ChevronRight className={cn("h-4 w-4 shrink-0 transition-transform", activeOpenSection === section.title ? "rotate-90 text-slate-300" : "text-slate-500")} />
               </button>
             )}
 
-            {!singleLevelContext && openSection === section.title ? (
+            {!singleLevelContext && activeOpenSection === section.title ? (
               <div className="space-y-0.5">
                 {section.items.map((item) => {
-                  const active = pathname === item.href;
+                  const active = isSectionActive(safePathname, item.href);
                   return (
                     <Link
                       key={item.href}
                       href={item.href}
                       onClick={onNavigate}
                       className={cn(
-                        "group flex items-center justify-between overflow-hidden rounded-md px-2.5 py-1.5 text-[14px] leading-6 transition-colors",
+                        "group flex items-center justify-between rounded-md px-2.5 py-2 text-left text-[11px] font-semibold uppercase tracking-[0.12em] transition-colors",
                         active ? "bg-slate-900 text-slate-50" : "text-slate-300 hover:bg-slate-950 hover:text-slate-100",
                       )}
                     >
-                      <span className="flex-1 truncate pe-3">{item.label}</span>
+                      <span className="flex-1 pe-3 whitespace-normal leading-5">{item.label}</span>
                       <ChevronRight className={cn("h-4 w-4 shrink-0 text-slate-500 transition-colors group-hover:text-slate-300", active ? "text-slate-200" : "")} />
                     </Link>
                   );
@@ -336,3 +425,4 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
     </aside>
   );
 }
+
