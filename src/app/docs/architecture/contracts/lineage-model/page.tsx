@@ -1,82 +1,105 @@
-import { DocsContent } from "@/components/layout/DocsContent";
-import { PageTitle } from "@/components/ui/PageTitle";
-import { SectionBlock } from "@/components/ui/SectionBlock";
-import { QAGENT_CANONICAL_FLOW } from "@/lib/qagent-canonical";
+import { DocsTemplatePage } from "@/components/ui/DocsTemplatePage";
+
+const lineageDetails = [
+  {
+    id: "request-session-ids",
+    title: "Request and Session IDs",
+    subtitle: "Root lineage identifiers",
+    purpose: "Define base identifiers that anchor all downstream lineage.",
+    defines: [
+      "request_id created at QCore intake.",
+      "session_id scoped to active session lifecycle.",
+      "Both IDs propagate across all critical boundaries.",
+    ],
+    doesNotDefine: "Module-specific internal telemetry identifiers.",
+    href: "/docs/architecture/contracts/lineage-model",
+  },
+  {
+    id: "decision-plan-approval-ids",
+    title: "Decision, Plan, and Approval IDs",
+    subtitle: "Planning lineage identifiers",
+    purpose: "Define planning-stage identifiers and their reference constraints.",
+    defines: [
+      "decision_id produced by intent validation stage.",
+      "plan_id produced by DAL and tied to decision lineage.",
+      "approval_id produced at approval gate with plan fingerprint linkage.",
+    ],
+    doesNotDefine: "Execution/runtime status ownership.",
+    href: "/docs/architecture/contracts/lineage-model",
+  },
+  {
+    id: "execution-version-restore-ids",
+    title: "Execution, Version, and Restore IDs",
+    subtitle: "Runtime and persistence lineage",
+    purpose: "Define runtime and version identifiers after execution handoff.",
+    defines: [
+      "execution_id created by DAgent at runtime start.",
+      "version_id created by Versioning and tied to execution lineage.",
+      "restore_id created for restore workflows referencing prior lineage.",
+    ],
+    doesNotDefine: "Job orchestration authority, owned by API.",
+    href: "/docs/architecture/contracts/lineage-model",
+  },
+  {
+    id: "linkage-rules",
+    title: "Linkage Rules",
+    subtitle: "Reference constraints",
+    purpose: "Define mandatory parent-child lineage relationships.",
+    defines: [
+      "decision_id references request_id.",
+      "plan_id references decision_id/request_id.",
+      "execution_id references plan_id.",
+      "version_id references execution_id.",
+    ],
+    doesNotDefine: "Alternative lineage graphs outside canonical rules.",
+    href: "/docs/architecture/contracts/lineage-model",
+  },
+] as const;
 
 export default function LineageModelPage() {
   return (
-    <DocsContent>
-      <PageTitle
-        title="End-to-End Lineage Model"
-        description="Authoritative correlation model that tracks each request across all architecture layers."
-      />
-      <div className="flex flex-col gap-5">
-        <SectionBlock
-          title="Architecture Diagram"
-          body={[]}
-          collapsible
-        >
-          <div className="rounded-xl border border-cyan-500/20 bg-slate-950/50 p-4">
-            <div className="grid gap-2 md:grid-cols-7">
-              {["request_id", "decision_id", "plan_id", "approval_id", "execution_id", "version_id", "restore_id"].map((item, index) => (
-                <div key={item} className="text-center">
-                  <div className="rounded-md border border-white/10 bg-slate-900/70 px-1.5 py-2 text-[11px] text-slate-200">{item}</div>
-                  {index < 6 ? <div className="pt-1 text-cyan-300/80">→</div> : null}
-                </div>
-              ))}
-            </div>
-            <p className="mt-2 text-center text-xs text-slate-400">session_id propagates across all stages</p>
-          </div>
-        </SectionBlock>
-        <SectionBlock
-          title="Overview"
-          body={[
-            "Lineage model defines traceability IDs, ownership, creation stage, and propagation rules.",
-            "Every critical artifact must be traceable back to request_id and session_id.",
-          ]}
-          collapsible
-        />
-        <SectionBlock
-          title="ID Definitions"
-          body={[
-            "request_id: created by QCore at intake; owner QCore; propagates to all modules.",
-            "session_id: created at session start; owner State Manager; propagates across all loop iterations.",
-            "decision_id: created after Intent validation; owner Intent + Clarification; propagates to DAL and downstream logs.",
-            "plan_id: created by DAL Plan Formatter; owner DAL; propagates to UAgent, Approval, DAgent.",
-            "execution_id: created by DAgent at execution start; owner DAgent; propagates to Versioning and runtime telemetry.",
-            "version_id: created by Version Manager; owner Versioning; propagates to history, restore, and comparison paths.",
-            "approval_id: created when Approval request is triggered; owner Approval; propagates to QCore enforcement and audit trail.",
-          ]}
-          collapsible
-        />
-        <SectionBlock
-          title="Linkage Rules"
-          body={[
-            "decision_id must reference exactly one request_id.",
-            "plan_id must reference one decision_id and one request_id.",
-            "execution_id must reference one plan_id.",
-            "version_id must reference one execution_id.",
-            "approval_id must reference one plan_id and one fingerprint.",
-          ]}
-          collapsible
-        />
-        <SectionBlock
-          title="Flow"
-          body={[
-            QAGENT_CANONICAL_FLOW,
-            "ID propagation: after User Input (handoff complete), QCore creates request_id and attaches session_id. Intent + Clarification creates decision_id after validation. DAL creates plan_id. Approval creates approval_id. DAgent creates execution_id at execution start. Versioning creates version_id. Restore requests reference version_id and spawn restore_id while keeping original request lineage.",
-          ]}
-          collapsible
-        />
-        <SectionBlock
-          title="Summary"
-          body={[
-            "Lineage model is mandatory for observability, auditability, and deterministic recovery.",
-            "No module may emit artifacts without required upstream lineage IDs.",
-          ]}
-          collapsible
-        />
-      </div>
-    </DocsContent>
+    <DocsTemplatePage
+      title="End-to-End Lineage Model"
+      description="Authoritative correlation model that tracks each request across all architecture layers."
+      sectionPath={["QAgent", "Contracts", "Lineage Model"]}
+      covers="ID ownership, creation stages, propagation constraints, and linkage rules."
+      doesNotCover="module behavior logic and cross-layer orchestration policy."
+      overviewIntro="The lineage model defines the canonical identifier graph that preserves traceability from request intake through execution and versioning."
+      overviewAreasTitle="Lineage concerns"
+      overviewAreas={[
+        "Root lineage IDs for request/session continuity.",
+        "Planning-stage IDs for intent and approval traceability.",
+        "Runtime/persistence IDs for execution and version lifecycle.",
+      ]}
+      outOfScope="Behavioral implementation details in individual modules."
+      relatedBoundaries={[
+        "Lineage Model = ID lifecycle authority.",
+        "Schema Registry = payload contract authority.",
+        "ID Mapping page = client bridge authority.",
+        "Versioning pages = persistence lifecycle authority.",
+      ]}
+      navItems={[
+        { title: "Overview", subtitle: "Lineage model scope.", href: "#overview" },
+        { title: "Lineage Diagram", subtitle: "ID hierarchy and propagation.", href: "#diagram" },
+        { title: "Lineage Details", subtitle: "ID rules and constraints.", href: "#details" },
+        { title: "Related Docs", subtitle: "Canonical references.", href: "#related-docs" },
+      ]}
+      diagramTitle="Lineage Diagram"
+      diagram={{
+        mode: "flow",
+        steps: ["request_id", "decision_id", "plan_id", "approval_id", "execution_id", "version_id", "restore_id"],
+      }}
+      detailsTitle="Lineage Details"
+      detailsItems={lineageDetails.map((d) => ({
+        ...d,
+        linkLabel: "Canonical page",
+      }))}
+      relatedDocs={[
+        "Lineage Model = ID lifecycle authority.",
+        "Schema Registry = contract payload authority.",
+        "Client-QAgent ID Mapping = cross-layer ID mapping authority.",
+        "Versioning = version lineage persistence authority.",
+      ]}
+    />
   );
 }

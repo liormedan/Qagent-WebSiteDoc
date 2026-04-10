@@ -1,73 +1,76 @@
-import { DocsContent } from "@/components/layout/DocsContent";
-import { PageTitle } from "@/components/ui/PageTitle";
-import { SectionBlock } from "@/components/ui/SectionBlock";
+import { DocsTemplatePage } from "@/components/ui/DocsTemplatePage";
+
+const details = [
+  {
+    id: "modify-trigger",
+    title: "Modify Trigger",
+    subtitle: "Approval loopback entry",
+    purpose: "Define what happens when user chooses Modify in approval stage.",
+    defines: ["Modify as controlled loopback action.", "Immediate invalidation of prior approval state.", "Return path to DAL regeneration."],
+    doesNotDefine: "Partial patching of previously approved plan.",
+    href: "/docs/architecture/approval/modify-loop-contract",
+  },
+  {
+    id: "invalidation-rules",
+    title: "Invalidation Rules",
+    subtitle: "Approval context reset",
+    purpose: "Define required invalidation behavior for previous approval artifacts.",
+    defines: ["Previous approval marked superseded.", "Fingerprint regeneration required.", "No reuse of prior approval signatures."],
+    doesNotDefine: "Execution continuation without re-approval.",
+    href: "/docs/architecture/approval/modify-loop-contract",
+  },
+  {
+    id: "regeneration-flow",
+    title: "Regeneration Flow",
+    subtitle: "Deterministic re-entry sequence",
+    purpose: "Define deterministic sequence after modify signal is accepted.",
+    defines: ["Return to DAL planning stage.", "Regenerate plan and UI artifacts.", "Issue new approval request before execution."],
+    doesNotDefine: "Alternative bypass flow around approval gate.",
+    href: "/docs/architecture/approval/modify-loop-contract",
+  },
+] as const;
 
 export default function ApprovalModifyLoopContractPage() {
   return (
-    <DocsContent>
-      <PageTitle
-        title="Approval Modify Loop Contract"
-        description="Standard contract defining deterministic behavior when user selects Modify during approval."
-      />
-      <div className="flex flex-col gap-5">
-        <SectionBlock
-          title="Architecture Diagram"
-          body={[]}
-          collapsible
-        >
-          <div className="rounded-xl border border-cyan-500/20 bg-slate-950/50 p-4">
-            <div className="grid gap-2 md:grid-cols-6">
-              {["Approval", "Modify", "Return to DAL", "Regenerate Plan", "Regenerate UI", "New Approval"].map((item, index) => (
-                <div key={item} className="text-center">
-                  <div className={index === 1 ? "rounded-md border border-cyan-400/40 bg-cyan-500/10 px-2 py-2 text-xs font-semibold text-cyan-100" : "rounded-md border border-white/10 bg-slate-900/70 px-2 py-2 text-xs text-slate-200"}>
-                    {item}
-                  </div>
-                  {index < 5 ? <div className="pt-1 text-cyan-300/80">→</div> : null}
-                </div>
-              ))}
-            </div>
-          </div>
-        </SectionBlock>
-        <SectionBlock
-          title="Overview"
-          body={[
-            "Modify is a controlled loopback path, not a partial patch over an approved plan.",
-            "Any modify action invalidates prior approval context and requires a full re-approval cycle.",
-          ]}
-          collapsible
-        />
-        <SectionBlock
-          title="Contract Rules"
-          body={[
-            "Previous approval state becomes invalid and set to superseded.",
-            "DAL must regenerate full plan from updated intent/context.",
-            "Approval fingerprint must be regenerated from the new plan payload.",
-            "All prior signatures are discarded and cannot be reused.",
-            "Re-entry point is DAL planning stage followed by UAgent refresh and new Approval request.",
-          ]}
-          collapsible
-        />
-        <SectionBlock
-          title="Flow"
-          body={[
-            "Approval",
-            "-> Modify",
-            "-> Return to DAL",
-            "-> Regenerate Plan",
-            "-> Regenerate UI",
-            "-> New Approval Request",
-          ]}
-          collapsible
-        />
-        <SectionBlock
-          title="Control Boundary"
-          body={[
-            "Approval module captures modify signal.",
-            "QCore enforces invalidation and blocks execution until new approval is granted.",
-          ]}
-          collapsible
-        />
-      </div>
-    </DocsContent>
+    <DocsTemplatePage
+      title="Approval Modify Loop Contract"
+      description="Standard contract defining deterministic behavior when user selects Modify during approval."
+      sectionPath={["QAgent", "Contracts", "Approval Modify Contract"]}
+      covers="modify trigger semantics, invalidation rules, and deterministic regeneration sequence."
+      doesNotCover="execution runtime internals and non-approval orchestration policy."
+      overviewIntro="Modify is a controlled loopback path. It invalidates prior approval context and requires a full re-approval cycle."
+      overviewAreasTitle="Contract concerns"
+      overviewAreas={[
+        "Modify trigger semantics.",
+        "Approval invalidation rules.",
+        "DAL/UI regeneration and re-approval sequence.",
+      ]}
+      outOfScope="Runtime execution handling outside approval loop contract."
+      relatedBoundaries={[
+        "Modify Loop Contract = approval loopback authority.",
+        "Approval module page = approval behavior authority.",
+        "DAL page = plan regeneration authority.",
+        "Control policy pages = governance authority.",
+      ]}
+      navItems={[
+        { title: "Overview", subtitle: "Contract scope and purpose.", href: "#overview" },
+        { title: "Contract Diagram", subtitle: "Modify loop sequence.", href: "#diagram" },
+        { title: "Contract Details", subtitle: "Rules and constraints.", href: "#details" },
+        { title: "Related Docs", subtitle: "Canonical references.", href: "#related-docs" },
+      ]}
+      diagramTitle="Contract Diagram"
+      diagram={{
+        mode: "flow",
+        steps: ["Approval", "Modify", "Return to DAL", "Regenerate Plan", "Regenerate UI", "New Approval"],
+      }}
+      detailsTitle="Contract Details"
+      detailsItems={details.map((d) => ({ ...d, linkLabel: "Canonical page" }))}
+      relatedDocs={[
+        "Modify Loop Contract = approval loopback authority.",
+        "Approval policy pages = gate enforcement authority.",
+        "DAL = plan regeneration authority.",
+        "QAgent Layer page = parent boundary authority.",
+      ]}
+    />
   );
 }

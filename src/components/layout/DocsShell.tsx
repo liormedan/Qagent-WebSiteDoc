@@ -1,14 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { usePathname } from "next/navigation";
 import { DocsHeader } from "@/components/layout/DocsHeader";
 import { DocsPager } from "@/components/layout/DocsPager";
 import { DocsSidebar } from "@/components/layout/DocsSidebar";
 import { DocsToc } from "@/components/layout/DocsToc";
 
 export function DocsShell({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileTocOpen, setMobileTocOpen] = useState(false);
   const [sidebarWidth, setSidebarWidth] = useState(240);
@@ -89,10 +87,10 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="bg-[var(--bg)] text-[var(--text)]">
-      <DocsHeader key={pathname} onOpenMenu={() => setMobileMenuOpen(true)} onOpenToc={() => setMobileTocOpen(true)} />
+      <DocsHeader onOpenMenu={() => setMobileMenuOpen(true)} onOpenToc={() => setMobileTocOpen(true)} />
 
       <div
-        className="mx-auto grid w-full max-w-[1800px] grid-cols-1 md:h-[calc(100dvh-72px)] md:grid-cols-[240px_minmax(0,1fr)] md:overflow-hidden xl:grid-cols-[240px_minmax(0,1fr)_230px] 2xl:grid-cols-[260px_minmax(0,1fr)_260px]"
+        className="mx-auto grid w-full max-w-[1800px] grid-cols-1 md:h-[calc(100dvh-88px)] md:grid-cols-[240px_minmax(0,1fr)] md:overflow-hidden xl:grid-cols-[240px_minmax(0,1fr)_230px] 2xl:grid-cols-[260px_minmax(0,1fr)_260px]"
         style={gridTemplateColumns ? { gridTemplateColumns } : undefined}
       >
         <aside className="relative hidden border-r border-[var(--border)] md:block md:min-h-0 md:overflow-hidden">

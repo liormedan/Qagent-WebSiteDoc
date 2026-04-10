@@ -1,191 +1,128 @@
-import { DocsContent } from "@/components/layout/DocsContent";
-import { PageTitle } from "@/components/ui/PageTitle";
-import { QAgentArchitectureLinearDiagram } from "@/components/ui/QAgentArchitectureLinearDiagram";
-import { SectionBlock } from "@/components/ui/SectionBlock";
-import { QAGENT_CANONICAL_FLOW, QAGENT_DOC_SOURCE_OF_TRUTH } from "@/lib/qagent-canonical";
-import { SYSTEM_DOC_SOURCE_OF_TRUTH, SYSTEM_RUNTIME_LIFECYCLE } from "@/lib/system-canonical";
+import { DocsTemplatePage } from "@/components/ui/DocsTemplatePage";
+import { QAGENT_DOC_SOURCE_OF_TRUTH } from "@/lib/qagent-canonical";
 
-type ModuleChapter = {
-  title: string;
-  role: "Core" | "Flow" | "Integration" | "UI" | "UI Gated" | "Execution" | "State";
-  purpose: string;
-  inputs: string;
-  outputs: string;
-  dependsOn: string;
-};
-
-const moduleChapters: ModuleChapter[] = [
+const moduleChapters = [
   {
     title: "QCore",
-    role: "Core",
+    subtitle: "Core orchestrator",
     purpose: "Controls ordered module execution and enforces deterministic system rules.",
-    inputs: "User request context, session state, and module responses.",
-    outputs: "Validated next-module command and runtime state updates.",
-    dependsOn: "All downstream modules for execution results.",
+    defines: ["State-aware runtime control.", "Deterministic routing and transition guardrails.", "Cross-module orchestration authority."],
+    href: "/docs/qcore",
   },
   {
     title: "Files Handler",
-    role: "Flow",
-    purpose: "Loads, validates, and indexes user-provided files for analysis.",
-    inputs: "Uploaded files and metadata.",
-    outputs: "Normalized file references and access-safe handles.",
-    dependsOn: "QCore request scope.",
+    subtitle: "Input gateway",
+    purpose: "Loads, validates, and indexes user-provided files for downstream interpretation.",
+    defines: ["Input normalization.", "File integrity and compatibility checks.", "Structured file references for Analyzer."],
+    href: "/docs/architecture/modules/files-handler",
   },
   {
     title: "Analyzer",
-    role: "Flow",
-    purpose: "Extracts audio evidence and structured signal features for decision layers.",
-    inputs: "File handles and analysis directives.",
-    outputs: "Feature vectors, detected events, and confidence metadata.",
-    dependsOn: "Files Handler output.",
+    subtitle: "Signal interpretation",
+    purpose: "Extracts structured evidence and signal-level features for reasoning layers.",
+    defines: ["Feature extraction outputs.", "Evidence structure for intent resolution.", "Confidence and analysis metadata."],
+    href: "/docs/architecture/modules/analyzer",
   },
   {
     title: "Intent + Clarification",
-    role: "Flow",
-    purpose: "Resolves user intent and blocks ambiguous actions until clarified.",
-    inputs: "User language intent and analyzer evidence.",
-    outputs: "Confirmed intent state with explicit constraints.",
-    dependsOn: "QCore and Analyzer evidence.",
+    subtitle: "Ambiguity control",
+    purpose: "Resolves ambiguity before planning and prevents unclear execution intent.",
+    defines: ["Intent validation.", "Clarification gating.", "Execution-readiness constraints."],
+    href: "/docs/architecture/modules/intent-clarification",
   },
   {
     title: "DAL",
-    role: "Integration",
-    purpose: "Builds executable action plans aligned to approved intent boundaries.",
-    inputs: "Confirmed intent, constraints, and module context.",
-    outputs: "Deterministic action graph for execution modules.",
-    dependsOn: "Intent + Clarification result.",
+    subtitle: "Planning engine",
+    purpose: "Builds executable action plans from validated intent and constraints.",
+    defines: ["Plan graph construction.", "Execution payload preparation.", "UI-plan bridge context."],
+    href: "/docs/architecture/modules/dal",
   },
   {
     title: "UAgent",
-    role: "UI",
-    purpose: "Generates user-facing plan view and review controls before execution.",
-    inputs: "DAL action graph and current session state.",
-    outputs: "UI-ready action summary and approval prompts.",
-    dependsOn: "DAL output.",
+    subtitle: "UI mediation",
+    purpose: "Converts plan context into user-facing interaction and approval prompts.",
+    defines: ["UI-ready plan rendering.", "Approval prompt shaping.", "User feedback bridging."],
+    href: "/docs/architecture/modules/uagent",
   },
   {
-    title: "Approval (UI-triggered, enforced by QCore)",
-    role: "UI Gated",
-    purpose: "Prevents execution until explicit user approval is captured and verified.",
-    inputs: "User approval signal and DAL plan fingerprint.",
-    outputs: "Approved or rejected execution gate state.",
-    dependsOn: "UAgent prompt delivery and QCore validation.",
+    title: "Approval",
+    subtitle: "Authorization gate",
+    purpose: "Blocks execution until explicit approval is validated and enforced.",
+    defines: ["Approval requirement checks.", "Approval signal validation.", "Execution gating state."],
+    href: "/docs/architecture/modules/approval",
   },
   {
     title: "DAgent",
-    role: "Execution",
-    purpose: "Builds the execution bridge from approved DAL intent to API Server runnable execution context.",
-    inputs: "Approved execution graph, media context, and lineage identifiers.",
-    outputs: "Execution Request Envelope handoff and execution bridge metadata.",
-    dependsOn: "Approval gate, DAL integrity, and API Server /run contract.",
+    subtitle: "Execution bridge",
+    purpose: "Builds API-ready execution handoff from approved planning artifacts.",
+    defines: ["Execution request envelope composition.", "Execution lineage bridge metadata.", "Runtime handoff boundary."],
+    href: "/docs/architecture/modules/dagent",
   },
   {
     title: "Versioning",
-    role: "State",
-    purpose: "Maintains QAgent-side version lineage and references from API execution outputs for compare/revert workflows.",
-    inputs: "Execution Result Package references and session lineage data.",
-    outputs: "Version references, snapshots, and lifecycle transition records.",
-    dependsOn: "API /jobs result publication and DAgent bridge lineage.",
+    subtitle: "Lineage persistence",
+    purpose: "Maintains version references and lifecycle traceability for execution outputs.",
+    defines: ["Version snapshot references.", "Lineage continuity.", "Restore/compare linkage boundaries."],
+    href: "/docs/architecture/modules/versioning",
   },
-];
-
-function chapterBody(chapter: ModuleChapter): string[] {
-  if (chapter.title === "QCore") {
-    return [
-      "### Main QCore Structure",
-      "Defines QCore as the architectural center that governs orchestration, state-aware routing, and system control boundaries.",
-      "### QCore Engine",
-      "Describes the internal runtime core that executes the agent loop and coordinates decision progression across stages.",
-      "### LLM Interface Layer",
-      "Explains the controlled bridge that prepares context, invokes external models, validates responses, and returns structured decisions.",
-      "### Model Provider Registry",
-      "Outlines provider selection logic, fallback options, and model-routing constraints for reliable multi-model operation.",
-      "### Tool System",
-      "Covers the execution path for approved actions and how tool invocations are routed from decisions into operational modules.",
-      "### State Manager",
-      "Summarizes how runtime context and progression state are persisted, updated, and reloaded between loop iterations.",
-      "### Flow Controller",
-      "Defines transition guardrails that enforce valid movement between states and prevent invalid execution sequences.",
-      "### Memory / History Layer",
-      "Describes how prior interactions, decisions, and lineage are surfaced to preserve context continuity across the workflow.",
-    ];
-  }
-
-  return [
-    "### Module Type",
-    chapter.role,
-    "### Purpose",
-    chapter.purpose,
-    "### Inputs",
-    chapter.inputs,
-    "### Outputs",
-    chapter.outputs,
-    "### Depends On",
-    chapter.dependsOn,
-  ];
-}
+] as const;
 
 export default function ArchitecturePage() {
   return (
-    <DocsContent>
-      <PageTitle
-        title="Architecture"
-        description="QAgent runs an ordered modular flow for audio requests with deterministic routing, UI-gated approval, and versioned outputs."
-      />
-
-      <div className="flex flex-col gap-5">
-        <section className="rounded-md border border-emerald-400/30 bg-emerald-500/10 px-3 py-2 text-xs leading-5 text-emerald-100 md:text-sm">
-          QAgent Layer
-          <br />
-          Version: v1.0
-          <br />
-          Status: Ready for Implementation
-        </section>
-
-        <SectionBlock
-          title="Architecture Diagram"
-          body={[
-            "### Overview",
-            "Ordered modular flow from request intake to versioned output.",
-            "### Canonical Flow",
-            QAGENT_CANONICAL_FLOW,
-            "### Structure",
-            "The diagram is the single reference of module order in this page.",
-          ]}
-          collapsible
-          childrenFirst
-        >
-          <div className="space-y-3">
-            <QAgentArchitectureLinearDiagram />
-          </div>
-        </SectionBlock>
-
-        {moduleChapters.map((chapter) => (
-          <SectionBlock key={chapter.title} title={chapter.title} body={chapterBody(chapter)} collapsible />
-        ))}
-
-        <SectionBlock
-          title="System-Level Canonical References"
-          body={[
-            `Primary system entry: ${SYSTEM_DOC_SOURCE_OF_TRUTH.canonicalLocation}`,
-            `Canonical runtime lifecycle reference: ${SYSTEM_RUNTIME_LIFECYCLE}`,
-            "This page references system-level declarations and does not redefine them.",
-          ]}
-          collapsible
-        />
-
-        <SectionBlock
-          title="Source of Truth"
-          body={[
-            `Canonical location: ${QAGENT_DOC_SOURCE_OF_TRUTH.canonicalLocation}`,
-            QAGENT_DOC_SOURCE_OF_TRUTH.rule,
-          ]}
-          collapsible
-        />
-      </div>
-    </DocsContent>
+    <DocsTemplatePage
+      title="Architecture"
+      description="QAgent runs an ordered modular flow for audio requests with deterministic routing, UI-gated approval, and versioned outputs."
+      sectionPath={["QAgent", "Architecture", "Overview"]}
+      covers="QAgent module architecture, module roles, and ordered handoff model."
+      doesNotCover="API runtime internals, client UI runtime ownership, and DSP execution implementation."
+      overviewIntro="This page is the architectural map of QAgent modules and the ordered module sequence used for deterministic request handling."
+      overviewAreasTitle="Architecture concerns"
+      overviewAreas={[
+        "Ordered module flow from intake to versioning.",
+        "Module responsibilities and handoff boundaries.",
+        "Deterministic control and approval-gated execution.",
+      ]}
+      outOfScope="Module-level implementation internals and non-QAgent subsystem ownership."
+      relatedBoundaries={[
+        "Architecture page = module map authority.",
+        "QAgent page = layer boundary authority.",
+        "Contracts pages = inter-module payload authority.",
+        "Policies pages = control governance authority.",
+      ]}
+      navItems={[
+        { title: "Overview", subtitle: "Architecture scope and purpose.", href: "#overview" },
+        { title: "Architecture Diagram", subtitle: "QAgent module topology.", href: "#diagram" },
+        { title: "Architecture Details", subtitle: "Module-by-module definitions.", href: "#details" },
+        { title: "Related Docs", subtitle: "Canonical references.", href: "#related-docs" },
+      ]}
+      diagramTitle="Architecture Diagram"
+      diagram={{
+        mode: "structure",
+        root: "QAgent Architecture",
+        groups: [
+          { title: "Core Modules", items: ["QCore", "Files Handler", "Analyzer", "Intent + Clarification", "DAL"] },
+          { title: "Control Modules", items: ["UAgent", "Approval", "DAgent"] },
+          { title: "State Modules", items: ["Versioning", "Lineage", "Session Continuity"] },
+        ],
+      }}
+      detailsTitle="Architecture Details"
+      detailsItems={moduleChapters.map((m) => ({
+        id: m.title.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+        title: m.title,
+        subtitle: m.subtitle,
+        purpose: m.purpose,
+        defines: [...m.defines],
+        doesNotDefine: "Cross-layer ownership outside QAgent.",
+        href: m.href,
+        linkLabel: "Related section",
+      }))}
+      relatedDocs={[
+        "Architecture = module map authority.",
+        "QAgent Layer page = layer authority.",
+        "Schema Registry = contract authority.",
+        "Control Policy Matrix = control ownership authority.",
+        `Source of truth: ${QAGENT_DOC_SOURCE_OF_TRUTH.canonicalLocation}.`,
+      ]}
+    />
   );
 }
-
-
-

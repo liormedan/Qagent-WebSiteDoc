@@ -1,96 +1,99 @@
-import { DocsContent } from "@/components/layout/DocsContent";
-import { PageTitle } from "@/components/ui/PageTitle";
-import { SectionBlock } from "@/components/ui/SectionBlock";
+import { DocsTemplatePage } from "@/components/ui/DocsTemplatePage";
+
+const baselineDetails = [
+  {
+    title: "Documentation Governance",
+    subtitle: "Source-of-truth boundaries",
+    purpose: "Define which documentation locations are authoritative for implementation.",
+    defines: [
+      "QAgent authority under architecture and system flow references.",
+      "Client and API authoritative locations.",
+      "Conflict rule: canonical pages override supporting content.",
+    ],
+    doesNotDefine: "New architecture semantics outside existing canonical pages.",
+  },
+  {
+    title: "Authoritative Baseline Set",
+    subtitle: "Implementation-allowed references",
+    purpose: "Define the baseline set of pages that may drive implementation behavior.",
+    defines: ["Core modules pages.", "Contracts pages.", "Policies pages.", "Approval and DSP abstraction pages."],
+    doesNotDefine: "Draft pages as binding requirements.",
+  },
+  {
+    title: "Non-authoritative Pages",
+    subtitle: "Draft/supporting content",
+    purpose: "Define which pages are supporting and not binding for implementation.",
+    defines: ["Draft skeleton pages.", "Exploratory pages without explicit boundaries.", "Future/optional content references."],
+    doesNotDefine: "Promotion process into authoritative baseline.",
+  },
+  {
+    title: "Enforcement Rule",
+    subtitle: "PR traceability requirement",
+    purpose: "Define implementation traceability requirement against baseline references.",
+    defines: [
+      "Implementation PRs must reference authoritative baseline sections.",
+      "Draft pages cannot introduce binding requirements.",
+      "Baseline promotion is required before new pages become authoritative.",
+    ],
+    doesNotDefine: "CI enforcement implementation details.",
+  },
+] as const;
 
 export default function ImplementationBaselinePage() {
   return (
-    <DocsContent>
-      <PageTitle
-        title="Implementation Baseline"
-        description="Authoritative baseline freeze for implementation: which pages are binding and which remain draft or future scope."
-      />
-      <div className="flex flex-col gap-5">
-        <SectionBlock
-          title="Architecture Diagram"
-          body={[]}
-          collapsible
-        >
-          <div className="rounded-xl border border-cyan-500/20 bg-slate-950/50 p-4">
-            <div className="grid gap-2 md:grid-cols-3">
-              {["Authoritative Baseline", "Implementation Allowed", "Draft / Non-authoritative"].map((item, index) => (
-                <div key={item} className="text-center">
-                  <div className={index === 0 ? "rounded-md border border-cyan-400/40 bg-cyan-500/10 px-2 py-2 text-xs font-semibold text-cyan-100" : "rounded-md border border-white/10 bg-slate-900/70 px-2 py-2 text-xs text-slate-200"}>
-                    {item}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </SectionBlock>
-        <SectionBlock
-          title="Overview"
-          body={[
-            "This page freezes implementation authority boundaries for the current release cycle.",
-            "Only pages listed under Authoritative Baseline may define implementation behavior.",
-          ]}
-          collapsible
-        />
-        <SectionBlock
-          title="Documentation Governance (Source of Truth)"
-          body={[
-            "QAgent source of truth: /docs/architecture (plus /docs/system-flow for end-to-end flow reference).",
-            "Client source of truth: /docs/client.",
-            "API Server source of truth: /docs/api (with /docs/api/job-orchestration and /docs/api/execution as locked subsystem canonicals).",
-            "Secondary content source: /src/content/* is non-authoritative support content and may contain placeholders.",
-            "Rule: if a statement in /src/content/* conflicts with canonical layer pages above, canonical layer pages are authoritative.",
-            "Future updates must modify authoritative architecture pages first; supporting content may then be synchronized.",
-          ]}
-          collapsible
-        />
-        <SectionBlock
-          title="Authoritative Baseline"
-          body={[
-            "/docs/architecture/modules/qagent-core",
-            "/docs/architecture/modules/files-handler",
-            "/docs/architecture/modules/analyzer",
-            "/docs/architecture/modules/intent-clarification",
-            "/docs/architecture/modules/dal",
-            "/docs/architecture/modules/uagent",
-            "/docs/architecture/modules/approval",
-            "/docs/architecture/modules/dagent",
-            "/docs/architecture/modules/versioning",
-            "/docs/architecture/modules/versioning/version-manager",
-            "/docs/architecture/modules/versioning/diff-engine",
-            "/docs/architecture/contracts/schema-registry",
-            "/docs/architecture/contracts/lineage-model",
-            "/docs/architecture/contracts/client-qagent-id-mapping",
-            "/docs/architecture/policies/failure-policy",
-            "/docs/architecture/policies/control-policy-matrix",
-            "/docs/architecture/policies/session-isolation",
-            "/docs/architecture/approval/modify-loop-contract",
-            "/docs/architecture/dagent/dsp-engine-abstraction",
-            "/docs/architecture/implementation-baseline",
-          ]}
-          collapsible
-        />
-        <SectionBlock
-          title="Non-authoritative Pages"
-          body={[
-            "Any page rendered through draft skeleton fallback in docs.ts.",
-            "Future/optional pages without completed module template sections.",
-            "Exploratory content that lacks explicit contract and control boundaries.",
-          ]}
-          collapsible
-        />
-        <SectionBlock
-          title="Enforcement Rule"
-          body={[
-            "Implementation PRs must reference at least one baseline page section for requirement traceability.",
-            "Draft pages cannot introduce binding implementation requirements until promoted to authoritative baseline.",
-          ]}
-          collapsible
-        />
-      </div>
-    </DocsContent>
+    <DocsTemplatePage
+      title="Implementation Baseline"
+      description="Authoritative baseline freeze for implementation: binding pages vs draft/future scope."
+      sectionPath={["QAgent", "Implementation", "Implementation Baseline"]}
+      covers="implementation authority boundaries, canonical source governance, and baseline enforcement rules."
+      doesNotCover="runtime implementation details or architecture redesign."
+      overviewIntro="Implementation Baseline freezes which documentation sources are binding for implementation and governance."
+      overviewAreasTitle="Baseline concerns"
+      overviewAreas={[
+        "Canonical source governance.",
+        "Authoritative baseline page set.",
+        "Draft/supporting page boundaries.",
+        "Implementation traceability rules.",
+      ]}
+      outOfScope="Changing architecture decisions or adding new modules."
+      relatedBoundaries={[
+        "Implementation Baseline = implementation authority boundary.",
+        "Architecture pages = module/system authority.",
+        "Testing Strategy = validation authority.",
+      ]}
+      navItems={[
+        { title: "Overview", subtitle: "Baseline scope and purpose.", href: "#overview" },
+        { title: "Baseline Diagram", subtitle: "Authority segmentation.", href: "#diagram" },
+        { title: "Baseline Details", subtitle: "Governance and enforcement rules.", href: "#details" },
+        { title: "Related Docs", subtitle: "Canonical references.", href: "#related-docs" },
+      ]}
+      diagramTitle="Baseline Diagram"
+      diagram={{
+        mode: "structure",
+        root: "Implementation Baseline",
+        groups: [
+          { title: "Authoritative", items: ["Architecture", "Contracts", "Policies", "Implementation Baseline"] },
+          { title: "Allowed for Implementation", items: ["Baseline-referenced sections", "Canonical contract rules", "Canonical flow references"] },
+          { title: "Non-authoritative", items: ["Draft pages", "Future placeholders", "Exploratory content"] },
+        ],
+      }}
+      detailsTitle="Baseline Details"
+      detailsItems={baselineDetails.map((d) => ({
+        id: d.title.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+        title: d.title,
+        subtitle: d.subtitle,
+        purpose: d.purpose,
+        defines: [...d.defines],
+        doesNotDefine: d.doesNotDefine,
+        href: "/docs/architecture/implementation-baseline",
+        linkLabel: "Canonical page",
+      }))}
+      relatedDocs={[
+        "Implementation Baseline = implementation authority.",
+        "Architecture page = module map authority.",
+        "System Flow = transition authority.",
+        "Testing Strategy = validation authority.",
+      ]}
+    />
   );
 }

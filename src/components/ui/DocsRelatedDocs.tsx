@@ -1,13 +1,17 @@
+import { normalizeDocListText } from "@/lib/docs-text";
+
 type DocsRelatedDocsProps = {
   items: string[];
 };
 
 export function DocsRelatedDocs({ items }: DocsRelatedDocsProps) {
   return (
-    <ul className="list-disc space-y-1 pl-5 text-sm text-[var(--muted)]">
+    <div className="space-y-2 text-sm text-[var(--muted)]">
       {items.slice(0, 5).map((item) => (
-        <li key={item}>{item.replace(/^(?:[-*\u2022]\s*)+/, "").trim()}</li>
+        <div key={item} className="rounded-md border border-[var(--border)]/70 bg-slate-950/20 px-3 py-2 leading-6">
+          {normalizeDocListText(item)}
+        </div>
       ))}
-    </ul>
+    </div>
   );
 }
