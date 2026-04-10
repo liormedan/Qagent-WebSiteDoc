@@ -1,12 +1,13 @@
-import Link from "next/link";
 import { DocsContent } from "@/components/layout/DocsContent";
-import { ClientLayerDiagram } from "@/components/ui/ClientLayerDiagram";
+import { DocsDiagram } from "@/components/ui/DocsDiagram";
+import { DocsInThisPageNav } from "@/components/ui/DocsInThisPageNav";
+import { DocsOverviewBlock } from "@/components/ui/DocsOverviewBlock";
+import { DocsRelatedDocs } from "@/components/ui/DocsRelatedDocs";
+import { DocsScopeBlocks } from "@/components/ui/DocsScopeBlocks";
 import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 import { CLIENT_LAYER_CANONICAL_NAME, CLIENT_LAYER_DOC_SOURCE_OF_TRUTH } from "@/lib/client-canonical";
-
-const normalizeListItem = (value: string) => value.replace(/^(?:[-*\u2022]\s*)+/, "").trim();
 
 const clientAreas = [
   "user interaction surfaces",
@@ -84,58 +85,28 @@ export default function ClientOverviewPage() {
     <DocsContent>
       <PageTitle title={CLIENT_LAYER_CANONICAL_NAME} description="Canonical layer page for user interaction boundaries, UI runtime ownership, and request handoff semantics." />
 
-      <section className="mt-4 rounded-md border border-cyan-400/30 bg-cyan-500/10 p-4 text-sm text-cyan-100">
-        <div className="grid gap-2 md:grid-cols-2">
-          <div className="rounded-md border border-cyan-300/30 bg-cyan-400/10 px-3 py-2">
-            <p className="text-xs font-semibold uppercase tracking-wide text-cyan-200">This page covers</p>
-            <p className="mt-1 text-sm">interaction surfaces, runtime projection, UI ownership boundaries, and QAgent handoff behavior.</p>
-          </div>
-          <div className="rounded-md border border-amber-300/30 bg-amber-400/10 px-3 py-2">
-            <p className="text-xs font-semibold uppercase tracking-wide text-amber-200">This page does not cover</p>
-            <p className="mt-1 text-sm">intent planning logic, API job orchestration, and runtime execution scheduling.</p>
-          </div>
-        </div>
-      </section>
+      <DocsScopeBlocks
+        covers="interaction surfaces, runtime projection, UI ownership boundaries, and QAgent handoff behavior."
+        doesNotCover="intent planning logic, API job orchestration, and runtime execution scheduling."
+      />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock id="overview" title="Overview" body={[]}>
-          <p className="text-sm text-[var(--muted)]">
-            Client Layer is the user-facing boundary that captures interaction, projects runtime state, and presents final outputs.
-          </p>
-          <div className="mt-3">
-            <p className="text-sm font-semibold text-slate-100">Client areas</p>
-            <ul className="mt-1 list-disc space-y-1 pl-5 text-sm text-[var(--muted)]">
-              {clientAreas.map((item) => (
-                <li key={item}>{normalizeListItem(item)}</li>
-              ))}
-            </ul>
-          </div>
-          <div className="mt-3 rounded-md border border-amber-400/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-100">
-            <span className="font-semibold">Out of Scope:</span> intent interpretation and API runtime orchestration decisions.
-          </div>
-          <div className="mt-3">
-            <p className="text-sm font-semibold text-slate-100">Related boundaries</p>
-            <ul className="mt-1 list-disc space-y-1 pl-5 text-sm text-[var(--muted)]">
-              {relatedBoundaries.map((item) => (
-                <li key={item}>{normalizeListItem(item)}</li>
-              ))}
-            </ul>
-          </div>
+          <DocsOverviewBlock
+            intro="Client Layer is the user-facing boundary that captures interaction, projects runtime state, and presents final outputs."
+            areasTitle="Client areas"
+            areas={clientAreas}
+            outOfScope="intent interpretation and API runtime orchestration decisions."
+            relatedBoundaries={relatedBoundaries}
+          />
         </SectionBlock>
 
         <SectionBlock id="in-this-page" title="In this page" body={[]}>
-          <div className="grid gap-2 text-sm md:grid-cols-2">
-            {inPageLinks.map((item) => (
-              <Link key={item.href} href={item.href} className="group rounded-md border border-[var(--border)] bg-slate-950/30 px-3 py-2 transition-colors hover:border-cyan-400/60">
-                <p className="font-semibold text-slate-100 group-hover:text-cyan-200">{item.title}</p>
-                <p className="text-xs text-slate-400">{item.subtitle}</p>
-              </Link>
-            ))}
-          </div>
+          <DocsInThisPageNav items={inPageLinks} />
         </SectionBlock>
 
         <SectionBlock id="layer-structure-diagram" title="Layer Structure Diagram" body={[]}>
-          <ClientLayerDiagram />
+          <DocsDiagram mode="flow" steps={["User", "Client Layer", "QAgent Layer", "API Server Layer", "Result Projection"]} />
         </SectionBlock>
 
         <SectionBlock id="layer-details" title="Layer Details" body={[]}>
@@ -143,11 +114,7 @@ export default function ClientOverviewPage() {
         </SectionBlock>
 
         <SectionBlock id="related-docs" title="Related Docs" body={[]}>
-          <ul className="list-disc space-y-1 pl-5 text-sm text-[var(--muted)]">
-            {relatedDocs.map((item) => (
-              <li key={item}>{normalizeListItem(item)}</li>
-            ))}
-          </ul>
+          <DocsRelatedDocs items={relatedDocs} />
           <p className="mt-3 text-sm text-[var(--muted)]">
             Canonical location: <span className="font-semibold text-slate-100">{CLIENT_LAYER_DOC_SOURCE_OF_TRUTH.canonicalLocation}</span>
           </p>
