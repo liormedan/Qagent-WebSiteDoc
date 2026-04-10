@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArrowDown } from "lucide-react";
 import { DocsContent } from "@/components/layout/DocsContent";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
@@ -22,6 +23,34 @@ const errorContract = `{
   "error": "string"
 }`;
 
+const coreStructureModel = [
+  {
+    source: "Layer Definition",
+    target: "Identity",
+    description: "Defines the layer identity and system position.",
+  },
+  {
+    source: "Responsibilities",
+    target: "What it does",
+    description: "Defines operational ownership during execution.",
+  },
+  {
+    source: "Execution Model",
+    target: "How it operates",
+    description: "Defines task execution semantics.",
+  },
+  {
+    source: "State & Behavior",
+    target: "How it behaves",
+    description: "Defines runtime guarantees and invariants.",
+  },
+  {
+    source: "Constraints",
+    target: "What it cannot do",
+    description: "Defines strict non-ownership boundaries.",
+  },
+];
+
 export default function DspLayerCorePage() {
   return (
     <DocsContent>
@@ -42,32 +71,57 @@ export default function DspLayerCorePage() {
 
         <SectionBlock
           title="CORE Structure Model"
-          body={[
-            "CORE SPECIFICATION",
-            "1. Layer Definition -> Identity",
-            "2. Responsibilities -> What it does",
-            "3. Execution Model -> How it operates",
-            "4. State & Behavior -> How it behaves",
-            "5. Constraints -> What it cannot do",
-          ]}
-        />
+          body={[]}
+          collapsible
+        >
+          <p className="inline-flex w-fit rounded-md border border-cyan-400/30 bg-cyan-500/10 px-2 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-cyan-100">
+            Diagram
+          </p>
+          <p className="text-sm text-[var(--muted)]">CORE SPECIFICATION</p>
+          <div className="mt-2 rounded-xl border border-cyan-500/25 bg-slate-950/40 p-4">
+            <div className="space-y-2">
+              {coreStructureModel.map((item, index) => (
+                <div key={`${item.source}-${item.target}`} className="flex flex-col items-center gap-2">
+                  <div className="w-full rounded-md border border-[var(--border)] bg-slate-950/40 p-3">
+                    <p className="text-sm font-semibold text-slate-100">{item.source}</p>
+                    <p className="text-xs text-cyan-200">{item.target}</p>
+                    <p className="mt-1 text-xs text-[var(--muted)]">{item.description}</p>
+                  </div>
+                  {index < coreStructureModel.length - 1 ? <ArrowDown className="h-4 w-4 text-cyan-300/80" /> : null}
+                </div>
+              ))}
+            </div>
+          </div>
+        </SectionBlock>
 
         <SectionBlock
           title="Role of Each Component"
-          body={[
-            "### Layer Definition",
-            "Defines the identity, purpose, and system position of the DSP layer.",
-            "### Responsibilities",
-            "Defines the operational responsibilities during execution.",
-            "### Execution Model",
-            "Defines how processing tasks are executed.",
-            "### State & Behavior",
-            "Defines stateless execution and deterministic behavior.",
-            "### Constraints",
-            "Defines strict boundaries and forbidden behaviors.",
-          ]}
-          plainStructured
-        />
+          body={[]}
+          collapsible
+        >
+          <div className="space-y-2">
+            <Link href="#1-layer-definition" className="block rounded-md border border-[var(--border)] bg-slate-950/30 px-3 py-2 hover:border-cyan-400/60">
+              <p className="text-sm font-semibold text-slate-100">Layer Definition</p>
+              <p className="text-xs text-[var(--muted)]">Defines the identity, purpose, and system position of the DSP layer.</p>
+            </Link>
+            <Link href="#2-responsibilities-refined" className="block rounded-md border border-[var(--border)] bg-slate-950/30 px-3 py-2 hover:border-cyan-400/60">
+              <p className="text-sm font-semibold text-slate-100">Responsibilities</p>
+              <p className="text-xs text-[var(--muted)]">Defines the operational responsibilities during execution.</p>
+            </Link>
+            <Link href="#3-execution-model" className="block rounded-md border border-[var(--border)] bg-slate-950/30 px-3 py-2 hover:border-cyan-400/60">
+              <p className="text-sm font-semibold text-slate-100">Execution Model</p>
+              <p className="text-xs text-[var(--muted)]">Defines how processing tasks are executed.</p>
+            </Link>
+            <Link href="#9-state-behavior" className="block rounded-md border border-[var(--border)] bg-slate-950/30 px-3 py-2 hover:border-cyan-400/60">
+              <p className="text-sm font-semibold text-slate-100">State & Behavior</p>
+              <p className="text-xs text-[var(--muted)]">Defines stateless execution and deterministic behavior.</p>
+            </Link>
+            <Link href="#10-constraints" className="block rounded-md border border-[var(--border)] bg-slate-950/30 px-3 py-2 hover:border-cyan-400/60">
+              <p className="text-sm font-semibold text-slate-100">Constraints</p>
+              <p className="text-xs text-[var(--muted)]">Defines strict boundaries and forbidden behaviors.</p>
+            </Link>
+          </div>
+        </SectionBlock>
 
         <SectionBlock
           title="CORE vs Other Sections"
@@ -77,11 +131,7 @@ export default function DspLayerCorePage() {
             "- Processing Engine defines implementation.",
             "- Integration defines system flow.",
           ]}
-        />
-
-        <SectionBlock
-          title="Navigation Guidance"
-          body={["Select a section below to explore its detailed specification."]}
+          collapsible
         />
 
         <SectionBlock

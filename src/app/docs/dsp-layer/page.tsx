@@ -6,27 +6,27 @@ import { SectionBlock } from "@/components/ui/SectionBlock";
 
 const coreCards = [
   {
-    title: "Layer Definition",
+    title: "1. Layer Definition",
     summary: "Defines DSP role, boundaries, and cross-layer relations.",
     href: "/docs/dsp-layer/core#1-layer-definition",
   },
   {
-    title: "Responsibilities",
+    title: "2. Responsibilities",
     summary: "Execution, transformation, and artifact generation ownership.",
     href: "/docs/dsp-layer/core#2-responsibilities-refined",
   },
   {
-    title: "Execution Model",
+    title: "3. Execution Model",
     summary: "Single-operation MVP model with future pipeline compatibility.",
     href: "/docs/dsp-layer/core#3-execution-model",
   },
   {
-    title: "State & Behavior",
+    title: "4. State & Behavior",
     summary: "Stateless and deterministic execution model definitions.",
     href: "/docs/dsp-layer/core#9-state-behavior",
   },
   {
-    title: "Constraints",
+    title: "5. Constraints",
     summary: "Explicit non-ownership boundaries for DSP scope.",
     href: "/docs/dsp-layer/core#10-constraints",
   },

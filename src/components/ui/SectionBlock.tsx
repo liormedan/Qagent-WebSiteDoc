@@ -3,6 +3,8 @@
 import { ChevronRight } from "lucide-react";
 import { linkConcepts } from "@/lib/docs/auto-link";
 
+const BULLET_MARKERS_RE = /^(?:[-*\u2022]\s*)+/;
+
 function renderLines(lines: readonly string[], keyPrefix: string, muted = false) {
   type Block = { type: "p" | "ul" | "ol"; lines: string[] };
 
@@ -17,10 +19,10 @@ function renderLines(lines: readonly string[], keyPrefix: string, muted = false)
   };
 
   lines.forEach((raw) => {
-    let line = raw.trim();
+    let line = raw.replace(/\u00A0/g, " ").trim();
     if (!line) return;
 
-    const orderedInsideBullet = line.match(/^[-*•]\s*(\d+[.)]\s+.+)$/);
+    const orderedInsideBullet = line.match(/^(?:[-*\u2022]\s*)+(\d+[.)]\s+.+)$/);
     if (orderedInsideBullet) {
       line = orderedInsideBullet[1];
     }
@@ -31,9 +33,17 @@ function renderLines(lines: readonly string[], keyPrefix: string, muted = false)
       return;
     }
 
-    const unordered = line.match(/^[-*•]\s*(?:[-*•]\s*)?(.+)$/);
-    if (unordered) {
-      pushLine("ul", unordered[1]);
+    if (BULLET_MARKERS_RE.test(line)) {
+      const item = line.replace(BULLET_MARKERS_RE, "").trim();
+      if (!item) return;
+
+      const orderedFromBullet = item.match(/^(\d+)[.)]\s+(.+)$/);
+      if (orderedFromBullet) {
+        pushLine("ol", orderedFromBullet[2]);
+        return;
+      }
+
+      pushLine("ul", item);
       return;
     }
 
