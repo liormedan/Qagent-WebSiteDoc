@@ -27,7 +27,7 @@ export default function DocsIndexPage() {
       />
 
       <div className="flex flex-col gap-5">
-        <SectionBlock title="Quick Actions" body={[]} collapsible>
+        <SectionBlock title="Quick Actions" body={[]}>
           <div className="grid gap-3 md:grid-cols-2">
             {quickActions.map((action) => (
               <Link
@@ -45,17 +45,16 @@ export default function DocsIndexPage() {
           <p className="text-sm text-[var(--muted)]">
             This path gives new readers the quickest way to understand WaveQ from high-level system structure to runtime execution.
           </p>
-          <ol className="space-y-3 text-sm text-[var(--muted)]">
-            {readingPath.map((item, index) => (
+          <ul className="space-y-3 text-sm text-[var(--muted)]">
+            {readingPath.map((item) => (
               <li key={item.href} className="rounded-md border border-[var(--border)] bg-slate-950/30 px-3 py-2">
-                <span className="font-semibold text-slate-100">{index + 1}. </span>
                 <Link href={item.href} className="font-semibold text-[var(--accent)] hover:underline">
                   {item.step}
                 </Link>
                 <span>: {item.description}</span>
               </li>
             ))}
-          </ol>
+          </ul>
           <Link
             href="/docs/system"
             className="inline-flex w-fit rounded-md border border-cyan-400/40 bg-cyan-500/10 px-3 py-2 text-sm font-semibold text-cyan-100 transition-colors hover:border-cyan-300/70 hover:bg-cyan-500/20"
