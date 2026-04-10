@@ -45,9 +45,9 @@ export function AnalyzerModuleDiagram() {
         {components.map((item) => (
           <article key={item.title} className="rounded-xl border border-white/10 bg-slate-900/70 p-3">
             <h4 className="text-base font-semibold text-white">{item.title}</h4>
-            <ul className="mt-2 space-y-1 text-xs text-slate-300">
+            <ul className="mt-2 list-disc space-y-1 pl-5 text-xs text-slate-300">
               {item.bullets.map((bullet) => (
-                <li key={bullet}>• {bullet}</li>
+                <li key={bullet}>{bullet}</li>
               ))}
             </ul>
           </article>
@@ -55,7 +55,7 @@ export function AnalyzerModuleDiagram() {
       </div>
 
       <div className="mt-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-center text-sm font-semibold text-emerald-200">
-        Output → Intent + Clarification
+        Output -&gt; Intent + Clarification
       </div>
     </div>
   );

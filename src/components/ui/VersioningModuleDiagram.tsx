@@ -47,9 +47,9 @@ export function VersioningModuleDiagram() {
         {components.map((item) => (
           <article key={item.title} className="rounded-xl border border-white/10 bg-slate-900/70 p-4">
             <h4 className="text-base font-semibold text-white">{item.title}</h4>
-            <ul className="mt-2 space-y-1.5 text-sm text-slate-300">
+            <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm text-slate-300">
               {item.bullets.map((bullet) => (
-                <li key={bullet}>• {bullet}</li>
+                <li key={bullet}>{bullet}</li>
               ))}
             </ul>
           </article>

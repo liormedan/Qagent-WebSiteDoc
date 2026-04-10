@@ -8,7 +8,56 @@ const normalizeListItem = (value: string) => value.replace(/^(?:[-*\u2022]\s*)+/
 
 const sharedContractHref = "/docs/dsp-layer/core#4-dsp-contract-critical";
 const meteringHref = "/docs/dsp-layer/core#11-metering-awareness";
-const compatibilityHref = "/docs/dsp-layer/core#12-future-compatibility";
+const contractsCanonicalHref = "/docs/dsp-layer/contracts";
+
+const executionContract = `{
+  "job_id": "string",
+  "input_file": "string",
+  "operation": "string",
+  "params": "object"
+}`;
+
+const resultContract = `{
+  "job_id": "string",
+  "status": "completed | failed",
+  "output_file": "string",
+  "metadata": "MetadataContractV1"
+}`;
+
+const errorContract = `{
+  "status": "failed",
+  "error": "string"
+}`;
+
+const metadataContract = `{
+  "required": {
+    "duration_sec": "number",
+    "sample_rate_hz": "number",
+    "channels": "number"
+  },
+  "optional": {
+    "peak_db": "number",
+    "lufs": "number",
+    "processing_notes": "string"
+  },
+  "metering_fields": [
+    "duration_sec",
+    "sample_rate_hz",
+    "channels"
+  ],
+  "output_metadata_only": [
+    "peak_db",
+    "lufs",
+    "processing_notes"
+  ]
+}`;
+
+const compatibilityDeclaration = `{
+  "engine_id": "string",
+  "contract_version": "string",
+  "compatibility_tag": "string",
+  "backend_profile": "python | c++ | wasm"
+}`;
 
 const contractDetails = [
   {
@@ -43,9 +92,14 @@ const contractDetails = [
     title: "Metadata Contract",
     subtitle: "Processing metadata",
     purpose: "Define returned metadata envelope.",
-    defines: ["Additional processing information returned with results.", "Execution metadata shape expectations."],
+    defines: [
+      "Required fields: duration_sec (number), sample_rate_hz (number), channels (number).",
+      "Optional fields: peak_db (number), lufs (number), processing_notes (string).",
+      "Metering fields: duration_sec, sample_rate_hz, channels.",
+      "Output metadata only: peak_db, lufs, processing_notes.",
+    ],
     doesNotDefine: "downstream storage schema details.",
-    href: sharedContractHref,
+    href: contractsCanonicalHref,
   },
   {
     id: "metering-awareness",
@@ -61,9 +115,12 @@ const contractDetails = [
     title: "Future Compatibility",
     subtitle: "Stability across backends",
     purpose: "Define compatibility expectations for contract stability.",
-    defines: ["Contract stability across backend targets.", "Compatibility expectations for future implementations."],
+    defines: [
+      "Compatibility declaration fields: engine_id, contract_version, compatibility_tag, backend_profile.",
+      "Contract stability expectations across python, c++, and wasm backend targets.",
+    ],
     doesNotDefine: "backend-specific implementation details.",
-    href: compatibilityHref,
+    href: contractsCanonicalHref,
   },
 ] as const;
 
@@ -116,6 +173,10 @@ export default function DspContractsPage() {
           <p className="text-sm text-[var(--muted)]">
             The DSP contract surface is divided into six areas, each defining a different part of the execution boundary.
           </p>
+          <div className="mt-3 rounded-md border border-emerald-400/30 bg-emerald-500/10 px-3 py-2 text-xs text-emerald-100">
+            <span className="font-semibold">Canonical ownership:</span> DSP contract definitions are canonically owned by this page (
+            <code>{contractsCanonicalHref}</code>).
+          </div>
 
           <div className="mt-3">
             <p className="text-sm font-semibold text-slate-100">Contract surfaces</p>
@@ -149,6 +210,10 @@ export default function DspContractsPage() {
             <Link href="#contract-structure-diagram" className="group rounded-md border border-[var(--border)] bg-slate-950/30 px-3 py-2 transition-colors hover:border-cyan-400/60">
               <p className="font-semibold text-slate-100 group-hover:text-cyan-200">Contract Structure Diagram</p>
               <p className="text-xs text-slate-400">Shared and specialized surfaces.</p>
+            </Link>
+            <Link href="#canonical-contract-definitions" className="group rounded-md border border-[var(--border)] bg-slate-950/30 px-3 py-2 transition-colors hover:border-cyan-400/60">
+              <p className="font-semibold text-slate-100 group-hover:text-cyan-200">Canonical Contract Definitions</p>
+              <p className="text-xs text-slate-400">Authoritative request, result, error, metadata, compatibility.</p>
             </Link>
             <Link href="#contract-details" className="group rounded-md border border-[var(--border)] bg-slate-950/30 px-3 py-2 transition-colors hover:border-cyan-400/60">
               <p className="font-semibold text-slate-100 group-hover:text-cyan-200">Contract Details</p>
@@ -184,6 +249,31 @@ export default function DspContractsPage() {
                   ))}
                 </ul>
               </div>
+            </div>
+          </div>
+        </SectionBlock>
+
+        <SectionBlock id="canonical-contract-definitions" title="Canonical Contract Definitions" body={[]}>
+          <div className="space-y-4">
+            <div>
+              <p className="text-sm font-semibold text-slate-100">Execution Contract</p>
+              <pre className="mt-2 overflow-x-auto rounded-md border border-[var(--border)] bg-slate-950/40 p-3 text-xs text-slate-200 md:text-sm">{executionContract}</pre>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-slate-100">Result Contract</p>
+              <pre className="mt-2 overflow-x-auto rounded-md border border-[var(--border)] bg-slate-950/40 p-3 text-xs text-slate-200 md:text-sm">{resultContract}</pre>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-slate-100">Error Contract</p>
+              <pre className="mt-2 overflow-x-auto rounded-md border border-[var(--border)] bg-slate-950/40 p-3 text-xs text-slate-200 md:text-sm">{errorContract}</pre>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-slate-100">Metadata Contract</p>
+              <pre className="mt-2 overflow-x-auto rounded-md border border-[var(--border)] bg-slate-950/40 p-3 text-xs text-slate-200 md:text-sm">{metadataContract}</pre>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-slate-100">Compatibility Declaration</p>
+              <pre className="mt-2 overflow-x-auto rounded-md border border-[var(--border)] bg-slate-950/40 p-3 text-xs text-slate-200 md:text-sm">{compatibilityDeclaration}</pre>
             </div>
           </div>
         </SectionBlock>

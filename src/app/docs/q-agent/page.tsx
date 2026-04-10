@@ -1,173 +1,169 @@
 import Link from "next/link";
 import { DocsContent } from "@/components/layout/DocsContent";
+import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { QAgentCanonicalFlowDiagram } from "@/components/ui/QAgentCanonicalFlowDiagram";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 import { QAGENT_CANONICAL_FLOW, QAGENT_DOC_SOURCE_OF_TRUTH } from "@/lib/qagent-canonical";
 
-const qagentSubsections = [
+const normalizeListItem = (value: string) => value.replace(/^(?:[-*\u2022]\s*)+/, "").trim();
+
+const qagentAreas = [
+  "intent intake and clarification",
+  "DAL plan construction",
+  "approval gating",
+  "execution handoff packaging",
+];
+
+const relatedBoundaries = [
+  "QAgent = intent and planning authority",
+  "API Server = execution lifecycle authority",
+  "Client Layer = UI state and interaction authority",
+  "Versioning = canonical version record authority",
+];
+
+const inPageLinks = [
+  { title: "Overview", subtitle: "Scope and ownership boundaries.", href: "#overview" },
+  { title: "QAgent Structure Diagram", subtitle: "Canonical planning-to-handoff flow.", href: "#qagent-structure-diagram" },
+  { title: "QAgent Details", subtitle: "Gates and planning components.", href: "#qagent-details" },
+  { title: "Related Docs", subtitle: "Canonical cross-layer references.", href: "#related-docs" },
+];
+
+const qagentDetails = [
   {
+    id: "qagent-scope",
     title: "QAgent Scope",
-    lines: [
-      "What it is: QAgent is the orchestration and reasoning layer between client interaction and API execution.",
-      "Responsible for intent and planning orchestration.",
-      "Does NOT execute API runtime jobs directly.",
-      "Inputs: user context, analyzer evidence, lineage metadata.",
-      "Outputs: approved execution handoff and lineage references.",
-    ],
+    subtitle: "Layer identity",
+    purpose: "Defines QAgent as the orchestration and reasoning layer between Client and API.",
+    defines: ["intent and planning orchestration", "execution handoff readiness", "lineage bridge context"],
+    doesNotDefine: "API runtime scheduling or job lifecycle ownership.",
+    href: "/docs/q-agent",
+    linkLabel: "Canonical page",
   },
   {
+    id: "intent-intake",
     title: "Intent Intake",
-    lines: [
-      "What it is: intake stage that transforms user requests into structured intent candidates.",
-      "Responsible for intent signal normalization.",
-      "Does NOT decide API policy/retry behavior.",
-      "Inputs: user request and contextual evidence.",
-      "Outputs: structured intent candidate.",
-    ],
+    subtitle: "Request normalization",
+    purpose: "Defines intake transformation from user request into structured intent.",
+    defines: ["intent signal normalization", "context preparation", "initial intent candidate formation"],
+    doesNotDefine: "policy or retry ownership.",
+    href: "/docs/architecture/modules/intent-clarification",
+    linkLabel: "Related section",
   },
   {
+    id: "clarification-gate",
     title: "Clarification Gate",
-    lines: [
-      "What it is: ambiguity gate that blocks unclear requests before planning.",
-      "Responsible for clarification enforcement.",
-      "Does NOT bypass unresolved ambiguity.",
-      "Inputs: intent candidate and ambiguity checks.",
-      "Outputs: clarified/validated intent or clarification-required state.",
-    ],
+    subtitle: "Ambiguity enforcement",
+    purpose: "Defines ambiguity checks before planning proceeds.",
+    defines: ["ambiguity detection", "clarification-required outcomes", "clarified intent progression"],
+    doesNotDefine: "execution orchestration behavior.",
+    href: "/docs/architecture/modules/intent-clarification",
+    linkLabel: "Related section",
   },
   {
+    id: "dal-construction",
     title: "DAL Construction",
-    lines: [
-      "What it is: planning stage that builds executable and UI plan structures.",
-      "Responsible for deterministic plan composition.",
-      "Does NOT execute tools/jobs.",
-      "Inputs: validated intent and constraints.",
-      "Outputs: execution graph and UI plan package.",
-    ],
+    subtitle: "Plan composition",
+    purpose: "Defines creation of execution-ready plan artifacts.",
+    defines: ["plan graph construction", "UI plan packaging", "handoff artifact composition"],
+    doesNotDefine: "runtime execution of generated plan.",
+    href: "/docs/architecture/modules/dal",
+    linkLabel: "Related section",
   },
   {
+    id: "approval-gate",
     title: "Approval Gate",
-    lines: [
-      "What it is: user-approval enforcement stage before execution handoff.",
-      "Responsible for approval gating integrity.",
-      "Does NOT mutate approved semantics after gate decision.",
-      "Inputs: approval-ready plan and user decision.",
-      "Outputs: approved/rejected gate result and handoff eligibility.",
-    ],
+    subtitle: "Execution authorization",
+    purpose: "Defines approval enforcement before API handoff.",
+    defines: ["approval decision boundary", "approved/rejected outcomes", "handoff eligibility control"],
+    doesNotDefine: "post-handoff API status ownership.",
+    href: "/docs/architecture/modules/approval",
+    linkLabel: "Related section",
   },
+] as const;
+
+const relatedDocs = [
+  "QAgent = intent interpretation and plan authority.",
+  "API Server = execution orchestration and job authority.",
+  "Client Layer = user interaction and UI ownership.",
+  "System Flow = cross-layer transition authority.",
 ];
 
 export default function QAgentPage() {
   return (
     <DocsContent>
-      <PageTitle title="QAgent Layer" description="Canonical layer page for QAgent responsibilities, gates, and execution handoff semantics." />
+      <PageTitle title="QAgent Layer" description="Canonical layer page for QAgent reasoning, planning gates, and execution handoff semantics." />
+
       <section className="mt-4 rounded-md border border-cyan-400/30 bg-cyan-500/10 p-4 text-sm text-cyan-100">
-        <p>QAgent is the canonical intent-to-plan layer that converts user goals into approved execution handoff for API Server processing.</p>
+        <div className="grid gap-2 md:grid-cols-2">
+          <div className="rounded-md border border-cyan-300/30 bg-cyan-400/10 px-3 py-2">
+            <p className="text-xs font-semibold uppercase tracking-wide text-cyan-200">This page covers</p>
+            <p className="mt-1 text-sm">QAgent scope, planning gates, handoff preparation, and canonical flow boundaries.</p>
+          </div>
+          <div className="rounded-md border border-amber-300/30 bg-amber-400/10 px-3 py-2">
+            <p className="text-xs font-semibold uppercase tracking-wide text-amber-200">This page does not cover</p>
+            <p className="mt-1 text-sm">API runtime lifecycle, infrastructure scheduling, and client-side UI state ownership.</p>
+          </div>
+        </div>
       </section>
 
-      <div className="flex flex-col gap-5">
-        <SectionBlock
-          title="Purpose"
-          body={["QAgent Layer converts user goals into validated, approved, and traceable execution handoff artifacts for API Server Layer."]}
-        >
+      <div className="mt-5 flex flex-col gap-5">
+        <SectionBlock id="overview" title="Overview" body={[]}>
           <p className="text-sm text-[var(--muted)]">
-            Canonical concepts: <Link href="/docs/q-agent" className="text-[var(--accent)] hover:underline">QAgent</Link>,{" "}
-            <Link href="/docs/architecture/modules/intent-clarification" className="text-[var(--accent)] hover:underline">Intent</Link>,{" "}
-            <Link href="/docs/architecture/modules/dal" className="text-[var(--accent)] hover:underline">Plan</Link>.
+            QAgent is the canonical intent-to-plan layer that converts user goals into approved execution handoff for API processing.
           </p>
+          <div className="mt-3">
+            <p className="text-sm font-semibold text-slate-100">QAgent areas</p>
+            <ul className="mt-1 list-disc space-y-1 pl-5 text-sm text-[var(--muted)]">
+              {qagentAreas.map((item) => (
+                <li key={item}>{normalizeListItem(item)}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="mt-3 rounded-md border border-amber-400/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-100">
+            <span className="font-semibold">Out of Scope:</span> API execution lifecycle policy and client runtime state ownership.
+          </div>
+          <div className="mt-3">
+            <p className="text-sm font-semibold text-slate-100">Related boundaries</p>
+            <ul className="mt-1 list-disc space-y-1 pl-5 text-sm text-[var(--muted)]">
+              {relatedBoundaries.map((item) => (
+                <li key={item}>{normalizeListItem(item)}</li>
+              ))}
+            </ul>
+          </div>
         </SectionBlock>
 
-        <SectionBlock
-          title="Responsibilities"
-          body={[
-            "Responsible for intent resolution, clarification gating, and plan construction.",
-            "Handles approval-gated transition toward execution handoff.",
-            "Owns QAgent-side lineage semantics and bridge readiness.",
-          ]}
-        />
-
-        <SectionBlock
-          title="Non-Responsibilities"
-          body={[
-            "Does NOT own API runtime job lifecycle authority.",
-            "Does NOT redefine API status tracker ownership.",
-            "Does NOT execute infrastructure-level runtime scheduling.",
-          ]}
-        />
-
-        <SectionBlock
-          title="Position in System"
-          body={[
-            "Before: Client Layer interaction and input capture.",
-            "After: API Server Layer /run intake and job lifecycle orchestration.",
-          ]}
-        >
-          <p className="text-sm text-[var(--muted)]">
-            Cross-layer links: <Link href="/docs/client" className="text-[var(--accent)] hover:underline">Client Layer</Link>{" -> "}
-            <Link href="/docs/api" className="text-[var(--accent)] hover:underline">API Server Layer</Link>.
-          </p>
+        <SectionBlock id="in-this-page" title="In this page" body={[]}>
+          <div className="grid gap-2 text-sm md:grid-cols-2">
+            {inPageLinks.map((item) => (
+              <Link key={item.href} href={item.href} className="group rounded-md border border-[var(--border)] bg-slate-950/30 px-3 py-2 transition-colors hover:border-cyan-400/60">
+                <p className="font-semibold text-slate-100 group-hover:text-cyan-200">{item.title}</p>
+                <p className="text-xs text-slate-400">{item.subtitle}</p>
+              </Link>
+            ))}
+          </div>
         </SectionBlock>
 
-        <SectionBlock
-          title="Inputs"
-          body={[
-            "Receives user interaction context and request payloads from Client Layer.",
-            "Receives analysis/context evidence from upstream QAgent internal modules.",
-          ]}
-        />
-
-        <SectionBlock
-          title="Outputs"
-          body={[
-            "Produces approved execution handoff artifacts (Execution Request Envelope bridge context).",
-            "Produces QAgent lineage references for status and version correlation.",
-          ]}
-        >
-          <p className="text-sm text-[var(--muted)]">
-            Contract links:{" "}
-            <Link href="/docs/api" className="text-[var(--accent)] hover:underline">
-              Execution Request Envelope
-            </Link>
-            , <Link href="/docs/api/job-orchestration" className="text-[var(--accent)] hover:underline">Job</Link>,{" "}
-            <Link href="/docs/api/versioning" className="text-[var(--accent)] hover:underline">Version</Link>.
-          </p>
-        </SectionBlock>
-
-        <SectionBlock
-          title="Boundaries"
-          body={[
-            "QAgent MUST NOT redefine API endpoint semantics.",
-            "QAgent MUST NOT replace API status/progress authority.",
-            "QAgent MUST maintain canonical handoff mapping without post-approval semantic mutation.",
-          ]}
-        />
-
-        <SectionBlock
-          title="Canonical Flow"
-          body={[
-            "This flow is defined once in the QAgent canonical model and consumed by child pages.",
-            QAGENT_CANONICAL_FLOW,
-          ]}
-        />
-
-        <SectionBlock title="Canonical Flow Diagram" body={[]}>
+        <SectionBlock id="qagent-structure-diagram" title="QAgent Structure Diagram" body={[]}>
           <QAgentCanonicalFlowDiagram />
+          <p className="mt-3 text-sm text-[var(--muted)]">Canonical flow: {QAGENT_CANONICAL_FLOW}</p>
         </SectionBlock>
 
-        {qagentSubsections.map((section) => (
-          <SectionBlock key={section.title} title={section.title} body={section.lines} />
-        ))}
+        <SectionBlock id="qagent-details" title="QAgent Details" body={[]}>
+          <LayerSpecAccordion items={[...qagentDetails]} />
+        </SectionBlock>
 
-        <SectionBlock
-          title="Source of Truth"
-          body={[
-            `Canonical layer page: ${QAGENT_DOC_SOURCE_OF_TRUTH.canonicalLocation}.`,
-            "This page is authoritative for QAgent layer role, boundaries, and canonical flow.",
-            "Subpages and module pages are child specifications and must not redefine this layer contract.",
-            QAGENT_DOC_SOURCE_OF_TRUTH.rule,
-          ]}
-        />
+        <SectionBlock id="related-docs" title="Related Docs" body={[]}>
+          <ul className="list-disc space-y-1 pl-5 text-sm text-[var(--muted)]">
+            {relatedDocs.map((item) => (
+              <li key={item}>{normalizeListItem(item)}</li>
+            ))}
+          </ul>
+          <p className="mt-3 text-sm text-[var(--muted)]">
+            Canonical location: <span className="font-semibold text-slate-100">{QAGENT_DOC_SOURCE_OF_TRUTH.canonicalLocation}</span>
+          </p>
+          <p className="text-sm text-[var(--muted)]">{QAGENT_DOC_SOURCE_OF_TRUTH.rule}</p>
+        </SectionBlock>
       </div>
     </DocsContent>
   );

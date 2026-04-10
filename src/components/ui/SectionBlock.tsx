@@ -22,12 +22,12 @@ function renderLines(lines: readonly string[], keyPrefix: string, muted = false)
     let line = raw.replace(/\u00A0/g, " ").trim();
     if (!line) return;
 
-    const orderedInsideBullet = line.match(/^(?:[-*\u2022]\s*)+(\d+[.)]\s+.+)$/);
+    const orderedInsideBullet = line.match(/^(?:[-*\u2022]\s*)+(\d+\s*[.)]\s+.+)$/);
     if (orderedInsideBullet) {
       line = orderedInsideBullet[1];
     }
 
-    const ordered = line.match(/^(\d+)[.)]\s+(.+)$/);
+    const ordered = line.match(/^(\d+)\s*[.)]\s+(.+)$/);
     if (ordered) {
       pushLine("ol", ordered[2]);
       return;
@@ -37,7 +37,7 @@ function renderLines(lines: readonly string[], keyPrefix: string, muted = false)
       const item = line.replace(BULLET_MARKERS_RE, "").trim();
       if (!item) return;
 
-      const orderedFromBullet = item.match(/^(\d+)[.)]\s+(.+)$/);
+      const orderedFromBullet = item.match(/^(\d+)\s*[.)]\s+(.+)$/);
       if (orderedFromBullet) {
         pushLine("ol", orderedFromBullet[2]);
         return;

@@ -15,12 +15,32 @@ const outputContract = `{
   "job_id": "string",
   "status": "completed | failed",
   "output_file": "string",
-  "metadata": "object"
+  "metadata": "MetadataContractV1"
 }`;
 
 const errorContract = `{
   "status": "failed",
   "error": "string"
+}`;
+
+const metadataContract = `{
+  "required": {
+    "duration_sec": "number",
+    "sample_rate_hz": "number",
+    "channels": "number"
+  },
+  "optional": {
+    "peak_db": "number",
+    "lufs": "number",
+    "processing_notes": "string"
+  }
+}`;
+
+const compatibilityDeclaration = `{
+  "engine_id": "string",
+  "contract_version": "string",
+  "compatibility_tag": "string",
+  "backend_profile": "python | c++ | wasm"
 }`;
 
 const coreStructureModel = [
@@ -180,7 +200,15 @@ export default function DspLayerCorePage() {
           collapsible
         />
 
-        <SectionBlock id="4-dsp-contract-critical" title="4. DSP Contract (Critical)" body={["Canonical request/response/error contracts for DSP processing execution."]} collapsible>
+        <SectionBlock
+          id="4-dsp-contract-critical"
+          title="4. DSP Contract (Critical)"
+          body={[
+            "Canonical request/response/error/metadata compatibility contract definitions are owned by /docs/dsp-layer/contracts.",
+            "This section keeps a synchronized deep-spec copy for Core traceability.",
+          ]}
+          collapsible
+        >
           <div className="space-y-4">
             <div>
               <h3 className="text-sm font-semibold text-slate-100">Input Contract</h3>
@@ -193,6 +221,14 @@ export default function DspLayerCorePage() {
             <div>
               <h3 className="text-sm font-semibold text-slate-100">Error Contract</h3>
               <pre className="mt-2 overflow-x-auto rounded-md border border-[var(--border)] bg-slate-950/40 p-3 text-xs text-slate-200 md:text-sm">{errorContract}</pre>
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-slate-100">Metadata Contract</h3>
+              <pre className="mt-2 overflow-x-auto rounded-md border border-[var(--border)] bg-slate-950/40 p-3 text-xs text-slate-200 md:text-sm">{metadataContract}</pre>
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-slate-100">Compatibility Declaration</h3>
+              <pre className="mt-2 overflow-x-auto rounded-md border border-[var(--border)] bg-slate-950/40 p-3 text-xs text-slate-200 md:text-sm">{compatibilityDeclaration}</pre>
             </div>
           </div>
         </SectionBlock>
@@ -296,12 +332,14 @@ export default function DspLayerCorePage() {
           title="Source of Truth"
           body={[
             "Canonical layer page: /docs/dsp-layer.",
-            "DSP Engine Abstraction page is a child specification and must not redefine layer contracts.",
+            "DSP Engine (Overview): contextual entry in /docs/dsp-layer internal structure.",
+            "DSP Engine (Deep Spec): /docs/architecture/dagent/dsp-engine-abstraction implementation-depth reference.",
+            "DSP Engine Deep Spec is a child specification and must not redefine layer contracts.",
           ]}
           collapsible
         >
           <Link href="/docs/architecture/dagent/dsp-engine-abstraction" className="font-medium text-[var(--accent)] hover:underline">
-            Open DSP Engine Abstraction (child page)
+            Open DSP Engine (Deep Spec)
           </Link>
         </SectionBlock>
       </div>

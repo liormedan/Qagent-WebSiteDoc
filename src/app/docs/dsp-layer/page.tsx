@@ -34,9 +34,14 @@ const coreCards = [
 
 const internalStructure = [
   {
-    label: "DSP Engine",
+    label: "DSP Engine (Overview)",
     summary: "Execution abstraction that routes operations and coordinates processor calls.",
     href: "/docs/dsp-layer/core#7-dsp-engine-abstraction-layer",
+  },
+  {
+    label: "DSP Engine (Deep Spec)",
+    summary: "Implementation-depth reference for DSP engine abstraction details.",
+    href: "/docs/architecture/dagent/dsp-engine-abstraction",
   },
   {
     label: "Processor Registry",

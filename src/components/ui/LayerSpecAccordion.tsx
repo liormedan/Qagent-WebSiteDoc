@@ -2,8 +2,8 @@
 
 import { DocsDetailsAccordion, type DocsDetailsItem } from "@/components/ui/DocsDetailsAccordion";
 
-type ContractAccordionItem = DocsDetailsItem;
+export type LayerSpecItem = DocsDetailsItem;
 
-export function ContractDetailsAccordion({ items }: { items: ContractAccordionItem[] }) {
+export function LayerSpecAccordion({ items }: { items: LayerSpecItem[] }) {
   return <DocsDetailsAccordion items={items} />;
 }

@@ -15,6 +15,7 @@ const readingPath = [
   { step: "Client", href: "/docs/client", description: "Understand the user-facing interface, interaction model, and UI boundaries." },
   { step: "QAgent", href: "/docs/q-agent", description: "Understand intent interpretation, planning, clarification, and approval logic." },
   { step: "API", href: "/docs/api", description: "Understand execution contracts, orchestration flow, and runtime boundaries." },
+  { step: "DSP", href: "/docs/dsp-layer", description: "Understand processing engine structure, transformation flow, and DSP integration boundaries." },
 ];
 
 export default function DocsIndexPage() {

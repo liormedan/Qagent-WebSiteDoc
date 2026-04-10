@@ -2,7 +2,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { DocsContent } from "@/components/layout/DocsContent";
 import { EndToEndSequenceDiagram } from "@/components/ui/EndToEndSequenceDiagram";
+import { DocsDetailsAccordion } from "@/components/ui/DocsDetailsAccordion";
+import { DocsDiagram } from "@/components/ui/DocsDiagram";
+import { DocsInThisPageNav } from "@/components/ui/DocsInThisPageNav";
+import { DocsOverviewBlock } from "@/components/ui/DocsOverviewBlock";
+import { DocsRelatedDocs } from "@/components/ui/DocsRelatedDocs";
+import { DocsScopeBlocks } from "@/components/ui/DocsScopeBlocks";
 import { PageTitle } from "@/components/ui/PageTitle";
+import { SectionBlock } from "@/components/ui/SectionBlock";
 
 const layerTitles: Record<string, string> = {
   "client-frontend-layer": "Client / Frontend Layer",
@@ -146,48 +153,111 @@ export default async function SystemLayerPage({ params }: { params: Promise<{ la
   const canonicalHref = layerCanonicalLinks[layer];
   const systemView = layerSystemViews[layer];
 
-  if (!title || !canonicalHref || !systemView) {
-    notFound();
-  }
+  if (!title || !canonicalHref || !systemView) notFound();
+
+  const detailsItems = [
+    {
+      id: "layer-purpose",
+      title: "Layer Purpose",
+      subtitle: "What this layer does",
+      purpose: systemView.explanation[0],
+      defines: [systemView.explanation[1], ...systemView.responsibilities],
+      doesNotDefine: "ownership that belongs to adjacent layers.",
+      href: canonicalHref,
+      linkLabel: "Canonical page",
+    },
+    {
+      id: "system-position",
+      title: "Position in System",
+      subtitle: "Before and after boundaries",
+      purpose: "Defines how this layer connects to upstream and downstream stages.",
+      defines: [systemView.position],
+      doesNotDefine: "cross-layer ownership redefinitions.",
+      href: "/docs/system-flow",
+      linkLabel: "Related section",
+    },
+    {
+      id: "ownership-boundary",
+      title: "Ownership Boundary",
+      subtitle: "Relation to neighboring layers",
+      purpose: "Defines stable ownership boundaries in system context.",
+      defines: [
+        "canonical page authority for this layer",
+        "system flow as transition reference",
+        "layer-specific deep spec authority",
+      ],
+      doesNotDefine: "new architecture semantics.",
+      href: canonicalHref,
+      linkLabel: "Canonical page",
+    },
+  ] as const;
 
   return (
     <DocsContent>
       <PageTitle title={`${title} - System View`} description={systemView.summary} />
 
-      <div className="mt-4 space-y-4 rounded-md border border-[var(--border)] bg-slate-900/30 p-4 text-sm text-slate-300">
-        <section className="space-y-2">
-          <h2 className="text-base font-semibold text-slate-100">What this layer does</h2>
-          <p>{systemView.explanation[0]}</p>
-          <p>{systemView.explanation[1]}</p>
-        </section>
+      <DocsScopeBlocks
+        covers="layer responsibilities, system position, and canonical cross-layer boundaries."
+        doesNotCover="deep implementation details, policy internals, and subsystem-specific runtime logic."
+      />
 
-        <section className="space-y-2">
-          <h2 className="text-base font-semibold text-slate-100">Responsibilities</h2>
-          <ul className="list-disc space-y-1 pl-5">
-            {systemView.responsibilities.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </section>
+      <div className="mt-5 flex flex-col gap-5">
+        <SectionBlock id="overview" title="Overview" body={[]}>
+          <DocsOverviewBlock
+            intro={systemView.explanation[0]}
+            areasTitle="Layer concerns"
+            areas={systemView.responsibilities}
+            outOfScope="semantic ownership of adjacent layers."
+            relatedBoundaries={[
+              "System View = layer-level orientation and ownership boundaries.",
+              "Canonical page = deep specification authority for this layer.",
+              "System Flow = cross-layer transition reference.",
+            ]}
+          />
+        </SectionBlock>
 
-        <section className="space-y-2">
-          <h2 className="text-base font-semibold text-slate-100">Position in the system</h2>
-          <p>{systemView.position}</p>
-        </section>
+        <SectionBlock id="in-this-page" title="In this page" body={[]}>
+          <DocsInThisPageNav
+            items={[
+              { title: "Overview", subtitle: "Layer scope and responsibilities.", href: "#overview" },
+              { title: "Layer Structure Diagram", subtitle: "System placement and handoff model.", href: "#layer-structure-diagram" },
+              { title: "Layer Details", subtitle: "Purpose, defines, boundaries.", href: "#layer-details" },
+              { title: "Related Docs", subtitle: "Canonical page and boundaries.", href: "#related-docs" },
+            ]}
+          />
+        </SectionBlock>
 
-        <section className="space-y-2">
-          <h2 className="text-base font-semibold text-slate-100">Canonical page</h2>
-          <Link href={canonicalHref} className="inline-block font-medium text-[var(--accent)] hover:underline">
-            Explore in detail
-          </Link>
-        </section>
-
-        {layer === "end-to-end-flow" ? (
-          <section className="space-y-2">
-            <h2 className="text-base font-semibold text-slate-100">End-to-End Sequence Diagram</h2>
+        <SectionBlock id="layer-structure-diagram" title="Layer Structure Diagram" body={[]}>
+          {layer === "end-to-end-flow" ? (
             <EndToEndSequenceDiagram />
-          </section>
-        ) : null}
+          ) : (
+            <DocsDiagram
+              mode="structure"
+              root={title}
+              groups={[
+                { title: "Layer Role", items: [systemView.explanation[0]] },
+                { title: "System Position", items: [systemView.position] },
+              ]}
+            />
+          )}
+        </SectionBlock>
+
+        <SectionBlock id="layer-details" title="Layer Details" body={[]}>
+          <DocsDetailsAccordion items={[...detailsItems]} />
+        </SectionBlock>
+
+        <SectionBlock id="related-docs" title="Related Docs" body={[]}>
+          <DocsRelatedDocs
+            items={[
+              "System View = layer-level orientation and ownership boundaries.",
+              "Canonical page = full specification authority.",
+              "System Flow = cross-layer transition authority.",
+            ]}
+          />
+          <Link href={canonicalHref} className="mt-3 inline-block font-medium text-[var(--accent)] hover:underline">
+            Canonical page
+          </Link>
+        </SectionBlock>
       </div>
     </DocsContent>
   );
