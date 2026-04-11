@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { DocsContent } from "@/components/layout/DocsContent";
 import { EndToEndSequenceDiagram } from "@/components/ui/EndToEndSequenceDiagram";
@@ -6,7 +5,6 @@ import { DocsDetailsAccordion, type DocsDetailsItem } from "@/components/ui/Docs
 import { DocsDiagram } from "@/components/ui/DocsDiagram";
 import { DocsInThisPageNav } from "@/components/ui/DocsInThisPageNav";
 import { DocsOverviewBlock } from "@/components/ui/DocsOverviewBlock";
-import { DocsRelatedDocs } from "@/components/ui/DocsRelatedDocs";
 import { DocsScopeBlocks } from "@/components/ui/DocsScopeBlocks";
 import { systemLayerDocLinks } from "@/lib/docs-scope-links";
 import { PageTitle } from "@/components/ui/PageTitle";
@@ -28,7 +26,7 @@ const layerCanonicalLinks: Record<string, string> = {
   "qagent-layer": "/docs/q-agent",
   "api-server-layer": "/docs/api",
   "dsp-processing-layer": "/docs/dsp-layer",
-  "data-layer": "/docs/data-layer/system-view",
+  "data-layer": "/docs/data-layer",
   "infrastructure-layer": "/docs/infrastructure-layer",
   "auth-security-layer": "/docs/auth-security",
   "end-to-end-flow": "/docs/system-flow",
@@ -658,7 +656,6 @@ export default async function SystemLayerPage({ params }: { params: Promise<{ la
               { title: "Overview", subtitle: "Layer scope and responsibilities.", href: "#overview" },
               { title: "Layer Structure Diagram", subtitle: "System placement and handoff model.", href: "#layer-structure-diagram" },
               { title: "Layer Details", subtitle: "Purpose, defines, boundaries.", href: "#layer-details" },
-              { title: "Related Docs", subtitle: "Canonical page and boundaries.", href: "#related-docs" },
             ]}
           />
         </SectionBlock>
@@ -689,19 +686,6 @@ export default async function SystemLayerPage({ params }: { params: Promise<{ la
 
         <SectionBlock id="layer-details" title="Layer Details" body={[]}>
           <DocsDetailsAccordion items={[...detailsItems]} />
-        </SectionBlock>
-
-        <SectionBlock id="related-docs" title="Related Docs" body={[]}>
-          <DocsRelatedDocs
-            items={[
-              "System View = layer-level orientation and ownership boundaries.",
-              "Canonical page = full specification authority.",
-              "System Flow = cross-layer transition authority.",
-            ]}
-          />
-          <Link href={canonicalHref} className="mt-3 inline-block font-medium text-[var(--accent)] hover:underline">
-            Canonical page
-          </Link>
         </SectionBlock>
       </div>
     </DocsContent>

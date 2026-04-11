@@ -3,18 +3,16 @@ import { DocsContent } from "@/components/layout/DocsContent";
 import { DocsDiagram } from "@/components/ui/DocsDiagram";
 import { DocsInThisPageNav } from "@/components/ui/DocsInThisPageNav";
 import { DocsOverviewBlock } from "@/components/ui/DocsOverviewBlock";
-import { DocsRelatedDocs } from "@/components/ui/DocsRelatedDocs";
 import { DocsScopeBlocks } from "@/components/ui/DocsScopeBlocks";
 import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 
-import { SYSTEM_DATA_LAYER_STUB_LINKS } from "@/lib/docs-scope-links";
+import { systemLayerDocLinks } from "@/lib/docs-scope-links";
 const inPageLinks = [
   { title: "Overview", subtitle: "Placement in System docs.", href: "#overview" },
   { title: "Placement Diagram", subtitle: "Internal pillars and neighbors.", href: "#system-data-layer-diagram" },
   { title: "Data Layer Details", subtitle: "Chapters at system abstraction.", href: "#system-data-layer-details" },
-  { title: "Related Docs", subtitle: "Top-level Data Layer section.", href: "#related-docs" },
 ] as const;
 
 const details = [
@@ -124,7 +122,7 @@ export default function SystemDataLayerPlacementPage() {
       />
       <p className="mt-2 text-xs uppercase tracking-[0.08em] text-slate-400">Section Path: System / Data Layer</p>
 
-      <DocsScopeBlocks links={SYSTEM_DATA_LAYER_STUB_LINKS} />
+      <DocsScopeBlocks links={systemLayerDocLinks("/docs/data-layer")} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock id="overview" title="Overview" body={[]} summaryPreview="System map entry for Data Layer; canonical content lives under the Data Layer tab.">
@@ -184,16 +182,6 @@ export default function SystemDataLayerPlacementPage() {
 
         <SectionBlock id="system-data-layer-details" title="Data Layer Details" body={[]}>
           <LayerSpecAccordion items={[...details]} />
-        </SectionBlock>
-
-        <SectionBlock id="related-docs" title="Related Docs" body={[]}>
-          <DocsRelatedDocs
-            links={[
-              { href: "/docs/data-layer", title: "Data Layer (section home)", description: "Overview and chapter index for persistence documentation." },
-              { href: "/docs/data-layer/system-view", title: "Data Layer — System View", description: "Full cross-layer placement and narrative." },
-              { href: "/docs/system-flow", title: "System Flow", description: "Cross-layer runtime flow complement." },
-            ]}
-          />
         </SectionBlock>
       </div>
     </DocsContent>

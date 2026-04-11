@@ -14,11 +14,6 @@ export const SYSTEM_HOME_SCOPE_LINKS: readonly DocsScopeLink[] = [
   { href: "/docs/system/client-frontend-layer", label: "Layer system views (Client)" },
 ] as const;
 
-export const SYSTEM_DATA_LAYER_STUB_LINKS: readonly DocsScopeLink[] = [
-  { href: "/docs/data-layer", label: "Data Layer documentation" },
-  { href: "/docs/data-layer/system-view", label: "Data Layer System View" },
-] as const;
-
 export const CLIENT_LAYER_HUB_LINKS: readonly DocsScopeLink[] = [
   { href: "/docs/system/client-frontend-layer", label: "View System view for this layer" },
   { href: "/docs/architecture/contracts/schema-registry", label: "Schema Registry (contracts)" },

@@ -95,7 +95,7 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
                     <button
                       type="button"
                       className={cn(
-                        "flex max-w-[140px] items-center gap-0.5 rounded-md px-2 py-1.5 text-left text-xs font-semibold uppercase tracking-[0.06em] transition-colors lg:max-w-none lg:px-2.5 lg:text-[11px] lg:tracking-[0.1em]",
+                        "flex max-w-[152px] items-center gap-0.5 rounded-md px-2 py-1.5 text-left text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors lg:max-w-none lg:px-2.5 lg:text-sm lg:tracking-[0.09em]",
                         routeActive || flyoutOpen ? "bg-slate-800/90 text-slate-50" : "text-slate-400 hover:bg-slate-900/80 hover:text-slate-200",
                       )}
                       aria-expanded={flyoutOpen}
@@ -128,7 +128,7 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
                             role="menuitem"
                             aria-current={itemActive ? "page" : undefined}
                             className={cn(
-                              "block whitespace-nowrap px-3 py-2 text-sm transition-colors",
+                              "block whitespace-nowrap px-3 py-2.5 text-[0.9375rem] leading-snug tracking-[0.01em] transition-colors",
                               itemActive ? "bg-cyan-500/15 text-cyan-100" : "text-slate-200 hover:bg-slate-800/90",
                             )}
                             onClick={() => setOpenGroupId(null)}
@@ -179,7 +179,7 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
             <div className="space-y-3 border-t border-[var(--border)]/40 px-1 pb-2 pt-2">
               {DOCS_NAV_GROUPS.map((group) => (
                 <div key={group.id}>
-                  <p className="px-2 pb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">{group.label}</p>
+                  <p className="px-2 pb-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">{group.label}</p>
                   <div className="flex flex-col gap-0.5">
                     {group.items.map((item) => {
                       const itemActive = item.matches(safePathname);
@@ -203,7 +203,7 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
 
         <div className="hidden h-[32px] items-center border-t border-[var(--border)]/60 md:flex">
           <p
-            className={`truncate text-xs font-medium leading-5 tracking-[0.04em] ${clientActive || authSecurityActive ? "text-slate-400" : "text-transparent select-none"}`}
+            className={`truncate text-[13px] font-medium leading-5 tracking-[0.05em] ${clientActive || authSecurityActive ? "text-slate-400" : "text-transparent select-none"}`}
           >
             {contextText}
           </p>
