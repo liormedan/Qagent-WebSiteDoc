@@ -1,69 +1,86 @@
-import { DocsContent } from "@/components/layout/DocsContent";
-import { PageTitle } from "@/components/ui/PageTitle";
-import { SectionBlock } from "@/components/ui/SectionBlock";
+import { DocsTemplatePage } from "@/components/ui/DocsTemplatePage";
+
+const isolationDetails = [
+  {
+    title: "Tenant and Session Isolation",
+    subtitle: "Scope ownership",
+    purpose: "Define tenant/session isolation boundaries for QAgent state and artifacts.",
+    defines: ["tenant-scoped data isolation", "session-scoped active state isolation", "version ownership by tenant/session scope"],
+    doesNotDefine: "Cross-tenant sharing policies outside explicit contracts.",
+  },
+  {
+    title: "Execution Ownership",
+    subtitle: "Lineage binding",
+    purpose: "Define execution ownership relationship to originating request/session lineage.",
+    defines: ["execution_id bound to originating lineage.", "ownership checks for execution actions.", "lineage-preserving access constraints."],
+    doesNotDefine: "API-side job scheduling ownership.",
+  },
+  {
+    title: "Locking and Conflict Handling",
+    subtitle: "Concurrency governance",
+    purpose: "Define lock strategy and conflict handling during concurrent operations.",
+    defines: ["write-lock for execution and version commits.", "first-lock-wins conflict rule.", "conflict event logging with lineage IDs."],
+    doesNotDefine: "Distributed lock implementation internals.",
+  },
+  {
+    title: "Shared Resource Policy",
+    subtitle: "Lease and access constraints",
+    purpose: "Define controlled shared-resource behavior across concurrent sessions.",
+    defines: ["read-only default shared access.", "lease TTL requirements for long operations.", "lease expiry invalidation rules."],
+    doesNotDefine: "Storage backend implementation details.",
+  },
+] as const;
 
 export default function SessionIsolationPage() {
   return (
-    <DocsContent>
-      <PageTitle
-        title="Multi-user and Session Isolation Spec"
-        description="Isolation policy for tenants, sessions, execution ownership, and concurrency control."
-      />
-      <div className="flex flex-col gap-5">
-        <SectionBlock
-          title="Architecture Diagram"
-          body={[]}
-          collapsible
-        >
-          <div className="rounded-xl border border-cyan-500/20 bg-slate-950/50 p-4">
-            <div className="grid gap-2 md:grid-cols-5">
-              {["tenant_id", "session_id", "request_id", "execution_id", "version_id"].map((item, index) => (
-                <div key={item} className="text-center">
-                  <div className="rounded-md border border-white/10 bg-slate-900/70 px-2 py-2 text-xs text-slate-200">{item}</div>
-                  {index < 4 ? <div className="pt-1 text-cyan-300/80">→</div> : null}
-                </div>
-              ))}
-            </div>
-            <p className="mt-2 text-center text-xs text-slate-400">Isolation enforced at each ownership boundary</p>
-          </div>
-        </SectionBlock>
-        <SectionBlock
-          title="Overview"
-          body={[
-            "This policy defines behavior under multi-user and multi-session conditions.",
-            "It ensures isolation, ownership integrity, and deterministic conflict handling.",
-          ]}
-          collapsible
-        />
-        <SectionBlock
-          title="Isolation Rules"
-          body={[
-            "Tenant isolation: data, versions, and execution artifacts cannot cross tenant boundary.",
-            "Session isolation: active state is scoped by session_id and cannot mutate another active session.",
-            "Version ownership: version_id is owned by creator session/tenant and requires explicit share policy to access.",
-            "Execution ownership: execution_id is bound to originating session and request lineage.",
-          ]}
-          collapsible
-        />
-        <SectionBlock
-          title="Locking and Conflict Handling"
-          body={[
-            "Write-lock required for plan execution and version commit within same session scope.",
-            "Concurrent modify attempts on same active plan must resolve by first-lock-wins and second path to rebase flow.",
-            "Conflict events are logged with request_id, session_id, actor_id, and conflict_type.",
-          ]}
-          collapsible
-        />
-        <SectionBlock
-          title="Shared Resource Policy"
-          body={[
-            "Shared resources must be read-only unless explicit ownership transfer contract exists.",
-            "Resource lease TTL is required for long-running operations.",
-            "Expired leases invalidate pending execution operations and force re-validation.",
-          ]}
-          collapsible
-        />
-      </div>
-    </DocsContent>
+    <DocsTemplatePage
+      title="Multi-user and Session Isolation Spec"
+      description="Isolation policy for tenants, sessions, execution ownership, and concurrency control."
+      sectionPath={["QAgent", "Policies", "Session Isolation"]}
+      covers="tenant/session isolation rules, execution ownership boundaries, conflict handling, and shared resource constraints."
+      doesNotCover="distributed lock implementation and storage backend internals."
+      overviewIntro="Session Isolation defines how QAgent preserves strict ownership boundaries under multi-user and multi-session load."
+      overviewAreasTitle="Isolation concerns"
+      overviewAreas={[
+        "Tenant and session scope isolation.",
+        "Execution and version ownership constraints.",
+        "Concurrency locks and conflict resolution.",
+      ]}
+      outOfScope="Implementation-level locking mechanisms and infrastructure persistence internals."
+      relatedBoundaries={[
+        "Session Isolation = isolation authority.",
+        "Control Policy Matrix = control transitions authority.",
+        "Failure Policy = failure/escalation authority.",
+        "Lineage Model = identifier ownership authority.",
+      ]}
+      navItems={[
+        { title: "Overview", subtitle: "Isolation scope.", href: "#overview" },
+        { title: "Isolation Diagram", subtitle: "Ownership chain and boundaries.", href: "#diagram" },
+        { title: "Isolation Details", subtitle: "Rules and constraints.", href: "#details" },
+        { title: "Related Docs", subtitle: "Canonical references.", href: "#related-docs" },
+      ]}
+      diagramTitle="Isolation Diagram"
+      diagram={{
+        mode: "flow",
+        steps: ["tenant_id", "session_id", "request_id", "execution_id", "version_id"],
+      }}
+      detailsTitle="Isolation Details"
+      detailsItems={isolationDetails.map((d) => ({
+        id: d.title.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+        title: d.title,
+        subtitle: d.subtitle,
+        purpose: d.purpose,
+        defines: [...d.defines],
+        doesNotDefine: d.doesNotDefine,
+        href: "/docs/architecture/policies/session-isolation",
+        linkLabel: "Canonical page",
+      }))}
+      relatedDocs={[
+        "Session Isolation = concurrency and ownership authority.",
+        "Control Policy Matrix = transition authority.",
+        "Failure Policy = fallback/escalation authority.",
+        "Lineage Model = identity ownership authority.",
+      ]}
+    />
   );
 }

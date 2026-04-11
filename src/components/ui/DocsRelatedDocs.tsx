@@ -1,13 +1,35 @@
-type DocsRelatedDocsProps = {
-  items: string[];
+import Link from "next/link";
+import { normalizeDocListText } from "@/lib/docs-text";
+
+export type DocsRelatedDocLink = {
+  href: string;
+  title: string;
+  description: string;
 };
 
-export function DocsRelatedDocs({ items }: DocsRelatedDocsProps) {
+type DocsRelatedDocsProps = {
+  items?: string[];
+  links?: DocsRelatedDocLink[];
+};
+
+export function DocsRelatedDocs({ items = [], links }: DocsRelatedDocsProps) {
   return (
-    <ul className="list-disc space-y-1 pl-5 text-sm text-[var(--muted)]">
-      {items.slice(0, 5).map((item) => (
-        <li key={item}>{item.replace(/^(?:[-*\u2022]\s*)+/, "").trim()}</li>
+    <div className="space-y-2 text-sm text-[var(--muted)]">
+      {links?.map((link) => (
+        <Link
+          key={link.href}
+          href={link.href}
+          className="block rounded-md border border-[var(--border)]/70 bg-slate-950/20 px-3 py-2 leading-6 transition-colors hover:border-cyan-400/50"
+        >
+          <span className="font-medium text-slate-100">{normalizeDocListText(link.title)}</span>
+          <span className="mt-1 block text-xs text-[var(--muted)]">{normalizeDocListText(link.description)}</span>
+        </Link>
       ))}
-    </ul>
+      {items.slice(0, 5).map((item) => (
+        <div key={item} className="rounded-md border border-[var(--border)]/70 bg-slate-950/20 px-3 py-2 leading-6">
+          {normalizeDocListText(item)}
+        </div>
+      ))}
+    </div>
   );
 }

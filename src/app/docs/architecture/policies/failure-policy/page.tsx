@@ -1,97 +1,86 @@
-import { DocsContent } from "@/components/layout/DocsContent";
-import { PageTitle } from "@/components/ui/PageTitle";
-import { SectionBlock } from "@/components/ui/SectionBlock";
+import { DocsTemplatePage } from "@/components/ui/DocsTemplatePage";
+
+const failureDetails = [
+  {
+    title: "Error Taxonomy",
+    subtitle: "Failure class definitions",
+    purpose: "Define canonical failure classes used by the QAgent failure model.",
+    defines: ["validation_error", "capability_error", "runtime_error", "execution_error", "storage_error", "approval_error", "recovery_error"],
+    doesNotDefine: "Module-specific implementation error payloads.",
+  },
+  {
+    title: "Retry Budget",
+    subtitle: "Retry envelope by class",
+    purpose: "Define retry limits and escalation entry points for each failure class.",
+    defines: ["No-retry boundaries for validation/approval classes.", "Limited retries with backoff for runtime/storage classes.", "Safe retry then fallback boundaries for execution classes."],
+    doesNotDefine: "Dynamic policy override logic at runtime.",
+  },
+  {
+    title: "Escalation and Abort",
+    subtitle: "Escalation path and stop conditions",
+    purpose: "Define escalation flow and deterministic abort conditions.",
+    defines: ["Module-local handling to QCore policy escalation.", "Immediate abort on integrity-risk failures.", "Safe stop/fallback boundary options."],
+    doesNotDefine: "Client UX behavior beyond escalation signals.",
+  },
+  {
+    title: "Fallback and Partial Success",
+    subtitle: "Degraded-mode behavior",
+    purpose: "Define fallback matrix and partial-success publication constraints.",
+    defines: ["Fallback mappings by subsystem failure.", "degraded_status usage for partial outputs.", "Versioning guardrails for partial persistence."],
+    doesNotDefine: "Billing/reporting policy tied to degraded outputs.",
+  },
+] as const;
 
 export default function FailurePolicyPage() {
   return (
-    <DocsContent>
-      <PageTitle
-        title="Unified Failure Policy"
-        description="System-wide failure taxonomy, retry rules, escalation path, and fallback strategy for deterministic resilience."
-      />
-      <div className="flex flex-col gap-5">
-        <SectionBlock
-          title="Architecture Diagram"
-          body={[]}
-          collapsible
-        >
-          <div className="rounded-xl border border-cyan-500/20 bg-slate-950/50 p-4">
-            <div className="grid gap-2 md:grid-cols-5">
-              {["Error Event", "Classify", "Retry Budget", "Fallback / Escalate", "Abort / Continue"].map((item, index) => (
-                <div key={item} className="text-center">
-                  <div className={index === 1 ? "rounded-md border border-cyan-400/40 bg-cyan-500/10 px-2 py-2 text-xs font-semibold text-cyan-100" : "rounded-md border border-white/10 bg-slate-900/70 px-2 py-2 text-xs text-slate-200"}>
-                    {item}
-                  </div>
-                  {index < 4 ? <div className="pt-1 text-cyan-300/80">→</div> : null}
-                </div>
-              ))}
-            </div>
-          </div>
-        </SectionBlock>
-        <SectionBlock
-          title="Error Taxonomy"
-          body={[
-            "validation_error: contract mismatch, missing fields, invalid transitions.",
-            "capability_error: unsupported model/tool/capability combination.",
-            "runtime_error: orchestration/runtime state failures.",
-            "execution_error: execution step failure inside DAgent or tool layer.",
-            "storage_error: persistence/retrieval/version storage failure.",
-            "approval_error: approval state mismatch, invalid approval signal, stale fingerprint.",
-            "recovery_error: restore/rollback/recovery flow failure.",
-          ]}
-          collapsible
-        />
-        <SectionBlock
-          title="Retry Budget"
-          body={[
-            "validation_error: no retries, immediate reject.",
-            "capability_error: 1 reroute attempt then fail.",
-            "runtime_error: 2 retries with exponential backoff.",
-            "execution_error: 1 safe retry then fallback path.",
-            "storage_error: 3 retries then degraded persistence mode.",
-            "approval_error: no retry until explicit user action.",
-            "recovery_error: 1 retry then escalate to manual recovery mode.",
-          ]}
-          collapsible
-        />
-        <SectionBlock
-          title="Escalation Path"
-          body={[
-            "Module-local handling -> QCore policy evaluation -> user-facing notification via UAgent -> safe stop or fallback execution.",
-            "Critical failures with data integrity risk trigger immediate abort and lock execution.",
-          ]}
-          collapsible
-        />
-        <SectionBlock
-          title="Abort Conditions"
-          body={[
-            "Contract violation at control boundary.",
-            "Approval required but missing.",
-            "Unrecoverable storage corruption.",
-            "Inconsistent state that fails recovery constraints.",
-          ]}
-          collapsible
-        />
-        <SectionBlock
-          title="Partial Success Handling"
-          body={[
-            "Partial outputs must be flagged with degraded_status and linked to execution_id.",
-            "Versioning stores partial result only if integrity rules pass and status is explicit.",
-          ]}
-          collapsible
-        />
-        <SectionBlock
-          title="Fallback Matrix"
-          body={[
-            "Analyzer fail -> return clarification request with minimal context path.",
-            "Intent ambiguity -> clarification loop, no planning.",
-            "DAL invalid plan -> regenerate plan with reduced scope.",
-            "DSP execution failure -> switch safe execution mode or abort with preserved state.",
-            "Storage failure -> queue deferred persistence and block restore entry until commit success.",
-          ]}
-          collapsible
-        />
-      </div>
-    </DocsContent>
+    <DocsTemplatePage
+      title="Unified Failure Policy"
+      description="System-wide failure taxonomy, retry rules, escalation path, and fallback strategy for deterministic resilience."
+      sectionPath={["QAgent", "Policies", "Failure Policy"]}
+      covers="error classes, retry budgets, escalation paths, abort conditions, and fallback behavior."
+      doesNotCover="module-level implementation internals and client UX copy strategy."
+      overviewIntro="Failure Policy defines how QAgent classifies failures and responds in a deterministic, boundary-safe way."
+      overviewAreasTitle="Failure concerns"
+      overviewAreas={[
+        "Failure classification taxonomy.",
+        "Retry and escalation control.",
+        "Abort and fallback governance.",
+      ]}
+      outOfScope="Module implementation details and external system retry logic outside QAgent policy ownership."
+      relatedBoundaries={[
+        "Failure Policy = failure ownership authority.",
+        "Control Policy Matrix = control ownership authority.",
+        "Session Isolation = isolation authority under contention.",
+        "QAgent layer = parent orchestration authority.",
+      ]}
+      navItems={[
+        { title: "Overview", subtitle: "Failure policy scope.", href: "#overview" },
+        { title: "Failure Diagram", subtitle: "Classify -> retry -> escalate flow.", href: "#diagram" },
+        { title: "Failure Details", subtitle: "Taxonomy and control rules.", href: "#details" },
+        { title: "Related Docs", subtitle: "Canonical references.", href: "#related-docs" },
+      ]}
+      diagramTitle="Failure Diagram"
+      diagram={{
+        mode: "flow",
+        steps: ["Error Event", "Classify", "Retry Budget", "Fallback/Escalate", "Abort/Continue"],
+      }}
+      detailsTitle="Failure Details"
+      detailsItems={failureDetails.map((d) => ({
+        id: d.title.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+        title: d.title,
+        subtitle: d.subtitle,
+        purpose: d.purpose,
+        defines: [...d.defines],
+        doesNotDefine: d.doesNotDefine,
+        href: "/docs/architecture/policies/failure-policy",
+        linkLabel: "Canonical page",
+      }))}
+      relatedDocs={[
+        "Failure Policy = failure handling authority.",
+        "Control Policy Matrix = stage control authority.",
+        "Session Isolation = contention/isolation authority.",
+        "QAgent layer page = parent boundary authority.",
+      ]}
+    />
   );
 }

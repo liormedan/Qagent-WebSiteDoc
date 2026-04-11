@@ -36,7 +36,12 @@ const clientDetails = [
     title: "Interaction Surfaces",
     subtitle: "Chat, Canvas, Workspace",
     purpose: "Define user-facing interaction boundaries.",
-    defines: ["chat and prompt interaction", "canvas workspace interaction", "workspace navigation and control events"],
+    defines: [
+      "chat and prompt interaction",
+      "canvas workspace interaction",
+      "workspace navigation and control events",
+      "[TEXT TBD – expand Client Layer detail]",
+    ],
     doesNotDefine: "intent policy decisions.",
     href: "/docs/client/chat-ui",
     linkLabel: "Related section",
@@ -46,7 +51,12 @@ const clientDetails = [
     title: "Runtime Projection",
     subtitle: "Status and result rendering",
     purpose: "Define projection of progress and outcomes to UI.",
-    defines: ["status rendering", "result projection", "error display boundaries"],
+    defines: [
+      "status rendering",
+      "result projection",
+      "error display boundaries",
+      "[TEXT TBD – expand Client Layer detail]",
+    ],
     doesNotDefine: "job lifecycle ownership.",
     href: "/docs/client/runtime",
     linkLabel: "Related section",
@@ -56,7 +66,12 @@ const clientDetails = [
     title: "State Ownership",
     subtitle: "Client-owned state boundary",
     purpose: "Define UI state ownership within Client Layer.",
-    defines: ["local UI state", "interaction event state", "view state transitions"],
+    defines: [
+      "local UI state",
+      "interaction event state",
+      "view state transitions",
+      "[TEXT TBD – expand Client Layer detail]",
+    ],
     doesNotDefine: "global API job status authority.",
     href: "/docs/client/state-ownership",
     linkLabel: "Related section",
@@ -66,7 +81,12 @@ const clientDetails = [
     title: "QAgent Handoff",
     subtitle: "Structured request emission",
     purpose: "Define how Client emits structured requests into QAgent.",
-    defines: ["request event emission", "payload shaping for QAgent", "handoff trigger boundaries"],
+    defines: [
+      "request event emission",
+      "payload shaping for QAgent",
+      "handoff trigger boundaries",
+      "[TEXT TBD – expand Client Layer detail]",
+    ],
     doesNotDefine: "QAgent planning semantics.",
     href: "/docs/q-agent",
     linkLabel: "Canonical page",
@@ -91,7 +111,12 @@ export default function ClientOverviewPage() {
       />
 
       <div className="mt-5 flex flex-col gap-5">
-        <SectionBlock id="overview" title="Overview" body={[]}>
+        <SectionBlock
+          id="overview"
+          title="Overview"
+          body={[]}
+          summaryPreview="Client Layer ownership summary, scope boundaries, and cross-layer alignment."
+        >
           <DocsOverviewBlock
             intro="Client Layer is the user-facing boundary that captures interaction, projects runtime state, and presents final outputs."
             areasTitle="Client areas"

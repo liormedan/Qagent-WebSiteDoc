@@ -4,6 +4,6 @@ import { DocsDetailsAccordion, type DocsDetailsItem } from "@/components/ui/Docs
 
 export type LayerSpecItem = DocsDetailsItem;
 
-export function LayerSpecAccordion({ items }: { items: LayerSpecItem[] }) {
-  return <DocsDetailsAccordion items={items} />;
+export function LayerSpecAccordion({ items, defaultOpenAll = false }: { items: LayerSpecItem[]; defaultOpenAll?: boolean }) {
+  return <DocsDetailsAccordion items={items} defaultOpenAll={defaultOpenAll} />;
 }

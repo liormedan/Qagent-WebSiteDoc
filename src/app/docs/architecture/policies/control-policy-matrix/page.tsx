@@ -1,61 +1,91 @@
-import { DocsContent } from "@/components/layout/DocsContent";
-import { PageTitle } from "@/components/ui/PageTitle";
-import { SectionBlock } from "@/components/ui/SectionBlock";
-import { QAGENT_CANONICAL_FLOW } from "@/lib/qagent-canonical";
+import { DocsTemplatePage } from "@/components/ui/DocsTemplatePage";
 
-const matrix = [
-  "file intake | trigger: QCore | validate: Files Handler | enforce: QCore | block: Files Handler/QCore | execute: Files Handler",
-  "analysis | trigger: QCore | validate: Analyzer | enforce: QCore | block: Analyzer/Flow Controller | execute: Analyzer",
-  "intent | trigger: QCore | validate: Intent Validator | enforce: QCore | block: Ambiguity Detector | execute: Intent + Clarification",
-  "planning | trigger: QCore | validate: Constraint Resolver | enforce: QCore | block: DAL | execute: DAL",
-  "UI generation | trigger: DAL plan handoff | validate: UAgent component registry | enforce: QCore policy | block: UAgent | execute: UAgent",
-  "approval | trigger: Approval Triggering | validate: User Confirmation Handling + approval state checks | enforce: QCore Enforcement | block: QCore Enforcement | execute: Approval layer",
-  "execution | trigger: approved plan | validate: DAgent preflight validation | enforce: QCore + Flow Controller | block: QCore Enforcement/DAgent | execute: DAgent",
-  "versioning | trigger: DAgent result | validate: Version Manager + Storage validation | enforce: QCore policy | block: Versioning integrity guard | execute: Versioning",
-  "restore | trigger: user restore request | validate: Restore Engine + state validation | enforce: QCore | block: Restore Engine | execute: Restore Engine",
-];
+const controlRows = [
+  {
+    title: "File Intake Control",
+    subtitle: "QCore -> Files Handler stage",
+    purpose: "Define control ownership for file intake and validation boundary.",
+    defines: ["Trigger: QCore.", "Validate: Files Handler.", "Enforce/Block: QCore.", "Execute: Files Handler."],
+    doesNotDefine: "Downstream analysis policy semantics.",
+  },
+  {
+    title: "Intent and Planning Control",
+    subtitle: "Intent + DAL stages",
+    purpose: "Define ownership for intent resolution and deterministic planning progression.",
+    defines: ["Intent trigger/validation ownership.", "DAL planning enforcement path.", "Block conditions for ambiguity and constraints."],
+    doesNotDefine: "Runtime execution scheduling.",
+  },
+  {
+    title: "Approval and Execution Control",
+    subtitle: "Approval -> DAgent stages",
+    purpose: "Define approval gate and execution transition authority.",
+    defines: ["Approval trigger and enforcement.", "Execution preflight control.", "QCore/Flow Controller block authority."],
+    doesNotDefine: "API job lifecycle ownership.",
+  },
+  {
+    title: "Versioning and Restore Control",
+    subtitle: "Post-execution lifecycle",
+    purpose: "Define control ownership for version persistence and restore transitions.",
+    defines: ["Versioning trigger and validation.", "Restore trigger and guardrails.", "Integrity block conditions."],
+    doesNotDefine: "Cross-layer status projections outside QAgent.",
+  },
+] as const;
 
 export default function ControlPolicyMatrixPage() {
   return (
-    <DocsContent>
-      <PageTitle
-        title="Control Policy Matrix"
-        description="Authoritative authority matrix defining who can trigger, validate, enforce, block, and execute at each system stage."
-      />
-      <div className="flex flex-col gap-5">
-        <SectionBlock
-          title="Architecture Diagram"
-          body={[]}
-          collapsible
-        >
-          <div className="rounded-xl border border-cyan-500/20 bg-slate-950/50 p-4">
-            <div className="grid gap-2 md:grid-cols-5">
-              {["Trigger", "Validate", "Enforce", "Block", "Execute"].map((item, index) => (
-                <div key={item} className="text-center">
-                  <div className={index === 2 ? "rounded-md border border-cyan-400/40 bg-cyan-500/10 px-2 py-2 text-xs font-semibold text-cyan-100" : "rounded-md border border-white/10 bg-slate-900/70 px-2 py-2 text-xs text-slate-200"}>
-                    {item}
-                  </div>
-                </div>
-              ))}
-            </div>
-            <p className="mt-2 text-center text-xs text-slate-400">QCore is enforcement authority across all critical stages</p>
-          </div>
-        </SectionBlock>
-        <SectionBlock
-          title="Control Matrix"
-          body={matrix}
-          collapsible
-        />
-        <SectionBlock title="Canonical Flow" body={[QAGENT_CANONICAL_FLOW]} collapsible />
-        <SectionBlock
-          title="Summary"
-          body={[
-            "This matrix is mandatory for implementation and governance audits.",
-            "Any new stage or module must declare trigger/validate/enforce/block/execute ownership before integration.",
-          ]}
-          collapsible
-        />
-      </div>
-    </DocsContent>
+    <DocsTemplatePage
+      title="Control Policy Matrix"
+      description="Authoritative matrix defining trigger, validate, enforce, block, and execute ownership per QAgent stage."
+      sectionPath={["QAgent", "Policies", "Control Policy Matrix"]}
+      covers="control ownership matrix across intake, planning, approval, execution, and version lifecycle stages."
+      doesNotCover="module implementation internals and API runtime lifecycle governance."
+      overviewIntro="Control Policy Matrix enforces deterministic authority boundaries so every stage has explicit control ownership."
+      overviewAreasTitle="Policy concerns"
+      overviewAreas={[
+        "Trigger/validate/enforce/block/execute ownership.",
+        "Deterministic control transitions.",
+        "Boundary-safe execution gating.",
+      ]}
+      outOfScope="Detailed module implementation and external runtime orchestration."
+      relatedBoundaries={[
+        "Control Policy Matrix = control ownership authority.",
+        "Failure Policy = failure/retry authority.",
+        "Session Isolation = multi-tenant isolation authority.",
+        "QAgent Layer page = parent boundary authority.",
+      ]}
+      navItems={[
+        { title: "Overview", subtitle: "Policy scope and purpose.", href: "#overview" },
+        { title: "Policy Diagram", subtitle: "Control ownership model.", href: "#diagram" },
+        { title: "Policy Details", subtitle: "Stage-by-stage matrix blocks.", href: "#details" },
+        { title: "Related Docs", subtitle: "Canonical references.", href: "#related-docs" },
+      ]}
+      diagramTitle="Policy Diagram"
+      diagram={{
+        mode: "structure",
+        root: "Control Policy Matrix",
+        groups: [
+          { title: "Control Axes", items: ["Trigger", "Validate", "Enforce", "Block", "Execute"] },
+          { title: "Planning Stages", items: ["File Intake", "Analysis", "Intent", "Planning", "Approval"] },
+          { title: "Runtime Stages", items: ["Execution", "Versioning", "Restore"] },
+        ],
+      }}
+      detailsTitle="Policy Details"
+      detailsItems={controlRows.map((r) => ({
+        id: r.title.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+        title: r.title,
+        subtitle: r.subtitle,
+        purpose: r.purpose,
+        defines: [...r.defines],
+        doesNotDefine: r.doesNotDefine,
+        href: "/docs/architecture/policies/control-policy-matrix",
+        linkLabel: "Canonical page",
+      }))}
+      relatedDocs={[
+        "Control Policy Matrix = control authority map.",
+        "Failure Policy = failure ownership map.",
+        "Session Isolation = isolation ownership map.",
+        "QAgent Architecture = module sequence authority.",
+      ]}
+    />
   );
 }

@@ -41,55 +41,54 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
     safePathname.startsWith("/docs/testing-strategy") ||
     safePathname.startsWith("/docs/implementation-map") ||
     safePathname.startsWith("/docs/concepts");
+  const contextText = clientActive ? "Client Layer - User Interface" : "Documentation Context";
 
   return (
-    <header className="sticky top-0 z-30 h-[72px] border-b border-[var(--border)] bg-[#0b1020f2] backdrop-blur">
-      <div className="flex h-full items-center px-3 md:px-6">
-        <div className="flex w-full items-center gap-2 lg:gap-4">
+    <header className="sticky top-0 z-30 h-[88px] border-b border-[var(--border)] bg-[#0b1020f2] backdrop-blur">
+      <div className="h-full px-3 md:px-6">
+        <div className="flex h-[56px] w-full items-center gap-2 lg:gap-4">
           <button type="button" onClick={onOpenMenu} className="rounded-md border border-[var(--border)] px-3 py-1.5 text-sm text-slate-200 md:hidden">
             Menu
           </button>
 
-          <Link href="/docs" className="rounded-md px-2 py-1 text-base font-bold hover:bg-slate-800 sm:text-lg md:text-xl">
+          <Link href="/docs" className="shrink-0 whitespace-nowrap rounded-md px-2 py-1 text-base font-bold leading-none hover:bg-slate-800 sm:text-lg md:text-xl">
             WaveQ Docs
           </Link>
 
-          <nav className="ml-4 hidden items-center gap-6 sm:flex" aria-label="Docs sections">
+          <nav className="ml-4 hidden min-w-0 items-center gap-5 sm:flex" aria-label="Docs sections">
             <Link
               href="/docs/system"
-              className={`text-sm font-medium transition-colors ${systemActive ? "text-slate-100" : "text-slate-400 hover:text-slate-200"}`}
+              className={`whitespace-nowrap text-sm font-medium leading-5 transition-colors ${systemActive ? "text-slate-100" : "text-slate-400 hover:text-slate-200"}`}
             >
               System
             </Link>
             <Link
               href="/docs/q-agent"
-              className={`text-sm font-medium transition-colors ${qagentActive ? "text-slate-100" : "text-slate-400 hover:text-slate-200"}`}
+              className={`whitespace-nowrap text-sm font-medium leading-5 transition-colors ${qagentActive ? "text-slate-100" : "text-slate-400 hover:text-slate-200"}`}
             >
               QAgent
             </Link>
             <Link
               href="/docs/client"
-              className={`text-sm font-medium transition-colors ${clientActive ? "text-slate-100" : "text-slate-400 hover:text-slate-200"}`}
+              className={`whitespace-nowrap text-sm font-medium leading-5 transition-colors ${clientActive ? "text-slate-100" : "text-slate-400 hover:text-slate-200"}`}
             >
               Client
             </Link>
             <Link
               href="/docs/api"
-              className={`text-sm font-medium transition-colors ${apiActive ? "text-slate-100" : "text-slate-400 hover:text-slate-200"}`}
+              className={`whitespace-nowrap text-sm font-medium leading-5 transition-colors ${apiActive ? "text-slate-100" : "text-slate-400 hover:text-slate-200"}`}
             >
               API Server
             </Link>
             <Link
               href="/docs/dsp-layer"
-              className={`text-sm font-medium transition-colors ${dspActive ? "text-slate-100" : "text-slate-400 hover:text-slate-200"}`}
+              className={`whitespace-nowrap text-sm font-medium leading-5 transition-colors ${dspActive ? "text-slate-100" : "text-slate-400 hover:text-slate-200"}`}
             >
               DSP
             </Link>
           </nav>
 
-          {clientActive ? <p className="hidden text-xs font-medium text-slate-400 md:block">Client Layer - User Interface</p> : null}
-
-          <div className="ml-auto hidden w-full max-w-sm md:block">
+          <div className="ml-auto hidden w-[320px] shrink-0 md:block">
             <Input placeholder="Search Documentation" aria-label="Search Documentation" />
           </div>
 
@@ -97,7 +96,7 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
             type="button"
             variant="ghost"
             size="sm"
-            className="hidden md:inline-flex"
+            className="hidden w-[88px] shrink-0 justify-center md:inline-flex"
             title="Ask anything about WaveQ..."
             aria-label="Ask anything about WaveQ..."
           >
@@ -107,6 +106,11 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
           <button type="button" onClick={onOpenToc} className="rounded-md border border-[var(--border)] px-3 py-1.5 text-sm text-slate-200 md:hidden">
             On this page
           </button>
+        </div>
+        <div className="hidden h-[32px] items-center border-t border-[var(--border)]/60 md:flex">
+          <p className={`truncate text-xs font-medium leading-5 tracking-[0.04em] ${clientActive ? "text-slate-400" : "text-transparent select-none"}`}>
+            {contextText}
+          </p>
         </div>
       </div>
     </header>
