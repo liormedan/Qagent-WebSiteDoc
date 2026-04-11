@@ -9,6 +9,7 @@ import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 import { CLIENT_LAYER_CANONICAL_NAME, CLIENT_LAYER_DOC_SOURCE_OF_TRUTH } from "@/lib/client-canonical";
 
+import { CLIENT_LAYER_HUB_LINKS } from "@/lib/docs-scope-links";
 const clientAreas = [
   "user interaction surfaces",
   "runtime status/result projection",
@@ -105,10 +106,7 @@ export default function ClientOverviewPage() {
     <DocsContent>
       <PageTitle title={CLIENT_LAYER_CANONICAL_NAME} description="Canonical layer page for user interaction boundaries, UI runtime ownership, and request handoff semantics." />
 
-      <DocsScopeBlocks
-        covers="interaction surfaces, runtime projection, UI ownership boundaries, and QAgent handoff behavior."
-        doesNotCover="intent planning logic, API job orchestration, and runtime execution scheduling."
-      />
+      <DocsScopeBlocks links={CLIENT_LAYER_HUB_LINKS} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock

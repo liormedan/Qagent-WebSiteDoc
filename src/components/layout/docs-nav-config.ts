@@ -30,8 +30,7 @@ export function normalizeDocsPath(path: string): string {
 const matchSystem = (path: string) =>
   path === "/docs" ||
   path.startsWith("/docs/system") ||
-  path.startsWith("/docs/system-flow") ||
-  path.startsWith("/docs/auth-security");
+  path.startsWith("/docs/system-flow");
 
 const matchClient = (path: string) => path === "/docs/client" || path.startsWith("/docs/client/");
 
@@ -56,6 +55,9 @@ const matchDsp = (path: string) =>
 const matchDataLayer = (path: string) => path.startsWith("/docs/data-layer");
 
 const matchInfrastructure = (path: string) => path.startsWith("/docs/infrastructure-layer");
+
+const matchAuthSecurity = (path: string) =>
+  path === "/docs/auth-security" || path.startsWith("/docs/auth-security/");
 
 /** Ordered groups and items: first matching item wins (path should be normalized). */
 export const DOCS_NAV_GROUPS: readonly DocsNavGroup[] = [
@@ -83,7 +85,10 @@ export const DOCS_NAV_GROUPS: readonly DocsNavGroup[] = [
     id: "platform",
     label: "Platform",
     labelShort: "Ops",
-    items: [{ label: "Infrastructure", href: "/docs/infrastructure-layer", matches: matchInfrastructure }],
+    items: [
+      { label: "Auth & Security", href: "/docs/auth-security", matches: matchAuthSecurity },
+      { label: "Infrastructure", href: "/docs/infrastructure-layer", matches: matchInfrastructure },
+    ],
   },
 ] as const;
 
@@ -118,5 +123,6 @@ export function getDocsNavActivityFlags(pathname: string) {
     dspActive: matchDsp(path),
     dataLayerActive: matchDataLayer(path),
     infrastructureActive: matchInfrastructure(path),
+    authSecurityActive: matchAuthSecurity(path),
   };
 }

@@ -8,6 +8,7 @@ import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 
+import { CLIENT_SUBPAGE_SCOPE_LINKS } from "@/lib/docs-scope-links";
 const canonicalErrorExample = `{
   "code": "VALIDATION_ERROR",
   "category": "validation | runtime | network | desync",
@@ -132,10 +133,7 @@ export default function ErrorModelPage() {
       />
       <p className="mt-2 text-xs uppercase tracking-[0.08em] text-slate-400">Section Path: Client / Events & Contracts / Error Model</p>
 
-      <DocsScopeBlocks
-        covers="Client Layer error shape, client-facing categories, user-visible behavior, recovery expectations, and retry/error-handling boundaries for normalized client errors."
-        doesNotCover="Event sequence across surfaces (Event Flow), event envelope structure (Event Contract), backend execution lifecycle ownership (API Server), or QAgent intent/planning internals."
-      />
+      <DocsScopeBlocks links={CLIENT_SUBPAGE_SCOPE_LINKS} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock

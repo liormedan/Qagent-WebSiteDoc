@@ -8,6 +8,7 @@ import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 
+import { CLIENT_SUBPAGE_SCOPE_LINKS } from "@/lib/docs-scope-links";
 const canonicalEnvelope =
   '{"eventId":"...","eventType":"...","correlationId":"...","sessionId":"...","sequence":42,"timestamp":1710000000000,"payload":{},"version":"1.0"}';
 
@@ -137,10 +138,7 @@ export default function EventContractPage() {
       />
       <p className="mt-2 text-xs uppercase tracking-[0.08em] text-slate-400">Section Path: Client / Events & Contracts / Event Contract</p>
 
-      <DocsScopeBlocks
-        covers="Client Layer rules for UI-facing event contracts: how the Client consumes and emits events under a stable canonical envelope and enforcement behavior."
-        doesNotCover="Event Flow (sequence of stages across surfaces), Error Model (error shapes and policies), or backend API / QAgent wire contracts as the source of truth for server-side execution lifecycle."
-      />
+      <DocsScopeBlocks links={CLIENT_SUBPAGE_SCOPE_LINKS} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock

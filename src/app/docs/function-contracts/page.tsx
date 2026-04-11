@@ -1,4 +1,5 @@
 import { DocsTemplatePage } from "@/components/ui/DocsTemplatePage";
+import { QAGENT_ARCH_HUB_LINKS } from "@/lib/docs-scope-links";
 import { getDocPage } from "@/lib/docs";
 
 const page = getDocPage("function-contracts");
@@ -11,8 +12,7 @@ export default function FunctionContractsPage() {
       title={page.title}
       description={page.description}
       sectionPath={["QAgent", "Implementation", "Function Contracts"]}
-      covers="function-level contract expectations, payload boundaries, and contract governance notes."
-      doesNotCover="module implementation internals and runtime policy orchestration."
+      scopeLinks={QAGENT_ARCH_HUB_LINKS}
       overviewIntro="Function Contracts define canonical payload and boundary expectations at function-level interfaces."
       overviewAreasTitle="Contract concerns"
       overviewAreas={["function payload boundaries", "input/output expectations", "contract conformance references"]}

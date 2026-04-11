@@ -1,4 +1,5 @@
 import { DocsTemplatePage } from "@/components/ui/DocsTemplatePage";
+import { QAGENT_LAYER_HUB_LINKS } from "@/lib/docs-scope-links";
 
 const detailsItems = [
   {
@@ -84,8 +85,7 @@ export default function QCorePage() {
       title="Main QCore Structure"
       description="Authoritative architectural definition of the QAgent runtime core structure."
       sectionPath={["QAgent", "Architecture", "Main QCore Structure"]}
-      covers="QCore runtime envelope, internal control engine, internal control units, connected interfaces, and supporting context services."
-      doesNotCover="API execution lifecycle ownership, client runtime UI ownership, and DSP backend implementation internals."
+      scopeLinks={QAGENT_LAYER_HUB_LINKS}
       overviewIntro="QCore is structured as two distinct layers: QCore Runtime as the outer orchestration envelope, and QCore Engine as the internal control kernel inside that envelope."
       overviewAreasTitle="QCore structure areas"
       overviewAreas={[

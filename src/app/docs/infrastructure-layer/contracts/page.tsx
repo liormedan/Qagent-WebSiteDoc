@@ -9,6 +9,7 @@ import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 
+import { INFRASTRUCTURE_SCOPE_LINKS } from "@/lib/docs-scope-links";
 const jobContractJson = `{
   "job_id": "string",
   "execution_profile": "string",
@@ -196,10 +197,7 @@ export default function InfrastructureLayerContractsPage() {
       />
       <p className="mt-2 text-xs uppercase tracking-[0.08em] text-slate-400">Infrastructure Layer (Spec) / Contracts</p>
 
-      <DocsScopeBlocks
-        covers="conceptual JSON field names, types, and infrastructure contract boundaries for jobs, queue messages, execution results, failure/retry, and observability (including health)."
-        doesNotCover="API request/response contracts; DSP processing contracts; database DDL; IdP configuration; business analytics schemas."
-      />
+      <DocsScopeBlocks links={INFRASTRUCTURE_SCOPE_LINKS} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock id="overview" title="Overview" body={[]}>

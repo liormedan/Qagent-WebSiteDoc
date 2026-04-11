@@ -27,7 +27,7 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
   const hydrated = useHydrated();
   const safePathname = hydrated ? pathname : "";
 
-  const { clientActive } = getDocsNavActivityFlags(safePathname);
+  const { clientActive, authSecurityActive } = getDocsNavActivityFlags(safePathname);
 
   const [openGroupId, setOpenGroupId] = useState<DocsNavGroupId | null>(null);
   const [mobileBrowseOpen, setMobileBrowseOpen] = useState(false);
@@ -62,7 +62,11 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
     setOpenGroupId((current) => (current === groupId ? null : groupId));
   }, []);
 
-  const contextText = clientActive ? "Client Layer - User Interface" : "Documentation Context";
+  const contextText = clientActive
+    ? "Client Layer - User Interface"
+    : authSecurityActive
+      ? "Auth & Security Layer — specification"
+      : "Documentation Context";
 
   const linkBase = "block rounded-md px-3 py-2.5 text-sm font-medium transition-colors sm:py-2";
   const linkIdle = "text-slate-200 hover:bg-slate-800/80";
@@ -198,7 +202,9 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
         </div>
 
         <div className="hidden h-[32px] items-center border-t border-[var(--border)]/60 md:flex">
-          <p className={`truncate text-xs font-medium leading-5 tracking-[0.04em] ${clientActive ? "text-slate-400" : "text-transparent select-none"}`}>
+          <p
+            className={`truncate text-xs font-medium leading-5 tracking-[0.04em] ${clientActive || authSecurityActive ? "text-slate-400" : "text-transparent select-none"}`}
+          >
             {contextText}
           </p>
         </div>

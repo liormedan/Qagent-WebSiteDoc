@@ -9,6 +9,7 @@ import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 
+import { API_SERVER_SPEC_SCOPE_LINKS } from "@/lib/docs-scope-links";
 const inThisPage = [
   { title: "Overview", subtitle: "Cross-layer intent.", href: "#overview" },
   { title: "Layer Structure Diagram", subtitle: "Flow topology.", href: "#integration-structure-diagram" },
@@ -81,10 +82,7 @@ export default function ApiServerLayerIntegrationPage() {
       />
       <p className="mt-2 text-xs uppercase tracking-[0.08em] text-slate-400">API Server Layer (Spec) / System Integration</p>
 
-      <DocsScopeBlocks
-        covers="QAgent to API intake, API to DSP execution trigger, API to Data mediation, and response publication lifecycle at spec abstraction."
-        doesNotCover="DSP algorithms, persistence DDL, worker implementation, or client UI code paths."
-      />
+      <DocsScopeBlocks links={API_SERVER_SPEC_SCOPE_LINKS} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock id="overview" title="Overview" body={[]}>

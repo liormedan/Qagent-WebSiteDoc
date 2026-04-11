@@ -10,6 +10,7 @@ import { SectionBlock } from "@/components/ui/SectionBlock";
 import { QAGENT_CANONICAL_FLOW, QAGENT_DOC_SOURCE_OF_TRUTH } from "@/lib/qagent-canonical";
 import { normalizeDocListText } from "@/lib/docs-text";
 
+import { QAGENT_LAYER_HUB_LINKS } from "@/lib/docs-scope-links";
 const qagentAreas = [
   "Intent intake and ambiguity resolution before planning",
   "DAL plan construction from validated intent and constraints",
@@ -137,10 +138,7 @@ export default function QAgentPage() {
       <PageTitle title="QAgent Layer" description="Canonical layer page for QAgent reasoning, planning gates, and execution handoff semantics." />
       <p className="mt-2 text-xs uppercase tracking-[0.08em] text-slate-400">Section Path: QAgent / Overview</p>
 
-      <DocsScopeBlocks
-        covers="QAgent scope, planning gates, handoff preparation, and canonical flow boundaries."
-        doesNotCover="API runtime lifecycle, infrastructure scheduling, and client-side UI state ownership."
-      />
+      <DocsScopeBlocks links={QAGENT_LAYER_HUB_LINKS} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock id="overview" title="Overview" body={[]}>

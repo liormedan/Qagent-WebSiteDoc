@@ -9,6 +9,7 @@ import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 import uiPlanSchema from "./ui-plan.schema.json";
 
+import { CLIENT_SUBPAGE_SCOPE_LINKS } from "@/lib/docs-scope-links";
 function UiPlanJsonSchemaPre() {
   return (
     <pre className="overflow-x-auto rounded-md border border-[var(--border)] bg-slate-950/40 p-4 text-sm text-slate-200">
@@ -118,10 +119,7 @@ export default function UiPlanContractPage() {
       />
       <p className="mt-2 text-xs uppercase tracking-[0.08em] text-slate-400">Section Path: Client / Validation & Tests / UI Plan Contract</p>
 
-      <DocsScopeBlocks
-        covers="Strict uiPlan JSON Schema, required vs optional fields, enums, MAJOR.MINOR versioning, backward compatibility, and fail-fast Canvas rendering rules at the Client boundary."
-        doesNotCover="General event-flow sequencing (Event Flow), canonical event envelopes (Event Contract), or API Server execution lifecycle."
-      />
+      <DocsScopeBlocks links={CLIENT_SUBPAGE_SCOPE_LINKS} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock

@@ -8,6 +8,7 @@ import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 
+import { DATA_LAYER_SUBPAGE_SCOPE_LINKS } from "@/lib/docs-scope-links";
 /** In-page anchors follow document order: Overview → diagram → detail entries → related. */
 const inPageLinks = [
   { title: "Overview", subtitle: "What the Data Layer is and why it exists.", href: "#overview" },
@@ -165,10 +166,7 @@ export default function DataLayerSystemViewPage() {
       />
       <p className="mt-2 text-xs uppercase tracking-[0.08em] text-slate-400">Section Path: Data Layer / System View</p>
 
-      <DocsScopeBlocks
-        covers="high-level Data Layer role; directional data exchange with API, DSP, Client, and QAgent; data ownership model; canonical vs derived; persistence model; state records; artifact management; cross-layer boundaries and responsibilities."
-        doesNotCover="API contracts and endpoints; DSP processing logic; database schemas; UI behavior; runtime orchestration sequencing."
-      />
+      <DocsScopeBlocks links={DATA_LAYER_SUBPAGE_SCOPE_LINKS} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock

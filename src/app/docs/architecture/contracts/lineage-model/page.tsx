@@ -1,4 +1,5 @@
 import { DocsTemplatePage } from "@/components/ui/DocsTemplatePage";
+import { CONTRACTS_LINEAGE_LINKS } from "@/lib/docs-scope-links";
 
 const lineageDetails = [
   {
@@ -62,8 +63,7 @@ export default function LineageModelPage() {
       title="End-to-End Lineage Model"
       description="Authoritative correlation model that tracks each request across all architecture layers."
       sectionPath={["QAgent", "Contracts", "Lineage Model"]}
-      covers="ID ownership, creation stages, propagation constraints, and linkage rules."
-      doesNotCover="module behavior logic and cross-layer orchestration policy."
+      scopeLinks={CONTRACTS_LINEAGE_LINKS}
       overviewIntro="The lineage model defines the canonical identifier graph that preserves traceability from request intake through execution and versioning."
       overviewAreasTitle="Lineage concerns"
       overviewAreas={[

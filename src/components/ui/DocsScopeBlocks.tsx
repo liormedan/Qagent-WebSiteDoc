@@ -1,24 +1,35 @@
-import React from "react";
-import { normalizeDocListText } from "@/lib/docs-text";
+import Link from "next/link";
+import type { DocsScopeLink } from "@/lib/docs-scope-links";
+
+export type { DocsScopeLink } from "@/lib/docs-scope-links";
 
 type DocsScopeBlocksProps = {
-  covers: string;
-  doesNotCover: string;
+  /** High-value next-step links (replaces the old generic covers / does-not-cover grid). */
+  links: readonly DocsScopeLink[];
+  /** Optional short page-specific note (use sparingly). */
+  note?: string;
 };
 
-export function DocsScopeBlocks({ covers, doesNotCover }: DocsScopeBlocksProps) {
+export function DocsScopeBlocks({ links, note }: DocsScopeBlocksProps) {
+  const hasLinks = links.length > 0;
+  if (!hasLinks && !note) return null;
+
   return (
-    <section className="mt-4 rounded-md border border-cyan-400/30 bg-cyan-500/10 p-4 text-sm text-cyan-100">
-      <div className="grid gap-2 md:grid-cols-2">
-        <div className="rounded-md border border-cyan-300/30 bg-cyan-400/10 px-3 py-2">
-          <p className="text-xs font-semibold uppercase tracking-wide text-cyan-200">This page covers</p>
-          <p className="mt-1 text-sm">{normalizeDocListText(covers)}</p>
+    <section className="mt-4 rounded-md border border-[var(--border)] bg-slate-950/40 px-3 py-2.5">
+      {note ? <p className="mb-2 text-xs leading-5 text-slate-400">{note}</p> : null}
+      {hasLinks ? (
+        <div className="flex flex-wrap items-center gap-2">
+          {links.map((link) => (
+            <Link
+              key={`${link.href}::${link.label}`}
+              href={link.href}
+              className="inline-flex items-center rounded-md border border-cyan-500/35 bg-cyan-500/10 px-2.5 py-1.5 text-xs font-medium text-cyan-100 transition-colors hover:border-cyan-400/50 hover:bg-cyan-500/15"
+            >
+              {link.label}
+            </Link>
+          ))}
         </div>
-        <div className="rounded-md border border-amber-300/30 bg-amber-400/10 px-3 py-2">
-          <p className="text-xs font-semibold uppercase tracking-wide text-amber-200">This page does not cover</p>
-          <p className="mt-1 text-sm">{normalizeDocListText(doesNotCover)}</p>
-        </div>
-      </div>
+      ) : null}
     </section>
   );
 }

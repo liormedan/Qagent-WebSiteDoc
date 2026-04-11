@@ -1,4 +1,5 @@
 import { DocsTemplatePage } from "@/components/ui/DocsTemplatePage";
+import { CONTRACTS_SCHEMA_LINKS } from "@/lib/docs-scope-links";
 
 const schemaItems = [
   {
@@ -72,8 +73,7 @@ export default function SchemaRegistryPage() {
       title="Global Schema Registry"
       description="Canonical contract registry for major inter-module transitions in QAgent architecture."
       sectionPath={["QAgent", "Contracts", "Schema Registry"]}
-      covers="producer/consumer schema contracts, required lineage fields, and handoff version identifiers."
-      doesNotCover="module business logic, execution policy, and cross-layer runtime orchestration."
+      scopeLinks={CONTRACTS_SCHEMA_LINKS}
       overviewIntro="Schema Registry is the authoritative source for QAgent inter-module payload contracts."
       overviewAreasTitle="Schema concerns"
       overviewAreas={[

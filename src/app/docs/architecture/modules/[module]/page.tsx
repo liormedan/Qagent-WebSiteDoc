@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { ARCHITECTURE_MODULE_SCOPE_LINKS } from "@/lib/docs-scope-links";
 import { DocsTemplatePage } from "@/components/ui/DocsTemplatePage";
 
 type ModuleKey =
@@ -15,8 +16,6 @@ type ModuleKey =
 type ModuleConfig = {
   title: string;
   description: string;
-  covers: string;
-  doesNotCover: string;
   overviewIntro: string;
   overviewAreas: string[];
   outOfScope: string;
@@ -40,9 +39,7 @@ type ModuleConfig = {
 const moduleConfigs: Record<ModuleKey, ModuleConfig> = {
   "qagent-core": {
     title: "QCore",
-    description: "Core orchestration module that enforces deterministic control flow inside QAgent.",
-    covers: "module identity, orchestration ownership, control boundaries, and module-level flow authority.",
-    doesNotCover: "API runtime scheduling, DSP execution internals, and client-side UI state management.",
+    description: "Core orchestration module that enforces deterministic control flow inside QAgent.",
     overviewIntro: "QCore is the control center of QAgent. It aligns interpretation, planning, and gating into one deterministic module boundary.",
     overviewAreas: ["control authority", "module orchestration", "flow progression", "state-aware enforcement"],
     outOfScope: "Cross-layer runtime lifecycle orchestration owned by API Server Layer.",
@@ -92,9 +89,7 @@ const moduleConfigs: Record<ModuleKey, ModuleConfig> = {
   },
   "files-handler": {
     title: "Files Handler",
-    description: "Input gateway module for ingestion, validation, normalization, and file reference readiness.",
-    covers: "file ingestion ownership, validation/normalization boundaries, and output reference guarantees.",
-    doesNotCover: "semantic interpretation, planning, or execution scheduling.",
+    description: "Input gateway module for ingestion, validation, normalization, and file reference readiness.",
     overviewIntro: "Files Handler prepares raw file inputs into deterministic, validated references for downstream reasoning modules.",
     overviewAreas: ["ingestion", "validation", "normalization", "metadata readiness"],
     outOfScope: "Plan construction and execution lifecycle ownership.",
@@ -142,9 +137,7 @@ const moduleConfigs: Record<ModuleKey, ModuleConfig> = {
   },
   analyzer: {
     title: "Analyzer",
-    description: "Interpretation module that transforms prepared inputs into structured machine-usable signals.",
-    covers: "analysis boundary, feature extraction ownership, and structured signal output.",
-    doesNotCover: "approval gating or API runtime orchestration.",
+    description: "Interpretation module that transforms prepared inputs into structured machine-usable signals.",
     overviewIntro: "Analyzer converts prepared input artifacts into structured interpretation signals for planning modules.",
     overviewAreas: ["feature extraction", "signal structuring", "context shaping", "intent-facing output"],
     outOfScope: "final intent decision and execution control authority.",
@@ -192,9 +185,7 @@ const moduleConfigs: Record<ModuleKey, ModuleConfig> = {
   },
   "intent-clarification": {
     title: "Intent + Clarification",
-    description: "Intent interpretation and ambiguity-resolution module before plan construction.",
-    covers: "intent formation, ambiguity detection, clarification outcomes, and validated intent output.",
-    doesNotCover: "execution scheduling or DSP runtime processing.",
+    description: "Intent interpretation and ambiguity-resolution module before plan construction.",
     overviewIntro: "Intent + Clarification resolves user goal ambiguity and produces validated intent for planning.",
     overviewAreas: ["intent interpretation", "ambiguity detection", "clarification loop", "validated intent handoff"],
     outOfScope: "job orchestration and execution lifecycle ownership.",
@@ -242,9 +233,7 @@ const moduleConfigs: Record<ModuleKey, ModuleConfig> = {
   },
   dal: {
     title: "DAL",
-    description: "Planning module that converts validated intent into executable plan artifacts.",
-    covers: "plan composition, execution-ready artifact structure, and planning ownership boundaries.",
-    doesNotCover: "runtime job execution or processing backend behavior.",
+    description: "Planning module that converts validated intent into executable plan artifacts.",
     overviewIntro: "DAL transforms validated intent into deterministic plan structures for user approval and execution handoff.",
     overviewAreas: ["plan graph construction", "execution artifact packaging", "UI plan shaping", "planning boundaries"],
     outOfScope: "API runtime orchestration and queue lifecycle.",
@@ -288,9 +277,7 @@ const moduleConfigs: Record<ModuleKey, ModuleConfig> = {
   },
   uagent: {
     title: "UAgent",
-    description: "UI-facing mediation module that reflects planning state and user interaction outcomes.",
-    covers: "UI mediation behavior, user-state projection, and interaction boundary ownership.",
-    doesNotCover: "execution orchestration or backend processing ownership.",
+    description: "UI-facing mediation module that reflects planning state and user interaction outcomes.",
     overviewIntro: "UAgent projects planning and approval state to the user while preserving clear separation from execution runtime.",
     overviewAreas: ["UI state mediation", "interaction handling", "approval context projection", "state synchronization"],
     outOfScope: "API status authority and job orchestration.",
@@ -338,9 +325,7 @@ const moduleConfigs: Record<ModuleKey, ModuleConfig> = {
   },
   approval: {
     title: "Approval",
-    description: "Authorization gate module that enforces explicit approval before execution handoff.",
-    covers: "approval decision boundaries, gate transitions, and authorization-state outcomes.",
-    doesNotCover: "execution runtime orchestration or API-side lifecycle management.",
+    description: "Authorization gate module that enforces explicit approval before execution handoff.",
     overviewIntro: "Approval is the explicit human-control gate that must resolve before any execution handoff is allowed.",
     overviewAreas: ["approval state model", "gate enforcement", "authorized transition logic", "rejection handling"],
     outOfScope: "post-handoff job-state transitions.",
@@ -388,9 +373,7 @@ const moduleConfigs: Record<ModuleKey, ModuleConfig> = {
   },
   dagent: {
     title: "DAgent",
-    description: "Execution module that interprets approved plans and prepares execution handoff artifacts.",
-    covers: "approved-plan execution preparation, operation routing, and handoff artifact emission.",
-    doesNotCover: "API queue orchestration or persistent version lifecycle ownership.",
+    description: "Execution module that interprets approved plans and prepares execution handoff artifacts.",
     overviewIntro: "DAgent converts approved plan instructions into execution-ready operation payloads for API runtime processing.",
     overviewAreas: ["plan interpretation", "operation routing", "execution preparation", "handoff packaging"],
     outOfScope: "API internal execution lifecycle and status projection.",
@@ -438,9 +421,7 @@ const moduleConfigs: Record<ModuleKey, ModuleConfig> = {
   },
   versioning: {
     title: "Versioning",
-    description: "Version tracking module for lineage continuity, restore references, and revision traceability.",
-    covers: "version identity model, lineage linkage, restore references, and state capture boundaries.",
-    doesNotCover: "final API persistence implementation or datastore-specific mechanics.",
+    description: "Version tracking module for lineage continuity, restore references, and revision traceability.",
     overviewIntro: "Versioning preserves QAgent-side lineage continuity and version references across planning and execution cycles.",
     overviewAreas: ["version identity", "lineage capture", "restore references", "timeline continuity"],
     outOfScope: "API-side storage backend implementation.",
@@ -521,8 +502,7 @@ export default async function ArchitectureModulePage({ params }: { params: Promi
       title={config.title}
       description={config.description}
       sectionPath={["QAgent", "Architecture", "Modules", config.title]}
-      covers={config.covers}
-      doesNotCover={config.doesNotCover}
+      scopeLinks={ARCHITECTURE_MODULE_SCOPE_LINKS}
       overviewIntro={config.overviewIntro}
       overviewAreasTitle="Module areas"
       overviewAreas={config.overviewAreas}

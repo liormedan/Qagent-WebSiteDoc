@@ -8,6 +8,7 @@ import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 
+import { CLIENT_SUBPAGE_SCOPE_LINKS } from "@/lib/docs-scope-links";
 const inPageLinks = [
   { title: "Overview", subtitle: "Scope and layer role.", href: "#overview" },
   { title: "Chat UI Diagram", subtitle: "Conversation interaction flow.", href: "#chat-ui-diagram" },
@@ -167,10 +168,7 @@ export default function ClientChatUiPage() {
       <PageTitle title="Chat UI" description="Canonical client page for conversational interaction boundaries, approval presentation, and QAgent exchange behavior." />
       <p className="mt-2 text-xs uppercase tracking-[0.08em] text-slate-400">Section Path: Client / Chat UI</p>
 
-      <DocsScopeBlocks
-        covers="chat interaction entrypoint, conversational rendering, approvals UX, and QAgent exchange behavior."
-        doesNotCover="intent interpretation semantics, execution plan ownership, and API runtime lifecycle."
-      />
+      <DocsScopeBlocks links={CLIENT_SUBPAGE_SCOPE_LINKS} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock

@@ -8,6 +8,7 @@ import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 
+import { INFRASTRUCTURE_SCOPE_LINKS } from "@/lib/docs-scope-links";
 const inThisPage = [
   { title: "Overview", subtitle: "Scope and boundaries.", href: "#overview" },
   { title: "Layer Structure Diagram", subtitle: "Behavior topology.", href: "#core-structure-diagram" },
@@ -104,10 +105,7 @@ export default function InfrastructureLayerCorePage() {
       />
       <p className="mt-2 text-xs uppercase tracking-[0.08em] text-slate-400">Infrastructure Layer (Spec) / Core Specification</p>
 
-      <DocsScopeBlocks
-        covers="layer definition; responsibilities (runtime, queues, reliability, visibility); execution model; operational state and behavior; explicit constraints."
-        doesNotCover="API business behavior; DSP processing semantics; canonical persistence rules; client or user interaction logic; duplicate orchestration definitions from /docs/api."
-      />
+      <DocsScopeBlocks links={INFRASTRUCTURE_SCOPE_LINKS} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock id="overview" title="Overview" body={[]}>

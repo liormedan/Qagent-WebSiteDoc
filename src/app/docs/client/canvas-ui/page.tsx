@@ -8,6 +8,7 @@ import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 
+import { CLIENT_SUBPAGE_SCOPE_LINKS } from "@/lib/docs-scope-links";
 const inPageLinks = [
   { title: "Overview", subtitle: "Canvas scope and ownership.", href: "#overview" },
   { title: "Canvas Diagram", subtitle: "Visual execution surface flow.", href: "#canvas-diagram" },
@@ -202,10 +203,7 @@ export default function ClientCanvasUiPage() {
       <PageTitle title="Canvas UI" description="Canonical client page for visual execution surface ownership, schema-driven rendering, and runtime feedback projection." />
       <p className="mt-2 text-xs uppercase tracking-[0.08em] text-slate-400">Section Path: Client / Canvas UI</p>
 
-      <DocsScopeBlocks
-        covers="visual execution surface rendering, uiPlan-driven projection, interaction controls, and runtime visual feedback."
-        doesNotCover="intent interpretation, execution lifecycle orchestration, and queue-backed server authority."
-      />
+      <DocsScopeBlocks links={CLIENT_SUBPAGE_SCOPE_LINKS} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock id="overview" title="Overview" body={[]}>

@@ -8,6 +8,7 @@ import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 
+import { DSP_LAYER_HUB_LINKS } from "@/lib/docs-scope-links";
 const coreAreas = [
   "layer definition and system position",
   "execution responsibilities and model",
@@ -211,10 +212,7 @@ export default function DspCoreSpecificationPage() {
         description="Defines the behavioral model of the DSP layer: responsibilities, execution semantics, state guarantees, and constraints."
       />
 
-      <DocsScopeBlocks
-        covers="behavior rules, execution model, state guarantees, constraints, processor model, and compatibility declarations."
-        doesNotCover="processor internals implementation, backend-specific optimizations, and full cross-system orchestration policy."
-      />
+      <DocsScopeBlocks links={DSP_LAYER_HUB_LINKS} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock id="overview" title="Overview" body={[]}>

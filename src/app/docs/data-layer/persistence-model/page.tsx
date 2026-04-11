@@ -8,6 +8,7 @@ import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 
+import { DATA_LAYER_SUBPAGE_SCOPE_LINKS } from "@/lib/docs-scope-links";
 const inPageLinks = [
   { title: "Overview", subtitle: "Durable vs transient.", href: "#overview" },
   { title: "Persistence Diagram", subtitle: "Data classes.", href: "#persistence-model-diagram" },
@@ -52,10 +53,7 @@ export default function PersistenceModelPage() {
       <PageTitle title="Persistence Model" description="Architectural expectations for durable versus transient data classes and how promotion aligns with Data Layer policy." />
       <p className="mt-2 text-xs uppercase tracking-[0.08em] text-slate-400">Section Path: Data Layer / Persistence Model</p>
 
-      <DocsScopeBlocks
-        covers="durable versus transient data classes; promotion expectations; persistence boundaries at the architectural level."
-        doesNotCover="Infrastructure provisioning; engine memory models; API job lifecycle states."
-      />
+      <DocsScopeBlocks links={DATA_LAYER_SUBPAGE_SCOPE_LINKS} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock id="overview" title="Overview" body={[]} summaryPreview="What must be durable under Data Layer governance versus what stays transient.">

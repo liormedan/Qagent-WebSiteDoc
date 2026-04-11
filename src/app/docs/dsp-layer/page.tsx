@@ -8,6 +8,7 @@ import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 
+import { DSP_LAYER_HUB_LINKS } from "@/lib/docs-scope-links";
 const dspAreas = [
   "core behavior definition",
   "contract ownership and payload boundaries",
@@ -105,10 +106,7 @@ export default function DspLayerOverviewPage() {
     <DocsContent>
       <PageTitle title="DSP / Processing Layer" description="Execution layer for deterministic audio transformations." />
 
-      <DocsScopeBlocks
-        covers="DSP scope, behavior boundaries, contract ownership, processing engine structure, and integration references."
-        doesNotCover="API orchestration policy, client UI runtime behavior, and backend implementation internals."
-      />
+      <DocsScopeBlocks links={DSP_LAYER_HUB_LINKS} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock id="overview" title="Overview" body={[]}>

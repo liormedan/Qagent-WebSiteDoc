@@ -8,6 +8,7 @@ import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 
+import { DATA_LAYER_SUBPAGE_SCOPE_LINKS } from "@/lib/docs-scope-links";
 const inPageLinks = [
   { title: "Overview", subtitle: "Ownership framing.", href: "#overview" },
   { title: "Ownership Diagram", subtitle: "Producers vs owners.", href: "#data-ownership-diagram" },
@@ -52,10 +53,7 @@ export default function DataOwnershipPage() {
       <PageTitle title="Data Ownership" description="Who owns persisted WaveQ data, how producers and accessors relate to the Data Layer, and access versus ownership boundaries." />
       <p className="mt-2 text-xs uppercase tracking-[0.08em] text-slate-400">Section Path: Data Layer / Data Ownership</p>
 
-      <DocsScopeBlocks
-        covers="persistence ownership; producers versus owners; access mediation versus canonical truth."
-        doesNotCover="DSP algorithms; API payload schemas; client UI state; database implementation."
-      />
+      <DocsScopeBlocks links={DATA_LAYER_SUBPAGE_SCOPE_LINKS} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock id="overview" title="Overview" body={[]} summaryPreview="Ownership rules for canonical data and how this chapter extends the System View.">

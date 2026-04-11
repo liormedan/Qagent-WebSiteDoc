@@ -1,4 +1,5 @@
 import { DocsTemplatePage } from "@/components/ui/DocsTemplatePage";
+import { QAGENT_ARCH_HUB_LINKS } from "@/lib/docs-scope-links";
 import { getDocPage } from "@/lib/docs";
 
 const page = getDocPage("testing-strategy");
@@ -11,8 +12,7 @@ export default function TestingStrategyPage() {
       title={page.title}
       description={page.description}
       sectionPath={["QAgent", "Implementation", "Testing Strategy"]}
-      covers="validation strategy, coverage boundaries, and test governance for QAgent documentation model."
-      doesNotCover="runtime implementation details and infrastructure-specific test tooling setup."
+      scopeLinks={QAGENT_ARCH_HUB_LINKS}
       overviewIntro="Testing Strategy defines how QAgent structure and contracts are validated before implementation and release transitions."
       overviewAreasTitle="Testing concerns"
       overviewAreas={["coverage boundaries", "validation layers", "quality gates and release readiness"]}

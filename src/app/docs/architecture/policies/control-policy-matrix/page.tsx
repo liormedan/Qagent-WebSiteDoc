@@ -1,4 +1,5 @@
 import { DocsTemplatePage } from "@/components/ui/DocsTemplatePage";
+import { QAGENT_ARCH_HUB_LINKS } from "@/lib/docs-scope-links";
 
 const controlRows = [
   {
@@ -37,8 +38,7 @@ export default function ControlPolicyMatrixPage() {
       title="Control Policy Matrix"
       description="Authoritative matrix defining trigger, validate, enforce, block, and execute ownership per QAgent stage."
       sectionPath={["QAgent", "Policies", "Control Policy Matrix"]}
-      covers="control ownership matrix across intake, planning, approval, execution, and version lifecycle stages."
-      doesNotCover="module implementation internals and API runtime lifecycle governance."
+      scopeLinks={QAGENT_ARCH_HUB_LINKS}
       overviewIntro="Control Policy Matrix enforces deterministic authority boundaries so every stage has explicit control ownership."
       overviewAreasTitle="Policy concerns"
       overviewAreas={[

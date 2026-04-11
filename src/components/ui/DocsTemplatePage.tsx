@@ -3,7 +3,7 @@ import { DocsDiagram } from "@/components/ui/DocsDiagram";
 import { DocsInThisPageNav } from "@/components/ui/DocsInThisPageNav";
 import { DocsOverviewBlock } from "@/components/ui/DocsOverviewBlock";
 import { DocsRelatedDocs } from "@/components/ui/DocsRelatedDocs";
-import { DocsScopeBlocks } from "@/components/ui/DocsScopeBlocks";
+import { DocsScopeBlocks, type DocsScopeLink } from "@/components/ui/DocsScopeBlocks";
 import { LayerSpecAccordion, type LayerSpecItem } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
@@ -23,8 +23,7 @@ type DocsTemplatePageProps = {
   title: string;
   description: string;
   sectionPath?: string[];
-  covers: string;
-  doesNotCover: string;
+  scopeLinks: readonly DocsScopeLink[];
   overviewIntro: string;
   overviewAreasTitle: string;
   overviewAreas: string[];
@@ -43,8 +42,7 @@ export function DocsTemplatePage({
   title,
   description,
   sectionPath,
-  covers,
-  doesNotCover,
+  scopeLinks,
   overviewIntro,
   overviewAreasTitle,
   overviewAreas,
@@ -65,7 +63,7 @@ export function DocsTemplatePage({
         <p className="mt-2 text-xs uppercase tracking-[0.08em] text-slate-400">Section Path: {sectionPath.join(" / ")}</p>
       ) : null}
 
-      <DocsScopeBlocks covers={covers} doesNotCover={doesNotCover} />
+      <DocsScopeBlocks links={scopeLinks} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock id="overview" title="Overview" body={[]}>

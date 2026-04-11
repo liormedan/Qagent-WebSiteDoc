@@ -9,6 +9,7 @@ import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 
+import { INFRASTRUCTURE_SCOPE_LINKS } from "@/lib/docs-scope-links";
 const inPageLinks = [
   { title: "Overview", subtitle: "Role of this layer spec.", href: "#overview" },
   { title: "Layer Structure Diagram", subtitle: "Runtime foundation map.", href: "#infrastructure-layer-structure-diagram" },
@@ -89,10 +90,7 @@ export default function InfrastructureLayerSpecOverviewPage() {
       />
       <p className="mt-2 text-xs uppercase tracking-[0.08em] text-slate-400">Infrastructure Layer (Spec) / Overview</p>
 
-      <DocsScopeBlocks
-        covers="runtime environment; execution infrastructure; queueing and job support; observability and operational reliability; deployment and runtime support."
-        doesNotCover="API business behavior; DSP processing logic; data ownership or canonical persistence rules; client or user interaction logic."
-      />
+      <DocsScopeBlocks links={INFRASTRUCTURE_SCOPE_LINKS} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock id="overview" title="Overview" body={[]} summaryPreview="What infrastructure is, why it exists, coverage boundaries, and how this spec tree is organized.">

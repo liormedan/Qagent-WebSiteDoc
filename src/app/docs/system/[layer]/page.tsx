@@ -8,6 +8,7 @@ import { DocsInThisPageNav } from "@/components/ui/DocsInThisPageNav";
 import { DocsOverviewBlock } from "@/components/ui/DocsOverviewBlock";
 import { DocsRelatedDocs } from "@/components/ui/DocsRelatedDocs";
 import { DocsScopeBlocks } from "@/components/ui/DocsScopeBlocks";
+import { systemLayerDocLinks } from "@/lib/docs-scope-links";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 
@@ -634,10 +635,7 @@ export default async function SystemLayerPage({ params }: { params: Promise<{ la
     <DocsContent>
       <PageTitle title={`${title} - System View`} description={systemView.summary} />
 
-      <DocsScopeBlocks
-        covers="layer responsibilities, system position, and canonical cross-layer boundaries."
-        doesNotCover="deep implementation details, policy internals, and subsystem-specific runtime logic."
-      />
+      <DocsScopeBlocks links={systemLayerDocLinks(canonicalHref)} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock id="overview" title="Overview" body={[]}>
