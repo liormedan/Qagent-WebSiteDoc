@@ -1,5 +1,4 @@
 import { DocsContent } from "@/components/layout/DocsContent";
-import { ApiOperationalDocsCanonicalNotice } from "@/components/ui/ApiDocsCanonicalNotices";
 import { DocsDiagram } from "@/components/ui/DocsDiagram";
 import { DocsInThisPageNav } from "@/components/ui/DocsInThisPageNav";
 import { DocsOverviewBlock } from "@/components/ui/DocsOverviewBlock";
@@ -98,7 +97,6 @@ const relatedDocs = [
 export default function ApiPage() {
   return (
     <DocsContent>
-      <ApiOperationalDocsCanonicalNotice />
       <PageTitle
         title={API_SERVER_CANONICAL_NAME}
         description="Execution orchestration layer that receives approved requests, manages jobs, and publishes runtime outcomes."

@@ -19,13 +19,15 @@ const integrationDetails = [
   {
     id: "api-to-infrastructure",
     title: "API → Infrastructure",
-    subtitle: "API triggers infra-managed runtime work",
-    purpose: "Describe how API-orchestrated execution becomes infra-managed runtime work: materialized jobs, enqueued messages, and placed workers.",
+    subtitle: "API orchestrates; Infrastructure executes",
+    purpose:
+      "State the split clearly: the API triggers and orchestrates execution (what runs, when, under which orchestration policy). Infrastructure owns the execution runtime and manages how work is executed (placement, queues, workers, lifecycle, substrate completion).",
     defines: [
-      "API remains owner of when a job exists and what policy applies; infrastructure receives Job Contract-compatible materialization.",
-      "Enqueue and autoscale react to orchestration signals and queue metrics without re-validating business fields.",
-      "Secrets and runtime profiles are resolved from deployment metadata, not from ad-hoc API fields.",
-      "Status upward from runners uses Execution Result Contract; API layers its publication model on top.",
+      "API triggers and orchestrates execution: admission, job creation, orchestration policy, and handoff of a Job Contract-compatible unit—infra does not originate that decision.",
+      "Infrastructure owns execution runtime and manages how work is executed: enqueue, route, claim, supervise processes/containers, apply resource limits, emit Execution Result Contract at the runner boundary.",
+      "Enqueue and autoscale react to orchestration signals and queue metrics without re-validating business meaning of payloads.",
+      "Secrets and runtime profiles are resolved from deployment metadata, not from ad-hoc reinterpretation of API semantics inside infra.",
+      "Status upward from runners uses Execution Result Contract; API layers publication and user-facing job semantics on top.",
     ],
     doesNotDefine: "HTTP route tables, auth token validation matrices, or `/run` JSON beyond what API docs specify.",
     href: "/docs/api-server-layer/integration",
@@ -35,12 +37,14 @@ const integrationDetails = [
     id: "infrastructure-to-dsp",
     title: "Infrastructure → DSP",
     subtitle: "Execution support and runtime dispatch",
-    purpose: "Clarify how infrastructure provides execution support and runtime dispatch for DSP work after scheduling decisions are made upstream.",
+    purpose:
+      "DSP performs processing within the execution environment provided by Infrastructure: infra supplies the runtime, dispatch, and resource envelope; DSP owns all processing semantics inside that boundary.",
     defines: [
-      "DSP binaries/libraries execute inside Execution Environment boundaries with resource envelopes from Job Contract.",
-      "Job Runner performs process lifecycle; DSP owns in-process transform semantics.",
-      "Optional GPU/accelerator placement is an infrastructure capability exposed via profiles, not DSP logic.",
-      "Completion paths emit Execution Result Contract records; DSP-specific result packaging stays in DSP documentation.",
+      "DSP performs processing inside Infrastructure’s Execution Environment—hosts, containers, sandboxes, and resource ceilings are infra-owned.",
+      "Infrastructure provides execution support and runtime dispatch (claim work, start/stop runner, attach storage/network policy); DSP does not own queue or node placement.",
+      "Job Runner performs OS-level process lifecycle; DSP owns in-process transform semantics, graphs, and deterministic processing rules.",
+      "Optional GPU/accelerator placement is an infrastructure capability exposed via profiles, not DSP orchestration logic.",
+      "Completion paths emit Execution Result Contract records at the substrate; DSP-specific result packaging and transform outputs stay in DSP documentation.",
     ],
     doesNotDefine: "Processor graphs, codec choice, or deterministic transform definitions.",
     href: "/docs/dsp-layer/system-integration",
@@ -83,25 +87,26 @@ export default function InfrastructureLayerIntegrationPage() {
     <DocsContent>
       <PageTitle
         title="Infrastructure Layer - System Integration"
-        description="Cross-layer integration: API-triggered infra work, DSP hosting and dispatch, Data-aligned storage support, and system-wide reliability flows—structural framing without API or DSP logic."
+        description="Orchestration (API) vs execution (Infrastructure) vs processing (DSP): API triggers and orchestrates execution; Infrastructure owns runtime and how work runs; DSP performs processing inside Infrastructure’s execution environment—plus Data support and reliability flows."
       />
       <p className="mt-2 text-xs uppercase tracking-[0.08em] text-slate-400">Infrastructure Layer (Spec) / System Integration</p>
 
       <DocsScopeBlocks
-        covers="API → Infrastructure triggers; Infrastructure → DSP execution support; Infrastructure → Data storage support; System Reliability Flow (retry, monitoring, recovery, continuity)."
+        covers="API triggers and orchestrates execution → Infrastructure; Infrastructure owns execution runtime and handling → DSP (processing inside provided environment); Infrastructure → Data storage support; System Reliability Flow."
         doesNotCover="DSP algorithms; API request handling internals; SQL schema authority; client UI flows."
       />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock id="overview" title="Overview" body={[]}>
           <DocsOverviewBlock
-            intro="System Integration ties the Infrastructure spec to its neighbors at a flow level: who triggers work, where DSP runs, how storage is supported, and how reliability behaviors propagate. It complements the structural diagrams elsewhere with a responsibility-oriented map—not a replacement for /docs/system-flow."
+            intro="System Integration states execution responsibility in one line: API triggers and orchestrates execution; Infrastructure owns the execution runtime and manages how work is executed; DSP performs processing inside the execution environment Infrastructure provides. Data and reliability flows attach without blurring those three roles."
             areasTitle="Integration concerns"
             areas={[
-              "API triggers infra-managed runtime work after orchestration decisions.",
-              "Infrastructure hosts DSP execution and supplies dispatch and resources.",
-              "Infrastructure supplies durable media and ops procedures; Data defines what is canonical.",
-              "Reliability flows span queues, runners, telemetry, and deployment gates end to end.",
+              "Orchestration (API): triggers execution, decides what runs and under which policy, materializes jobs—does not replace infra queues or worker lifecycles.",
+              "Execution (Infrastructure): owns runtime, placement, supervision, and substrate completion—does not decide business “what” or DSP “how”.",
+              "Processing (DSP): runs inside infra-provided environments; owns transforms and processing semantics—not queue placement or orchestration.",
+              "Data: canonical persistence; Infrastructure supplies durable execution of storage operations only.",
+              "Reliability: spans queues, runners, telemetry, and deployment gates without merging orchestration into ops code.",
             ]}
             outOfScope="Vendor-specific runbooks beyond named capabilities; keep those in operations playbooks external to this tree."
             relatedBoundaries={[
@@ -123,9 +128,9 @@ export default function InfrastructureLayerIntegrationPage() {
             mode="structure"
             root="Infrastructure Integration (spec)"
             groups={[
-              { title: "Upstream trigger", items: ["API orchestration → Job Contract", "Policy & secrets resolution"] },
-              { title: "Infrastructure path", items: ["Enqueue & route", "Run & supervise", "Results & telemetry"] },
-              { title: "Downstream & platform", items: ["DSP (hosted)", "Data substrates (supported)", "Reliability & continuity"] },
+              { title: "Orchestration (API)", items: ["Triggers & orchestrates execution", "Job materialization → handoff"] },
+              { title: "Execution (Infrastructure)", items: ["Runtime ownership", "How work runs: enqueue, run, supervise"] },
+              { title: "Processing & platform", items: ["DSP (processing inside infra environment)", "Data substrates", "Reliability & continuity"] },
             ]}
           />
         </SectionBlock>
