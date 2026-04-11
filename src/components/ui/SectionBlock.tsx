@@ -92,6 +92,7 @@ export function SectionBlock({
   children,
   childrenFirst = false,
   collapsible = false,
+  summaryPreview,
   tocHidden = false,
   plainStructured = false,
 }: {
@@ -101,9 +102,12 @@ export function SectionBlock({
   children?: React.ReactNode;
   childrenFirst?: boolean;
   collapsible?: boolean;
+  summaryPreview?: string;
   tocHidden?: boolean;
   plainStructured?: boolean;
 }) {
+  const autoOverviewCollapse = id === "overview" || title.trim().toLowerCase() === "overview";
+  const shouldRenderCollapsible = collapsible || autoOverviewCollapse;
   const hasStructuredHeadings = body.some((line) => line.startsWith("### "));
   const summaryLines = body;
 
@@ -184,10 +188,15 @@ export function SectionBlock({
   return (
     <section id={id} className="rounded-xl bg-[var(--panel)] p-4 md:p-5">
       <div className="space-y-3">
-        {collapsible ? (
+        {shouldRenderCollapsible ? (
           <details className="group/details" name="docs-primary-accordion">
-            <summary className="flex cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
-              {heading}
+            <summary className="flex cursor-pointer list-none items-start justify-between gap-2 [&::-webkit-details-marker]:hidden">
+              <div className="min-w-0">
+                {heading}
+                {summaryPreview ? (
+                  <p className="mt-1 text-xs leading-5 text-slate-400">{summaryPreview}</p>
+                ) : null}
+              </div>
               <ChevronRight className="h-5 w-5 shrink-0 text-slate-400 transition-transform group-open/details:rotate-90" />
             </summary>
             <div className="mt-3 space-y-3">{content}</div>

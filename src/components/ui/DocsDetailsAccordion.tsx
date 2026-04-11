@@ -1,5 +1,6 @@
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { normalizeDocListText } from "@/lib/docs-text";
 
 export type DocsDetailsItem = {
@@ -8,17 +9,24 @@ export type DocsDetailsItem = {
   subtitle: string;
   purpose: string;
   defines: readonly string[];
+  /** Optional rich content (e.g. tables) rendered after Defines, before Does not define. */
+  supplement?: ReactNode;
   doesNotDefine: string;
   href: string;
   linkLabel?: string;
 };
 
-export function DocsDetailsAccordion({ items }: { items: readonly DocsDetailsItem[] }) {
+export function DocsDetailsAccordion({ items, defaultOpenAll = false }: { items: readonly DocsDetailsItem[]; defaultOpenAll?: boolean }) {
   return (
     <div className="space-y-4 text-sm">
       {items.map((item, index) => (
         <section id={item.id} key={item.id} className="overflow-hidden rounded-lg border border-[var(--border)] bg-slate-950/30 shadow-sm">
-          <details className="group/details" open={index === 0}>
+          <div className="border-b border-[var(--border)]/70 bg-slate-900/40 px-3 py-1.5">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">
+              Detail Entry {index + 1}
+            </p>
+          </div>
+          <details className="group/details" open={defaultOpenAll}>
             <summary className="flex cursor-pointer list-none items-start justify-between gap-3 px-3 py-2.5 text-left transition-colors hover:bg-slate-900/30 [&::-webkit-details-marker]:hidden">
               <span className="min-w-0">
                 <span className="block font-semibold text-slate-100">{item.title}</span>
@@ -30,6 +38,7 @@ export function DocsDetailsAccordion({ items }: { items: readonly DocsDetailsIte
             </summary>
             <div className="border-t border-[var(--border)]">
               <div className="space-y-3 px-3 py-3">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">Detail Content</p>
                 <p className="rounded-md bg-slate-900/30 px-2.5 py-2 text-[var(--muted)]">
                   <span className="font-semibold text-slate-100">Purpose:</span> {normalizeDocListText(item.purpose)}
                 </p>
@@ -41,6 +50,7 @@ export function DocsDetailsAccordion({ items }: { items: readonly DocsDetailsIte
                     </div>
                   ))}
                 </div>
+                {item.supplement ? <div className="space-y-2">{item.supplement}</div> : null}
                 <p className="rounded-md bg-slate-900/30 px-2.5 py-2 text-[var(--muted)]">
                   <span className="font-semibold text-slate-100">Does not define:</span> {normalizeDocListText(item.doesNotDefine)}
                 </p>

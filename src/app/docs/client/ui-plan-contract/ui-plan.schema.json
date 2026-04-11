@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "waveq/client/ui-plan.schema.json",
+  "title": "WaveQ UI Plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "uiPlan"
+  ],
+  "properties": {
+    "uiPlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "layout",
+        "blocks",
+        "metadata"
+      ],
+      "properties": {
+        "version": {
+          "type": "string",
+          "pattern": "^\\\\d+\\\\.\\\\d+$"
+        },
+        "layout": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "type",
+              "region"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "type": {
+                "enum": [
+                  "waveform",
+                  "pipeline",
+                  "panel",
+                  "status"
+                ]
+              },
+              "region": {
+                "enum": [
+                  "main",
+                  "left",
+                  "right",
+                  "bottom",
+                  "overlay"
+                ]
+              }
+            }
+          }
+        },
+        "blocks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "type",
+              "label",
+              "status"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "type": {
+                "enum": [
+                  "effect",
+                  "control",
+                  "waveform",
+                  "status",
+                  "action"
+                ]
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1
+              },
+              "status": {
+                "enum": [
+                  "idle",
+                  "ready",
+                  "running",
+                  "completed",
+                  "failed"
+                ]
+              },
+              "params": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "layoutRef": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "ready",
+                "running",
+                "completed",
+                "failed"
+              ]
+            },
+            "duration": {
+              "type": "number",
+              "minimum": 0
+            },
+            "sampleRate": {
+              "type": "integer",
+              "minimum": 8000
+            },
+            "sessionId": {
+              "type": "string"
+            },
+            "traceId": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

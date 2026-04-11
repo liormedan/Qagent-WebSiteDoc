@@ -1,157 +1,224 @@
 import { DocsContent } from "@/components/layout/DocsContent";
-import { ClientWorkspaceFlowDiagram } from "@/components/ui/ClientWorkspaceFlowDiagram";
+import { DocsDiagram } from "@/components/ui/DocsDiagram";
+import { DocsInThisPageNav } from "@/components/ui/DocsInThisPageNav";
+import { DocsOverviewBlock } from "@/components/ui/DocsOverviewBlock";
+import { DocsRelatedDocs } from "@/components/ui/DocsRelatedDocs";
+import { DocsScopeBlocks } from "@/components/ui/DocsScopeBlocks";
+import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
+import { PageTitle } from "@/components/ui/PageTitle";
+import { SectionBlock } from "@/components/ui/SectionBlock";
 
-export default function ClientWorkspaceUiPage() {
-  return (
-    <DocsContent>
-    <main className="space-y-8">
-      <section className="space-y-2">
-        <h1 className="text-3xl font-semibold">Workspace UI — Overview</h1>
-        <p className="text-base text-[var(--muted)]">
-          The Workspace UI is the structural and organizational layer of the WaveQ client.
-        </p>
-        <p className="text-base text-[var(--muted)]">
-          It defines how different UI components (Chat, Canvas, and Runtime) are arranged, connected, and accessed by the user.
-        </p>
-      </section>
+const inPageLinks = [
+  { title: "Overview", subtitle: "Workspace scope and ownership.", href: "#overview" },
+  { title: "Workspace Diagram", subtitle: "Structural coordination flow.", href: "#workspace-diagram" },
+  { title: "Workspace Details", subtitle: "Responsibilities and references.", href: "#workspace-details" },
+  { title: "Related Docs", subtitle: "Canonical client cross-references.", href: "#related-docs" },
+];
 
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Role in the System</h2>
-        <ClientWorkspaceFlowDiagram />
-        <p className="text-[var(--muted)]">The Workspace UI is the container and coordinator of the Client Layer.</p>
-        <p className="text-[var(--muted)]">
-          It ensures that all components operate within a coherent and navigable environment.
-        </p>
-      </section>
+const workspaceDetails = [
+  {
+    id: "workspace-purpose",
+    title: "Purpose",
+    subtitle: "Structural and organizational frontend layer",
+    purpose: "Define Workspace UI as the structural and organizational layer of the Client frontend.",
+    defines: [
+      "Organize how Chat UI, Canvas UI, and Runtime are arranged and accessed.",
+      "Provide coherent navigation structure for multi-surface interaction.",
+      "[TEXT TBD – expand Workspace UI detail]",
+    ],
+    doesNotDefine: "Intent/planning or server execution ownership.",
+    href: "/docs/client/workspace-ui",
+    linkLabel: "Canonical page",
+  },
+  {
+    id: "workspace-role-flow",
+    title: "Role in the System / Interaction Flow",
+    subtitle: "Container and coordination flow",
+    purpose: "Define Workspace UI as the container/coordinator inside the Client layer.",
+    defines: [
+      "Run canonical flow: User Navigation -> Workspace UI -> Chat UI / Canvas UI / Runtime -> System Response -> Workspace Update.",
+      "Maintain coherent and navigable environment across client surfaces.",
+      "[TEXT TBD – expand Workspace UI detail]",
+    ],
+    doesNotDefine: "Cross-layer execution orchestration.",
+    href: "/docs/client",
+    linkLabel: "Client overview",
+  },
+  {
+    id: "workspace-responsibilities",
+    title: "Core Responsibilities",
+    subtitle: "Layout, navigation, session continuity",
+    purpose: "Define concrete Workspace UI ownership responsibilities.",
+    defines: [
+      "Layout composition for Chat, Canvas, and navigation regions.",
+      "Navigation management across major client surfaces.",
+      "Session continuity across views.",
+      "Global state awareness for active project/file/runtime context.",
+      "System coordination between Chat UI, Canvas UI, and Runtime.",
+      "[TEXT TBD – expand Workspace UI detail]",
+    ],
+    doesNotDefine: "Business logic ownership.",
+    href: "/docs/client/runtime",
+    linkLabel: "Related runtime",
+  },
+  {
+    id: "workspace-boundaries",
+    title: "Boundaries",
+    subtitle: "Non-ownership constraints",
+    purpose: "Define what Workspace UI explicitly does not own.",
+    defines: [
+      "Does not interpret user intent.",
+      "Does not generate dynamic UI (Canvas/uiPlan responsibility).",
+      "Does not execute processing logic.",
+      "Does not manage API Server jobs.",
+      "Does not contain business logic or DSP behavior.",
+      "[TEXT TBD – expand Workspace UI detail]",
+    ],
+    doesNotDefine: "QAgent, API Server, and DSP ownership boundaries.",
+    href: "/docs/q-agent",
+    linkLabel: "Related layer",
+  },
+  {
+    id: "workspace-connected-components",
+    title: "Connected Components",
+    subtitle: "Surface integration matrix",
+    purpose: "Define connected components coordinated by Workspace UI.",
+    defines: [
+      "Chat UI for interaction panel and conversation flow anchoring.",
+      "Canvas UI for visual execution environment hosting.",
+      "Client Runtime for global execution status and state reflection.",
+      "QAgent indirectly through structured data-flow boundaries.",
+      "[TEXT TBD – expand Workspace UI detail]",
+    ],
+    doesNotDefine: "Ownership replacement for connected components.",
+    href: "/docs/client/chat-ui",
+    linkLabel: "Related section",
+  },
+  {
+    id: "workspace-design-principles",
+    title: "Design Principles",
+    subtitle: "Workspace UX quality rules",
+    purpose: "Define principles that keep Workspace behavior coherent.",
+    defines: [
+      "Structural clarity with predictable layout behavior.",
+      "Minimal interaction friction for navigation between views.",
+      "Persistent context across view transitions.",
+      "Consistent behavior across all client surfaces.",
+      "[TEXT TBD – expand Workspace UI detail]",
+    ],
+    doesNotDefine: "Execution policy semantics.",
+    href: "/docs/client",
+    linkLabel: "Client overview",
+  },
+  {
+    id: "workspace-capabilities",
+    title: "Capabilities",
+    subtitle: "Operational feature surface",
+    purpose: "Define key capabilities exposed by Workspace UI.",
+    defines: [
+      "Multi-view navigation support.",
+      "Session switching behavior.",
+      "Layout orchestration across surfaces.",
+      "Global state coordination.",
+      "Unified interaction environment.",
+      "[TEXT TBD – expand Workspace UI detail]",
+    ],
+    doesNotDefine: "Intent/planning authority.",
+    href: "/docs/client/state-model",
+    linkLabel: "Related section",
+  },
+  {
+    id: "workspace-mental-model",
+    title: "Mental Model",
+    subtitle: "Operating environment metaphor",
+    purpose: "Define Workspace UI mental model for documentation consistency.",
+    defines: [
+      "Workspace UI acts as the operating environment of the Client layer.",
+      "Conversations, visual workflows, and execution control coexist in one structural frame.",
+      "[TEXT TBD – expand Workspace UI detail]",
+    ],
+    doesNotDefine: "Plan construction ownership.",
+    href: "/docs/client/workspace-ui",
+    linkLabel: "Canonical page",
+  },
+  {
+    id: "workspace-other-layers",
+    title: "Interaction with Other Layers",
+    subtitle: "Cross-component coordination behavior",
+    purpose: "Define Workspace-level interactions with adjacent client components.",
+    defines: [
+      "With Chat UI: hosts conversation panel and user action entrypoint.",
+      "With Canvas UI: hosts visual execution surface and synchronization context.",
+      "With Client Runtime: reflects runtime state globally across workspace surfaces.",
+      "[TEXT TBD – expand Workspace UI detail]",
+    ],
+    doesNotDefine: "Cross-layer authority redefinition.",
+    href: "/docs/client/runtime",
+    linkLabel: "Related runtime",
+  },
+  {
+    id: "workspace-integration-note",
+    title: "Integration Note",
+    subtitle: "Unified interaction environment",
+    purpose: "Define integration note for Chat/Canvas/Runtime coordination.",
+    defines: [
+      "Coordinate Chat, Canvas, and Runtime into one unified interaction environment.",
+      "Preserve consistent data-flow expectations across client surfaces.",
+      "[TEXT TBD – expand Workspace UI detail]",
+    ],
+    doesNotDefine: "Schema or API contract ownership.",
+    href: "/docs/client/contracts",
+    linkLabel: "Related contracts",
+  },
+  {
+    id: "workspace-future-extensions",
+    title: "Future Extensions",
+    subtitle: "Planned workspace evolution",
+    purpose: "Define future extension directions while keeping current ownership unchanged.",
+    defines: [
+      "Multi-project workspace support.",
+      "Collaborative session features.",
+      "Workspace presets.",
+      "Custom layout profiles.",
+      "[TEXT TBD – expand Workspace UI detail]",
+    ],
+    doesNotDefine: "Current canonical responsibilities.",
+    href: "/docs/client/workspace-ui",
+    linkLabel: "Canonical page",
+  },
+  {
+    id: "workspace-implementation-note",
+    title: "Implementation Note",
+    subtitle: "Execution boundaries in implementation",
+    purpose: "Define implementation guardrails for Workspace UI code.",
+    defines: [
+      "No business logic embedding in workspace layer.",
+      "No Gen UI generation in workspace orchestration surface.",
+      "No DSP behavior ownership in workspace module.",
+      "Focus implementation on layout, navigation, and orchestration glue.",
+      "[TEXT TBD – expand Workspace UI detail]",
+    ],
+    doesNotDefine: "Behavioral ownership of other client modules.",
+    href: "/docs/client/system-validation",
+    linkLabel: "Related validation",
+  },
+  {
+    id: "workspace-frontend-reference",
+    title: "Frontend Structure Reference",
+    subtitle: "Workspace-related project hierarchy map",
+    purpose: "Define the frontend structure reference relevant to Workspace UI organizational ownership.",
+    defines: [
+      "Preserve Workspace-related frontend hierarchy as documentation reference.",
+      "Use project tree as structural context for workspace ownership and integration boundaries.",
+      "[TEXT TBD – expand Workspace UI detail]",
+    ],
+    doesNotDefine: "Canonical build/runtime topology guarantees.",
+    href: "/docs/client/workspace-ui",
+    linkLabel: "Canonical page",
+  },
+] as const;
 
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Interaction Flow</h2>
-        <pre className="overflow-x-auto rounded-md border border-[var(--border)] bg-slate-950/40 p-4 text-sm text-slate-200">
-{`User Navigation -> Workspace UI -> Chat / Canvas -> System Response -> Workspace Update`}
-        </pre>
-      </section>
-
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Core Responsibilities</h2>
-        <div className="space-y-2 text-[var(--muted)]">
-          <p>
-            <span className="font-semibold text-slate-100">1. Layout Composition</span>: define overall UI structure and manage positioning of Chat,
-            Canvas, and navigation areas.
-          </p>
-          <p>
-            <span className="font-semibold text-slate-100">2. Navigation Management</span>: enable switching between Chat, Canvas, and Export while
-            keeping navigation intuitive.
-          </p>
-          <p>
-            <span className="font-semibold text-slate-100">3. Session Management</span>: track active session and maintain continuity across views.
-          </p>
-          <p>
-            <span className="font-semibold text-slate-100">4. Global State Awareness</span>: reflect active project, selected file, and execution
-            state in synchronized UI.
-          </p>
-          <p>
-            <span className="font-semibold text-slate-100">5. System Coordination</span>: connect Chat UI and Canvas UI with consistent data flow and
-            unified experience.
-          </p>
-        </div>
-      </section>
-
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Boundaries (Does Not Do)</h2>
-        <ul className="list-disc space-y-1 pl-6 text-[var(--muted)]">
-          <li>Interpret user intent</li>
-          <li>Generate UI dynamically (Canvas responsibility)</li>
-          <li>Execute processing</li>
-          <li>Manage API Server jobs</li>
-          <li>Contain business logic</li>
-        </ul>
-        <p className="text-[var(--muted)]">It is purely structural and coordinative.</p>
-      </section>
-
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Connected Components</h2>
-        <ul className="list-disc space-y-1 pl-6 text-[var(--muted)]">
-          <li>Chat UI</li>
-          <li>Canvas UI</li>
-          <li>Client Runtime</li>
-          <li>QAgent (indirectly via data flow)</li>
-        </ul>
-      </section>
-
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Design Principles</h2>
-        <ul className="list-disc space-y-1 pl-6 text-[var(--muted)]">
-          <li>Structural clarity: clear and predictable layout</li>
-          <li>Minimal friction: easy navigation with no unnecessary steps</li>
-          <li>Persistent context: no loss of user state between views</li>
-          <li>Consistency: unified behavior across all views</li>
-        </ul>
-      </section>
-
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Capabilities</h2>
-        <ul className="list-disc space-y-1 pl-6 text-[var(--muted)]">
-          <li>Multi-view navigation</li>
-          <li>Session switching</li>
-          <li>Layout orchestration</li>
-          <li>Global state coordination</li>
-          <li>Unified UI experience</li>
-        </ul>
-      </section>
-
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Mental Model</h2>
-        <p className="text-[var(--muted)]">Workspace = Operating Environment.</p>
-        <p className="text-[var(--muted)]">It is the space where conversations happen, workflows are visualized, and execution is controlled.</p>
-      </section>
-
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Interaction with Other Layers</h2>
-        <div className="space-y-2 text-[var(--muted)]">
-          <p><span className="font-semibold text-slate-100">With Chat UI</span>: receives user actions and displays the conversation panel.</p>
-          <p><span className="font-semibold text-slate-100">With Canvas UI</span>: hosts visual execution environment and maintains synchronization.</p>
-          <p><span className="font-semibold text-slate-100">With Client Runtime</span>: reflects execution state globally and updates UI accordingly.</p>
-        </div>
-      </section>
-
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Integration Note</h2>
-        <p className="text-[var(--muted)]">
-          Workspace coordinates Chat, Canvas, and Runtime into a unified interaction environment.
-        </p>
-      </section>
-
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Future Extensions</h2>
-        <ul className="list-disc space-y-1 pl-6 text-[var(--muted)]">
-          <li>Multi-project workspace</li>
-          <li>Collaborative sessions</li>
-          <li>Workspace presets</li>
-          <li>Custom layouts</li>
-        </ul>
-      </section>
-
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Summary</h2>
-        <p className="text-[var(--muted)]">
-          Workspace UI is the structural backbone of the frontend, the coordinator of UI components, and the environment in which WaveQ operates.
-        </p>
-      </section>
-
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">Implementation Note</h2>
-        <ul className="list-disc space-y-1 pl-6 text-[var(--muted)]">
-          <li>No business logic</li>
-          <li>No Gen UI generation</li>
-          <li>No DSP behavior</li>
-          <li>Focus only on layout, navigation, and orchestration</li>
-        </ul>
-      </section>
-
-      <section className="space-y-2">
-        <h2 className="text-2xl font-semibold">WaveQ Frontend Project Structure</h2>
-        <pre className="overflow-x-auto rounded-md border border-[var(--border)] bg-slate-950/40 p-4 text-sm text-slate-200">
-{`WaveQ Frontend
+const frontendProjectTree = `WaveQ Frontend
 ├── app/ (Next.js App Router)
 │   ├── layout.tsx
 │   ├── page.tsx
@@ -302,10 +369,82 @@ export default function ClientWorkspaceUiPage() {
     ├── canvas.ts
     ├── audio.ts
     ├── plan.ts
-    └── session.ts`}
-        </pre>
-      </section>
-    </main>
+    └── session.ts`;
+
+export default function ClientWorkspaceUiPage() {
+  return (
+    <DocsContent>
+      <PageTitle title="Workspace UI" description="Canonical client page for workspace composition, navigation coordination, and multi-surface frontend structure ownership." />
+      <p className="mt-2 text-xs uppercase tracking-[0.08em] text-slate-400">Section Path: Client / Workspace UI</p>
+
+      <DocsScopeBlocks
+        covers="layout composition, navigation management, session continuity, and coordination across Chat UI/Canvas UI/Runtime."
+        doesNotCover="intent interpretation, dynamic UI generation ownership, processing execution, API Server job management, business logic, and DSP behavior."
+      />
+
+      <div className="mt-5 flex flex-col gap-5">
+        <SectionBlock
+          id="overview"
+          title="Overview"
+          body={[]}
+          summaryPreview="Workspace structure ownership, navigation coordination, and multi-surface client alignment."
+        >
+          <DocsOverviewBlock
+            intro="Workspace UI is the structural and organizational layer of the Client frontend, coordinating how Chat UI, Canvas UI, and Runtime are arranged and accessed."
+            areasTitle="Workspace UI areas"
+            areas={[
+              "Layout composition and structural surface arrangement.",
+              "Cross-surface navigation management.",
+              "Session continuity and global state awareness.",
+              "Coordination across Chat UI, Canvas UI, and Runtime.",
+            ]}
+            outOfScope="Intent/planning ownership, dynamic UI generation authority, processing execution control, and API job lifecycle management."
+            relatedBoundaries={[
+              "Workspace UI = structural/organizational client authority.",
+              "Chat UI = conversational interaction authority.",
+              "Canvas UI = visual execution surface authority.",
+              "Client Runtime = local runtime feedback authority.",
+            ]}
+          />
+        </SectionBlock>
+
+        <SectionBlock id="in-this-page" title="In this page" body={[]}>
+          <DocsInThisPageNav items={inPageLinks} />
+        </SectionBlock>
+
+        <SectionBlock id="workspace-diagram" title="Workspace Diagram" body={[]}>
+          <DocsDiagram mode="flow" steps={["User Navigation", "Workspace UI", "Chat UI / Canvas UI / Runtime", "System Response", "Workspace Update"]} />
+        </SectionBlock>
+
+        <SectionBlock id="workspace-details" title="Workspace Details" body={[]}>
+          <LayerSpecAccordion items={[...workspaceDetails]} defaultOpenAll />
+          <div className="mt-4 rounded-md border border-[var(--border)] bg-slate-950/30 p-3">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">Workspace / Frontend Structure Reference</p>
+            <p className="mt-2 text-xs text-slate-300">Reference tree (rendered content):</p>
+            <pre className="mt-2 overflow-x-auto rounded-md border border-[var(--border)] bg-slate-950/40 p-4 text-xs leading-6 text-slate-200">
+              {frontendProjectTree}
+            </pre>
+          </div>
+        </SectionBlock>
+
+        <SectionBlock id="related-docs" title="Related Docs" body={[]}>
+          <div className="rounded-md border border-[var(--border)] bg-slate-950/25 p-3">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">Client Cross-Reference Map</p>
+            <p className="mt-1 text-xs text-slate-500">Canonical references for Workspace ownership boundaries and adjacent specs.</p>
+            <div className="mt-3">
+              <DocsRelatedDocs
+                items={[
+                  "Client Layer = canonical parent page for client ownership boundaries.",
+                  "Chat UI = conversational interaction authority.",
+                  "Canvas UI = visual execution representation authority.",
+                  "Client Runtime = local runtime state/feedback authority.",
+                  "Cross-Layer Contracts = boundary contract authority.",
+                ]}
+              />
+            </div>
+          </div>
+        </SectionBlock>
+      </div>
     </DocsContent>
   );
 }

@@ -68,7 +68,7 @@ const qagentSections: SidebarSection[] = [
     ],
   },
   {
-    title: "System Flow",
+    title: "System Flow (Cross-layer)",
     href: "/docs/system-flow",
     items: [
       { label: "Runtime Graph (Cross-layer Reference)", href: "/docs/system-flow", kind: "reference" },
@@ -154,84 +154,44 @@ const apiSections: SidebarSection[] = [
 
 const clientSections: SidebarSection[] = [
   {
-    title: "Overview",
+    title: "Client Layer",
     href: "/docs/client",
     items: [],
   },
   {
-    title: "Chat UI",
-    href: "/docs/client/chat-ui",
-    items: [],
+    title: "Surfaces",
+    items: [
+      { label: "Chat UI", href: "/docs/client/chat-ui" },
+      { label: "Canvas UI", href: "/docs/client/canvas-ui" },
+      { label: "Workspace UI", href: "/docs/client/workspace-ui" },
+    ],
   },
   {
-    title: "Canvas UI",
-    href: "/docs/client/canvas-ui",
-    items: [],
+    title: "Runtime & State",
+    items: [
+      { label: "Client Runtime", href: "/docs/client/runtime" },
+      { label: "State Model", href: "/docs/client/state-model" },
+      { label: "State Ownership", href: "/docs/client/state-ownership" },
+    ],
   },
   {
-    title: "Workspace UI",
-    href: "/docs/client/workspace-ui",
-    items: [],
+    title: "Events & Contracts",
+    items: [
+      { label: "Event Flow", href: "/docs/client/event-flow" },
+      { label: "Event Contract", href: "/docs/client/event-contract" },
+      { label: "Runtime Lifecycle", href: "/docs/client/runtime-lifecycle" },
+      { label: "Error Model", href: "/docs/client/error-model" },
+      { label: "Contracts", href: "/docs/client/contracts" },
+    ],
   },
   {
-    title: "Client Runtime",
-    href: "/docs/client/runtime",
-    items: [],
-  },
-  {
-    title: "State Model",
-    href: "/docs/client/state-model",
-    items: [],
-  },
-  {
-    title: "State Ownership",
-    href: "/docs/client/state-ownership",
-    items: [],
-  },
-  {
-    title: "Event Flow",
-    href: "/docs/client/event-flow",
-    items: [],
-  },
-  {
-    title: "Event Contract",
-    href: "/docs/client/event-contract",
-    items: [],
-  },
-  {
-    title: "Runtime Lifecycle",
-    href: "/docs/client/runtime-lifecycle",
-    items: [],
-  },
-  {
-    title: "Error Model",
-    href: "/docs/client/error-model",
-    items: [],
-  },
-  {
-    title: "Cross-Layer Contracts",
-    href: "/docs/client/contracts",
-    items: [],
-  },
-  {
-    title: "System Validation",
-    href: "/docs/client/system-validation",
-    items: [],
-  },
-  {
-    title: "Conformance Tests",
-    href: "/docs/client/conformance-tests",
-    items: [],
-  },
-  {
-    title: "Test Report",
-    href: "/docs/client/test-report",
-    items: [],
-  },
-  {
-    title: "UI Plan Contract",
-    href: "/docs/client/ui-plan-contract",
-    items: [],
+    title: "Validation & Tests",
+    items: [
+      { label: "System Validation", href: "/docs/client/system-validation" },
+      { label: "Conformance Tests", href: "/docs/client/conformance-tests" },
+      { label: "Test Report", href: "/docs/client/test-report" },
+      { label: "UI Plan Contract", href: "/docs/client/ui-plan-contract" },
+    ],
   },
 ];
 
@@ -356,7 +316,7 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
     safePathname.startsWith("/docs/data-layer") ||
     safePathname.startsWith("/docs/auth-security") ||
     safePathname.startsWith("/docs/infrastructure-layer");
-  const singleLevelContext = apiContext || clientContext || systemContext || dspContext;
+  const singleLevelContext = apiContext || systemContext || dspContext;
   const sections = apiContext
     ? apiSections
     : clientContext
@@ -373,7 +333,7 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
           })),
         }));
 
-  const activeOpenSection = openSection;
+  const activeOpenSection = clientContext && openSection === "Architecture" ? "Surfaces" : openSection;
 
   return (
     <aside className={cn("h-full min-h-0 overflow-y-scroll bg-black px-4 py-5", className)}>
@@ -424,7 +384,10 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
               <button
                 type="button"
                 onClick={() => setOpenSection(activeOpenSection === section.title ? "" : section.title)}
-                className="flex w-full items-center justify-between rounded-md px-2.5 py-2 text-left text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 transition-colors hover:bg-slate-950/70 hover:text-slate-300"
+                className={cn(
+                  "flex w-full items-center justify-between rounded-md px-2.5 py-2 text-left text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 transition-colors hover:bg-slate-950/70 hover:text-slate-300",
+                  clientContext ? "text-slate-300 hover:text-slate-100" : "",
+                )}
                 aria-expanded={activeOpenSection === section.title}
               >
                 <span className="pe-3 whitespace-normal leading-5">{section.title}</span>
@@ -433,7 +396,7 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
             )}
 
             {!singleLevelContext && activeOpenSection === section.title ? (
-              <div className="space-y-0.5">
+              <div className={cn("space-y-0.5", clientContext ? "border-l border-[var(--border)]/60 pl-2" : "")}>
                 {section.items.map((item) => {
                   const active = isSectionActive(safePathname, item.href);
                   const isReference = item.kind === "reference";
