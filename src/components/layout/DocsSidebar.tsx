@@ -89,6 +89,39 @@ const qagentSections: SidebarSection[] = [
     ],
   },
 ];
+const infrastructureLayerSpecSections: SidebarSection[] = [
+  {
+    title: "Infrastructure Layer (Spec)",
+    href: "/docs/infrastructure-layer",
+    level: "primary",
+    items: [],
+  },
+  {
+    title: "Core Specification",
+    href: "/docs/infrastructure-layer/core",
+    level: "secondary",
+    items: [],
+  },
+  {
+    title: "Contracts",
+    href: "/docs/infrastructure-layer/contracts",
+    level: "secondary",
+    items: [],
+  },
+  {
+    title: "Internal Modules",
+    href: "/docs/infrastructure-layer/modules",
+    level: "secondary",
+    items: [],
+  },
+  {
+    title: "System Integration",
+    href: "/docs/infrastructure-layer/integration",
+    level: "secondary",
+    items: [],
+  },
+];
+
 const apiServerLayerSpecSections: SidebarSection[] = [
   {
     title: "API Server Layer (Spec)",
@@ -356,7 +389,12 @@ function isSectionActive(pathname: string, href: string): boolean {
   const path = normalizePath(pathname);
   const target = normalizePath(href.split("#")[0] ?? href);
   if (!target) return false;
-  if (target === "/docs/dsp-layer" || target === "/docs/data-layer" || target === "/docs/api-server-layer") {
+  if (
+    target === "/docs/dsp-layer" ||
+    target === "/docs/data-layer" ||
+    target === "/docs/api-server-layer" ||
+    target === "/docs/infrastructure-layer"
+  ) {
     return path === target;
   }
   return path === target || path.startsWith(`${target}/`);
@@ -377,6 +415,7 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
   const safePathname = hydrated ? pathname : "";
 
   const clientContext = safePathname.startsWith("/docs/client");
+  const infrastructureLayerSpecContext = safePathname.startsWith("/docs/infrastructure-layer");
   const apiServerLayerSpecContext = safePathname.startsWith("/docs/api-server-layer");
   const apiContext = safePathname.startsWith("/docs/api") && !apiServerLayerSpecContext;
   const dspContext =
@@ -387,10 +426,17 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
     safePathname === "/docs" ||
     safePathname.startsWith("/docs/system") ||
     safePathname.startsWith("/docs/system-flow") ||
-    safePathname.startsWith("/docs/auth-security") ||
-    safePathname.startsWith("/docs/infrastructure-layer");
-  const singleLevelContext = apiServerLayerSpecContext || apiContext || systemContext || dspContext || dataLayerContext;
-  const sections = apiServerLayerSpecContext
+    safePathname.startsWith("/docs/auth-security");
+  const singleLevelContext =
+    infrastructureLayerSpecContext ||
+    apiServerLayerSpecContext ||
+    apiContext ||
+    systemContext ||
+    dspContext ||
+    dataLayerContext;
+  const sections = infrastructureLayerSpecContext
+    ? infrastructureLayerSpecSections
+    : apiServerLayerSpecContext
     ? apiServerLayerSpecSections
     : apiContext
     ? apiSections
@@ -423,8 +469,14 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
                 onClick={onNavigate}
                 className={cn(
                   "group flex items-center justify-between rounded-md px-2 py-1 text-left text-xs uppercase tracking-[0.14em] transition-colors",
-                  (apiContext || apiServerLayerSpecContext || dataLayerContext) && section.level === "primary" ? "font-bold text-slate-200" : "font-semibold",
-                  (apiContext || apiServerLayerSpecContext || dataLayerContext) && section.level === "secondary" ? "pl-5" : "",
+                  (apiContext || apiServerLayerSpecContext || dataLayerContext || infrastructureLayerSpecContext) &&
+                  section.level === "primary"
+                    ? "font-bold text-slate-200"
+                    : "font-semibold",
+                  (apiContext || apiServerLayerSpecContext || dataLayerContext || infrastructureLayerSpecContext) &&
+                  section.level === "secondary"
+                    ? "pl-5"
+                    : "",
                   isSectionActive(safePathname, section.href)
                     ? "bg-slate-900 text-slate-100"
                     : "text-slate-500 hover:bg-slate-950/70 hover:text-slate-300",
