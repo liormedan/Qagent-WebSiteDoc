@@ -539,8 +539,8 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
                 href={section.href}
                 onClick={onNavigate}
                 className={cn(
-                  // System-style nav: 12px caps, bold, wide tracking, generous vertical padding (matches QAgent overview links).
-                  "group flex items-center justify-between rounded-lg px-2.5 py-2 text-left text-xs uppercase tracking-[0.12em] transition-colors",
+                  // System-style nav: caps, bold, wide tracking, generous vertical padding (matches QAgent overview links).
+                  "group flex items-center justify-between rounded-lg px-2.5 py-2.5 text-left text-[13px] uppercase leading-snug tracking-[0.1em] transition-colors",
                   layerSpecNav && sectionLevel === "secondary" && "pl-5 font-semibold",
                   (!layerSpecNav || sectionLevel === "primary") && "font-bold",
                   sectionHrefActive && "bg-slate-900 text-slate-50",
@@ -568,7 +568,7 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
                 href={section.href}
                 onClick={onNavigate}
                 className={cn(
-                  "group flex items-center justify-between rounded-lg px-2.5 py-2 text-left text-xs font-semibold uppercase tracking-[0.12em] transition-colors",
+                  "group flex items-center justify-between rounded-lg px-2.5 py-2.5 text-left text-[13px] font-semibold uppercase leading-snug tracking-[0.1em] transition-colors",
                   isSectionActive(safePathname, section.href)
                     ? "bg-slate-900 text-slate-50"
                     : "text-slate-300 hover:bg-slate-950 hover:text-slate-100",
@@ -608,7 +608,7 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
                       href={item.href}
                       onClick={onNavigate}
                       className={cn(
-                        "group flex items-center justify-between rounded-lg px-2.5 py-2 text-left text-xs font-semibold uppercase tracking-[0.12em] transition-colors",
+                        "group flex items-center justify-between rounded-lg px-2.5 py-2.5 text-left text-[13px] font-semibold uppercase leading-snug tracking-[0.1em] transition-colors",
                         active ? "bg-slate-900 text-slate-50" : "text-slate-300 hover:bg-slate-950 hover:text-slate-100",
                         isReference ? "border border-cyan-400/30 bg-cyan-500/5 text-cyan-200 hover:bg-cyan-500/10" : "",
                       )}
