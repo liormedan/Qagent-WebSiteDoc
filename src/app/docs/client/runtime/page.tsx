@@ -8,6 +8,7 @@ import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 
+import { CLIENT_SUBPAGE_SCOPE_LINKS } from "@/lib/docs-scope-links";
 const inPageLinks = [
   { title: "Overview", subtitle: "Runtime scope and ownership.", href: "#overview" },
   { title: "Runtime Diagram", subtitle: "Client feedback loop flow.", href: "#runtime-diagram" },
@@ -101,10 +102,7 @@ export default function ClientRuntimePage() {
       <PageTitle title="Client Runtime" description="Canonical client page for local runtime behavior, feedback projection, and state transition visibility." />
       <p className="mt-2 text-xs uppercase tracking-[0.08em] text-slate-400">Section Path: Client / Runtime</p>
 
-      <DocsScopeBlocks
-        covers="local runtime behavior, preview feedback loops, client state projection, and runtime observability."
-        doesNotCover="API execution lifecycle ownership, queue orchestration, and intent/planning authority."
-      />
+      <DocsScopeBlocks links={CLIENT_SUBPAGE_SCOPE_LINKS} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock

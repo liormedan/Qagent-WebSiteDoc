@@ -8,6 +8,7 @@ import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 
+import { CLIENT_SUBPAGE_SCOPE_LINKS } from "@/lib/docs-scope-links";
 const EXEC_ROWS = [
   ["T-LINT-001", "pass", "npm run lint -> eslint -> exit_code 0", "2026-04-07T20:47Z"],
   ["T-BUILD-001", "pass", "npm run build -> next build -> compiled + generated docs routes", "2026-04-07T20:49Z"],
@@ -207,10 +208,7 @@ export default function TestReportPage() {
       />
       <p className="mt-2 text-xs uppercase tracking-[0.08em] text-slate-400">Section Path: Client / Validation & Tests / Test Report</p>
 
-      <DocsScopeBlocks
-        covers="Reporting and reference for Client validation outcomes from workspace command runs: tables, blocked traces, determinism checks, and lock rule result—distinct from defining validation rules or test suites."
-        doesNotCover="Conformance suite definitions (Conformance Tests) or minimal success scenario spec (System Validation)."
-      />
+      <DocsScopeBlocks links={CLIENT_SUBPAGE_SCOPE_LINKS} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock

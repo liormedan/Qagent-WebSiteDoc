@@ -8,6 +8,7 @@ import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 
+import { DATA_LAYER_SUBPAGE_SCOPE_LINKS } from "@/lib/docs-scope-links";
 const inPageLinks = [
   { title: "Overview", subtitle: "Canonical vs derived framing.", href: "#overview" },
   { title: "Canonical Diagram", subtitle: "Truth vs projections.", href: "#canonical-data-diagram" },
@@ -52,10 +53,7 @@ export default function CanonicalDataPage() {
       <PageTitle title="Canonical vs Derived Data" description="Separates authoritative persisted records from projections, caches, and presentation copies across WaveQ layers." />
       <p className="mt-2 text-xs uppercase tracking-[0.08em] text-slate-400">Section Path: Data Layer / Canonical vs Derived Data</p>
 
-      <DocsScopeBlocks
-        covers="canonical source of truth; derived and ephemeral representations; promotion boundaries; why the distinction matters."
-        doesNotCover="DSP math; API serialization; client reducer implementations; database engines."
-      />
+      <DocsScopeBlocks links={DATA_LAYER_SUBPAGE_SCOPE_LINKS} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock id="overview" title="Overview" body={[]} summaryPreview="Why canonical data must stay distinct from derived runtime and UI projections.">

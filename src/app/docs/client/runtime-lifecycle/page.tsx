@@ -8,6 +8,7 @@ import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 
+import { CLIENT_SUBPAGE_SCOPE_LINKS } from "@/lib/docs-scope-links";
 const transitions = [
   "idle -> ready",
   "ready -> running",
@@ -149,10 +150,7 @@ export default function RuntimeLifecyclePage() {
       />
       <p className="mt-2 text-xs uppercase tracking-[0.08em] text-slate-400">Section Path: Client / Events & Contracts / Runtime Lifecycle</p>
 
-      <DocsScopeBlocks
-        covers="Client runtime lifecycle over time: initialization, handoff into execution, active running/paused behavior, updates, teardown, failure, recovery, cancellation, and retry constraints."
-        doesNotCover="State ownership matrix (State Ownership), event envelope structure (Event Contract), or API Server execution lifecycle ownership."
-      />
+      <DocsScopeBlocks links={CLIENT_SUBPAGE_SCOPE_LINKS} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock

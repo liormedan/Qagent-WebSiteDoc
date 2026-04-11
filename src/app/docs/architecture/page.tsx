@@ -1,4 +1,5 @@
 import { DocsTemplatePage } from "@/components/ui/DocsTemplatePage";
+import { QAGENT_ARCH_HUB_LINKS } from "@/lib/docs-scope-links";
 import { QAGENT_DOC_SOURCE_OF_TRUTH } from "@/lib/qagent-canonical";
 
 const moduleChapters = [
@@ -73,8 +74,7 @@ export default function ArchitecturePage() {
       title="Architecture"
       description="QAgent runs an ordered modular flow for audio requests with deterministic routing, UI-gated approval, and versioned outputs."
       sectionPath={["QAgent", "Architecture", "Overview"]}
-      covers="QAgent module architecture, module roles, and ordered handoff model."
-      doesNotCover="API runtime internals, client UI runtime ownership, and DSP execution implementation."
+      scopeLinks={QAGENT_ARCH_HUB_LINKS}
       overviewIntro="This page is the architectural map of QAgent modules and the ordered module sequence used for deterministic request handling."
       overviewAreasTitle="Architecture concerns"
       overviewAreas={[

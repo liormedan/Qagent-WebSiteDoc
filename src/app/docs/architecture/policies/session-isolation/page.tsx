@@ -1,4 +1,5 @@
 import { DocsTemplatePage } from "@/components/ui/DocsTemplatePage";
+import { AUTH_SECURITY_ROOT_SCOPE_LINKS } from "@/lib/docs-scope-links";
 
 const isolationDetails = [
   {
@@ -37,8 +38,7 @@ export default function SessionIsolationPage() {
       title="Multi-user and Session Isolation Spec"
       description="Isolation policy for tenants, sessions, execution ownership, and concurrency control."
       sectionPath={["QAgent", "Policies", "Session Isolation"]}
-      covers="tenant/session isolation rules, execution ownership boundaries, conflict handling, and shared resource constraints."
-      doesNotCover="distributed lock implementation and storage backend internals."
+      scopeLinks={AUTH_SECURITY_ROOT_SCOPE_LINKS}
       overviewIntro="Session Isolation defines how QAgent preserves strict ownership boundaries under multi-user and multi-session load."
       overviewAreasTitle="Isolation concerns"
       overviewAreas={[

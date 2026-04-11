@@ -9,6 +9,7 @@ import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 
+import { DATA_LAYER_OVERVIEW_SCOPE_LINKS } from "@/lib/docs-scope-links";
 const inPageLinks = [
   { title: "Overview", subtitle: "What this section contains.", href: "#overview" },
   { title: "Data Layer Diagram", subtitle: "Chapters and cross-layer context.", href: "#data-layer-overview-diagram" },
@@ -57,10 +58,7 @@ export default function DataLayerOverviewPage() {
       />
       <p className="mt-2 text-xs uppercase tracking-[0.08em] text-slate-400">Section Path: Data Layer / Overview</p>
 
-      <DocsScopeBlocks
-        covers="persistence ownership; canonical and derived data; artifacts and metadata; state records; cross-layer data boundaries."
-        doesNotCover="API request/response design; DSP signal processing; client projection state; execution lifecycle orchestration internals."
-      />
+      <DocsScopeBlocks links={DATA_LAYER_OVERVIEW_SCOPE_LINKS} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock

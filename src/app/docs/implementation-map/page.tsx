@@ -1,4 +1,5 @@
 import { DocsTemplatePage } from "@/components/ui/DocsTemplatePage";
+import { QAGENT_ARCH_HUB_LINKS } from "@/lib/docs-scope-links";
 import { getDocPage } from "@/lib/docs";
 
 const page = getDocPage("implementation-map");
@@ -11,8 +12,7 @@ export default function ImplementationMapPage() {
       title={page.title}
       description={page.description}
       sectionPath={["QAgent", "Implementation", "Implementation Map"]}
-      covers="implementation scope mapping, phase boundaries, and implementation-readiness checkpoints."
-      doesNotCover="runtime implementation details of specific modules."
+      scopeLinks={QAGENT_ARCH_HUB_LINKS}
       overviewIntro="Implementation Map defines how architecture sections map into implementation scope and sequencing."
       overviewAreasTitle="Implementation concerns"
       overviewAreas={["scope mapping", "phase ordering", "implementation readiness boundaries"]}

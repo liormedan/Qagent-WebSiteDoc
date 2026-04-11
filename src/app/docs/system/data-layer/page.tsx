@@ -9,6 +9,7 @@ import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 
+import { SYSTEM_DATA_LAYER_STUB_LINKS } from "@/lib/docs-scope-links";
 const inPageLinks = [
   { title: "Overview", subtitle: "Placement in System docs.", href: "#overview" },
   { title: "Placement Diagram", subtitle: "Internal pillars and neighbors.", href: "#system-data-layer-diagram" },
@@ -123,10 +124,7 @@ export default function SystemDataLayerPlacementPage() {
       />
       <p className="mt-2 text-xs uppercase tracking-[0.08em] text-slate-400">Section Path: System / Data Layer</p>
 
-      <DocsScopeBlocks
-        covers="where the Data Layer sits in the System map and how to navigate to the dedicated Data Layer docs section."
-        doesNotCover="full persistence specifications, schema details, or chapter-level ownership rules (see /docs/data-layer)."
-      />
+      <DocsScopeBlocks links={SYSTEM_DATA_LAYER_STUB_LINKS} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock id="overview" title="Overview" body={[]} summaryPreview="System map entry for Data Layer; canonical content lives under the Data Layer tab.">

@@ -1,4 +1,5 @@
 import { DocsTemplatePage } from "@/components/ui/DocsTemplatePage";
+import { MODIFY_LOOP_CONTRACT_LINKS } from "@/lib/docs-scope-links";
 
 const details = [
   {
@@ -36,8 +37,7 @@ export default function ApprovalModifyLoopContractPage() {
       title="Approval Modify Loop Contract"
       description="Standard contract defining deterministic behavior when user selects Modify during approval."
       sectionPath={["QAgent", "Contracts", "Approval Modify Contract"]}
-      covers="modify trigger semantics, invalidation rules, and deterministic regeneration sequence."
-      doesNotCover="execution runtime internals and non-approval orchestration policy."
+      scopeLinks={MODIFY_LOOP_CONTRACT_LINKS}
       overviewIntro="Modify is a controlled loopback path. It invalidates prior approval context and requires a full re-approval cycle."
       overviewAreasTitle="Contract concerns"
       overviewAreas={[

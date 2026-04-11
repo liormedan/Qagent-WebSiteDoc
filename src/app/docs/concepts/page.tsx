@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CONCEPTS_SCOPE_LINKS } from "@/lib/docs-scope-links";
 import { DocsTemplatePage } from "@/components/ui/DocsTemplatePage";
 import { CANONICAL_CONCEPT_REGISTRY } from "@/lib/docs/concept-registry";
 
@@ -55,8 +56,7 @@ export default function ConceptsPage() {
       title="Concept Registry"
       description="Canonical concept map for WaveQ terminology ownership and source-of-truth routing."
       sectionPath={["QAgent", "Concept Registry"]}
-      covers="canonical concept names, ownership boundaries, and authoritative concept locations."
-      doesNotCover="module implementation logic or runtime execution behavior."
+      scopeLinks={CONCEPTS_SCOPE_LINKS}
       overviewIntro="Concept Registry is the terminology authority layer that prevents naming drift across the WaveQ documentation system."
       overviewAreasTitle="Registry areas"
       overviewAreas={["system-level vocabulary", "QAgent term ownership", "API term ownership", "canonical page mapping"]}

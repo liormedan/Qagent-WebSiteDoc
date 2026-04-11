@@ -8,6 +8,7 @@ import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 
+import { CLIENT_SUBPAGE_SCOPE_LINKS } from "@/lib/docs-scope-links";
 const SUITE_ROWS = [
   ["uiPlan validation", "Invalid enum/missing required field", "Reject before render, no partial UI", "Validation error emitted; rendered tree unchanged"],
   ["State ownership enforcement", "Unauthorized writer attempts mutation", "Write denied deterministically", "State snapshot unchanged + violation event logged"],
@@ -194,10 +195,7 @@ export default function ConformanceTestsPage() {
       />
       <p className="mt-2 text-xs uppercase tracking-[0.08em] text-slate-400">Section Path: Client / Validation & Tests / Conformance Tests</p>
 
-      <DocsScopeBlocks
-        covers="Conformance and determinism test expectations for the Client layer: suites, event-order rules, lifecycle checks, edge cases, and lock validation."
-        doesNotCover="API Server execution lifecycle tests or QAgent planning unit tests as authoritative cross-layer proof."
-      />
+      <DocsScopeBlocks links={CLIENT_SUBPAGE_SCOPE_LINKS} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock

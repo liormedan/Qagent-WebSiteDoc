@@ -1,4 +1,5 @@
 import { DocsTemplatePage } from "@/components/ui/DocsTemplatePage";
+import { QAGENT_ARCH_HUB_LINKS } from "@/lib/docs-scope-links";
 
 const failureDetails = [
   {
@@ -37,8 +38,7 @@ export default function FailurePolicyPage() {
       title="Unified Failure Policy"
       description="System-wide failure taxonomy, retry rules, escalation path, and fallback strategy for deterministic resilience."
       sectionPath={["QAgent", "Policies", "Failure Policy"]}
-      covers="error classes, retry budgets, escalation paths, abort conditions, and fallback behavior."
-      doesNotCover="module-level implementation internals and client UX copy strategy."
+      scopeLinks={QAGENT_ARCH_HUB_LINKS}
       overviewIntro="Failure Policy defines how QAgent classifies failures and responds in a deterministic, boundary-safe way."
       overviewAreasTitle="Failure concerns"
       overviewAreas={[

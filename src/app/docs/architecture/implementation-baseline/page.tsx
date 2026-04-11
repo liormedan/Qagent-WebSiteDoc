@@ -1,4 +1,5 @@
 import { DocsTemplatePage } from "@/components/ui/DocsTemplatePage";
+import { QAGENT_ARCH_HUB_LINKS } from "@/lib/docs-scope-links";
 
 const baselineDetails = [
   {
@@ -45,8 +46,7 @@ export default function ImplementationBaselinePage() {
       title="Implementation Baseline"
       description="Authoritative baseline freeze for implementation: binding pages vs draft/future scope."
       sectionPath={["QAgent", "Implementation", "Implementation Baseline"]}
-      covers="implementation authority boundaries, canonical source governance, and baseline enforcement rules."
-      doesNotCover="runtime implementation details or architecture redesign."
+      scopeLinks={QAGENT_ARCH_HUB_LINKS}
       overviewIntro="Implementation Baseline freezes which documentation sources are binding for implementation and governance."
       overviewAreasTitle="Baseline concerns"
       overviewAreas={[

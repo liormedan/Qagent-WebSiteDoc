@@ -1,4 +1,5 @@
 import { DocsTemplatePage } from "@/components/ui/DocsTemplatePage";
+import { ORCHESTRATION_HUB_LINKS } from "@/lib/docs-scope-links";
 import { getDocPage } from "@/lib/docs";
 
 const page = getDocPage("orchestration/state-machine");
@@ -11,8 +12,7 @@ export default function OrchestrationStateMachinePage() {
       title={page.title}
       description={page.description}
       sectionPath={["QAgent", "System Flow", "State Machine"]}
-      covers="state definitions, transition constraints, and state-machine governance rules."
-      doesNotCover="module implementation internals and external orchestration systems."
+      scopeLinks={ORCHESTRATION_HUB_LINKS}
       overviewIntro="This page defines the orchestration state machine that constrains valid transitions in QAgent workflows."
       overviewAreasTitle="State-machine concerns"
       overviewAreas={["state definitions", "allowed transitions", "invalid transition handling"]}

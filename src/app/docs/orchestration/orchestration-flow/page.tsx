@@ -1,4 +1,5 @@
 import { DocsTemplatePage } from "@/components/ui/DocsTemplatePage";
+import { ORCHESTRATION_HUB_LINKS } from "@/lib/docs-scope-links";
 import { getDocPage } from "@/lib/docs";
 
 const page = getDocPage("orchestration/orchestration-flow");
@@ -11,8 +12,7 @@ export default function OrchestrationFlowPage() {
       title={page.title}
       description={page.description}
       sectionPath={["QAgent", "System Flow", "Orchestration Flow"]}
-      covers="orchestration transition flow, sequencing rules, and stage handoff behavior."
-      doesNotCover="module-specific implementation internals."
+      scopeLinks={ORCHESTRATION_HUB_LINKS}
       overviewIntro="This page defines orchestration flow behavior for the QAgent system flow layer."
       overviewAreasTitle="Orchestration concerns"
       overviewAreas={["state transitions", "stage ordering", "handoff determinism"]}

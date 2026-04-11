@@ -1,4 +1,5 @@
 import { DocsTemplatePage } from "@/components/ui/DocsTemplatePage";
+import { ORCHESTRATION_HUB_LINKS } from "@/lib/docs-scope-links";
 import { getDocPage } from "@/lib/docs";
 
 const page = getDocPage("orchestration/routing-logic");
@@ -11,8 +12,7 @@ export default function OrchestrationRoutingLogicPage() {
       title={page.title}
       description={page.description}
       sectionPath={["QAgent", "System Flow", "Routing Logic"]}
-      covers="routing rules, decision branches, and deterministic routing boundaries."
-      doesNotCover="execution internals and API-level lifecycle ownership."
+      scopeLinks={ORCHESTRATION_HUB_LINKS}
       overviewIntro="This page defines how orchestration routes requests and transitions across QAgent flow paths."
       overviewAreasTitle="Routing concerns"
       overviewAreas={["route selection logic", "branch constraints", "deterministic routing outcomes"]}

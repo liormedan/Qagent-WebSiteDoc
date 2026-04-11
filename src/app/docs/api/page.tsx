@@ -9,6 +9,7 @@ import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 import { API_SERVER_CANONICAL_NAME, API_SERVER_DOC_SOURCE_OF_TRUTH } from "@/lib/api-server-canonical";
 
+import { API_LAYER_HUB_LINKS } from "@/lib/docs-scope-links";
 const inPageLinks = [
   { title: "Overview", subtitle: "Scope and ownership boundaries.", href: "#overview" },
   { title: "API Structure Diagram", subtitle: "Entry, orchestration, and runtime flow.", href: "#api-structure-diagram" },
@@ -102,10 +103,7 @@ export default function ApiPage() {
         description="Execution orchestration layer that receives approved requests, manages jobs, and publishes runtime outcomes."
       />
 
-      <DocsScopeBlocks
-        covers="API entry, request validation, job orchestration, execution routing, and versioned output publication."
-        doesNotCover="QAgent intent planning logic, client UI state ownership, and DSP internal processor implementation."
-      />
+      <DocsScopeBlocks links={API_LAYER_HUB_LINKS} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock id="overview" title="Overview" body={[]}>

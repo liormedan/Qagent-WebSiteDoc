@@ -348,6 +348,63 @@ const dataLayerSections: SidebarSection[] = [
   },
 ];
 
+const authSecuritySections: SidebarSection[] = [
+  {
+    title: "Auth & Security Layer",
+    href: "/docs/auth-security",
+    level: "primary",
+    items: [],
+  },
+  {
+    title: "Identity",
+    href: "/docs/auth-security/identity",
+    level: "secondary",
+    items: [],
+  },
+  {
+    title: "Session",
+    href: "/docs/auth-security/session",
+    level: "secondary",
+    items: [],
+  },
+  {
+    title: "Authorization",
+    href: "/docs/auth-security/authorization",
+    level: "secondary",
+    items: [],
+  },
+  {
+    title: "API protection",
+    href: "/docs/auth-security/api-protection",
+    level: "secondary",
+    items: [],
+  },
+  {
+    title: "Data security",
+    href: "/docs/auth-security/data-security",
+    level: "secondary",
+    items: [],
+  },
+  {
+    title: "Rate limit",
+    href: "/docs/auth-security/rate-limit",
+    level: "secondary",
+    items: [],
+  },
+  {
+    title: "Audit",
+    href: "/docs/auth-security/audit",
+    level: "secondary",
+    items: [],
+  },
+  {
+    title: "Secrets",
+    href: "/docs/auth-security/secrets",
+    level: "secondary",
+    items: [],
+  },
+];
+
 const dspSections: SidebarSection[] = [
   {
     title: "Overview",
@@ -393,7 +450,8 @@ function isSectionActive(pathname: string, href: string): boolean {
     target === "/docs/dsp-layer" ||
     target === "/docs/data-layer" ||
     target === "/docs/api-server-layer" ||
-    target === "/docs/infrastructure-layer"
+    target === "/docs/infrastructure-layer" ||
+    target === "/docs/auth-security"
   ) {
     return path === target;
   }
@@ -422,71 +480,86 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
     safePathname.startsWith("/docs/dsp-layer") ||
     safePathname.startsWith("/docs/architecture/dagent/dsp-engine-abstraction");
   const dataLayerContext = safePathname.startsWith("/docs/data-layer");
+  const authSecurityContext = safePathname.startsWith("/docs/auth-security");
   const systemContext =
     safePathname === "/docs" ||
     safePathname.startsWith("/docs/system") ||
-    safePathname.startsWith("/docs/system-flow") ||
-    safePathname.startsWith("/docs/auth-security");
+    safePathname.startsWith("/docs/system-flow");
   const singleLevelContext =
     infrastructureLayerSpecContext ||
     apiServerLayerSpecContext ||
     apiContext ||
     systemContext ||
     dspContext ||
-    dataLayerContext;
+    dataLayerContext ||
+    authSecurityContext;
   const sections = infrastructureLayerSpecContext
     ? infrastructureLayerSpecSections
     : apiServerLayerSpecContext
-    ? apiServerLayerSpecSections
-    : apiContext
-    ? apiSections
-    : clientContext
-      ? clientSections
-      : dspContext
-        ? dspSections
-        : dataLayerContext
-          ? dataLayerSections
-      : systemContext
-        ? systemSections
-        : qagentSections.map((section) => ({
-          ...section,
-          items: section.items.map((item) => ({
-            ...item,
-            href: toQAgentHref(item.href),
-          })),
-        }));
+      ? apiServerLayerSpecSections
+      : apiContext
+        ? apiSections
+        : clientContext
+          ? clientSections
+          : dspContext
+            ? dspSections
+            : dataLayerContext
+              ? dataLayerSections
+              : authSecurityContext
+                ? authSecuritySections
+                : systemContext
+                  ? systemSections
+                  : qagentSections.map((section) => ({
+                      ...section,
+                      items: section.items.map((item) => ({
+                        ...item,
+                        href: toQAgentHref(item.href),
+                      })),
+                    }));
 
   const activeOpenSection = clientContext && openSection === "Architecture" ? "Surfaces" : openSection;
 
   return (
     <aside className={cn("h-full min-h-0 overflow-y-scroll bg-black px-4 py-5", className)}>
       <nav className="space-y-4">
-        {sections.map((section) => (
+        {sections.map((section) => {
+          const layerSpecNav =
+            apiContext ||
+            apiServerLayerSpecContext ||
+            dataLayerContext ||
+            infrastructureLayerSpecContext ||
+            authSecurityContext;
+          const sectionLevel = section.level;
+          const sectionHrefActive = section.href ? isSectionActive(safePathname, section.href) : false;
+
+          return (
           <div key={section.href ?? section.title} className="space-y-1.5">
             {singleLevelContext && section.href ? (
               <Link
                 href={section.href}
                 onClick={onNavigate}
                 className={cn(
-                  "group flex items-center justify-between rounded-md px-2 py-1 text-left text-xs uppercase tracking-[0.14em] transition-colors",
-                  (apiContext || apiServerLayerSpecContext || dataLayerContext || infrastructureLayerSpecContext) &&
-                  section.level === "primary"
-                    ? "font-bold text-slate-200"
-                    : "font-semibold",
-                  (apiContext || apiServerLayerSpecContext || dataLayerContext || infrastructureLayerSpecContext) &&
-                  section.level === "secondary"
-                    ? "pl-5"
-                    : "",
-                  isSectionActive(safePathname, section.href)
-                    ? "bg-slate-900 text-slate-100"
-                    : "text-slate-500 hover:bg-slate-950/70 hover:text-slate-300",
+                  // System-style nav: 12px caps, bold, wide tracking, generous vertical padding (matches QAgent overview links).
+                  "group flex items-center justify-between rounded-lg px-2.5 py-2 text-left text-xs uppercase tracking-[0.12em] transition-colors",
+                  layerSpecNav && sectionLevel === "secondary" && "pl-5 font-semibold",
+                  (!layerSpecNav || sectionLevel === "primary") && "font-bold",
+                  sectionHrefActive && "bg-slate-900 text-slate-50",
+                  !sectionHrefActive &&
+                    layerSpecNav &&
+                    sectionLevel === "secondary" &&
+                    "text-slate-400 hover:bg-slate-950/70 hover:text-slate-200",
+                  !sectionHrefActive &&
+                    layerSpecNav &&
+                    sectionLevel === "primary" &&
+                    "text-slate-200 hover:bg-slate-950/70 hover:text-white",
+                  !sectionHrefActive && !layerSpecNav && "text-slate-100 hover:bg-slate-950/70 hover:text-white",
                 )}
               >
                 <span>{section.title}</span>
                 <ChevronRight
                   className={cn(
                     "h-4 w-4 shrink-0 transition-colors",
-                    isSectionActive(safePathname, section.href) ? "text-slate-200" : "text-slate-500 group-hover:text-slate-300",
+                    sectionHrefActive ? "text-slate-200" : "text-slate-400 group-hover:text-slate-200",
                   )}
                 />
               </Link>
@@ -495,7 +568,7 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
                 href={section.href}
                 onClick={onNavigate}
                 className={cn(
-                  "group flex items-center justify-between rounded-md px-2.5 py-2 text-left text-[11px] font-semibold uppercase tracking-[0.12em] transition-colors",
+                  "group flex items-center justify-between rounded-lg px-2.5 py-2 text-left text-xs font-semibold uppercase tracking-[0.12em] transition-colors",
                   isSectionActive(safePathname, section.href)
                     ? "bg-slate-900 text-slate-50"
                     : "text-slate-300 hover:bg-slate-950 hover:text-slate-100",
@@ -514,7 +587,7 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
                 type="button"
                 onClick={() => setOpenSection(activeOpenSection === section.title ? "" : section.title)}
                 className={cn(
-                  "flex w-full items-center justify-between rounded-md px-2.5 py-2 text-left text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 transition-colors hover:bg-slate-950/70 hover:text-slate-300",
+                  "flex w-full items-center justify-between rounded-lg px-2.5 py-2 text-left text-xs font-semibold uppercase tracking-[0.12em] text-slate-400 transition-colors hover:bg-slate-950/70 hover:text-slate-200",
                   clientContext ? "text-slate-300 hover:text-slate-100" : "",
                 )}
                 aria-expanded={activeOpenSection === section.title}
@@ -535,7 +608,7 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
                       href={item.href}
                       onClick={onNavigate}
                       className={cn(
-                        "group flex items-center justify-between rounded-md px-2.5 py-2 text-left text-[11px] font-semibold uppercase tracking-[0.12em] transition-colors",
+                        "group flex items-center justify-between rounded-lg px-2.5 py-2 text-left text-xs font-semibold uppercase tracking-[0.12em] transition-colors",
                         active ? "bg-slate-900 text-slate-50" : "text-slate-300 hover:bg-slate-950 hover:text-slate-100",
                         isReference ? "border border-cyan-400/30 bg-cyan-500/5 text-cyan-200 hover:bg-cyan-500/10" : "",
                       )}
@@ -548,7 +621,8 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
               </div>
             ) : null}
           </div>
-        ))}
+          );
+        })}
       </nav>
     </aside>
   );

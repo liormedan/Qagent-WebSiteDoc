@@ -8,6 +8,7 @@ import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 
+import { CLIENT_SUBPAGE_SCOPE_LINKS } from "@/lib/docs-scope-links";
 const SCENARIO_ASCII = `Upload -> Plan -> uiPlan -> Render -> Runtime -> Output`;
 
 function SystemValidationScenarioBlock() {
@@ -115,10 +116,7 @@ export default function SystemValidationPage() {
       />
       <p className="mt-2 text-xs uppercase tracking-[0.08em] text-slate-400">Section Path: Client / Validation & Tests / System Validation</p>
 
-      <DocsScopeBlocks
-        covers="Client-layer validation of integrated behavior: scenario, expected states, pass/fail criteria, and UI expectations for lock-level integrity—not runtime ownership or event contract structure."
-        doesNotCover="Per-event contract field rules, state ownership matrix authority, or API Server execution lifecycle."
-      />
+      <DocsScopeBlocks links={CLIENT_SUBPAGE_SCOPE_LINKS} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock

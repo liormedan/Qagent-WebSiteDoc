@@ -1,4 +1,5 @@
 import { DocsTemplatePage } from "@/components/ui/DocsTemplatePage";
+import { QAGENT_ARCH_HUB_LINKS } from "@/lib/docs-scope-links";
 
 const modules = [
   {
@@ -57,8 +58,7 @@ export default function ModuleDesignPage() {
       title="Module Design"
       description="Future Q runtime modules with IO boundaries, dependencies, and failure points."
       sectionPath={["QAgent", "Implementation", "Implementation Notes"]}
-      covers="module purpose, IO boundaries, dependencies, and failure surfaces."
-      doesNotCover="module implementation code and runtime infrastructure details."
+      scopeLinks={QAGENT_ARCH_HUB_LINKS}
       overviewIntro="Module Design defines high-level module contracts for future Q runtime evolution."
       overviewAreasTitle="Design concerns"
       overviewAreas={["module boundaries", "input/output contracts", "dependency model", "failure surfaces"]}

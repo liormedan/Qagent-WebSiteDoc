@@ -10,6 +10,7 @@ import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 import { SYSTEM_DOC_SOURCE_OF_TRUTH } from "@/lib/system-canonical";
 
+import { SYSTEM_HOME_SCOPE_LINKS } from "@/lib/docs-scope-links";
 const layerNavigationCards: Array<{
   id: string;
   title: string;
@@ -81,10 +82,7 @@ export default function SystemPage() {
     <DocsContent>
       <PageTitle title="WaveQ System Structure" description="This page presents the full architecture of WaveQ as a unified system." />
 
-      <DocsScopeBlocks
-        covers="system map, layer boundaries, canonical flow anchors, and system-level governance references."
-        doesNotCover="module-level implementation details and deep subsystem specifications."
-      />
+      <DocsScopeBlocks links={SYSTEM_HOME_SCOPE_LINKS} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock id="overview" title="Overview" body={[]}>

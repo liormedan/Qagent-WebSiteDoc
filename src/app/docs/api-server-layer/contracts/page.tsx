@@ -10,6 +10,7 @@ import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 
+import { API_SERVER_SPEC_SCOPE_LINKS } from "@/lib/docs-scope-links";
 const requestContractJson = `{
   "request_id": "string",
   "session_id": "string",
@@ -149,10 +150,7 @@ export default function ApiServerLayerContractsPage() {
       />
       <p className="mt-2 text-xs uppercase tracking-[0.08em] text-slate-400">API Server Layer (Spec) / Contracts</p>
 
-      <DocsScopeBlocks
-        covers="conceptual JSON shapes, field names, and contract boundaries for API ingress and publication surfaces in this spec tree."
-        doesNotCover="database DDL, IdP configuration, DSP math, or full duplicate of every /docs/api validation rule."
-      />
+      <DocsScopeBlocks links={API_SERVER_SPEC_SCOPE_LINKS} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock id="overview" title="Overview" body={[]}>

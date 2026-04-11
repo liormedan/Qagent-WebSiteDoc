@@ -9,6 +9,7 @@ import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 
+import { API_SERVER_SPEC_SCOPE_LINKS } from "@/lib/docs-scope-links";
 const inThisPage = [
   { title: "Overview", subtitle: "Module map intent.", href: "#overview" },
   { title: "Layer Structure Diagram", subtitle: "Internal modules.", href: "#modules-structure-diagram" },
@@ -96,10 +97,7 @@ export default function ApiServerLayerModulesPage() {
       />
       <p className="mt-2 text-xs uppercase tracking-[0.08em] text-slate-400">API Server Layer (Spec) / Internal Modules</p>
 
-      <DocsScopeBlocks
-        covers="module responsibilities at the API layer and how they connect to canonical /docs/api subsystem documentation."
-        doesNotCover="implementation code, worker binaries, database drivers, or DSP algorithm internals."
-      />
+      <DocsScopeBlocks links={API_SERVER_SPEC_SCOPE_LINKS} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock id="overview" title="Overview" body={[]}>

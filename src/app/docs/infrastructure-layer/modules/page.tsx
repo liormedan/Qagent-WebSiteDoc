@@ -8,6 +8,7 @@ import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 
+import { INFRASTRUCTURE_SCOPE_LINKS } from "@/lib/docs-scope-links";
 const inThisPage = [
   { title: "Overview", subtitle: "Module map intent.", href: "#overview" },
   { title: "Layer Structure Diagram", subtitle: "Internal modules.", href: "#modules-structure-diagram" },
@@ -117,10 +118,7 @@ export default function InfrastructureLayerModulesPage() {
       />
       <p className="mt-2 text-xs uppercase tracking-[0.08em] text-slate-400">Infrastructure Layer (Spec) / Internal Modules</p>
 
-      <DocsScopeBlocks
-        covers="named infrastructure components, their responsibilities, and how they bind to Contracts and Integration narratives in this spec tree."
-        doesNotCover="API subsystem pages, DSP engine internals, SQL DDL as domain authority, or repository folder structure."
-      />
+      <DocsScopeBlocks links={INFRASTRUCTURE_SCOPE_LINKS} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock id="overview" title="Overview" body={[]}>

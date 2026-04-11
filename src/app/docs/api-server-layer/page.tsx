@@ -10,6 +10,7 @@ import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 
+import { API_SERVER_SPEC_SCOPE_LINKS } from "@/lib/docs-scope-links";
 const inPageLinks = [
   { title: "Overview", subtitle: "Role of this layer spec.", href: "#overview" },
   { title: "Layer Structure Diagram", subtitle: "Ingress, control plane, egress.", href: "#api-layer-structure-diagram" },
@@ -61,10 +62,7 @@ export default function ApiServerLayerSpecOverviewPage() {
       />
       <p className="mt-2 text-xs uppercase tracking-[0.08em] text-slate-400">API Server Layer (Spec) / Overview</p>
 
-      <DocsScopeBlocks
-        covers="layer-level map of API control plane, ingress/egress boundaries, and navigation into Core, Contracts, Modules, and Integration spec pages."
-        doesNotCover="full payload schemas (see Contracts page and /docs/api), DSP internals, database schemas, or client UI implementation."
-      />
+      <DocsScopeBlocks links={API_SERVER_SPEC_SCOPE_LINKS} />
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock id="overview" title="Overview" body={[]} summaryPreview="Why the API layer exists, what it controls, and how this spec is organized.">

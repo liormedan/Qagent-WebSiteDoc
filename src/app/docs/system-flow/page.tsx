@@ -1,4 +1,5 @@
 import { DocsTemplatePage } from "@/components/ui/DocsTemplatePage";
+import { SYSTEM_FLOW_SCOPE_LINKS } from "@/lib/docs-scope-links";
 import { SYSTEM_RUNTIME_LIFECYCLE } from "@/lib/system-canonical";
 
 const flowDetails = [
@@ -35,8 +36,7 @@ export default function SystemFlowPage() {
       title="End-to-End System Flow"
       description="Canonical cross-layer flow from user request to versioned output."
       sectionPath={["QAgent", "Cross-Layer References", "Runtime Graph / System Structure"]}
-      covers="canonical sequence, handoff boundaries, and flow governance references."
-      doesNotCover="module-level implementation details and subsystem deep specs."
+      scopeLinks={SYSTEM_FLOW_SCOPE_LINKS}
       overviewIntro="This page is the canonical cross-layer flow reference used by System, QAgent, Client, and API pages."
       overviewAreasTitle="Flow concerns"
       overviewAreas={[

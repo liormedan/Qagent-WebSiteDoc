@@ -1,4 +1,5 @@
 import { DocsTemplatePage } from "@/components/ui/DocsTemplatePage";
+import { CLIENT_QAGENT_ID_MAPPING_LINKS } from "@/lib/docs-scope-links";
 import { QAGENT_API_HANDOFF_BRIDGE, QAGENT_API_JOB_STATUS_BRIDGE } from "@/lib/api-server-canonical";
 
 const mappingDetails = [
@@ -69,8 +70,7 @@ export default function ClientQAgentIdMappingPage() {
       title="Client-QAgent ID Mapping"
       description="Authoritative mapping between Client identifiers and QAgent lineage identifiers for end-to-end traceability."
       sectionPath={["QAgent", "Contracts", "Client-QAgent ID Mapping"]}
-      covers="session/correlation mapping, handoff transformation rules, and API bridge mappings."
-      doesNotCover="module behavior logic and API job lifecycle ownership."
+      scopeLinks={CLIENT_QAGENT_ID_MAPPING_LINKS}
       overviewIntro="This page defines the canonical identifier mapping rules from Client events through QAgent lineage and API bridge surfaces."
       overviewAreasTitle="Mapping concerns"
       overviewAreas={[
