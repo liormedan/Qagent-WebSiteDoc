@@ -8,124 +8,149 @@ import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 
+/** In-page anchors follow document order: Overview → diagram → detail entries → related. */
 const inPageLinks = [
-  { title: "Overview", subtitle: "Role of the Data Layer in WaveQ.", href: "#overview" },
-  { title: "Data Layer Structure Diagram", subtitle: "Placement and source of truth.", href: "#data-layer-structure-diagram" },
-  { title: "Data Ownership Model", subtitle: "Who owns what data.", href: "#data-ownership-model" },
-  { title: "Canonical vs Derived Data", subtitle: "Truth vs projections.", href: "#canonical-vs-derived" },
-  { title: "Data Flow Across Layers", subtitle: "Reads, writes, producers.", href: "#data-flow-across-layers" },
-  { title: "Persistence Model", subtitle: "Durable vs transient classes.", href: "#persistence-model" },
-  { title: "Artifact Management", subtitle: "DSP outputs and stored artifacts.", href: "#artifact-management" },
-  { title: "State Records", subtitle: "Durable records vs runtime state.", href: "#state-records" },
-  { title: "Boundaries & Responsibilities", subtitle: "Persistence vs execution.", href: "#boundaries-responsibilities" },
-  { title: "Related Docs", subtitle: "Cross-layer references.", href: "#related-docs" },
+  { title: "Overview", subtitle: "What the Data Layer is and why it exists.", href: "#overview" },
+  {
+    title: "Data Layer Placement Diagram",
+    subtitle: "Where persistence sits relative to other layers.",
+    href: "#data-layer-placement-diagram",
+  },
+  {
+    title: "Data Flow Across Layers",
+    subtitle: "Who exchanges data with the Data Layer and in what direction.",
+    href: "#data-flow-across-layers",
+  },
+  {
+    title: "Data Ownership Model",
+    subtitle: "Owner vs producer vs accessor.",
+    href: "#data-ownership-model",
+  },
+  {
+    title: "Canonical vs Derived Data",
+    subtitle: "Source of truth versus projections.",
+    href: "#canonical-vs-derived",
+  },
+  { title: "Persistence Model", subtitle: "Durable, transient, and lifecycle framing.", href: "#persistence-model" },
+  { title: "State Records", subtitle: "Durable references vs runtime-only state.", href: "#state-records" },
+  {
+    title: "Artifact Management",
+    subtitle: "Outputs, storage relationship, and canonical linkage.",
+    href: "#artifact-management",
+  },
+  {
+    title: "Boundaries & Responsibilities",
+    subtitle: "Cross-layer separation and read/write framing.",
+    href: "#boundaries-responsibilities",
+  },
+  { title: "Related Docs", subtitle: "Deeper specs in other sections.", href: "#related-docs" },
 ] as const;
 
 const details = [
   {
+    id: "data-flow-across-layers",
+    title: "Data Flow Across Layers",
+    subtitle: "Movement and direction, not sequencing or APIs",
+    purpose:
+      "Explain how data moves between the Data Layer and other WaveQ layers at an architectural level, without prescribing execution order or wire contracts.",
+    defines: [
+      "API Server ↔ Data Layer: the API mediates reads and writes against persisted truth; it does not become the owner of canonical records.",
+      "DSP → Data Layer: processing emits artifacts and related metadata that are registered or stored under Data Layer policy (producer ≠ owner).",
+      "Client ← Data Layer: the client consumes projections and references for presentation; it does not author canonical persistence.",
+      "QAgent → Data Layer: planning consumes data context and references governed records; QAgent does not own where canonical truth is stored.",
+    ],
+    doesNotDefine: "Execution sequencing, concrete API endpoints, queue/worker runtime behavior, or orchestration timelines.",
+    href: "/docs/data-layer/data-ownership",
+    linkLabel: "Data Ownership chapter",
+  },
+  {
     id: "data-ownership-model",
     title: "Data Ownership Model",
-    subtitle: "Producers, owners, and access",
-    purpose: "Clarify which layer owns persisted system data versus who may read or produce values without owning canonical persistence.",
+    subtitle: "Who owns truth versus who touches it",
+    purpose:
+      "Define ownership boundaries for data so producer, owner, and accessor roles stay distinct across layers.",
     defines: [
-      "Data Layer owns canonical persistence and governance for system entities referenced across runs.",
-      "Upstream layers may produce payloads or artifacts, but ownership of durable truth remains with the Data Layer model.",
-      "Access (API mediation, read paths) is distinct from ownership: control of access does not transfer persistence ownership.",
-      "[TEXT TBD – expand Data Ownership Model detail]",
+      "The Data Layer owns canonical persistence governance for system entities the architecture treats as durable truth.",
+      "Producer layers (e.g. DSP, execution paths) may create payloads or artifacts; ownership of governed records remains with the Data Layer unless explicitly promoted by policy.",
+      "Read responsibility: layers may read through mediated access (e.g. API) without acquiring ownership of stored truth.",
+      "Write responsibility: writes that change canonical state are initiated via controlled paths; access mediation does not transfer persistence ownership to the API.",
     ],
-    doesNotDefine: "Physical storage technology and low-level schema definitions.",
+    doesNotDefine: "Concrete storage engines, table layouts, or schema DDL.",
     href: "/docs/data-layer/data-ownership",
     linkLabel: "Data Ownership chapter",
   },
   {
     id: "canonical-vs-derived",
     title: "Canonical vs Derived Data",
-    subtitle: "Source of truth vs projections",
-    purpose: "Separate durable canonical records from derived, temporary, or presentation-focused representations.",
+    subtitle: "Types of data and why the split matters",
+    purpose:
+      "Clarify which data counts as authoritative versus derived so projections cannot silently replace governed records.",
     defines: [
-      "Canonical data is the authoritative, persisted source of truth for entities the system relies on across sessions and runs.",
-      "Derived data is computed, cached for presentation, or reconstructed for runtime UX and is not a substitute for canonical ownership.",
-      "The distinction keeps execution and UI projections from silently replacing governed records.",
-      "[TEXT TBD – expand Canonical vs Derived Data detail]",
+      "Canonical data: the authoritative, persisted source of truth the system relies on across sessions and runs.",
+      "Derived data: computed, session-local, or presentation-oriented values rebuilt from canonical inputs or ephemeral coordination.",
+      "The distinction matters so UI, caches, and execution mirrors cannot be mistaken for durable governance without an explicit promotion path.",
     ],
-    doesNotDefine: "Transformation implementation details and cache strategy design.",
+    doesNotDefine: "Transformation algorithms, cache invalidation rules, or materialized view implementation.",
     href: "/docs/data-layer/canonical-data",
     linkLabel: "Canonical vs Derived chapter",
   },
   {
-    id: "data-flow-across-layers",
-    title: "Data Flow Across Layers",
-    subtitle: "Handoffs without collapsing ownership",
-    purpose: "Describe how data moves between Client, QAgent, API Server, DSP, and the Data Layer at a system level.",
-    defines: [
-      "API Server mediates access to persisted data: validation and orchestration align with Data Layer boundaries without redefining ownership.",
-      "DSP and execution pipelines produce artifacts and metadata that are persisted or linked under Data Layer rules.",
-      "Client reads and presents data; it does not author canonical persistence authority.",
-      "QAgent consumes data context for planning; it does not define canonical storage ownership.",
-      "[TEXT TBD – expand Data Flow Across Layers detail]",
-    ],
-    doesNotDefine: "Full runtime sequencing and execution lifecycle behavior (see API and system flow references).",
-    href: "/docs/system-flow",
-    linkLabel: "System Flow",
-  },
-  {
     id: "persistence-model",
     title: "Persistence Model",
-    subtitle: "What must be durable",
-    purpose: "State what classes of information must persist versus what may remain transient in the architecture.",
+    subtitle: "What must survive, what may be ephemeral",
+    purpose:
+      "Define conceptually what must persist, what may remain transient, and how durable records relate to lifecycle—not how disks are provisioned.",
     defines: [
-      "Canonical entities, lineage references, and governed artifacts are expected to persist under Data Layer authority.",
-      "Ephemeral coordination signals, in-flight UI buffers, and disposable previews remain outside canonical persistence unless promoted by policy.",
-      "Durable records are distinguished from temporary projections used during execution.",
-      "[TEXT TBD – expand Persistence Model detail]",
+      "Must persist: governed entities, lineage and references needed for traceability, and artifacts/metadata under Data Layer retention policy.",
+      "May be transient: in-flight coordination, disposable previews, and engine-local buffers unless explicitly promoted into canonical scope.",
+      "Lifecycle: durable records are the continuity anchor; transient state is discardable when it does not carry governed meaning.",
     ],
-    doesNotDefine: "Database engine choice and infrastructure-specific storage topology.",
+    doesNotDefine: "Database product choice, cluster topology, backup mechanics, or infrastructure provisioning.",
+    href: "/docs/data-layer/persistence-model",
+    linkLabel: "Persistence Model chapter",
+  },
+  {
+    id: "state-records",
+    title: "State Records",
+    subtitle: "Durable references vs runtime-only mirrors",
+    purpose:
+      "Isolate durable state records from transient runtime mirrors so traceable system state is not conflated with engine-local or in-flight data.",
+    defines: [
+      "State records (durable): persisted references to system state that must survive process boundaries, support traceability, and remain distinct from runtime-only mirrors.",
+      "They are distinct from in-memory execution state, engine lifecycle states, and volatile coordination snapshots.",
+      "Versioning and lineage tie back to canonical records rather than transient runtime mirrors.",
+    ],
+    doesNotDefine: "In-memory execution state and engine lifecycle states owned by runtime layers.",
     href: "/docs/data-layer/persistence-model",
     linkLabel: "Persistence Model chapter",
   },
   {
     id: "artifact-management",
     title: "Artifact Management",
-    subtitle: "Generated outputs vs canonical records",
-    purpose: "Explain how DSP and execution outputs relate to stored artifacts and canonical records.",
+    subtitle: "From output to governed stored object",
+    purpose:
+      "Define how outputs become artifacts under Data Layer rules, and how artifacts relate to canonical data—without describing DSP math or file formats.",
     defines: [
-      "DSP outputs (processed media, intermediate artifacts) are linked or stored according to Data Layer artifact policy.",
-      "Generated artifacts remain accountable to canonical records: identifiers, lineage, and retention expectations apply at the data model level.",
-      "Artifact management is a persistence concern, not a description of DSP algorithms.",
-      "[TEXT TBD – expand Artifact Management detail]",
+      "Artifact creation: execution and DSP paths produce outputs that become artifacts when registered or stored according to Data Layer policy.",
+      "Storage relationship: artifacts are linked to identifiers, lineage, or parent canonical entities so they remain accountable to governed records.",
+      "Link to canonical data: artifacts are not a separate truth plane; they remain tied to canonical ownership and retention semantics.",
     ],
-    doesNotDefine: "DSP execution logic and file encoding specifics.",
+    doesNotDefine: "DSP algorithms, codec or container formats, or processing pipeline internals.",
     href: "/docs/data-layer/artifact-management",
     linkLabel: "Artifact Management chapter",
   },
   {
-    id: "state-records",
-    title: "State Records",
-    subtitle: "Durable references vs runtime state",
-    purpose: "Define persisted state references and how they differ from runtime or engine-local state.",
-    defines: [
-      "State records reflect durable system state that must survive process boundaries and support traceability.",
-      "They are distinct from in-memory execution state, engine lifecycle states, and volatile coordination snapshots.",
-      "Versioning and lineage tie back to canonical records rather than transient runtime mirrors.",
-      "[TEXT TBD – expand State Records detail]",
-    ],
-    doesNotDefine: "In-memory execution state and engine lifecycle states owned by runtime layers.",
-    href: "/docs/api",
-    linkLabel: "API Server",
-  },
-  {
     id: "boundaries-responsibilities",
     title: "Boundaries & Responsibilities",
-    subtitle: "Persistence vs execution",
-    purpose: "State strict ownership boundaries between persistence, orchestration, processing, and presentation.",
+    subtitle: "Cross-layer separation at a glance",
+    purpose:
+      "Centralize how persistence ownership, read paths, write paths, and layer responsibilities stay separated so architectural roles do not collapse into one another.",
     defines: [
-      "Data Layer owns persistence, not execution: it governs what is stored and referenced, not how jobs run moment-to-moment.",
-      "API Server controls access to data: it mediates reads and writes without becoming the canonical owner of stored truth.",
-      "DSP may produce outputs and artifacts but does not own canonical persistence policy.",
-      "Client may consume or present data but is not the source of truth for governed system records.",
-      "QAgent uses data context for planning and decisions but does not define data ownership or storage authority.",
+      "Ownership boundaries: the Data Layer remains the canonical persistence authority; other layers do not redefine governed truth by mediating access or producing outputs.",
+      "Read vs write rules: reads may traverse mediators (e.g. API) without transferring persistence ownership; writes that change canonical state follow controlled persistence paths and remain accountable to Data Layer governance.",
+      "Separation between layers: Client presents and consumes projections; QAgent consumes data context for planning; API Server mediates access; DSP produces artifacts and processing outputs—each without becoming the owner of canonical stored truth.",
     ],
-    doesNotDefine: "API orchestration algorithms, DSP signal logic, or client UI state machine definitions.",
+    doesNotDefine: "API orchestration algorithms, DSP signal processing, client UI state machines, or storage implementation.",
     href: "/docs/data-layer",
     linkLabel: "Data Layer Overview",
   },
@@ -136,13 +161,13 @@ export default function DataLayerSystemViewPage() {
     <DocsContent>
       <PageTitle
         title="Data Layer - System View"
-        description="Defines how data is structured, stored, and managed across the WaveQ system, including ownership boundaries and data flow between layers."
+        description="Cross-layer view of persistence: source of truth, directional data exchange with other layers, and boundaries—without contracts, execution logic, or storage implementation."
       />
       <p className="mt-2 text-xs uppercase tracking-[0.08em] text-slate-400">Section Path: Data Layer / System View</p>
 
       <DocsScopeBlocks
-        covers="data ownership and boundaries; canonical vs derived data; persistence responsibilities; system-level data flow; source of truth positioning."
-        doesNotCover="API contracts; DSP processing logic; database schema implementation; client state management; runtime execution lifecycle."
+        covers="high-level Data Layer role; directional data exchange with API, DSP, Client, and QAgent; data ownership model; canonical vs derived; persistence model; state records; artifact management; cross-layer boundaries and responsibilities."
+        doesNotCover="API contracts and endpoints; DSP processing logic; database schemas; UI behavior; runtime orchestration sequencing."
       />
 
       <div className="mt-5 flex flex-col gap-5">
@@ -150,23 +175,19 @@ export default function DataLayerSystemViewPage() {
           id="overview"
           title="Overview"
           body={[]}
-          summaryPreview="Canonical persistence, derived representations, and how the Data Layer differs from runtime and API behavior."
+          summaryPreview="What the Data Layer is, its role in WaveQ, and its position as persistence source of truth—at a glance."
         >
           <DocsOverviewBlock
-            intro="The Data Layer is the source of truth for persistent system data in WaveQ. It defines how data is owned, stored, and accessed across layers, separating canonical records from derived or runtime representations that surfaces and pipelines use for execution and presentation."
-            areasTitle="Architectural intent"
+            intro="The Data Layer is WaveQ's persistence and canonical-data boundary: it is where governed, durable truth for the architecture lives. Other layers orchestrate, process, or present work; they interact with stored data through defined relationships but do not replace this boundary as the owner of canonical persistence."
+            areasTitle="This page defines"
             areas={[
-              "Persistence boundaries: what must be durable versus what remains transient outside canonical scope.",
-              "System-level data flow: how artifacts, metadata, and state records relate to Client, QAgent, API Server, and DSP without collapsing layers.",
-              "Separation from execution: storage and ownership are specified here; runtime behavior and processing logic are specified elsewhere.",
+              "What the Data Layer is and why it exists as the system's persistence source of truth.",
+              "Its role relative to execution, access mediation, processing, and presentation—without specifying internal storage layout or wire contracts.",
             ]}
-            outOfScope="Database DDL, API payload schemas, DSP algorithms, and client UI state ownership."
+            outOfScope="Internal storage structure, API payloads, execution sequencing, DSP algorithms, and client UI state machines."
             relatedBoundaries={[
-              "Data Layer owns persistence governance, not execution engines.",
-              "API Server controls access to persisted data; it does not replace canonical ownership.",
-              "DSP produces outputs and artifacts; it does not define canonical storage ownership.",
-              "Client presents data; it is not the system source of truth.",
-              "QAgent uses data context; it does not own persistence definitions.",
+              "Does not define internal physical structure of stores—only architectural persistence responsibility.",
+              "Does not define contracts or execution logic—those belong to API, runtime, and layer-specific specs.",
             ]}
           />
         </SectionBlock>
@@ -175,9 +196,9 @@ export default function DataLayerSystemViewPage() {
           <DocsInThisPageNav items={[...inPageLinks]} />
         </SectionBlock>
 
-        <SectionBlock id="data-layer-structure-diagram" title="Data Layer Structure Diagram" body={[]}>
+        <SectionBlock id="data-layer-placement-diagram" title="Data Layer Placement Diagram" body={[]}>
           <p className="mb-3 text-sm text-[var(--muted)]">
-            Cross-layer placement showing the Data Layer as the persistence source of truth between upstream orchestration and downstream processing.
+            Placement only: shows where the Data Layer sits as persistence source of truth. It does not define data flow sequencing, API shapes, or store internals.
           </p>
           <DocsDiagram
             mode="structure"
@@ -185,32 +206,32 @@ export default function DataLayerSystemViewPage() {
             groups={[
               {
                 title: "Client",
-                items: ["User-facing interaction", "Consumes and presents data; not source of truth"],
+                items: ["Presentation and interaction", "Consumes data from the system; not canonical owner"],
               },
               {
                 title: "QAgent",
-                items: ["Planning and intent", "Uses data context; does not own persistence"],
+                items: ["Planning and context", "Uses Data Layer context; does not own persistence"],
               },
               {
                 title: "API Server",
-                items: ["Orchestration and access control", "Mediates access to Data Layer"],
+                items: ["Access mediation", "Reads and writes go through controlled paths; not owner of canonical truth"],
               },
               {
                 title: "Data Layer",
-                items: ["Canonical Data", "Artifacts", "Metadata", "State Records", "Source of truth for persistence"],
+                items: ["Canonical records", "Artifacts (governed)", "Metadata", "Durable state references", "Source of truth"],
               },
               {
                 title: "DSP",
-                items: ["Processing and outputs", "Produces artifacts; no canonical storage ownership"],
+                items: ["Processing outputs", "Produces artifacts; does not own canonical storage policy"],
               },
             ]}
           />
           <p className="mt-2 text-xs text-slate-500">
-            Architecture placement only: no database tables, schema fields, API payloads, DSP engine internals, job lifecycle detail, or client state internals.
+            Not shown here: database tables, field-level schemas, REST paths, job timelines, DSP internals, or client state graphs.
           </p>
         </SectionBlock>
 
-        <SectionBlock id="data-layer-details" title="Data Layer Details" body={[]}>
+        <SectionBlock id="details" title="Details" body={[]}>
           <LayerSpecAccordion items={[...details]} />
         </SectionBlock>
 
@@ -220,27 +241,37 @@ export default function DataLayerSystemViewPage() {
               {
                 href: "/docs/data-layer",
                 title: "Data Layer Overview",
-                description: "Section home and chapter index for Data Layer documentation.",
+                description: "Section home and chapter index.",
+              },
+              {
+                href: "/docs/data-layer/data-ownership",
+                title: "Data Ownership",
+                description: "Deep dive on ownership and access versus persistence ownership.",
+              },
+              {
+                href: "/docs/data-layer/canonical-data",
+                title: "Canonical vs Derived Data",
+                description: "Truth versus projections and promotion boundaries.",
+              },
+              {
+                href: "/docs/data-layer/persistence-model",
+                title: "Persistence Model",
+                description: "Durable classes, transience, and lifecycle expectations.",
+              },
+              {
+                href: "/docs/data-layer/artifact-management",
+                title: "Artifact Management",
+                description: "Artifacts, lineage, and relationship to canonical records.",
               },
               {
                 href: "/docs/api",
                 title: "API Server",
-                description: "Controls and mediates access to the Data Layer.",
-              },
-              {
-                href: "/docs/q-agent",
-                title: "QAgent",
-                description: "Consumes and uses data context; does not own persistence.",
-              },
-              {
-                href: "/docs/dsp-layer",
-                title: "DSP / Processing Layer",
-                description: "Produces artifacts and metadata; does not define canonical storage ownership.",
+                description: "Where access mediation and execution-facing contracts are specified.",
               },
               {
                 href: "/docs/system-flow",
-                title: "System Integration",
-                description: "Subsystem flow reference; this page covers persistence ownership and data structure boundaries.",
+                title: "System Flow",
+                description: "Subsystem flow reference; sequencing is not defined on this page.",
               },
             ]}
           />

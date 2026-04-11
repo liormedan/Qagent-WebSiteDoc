@@ -20,7 +20,9 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
   const safePathname = hydrated ? pathname : "";
 
   const clientActive = safePathname.startsWith("/docs/client");
-  const apiActive = safePathname.startsWith("/docs/api");
+  const apiActive =
+    safePathname.startsWith("/docs/api-server-layer") ||
+    (safePathname.startsWith("/docs/api") && !safePathname.startsWith("/docs/api-server-layer"));
   const dataLayerActive = safePathname.startsWith("/docs/data-layer");
   const dspActive =
     safePathname.startsWith("/docs/dsp-layer") ||

@@ -117,13 +117,29 @@ export default function SystemPage() {
         </SectionBlock>
 
         <SectionBlock id="system-structure-diagram" title="System Structure Diagram" body={[]}>
+          <p className="mb-3 text-sm text-[var(--muted)]">
+            High-level map aligned with the canonical docs for each layer: primary execution path, persistence and DSP, platform/security, and where to read sequencing (not shown as a step graph here).
+          </p>
           <DocsDiagram
             mode="structure"
-            root="WaveQ"
+            root="WaveQ System"
             groups={[
-              { title: "Primary Layers", items: ["Client Layer", "QAgent Layer", "API Server Layer"] },
-              { title: "Supporting Layers", items: ["DSP / Processing", "Data", "Infrastructure", "Auth & Security"] },
-              { title: "Cross-Layer", items: ["End-to-End Flow", "Versioned Output"] },
+              {
+                title: "Primary execution layers",
+                items: ["Client Layer", "QAgent Layer", "API Server Layer"],
+              },
+              {
+                title: "Persistence & processing",
+                items: ["Data Layer (canonical persistence)", "DSP / Processing Layer"],
+              },
+              {
+                title: "Platform & security",
+                items: ["Infrastructure Layer", "Auth & Security Layer"],
+              },
+              {
+                title: "Cross-layer references",
+                items: ["End-to-end flow (/docs/system-flow)", "Versioned outputs (API authority)"],
+              },
             ]}
           />
         </SectionBlock>

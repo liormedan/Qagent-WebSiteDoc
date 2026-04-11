@@ -1,7 +1,9 @@
 "use client";
 
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button";
 import { getFlowNeighborsByHref, getFlowOrderedNavigation, getNavigationItemByHref } from "@/lib/navigation";
 
 const canonicalOverviewPath: Record<string, { previous?: { title: string; href: string }; next?: { title: string; href: string } }> = {
@@ -39,19 +41,31 @@ export function DocsPager() {
   const next = canonical?.next ?? (navItem?.group === "Core Flow" ? flowNeighbors.next : flowOrder[index + 1]);
 
   return (
-    <div className="mt-10 flex justify-between gap-4 border-t border-[var(--border)] pt-6">
-      {previous ? (
-        <Link href={previous.href} className="text-[var(--muted)] hover:text-[var(--accent)]">
-          Previous: {previous.title}
-        </Link>
-      ) : (
-        <span className="text-slate-600">&nbsp;</span>
-      )}
-      {next ? (
-        <Link href={next.href} className="text-[var(--muted)] hover:text-[var(--accent)]">
-          Next: {next.title}
-        </Link>
-      ) : null}
+    <div className="mt-10 flex flex-col gap-3 border-t border-[var(--border)] pt-6 sm:flex-row sm:items-stretch sm:justify-between sm:gap-4">
+      <div className="flex min-w-0 flex-1 justify-start">
+        {previous ? (
+          <Button variant="outline" size="default" asChild className="h-auto min-h-9 w-full max-w-full justify-start px-3 py-2.5 text-left sm:w-auto sm:max-w-[min(100%,28rem)]">
+            <Link href={previous.href} className="inline-flex w-full items-center gap-2">
+              <ChevronLeft className="h-4 w-4 shrink-0 text-slate-400" aria-hidden />
+              <span className="min-w-0 truncate text-sm leading-snug text-slate-300">
+                Previous: <span className="font-medium text-slate-100">{previous.title}</span>
+              </span>
+            </Link>
+          </Button>
+        ) : null}
+      </div>
+      <div className="flex min-w-0 flex-1 justify-end">
+        {next ? (
+          <Button variant="outline" size="default" asChild className="h-auto min-h-9 w-full max-w-full justify-end px-3 py-2.5 sm:w-auto sm:max-w-[min(100%,28rem)]">
+            <Link href={next.href} className="inline-flex w-full items-center justify-end gap-2">
+              <span className="min-w-0 truncate text-right text-sm leading-snug text-slate-300">
+                Next: <span className="font-medium text-slate-100">{next.title}</span>
+              </span>
+              <ChevronRight className="h-4 w-4 shrink-0 text-slate-400" aria-hidden />
+            </Link>
+          </Button>
+        ) : null}
+      </div>
     </div>
   );
 }
