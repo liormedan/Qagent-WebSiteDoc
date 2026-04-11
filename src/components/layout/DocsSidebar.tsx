@@ -89,6 +89,39 @@ const qagentSections: SidebarSection[] = [
     ],
   },
 ];
+const apiServerLayerSpecSections: SidebarSection[] = [
+  {
+    title: "API Server Layer (Spec)",
+    href: "/docs/api-server-layer",
+    level: "primary",
+    items: [],
+  },
+  {
+    title: "Core Specification",
+    href: "/docs/api-server-layer/core",
+    level: "secondary",
+    items: [],
+  },
+  {
+    title: "Contracts",
+    href: "/docs/api-server-layer/contracts",
+    level: "secondary",
+    items: [],
+  },
+  {
+    title: "Internal Modules",
+    href: "/docs/api-server-layer/modules",
+    level: "secondary",
+    items: [],
+  },
+  {
+    title: "System Integration",
+    href: "/docs/api-server-layer/integration",
+    level: "secondary",
+    items: [],
+  },
+];
+
 const apiSections: SidebarSection[] = [
   {
     title: "API Server Layer",
@@ -243,6 +276,45 @@ const systemSections: SidebarSection[] = [
   },
 ];
 
+const dataLayerSections: SidebarSection[] = [
+  {
+    title: "Overview",
+    href: "/docs/data-layer",
+    level: "primary",
+    items: [],
+  },
+  {
+    title: "System View",
+    href: "/docs/data-layer/system-view",
+    level: "secondary",
+    items: [],
+  },
+  {
+    title: "Data Ownership",
+    href: "/docs/data-layer/data-ownership",
+    level: "secondary",
+    items: [],
+  },
+  {
+    title: "Canonical vs Derived Data",
+    href: "/docs/data-layer/canonical-data",
+    level: "secondary",
+    items: [],
+  },
+  {
+    title: "Persistence Model",
+    href: "/docs/data-layer/persistence-model",
+    level: "secondary",
+    items: [],
+  },
+  {
+    title: "Artifact Management",
+    href: "/docs/data-layer/artifact-management",
+    level: "secondary",
+    items: [],
+  },
+];
+
 const dspSections: SidebarSection[] = [
   {
     title: "Overview",
@@ -284,7 +356,7 @@ function isSectionActive(pathname: string, href: string): boolean {
   const path = normalizePath(pathname);
   const target = normalizePath(href.split("#")[0] ?? href);
   if (!target) return false;
-  if (target === "/docs/dsp-layer") {
+  if (target === "/docs/dsp-layer" || target === "/docs/data-layer" || target === "/docs/api-server-layer") {
     return path === target;
   }
   return path === target || path.startsWith(`${target}/`);
@@ -305,24 +377,29 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
   const safePathname = hydrated ? pathname : "";
 
   const clientContext = safePathname.startsWith("/docs/client");
-  const apiContext = safePathname.startsWith("/docs/api");
+  const apiServerLayerSpecContext = safePathname.startsWith("/docs/api-server-layer");
+  const apiContext = safePathname.startsWith("/docs/api") && !apiServerLayerSpecContext;
   const dspContext =
     safePathname.startsWith("/docs/dsp-layer") ||
     safePathname.startsWith("/docs/architecture/dagent/dsp-engine-abstraction");
+  const dataLayerContext = safePathname.startsWith("/docs/data-layer");
   const systemContext =
     safePathname === "/docs" ||
     safePathname.startsWith("/docs/system") ||
     safePathname.startsWith("/docs/system-flow") ||
-    safePathname.startsWith("/docs/data-layer") ||
     safePathname.startsWith("/docs/auth-security") ||
     safePathname.startsWith("/docs/infrastructure-layer");
-  const singleLevelContext = apiContext || systemContext || dspContext;
-  const sections = apiContext
+  const singleLevelContext = apiServerLayerSpecContext || apiContext || systemContext || dspContext || dataLayerContext;
+  const sections = apiServerLayerSpecContext
+    ? apiServerLayerSpecSections
+    : apiContext
     ? apiSections
     : clientContext
       ? clientSections
       : dspContext
         ? dspSections
+        : dataLayerContext
+          ? dataLayerSections
       : systemContext
         ? systemSections
         : qagentSections.map((section) => ({
@@ -346,8 +423,8 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
                 onClick={onNavigate}
                 className={cn(
                   "group flex items-center justify-between rounded-md px-2 py-1 text-left text-xs uppercase tracking-[0.14em] transition-colors",
-                  apiContext && section.level === "primary" ? "font-bold text-slate-200" : "font-semibold",
-                  apiContext && section.level === "secondary" ? "pl-5" : "",
+                  (apiContext || apiServerLayerSpecContext || dataLayerContext) && section.level === "primary" ? "font-bold text-slate-200" : "font-semibold",
+                  (apiContext || apiServerLayerSpecContext || dataLayerContext) && section.level === "secondary" ? "pl-5" : "",
                   isSectionActive(safePathname, section.href)
                     ? "bg-slate-900 text-slate-100"
                     : "text-slate-500 hover:bg-slate-950/70 hover:text-slate-300",

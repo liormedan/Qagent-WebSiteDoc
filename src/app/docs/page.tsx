@@ -2,6 +2,7 @@ import Link from "next/link";
 import { DocsContent } from "@/components/layout/DocsContent";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
+import { cn } from "@/lib/utils";
 
 const quickActions = [
   { label: "Start with System Map", href: "/docs/system" },
@@ -10,13 +11,53 @@ const quickActions = [
   { label: "Understand Execution (API Server)", href: "/docs/api" },
 ];
 
-const readingPath = [
-  { step: "System", href: "/docs/system", description: "Understand the complete system map, major layers, and cross-layer flow." },
-  { step: "Client", href: "/docs/client", description: "Understand the user-facing interface, interaction model, and UI boundaries." },
-  { step: "QAgent", href: "/docs/q-agent", description: "Understand intent interpretation, planning, clarification, and approval logic." },
-  { step: "API", href: "/docs/api", description: "Understand execution contracts, orchestration flow, and runtime boundaries." },
-  { step: "DSP", href: "/docs/dsp-layer", description: "Understand processing engine structure, transformation flow, and DSP integration boundaries." },
-];
+const readingPathSystemChapters = [
+  {
+    title: "Client / Frontend Layer",
+    href: "/docs/system/client-frontend-layer",
+    description: "System placement of the Client layer: responsibilities, diagram, and pointers to canonical Client documentation.",
+  },
+  {
+    title: "QAgent Layer",
+    href: "/docs/system/qagent-layer",
+    description: "System placement of QAgent: planning boundary, handoffs to API, and links to the QAgent documentation tree.",
+  },
+  {
+    title: "API Server Layer",
+    href: "/docs/system/api-server-layer",
+    description: "System placement of the API: orchestration role, tiers at a glance, and links to /docs/api deep specs.",
+  },
+  {
+    title: "DSP / Processing Layer",
+    href: "/docs/system/dsp-processing-layer",
+    description: "System placement of DSP: processing versus orchestration, and links to DSP layer contracts and core specs.",
+  },
+  {
+    title: "Data Layer",
+    href: "/docs/system/data-layer",
+    description: "System IA stub for persistence: where the Data Layer sits on the map and links to /docs/data-layer chapters.",
+  },
+  {
+    title: "Infrastructure Layer",
+    href: "/docs/system/infrastructure-layer",
+    description: "Hosting, scaling, deployment, and platform support that stabilizes services across Client, QAgent, and API.",
+  },
+  {
+    title: "Auth & Security Layer",
+    href: "/docs/system/auth-security-layer",
+    description: "Identity, authorization, and isolation boundaries applied before protected operations continue across flows.",
+  },
+  {
+    title: "End-to-End Flow (Cross-Layer)",
+    href: "/docs/system/end-to-end-flow",
+    description: "Cross-layer journey from user interaction through planning, API execution, and versioning as one system path.",
+  },
+] as const;
+
+const cardClassName = cn(
+  "group block h-full rounded-lg border border-[var(--border)] bg-slate-950/40 p-4 text-left shadow-sm transition-colors",
+  "cursor-pointer hover:border-cyan-400/55 hover:bg-slate-900/55 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400/60",
+);
 
 export default function DocsIndexPage() {
   return (
@@ -43,24 +84,20 @@ export default function DocsIndexPage() {
 
         <SectionBlock title="Recommended Reading Path" body={[]}>
           <p className="text-sm text-[var(--muted)]">
-            This path gives new readers the quickest way to understand WaveQ from high-level system structure to runtime execution.
+            Same routes as the System sidebar: each card opens a System placement chapter (map context, diagram, and links into
+            the canonical docs for that layer). For a direct jump to the full system overview, use{" "}
+            <span className="text-slate-300">Quick Actions → Start with System Map</span> above.
           </p>
-          <ul className="space-y-3 text-sm text-[var(--muted)]">
-            {readingPath.map((item) => (
-              <li key={item.href} className="rounded-md border border-[var(--border)] bg-slate-950/30 px-3 py-2">
-                <Link href={item.href} className="font-semibold text-[var(--accent)] hover:underline">
-                  {item.step}
-                </Link>
-                <span>: {item.description}</span>
-              </li>
+
+          <p className="mt-6 text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">System map chapters</p>
+          <div className="mt-2 grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+            {readingPathSystemChapters.map((item) => (
+              <Link key={`system-${item.href}`} href={item.href} className={cardClassName}>
+                <span className="block text-sm font-semibold text-slate-100 transition-colors group-hover:text-cyan-100">{item.title}</span>
+                <span className="mt-2 block text-xs leading-relaxed text-[var(--muted)]">{item.description}</span>
+              </Link>
             ))}
-          </ul>
-          <Link
-            href="/docs/system"
-            className="inline-flex w-fit rounded-md border border-cyan-400/40 bg-cyan-500/10 px-3 py-2 text-sm font-semibold text-cyan-100 transition-colors hover:border-cyan-300/70 hover:bg-cyan-500/20"
-          >
-            Start with System
-          </Link>
+          </div>
         </SectionBlock>
       </div>
     </DocsContent>
