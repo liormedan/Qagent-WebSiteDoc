@@ -27,7 +27,7 @@ const layerCanonicalLinks: Record<string, string> = {
   "qagent-layer": "/docs/q-agent",
   "api-server-layer": "/docs/api",
   "dsp-processing-layer": "/docs/dsp-layer",
-  "data-layer": "/docs/data-layer",
+  "data-layer": "/docs/data-layer/system-view",
   "infrastructure-layer": "/docs/infrastructure-layer",
   "auth-security-layer": "/docs/auth-security",
   "end-to-end-flow": "/docs/system-flow",

@@ -21,6 +21,7 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
 
   const clientActive = safePathname.startsWith("/docs/client");
   const apiActive = safePathname.startsWith("/docs/api");
+  const dataLayerActive = safePathname.startsWith("/docs/data-layer");
   const dspActive =
     safePathname.startsWith("/docs/dsp-layer") ||
     safePathname.startsWith("/docs/architecture/dagent/dsp-engine-abstraction");
@@ -28,7 +29,6 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
     safePathname === "/docs" ||
     safePathname.startsWith("/docs/system") ||
     safePathname.startsWith("/docs/system-flow") ||
-    safePathname.startsWith("/docs/data-layer") ||
     safePathname.startsWith("/docs/auth-security") ||
     safePathname.startsWith("/docs/infrastructure-layer");
   const qagentActive =
@@ -85,6 +85,12 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
               className={`whitespace-nowrap text-sm font-medium leading-5 transition-colors ${dspActive ? "text-slate-100" : "text-slate-400 hover:text-slate-200"}`}
             >
               DSP
+            </Link>
+            <Link
+              href="/docs/data-layer"
+              className={`whitespace-nowrap text-sm font-medium leading-5 transition-colors ${dataLayerActive ? "text-slate-100" : "text-slate-400 hover:text-slate-200"}`}
+            >
+              Data Layer
             </Link>
           </nav>
 
