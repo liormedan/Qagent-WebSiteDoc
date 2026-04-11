@@ -50,14 +50,16 @@ const coreDetails = [
     id: "execution-model",
     title: "Execution Model",
     subtitle: "From handoff to completion",
-    purpose: "Describe how infra-managed execution is enabled, how work is routed into runtime systems, and how downstream execution is supported.",
+    purpose:
+      "Separate execution responsibilities: Infrastructure owns the execution environment and execution handling (where and how a runnable runs). The API decides what should be executed (orchestration, admission, job materialization). DSP defines how processing is performed inside a runner once infrastructure has placed work.",
     defines: [
-      "Enablement: orchestration hands a Job Contract-shaped unit; infrastructure resolves profile → runtime binding (VM, container, or process host).",
+      "Infrastructure is responsible for execution environment and execution handling: isolation, scheduling onto workers, lifecycle (start/stop/restart), resource enforcement, queue leases, and completion signaling at the substrate.",
+      "It does not decide what should be executed: which jobs exist, when they are admitted, and what immutable intent they carry remain API orchestration responsibilities—infra consumes Job Contract-shaped handoffs.",
+      "It does not define how processing is performed: algorithms, transforms, graphs, and deterministic processing semantics are DSP (and related) responsibilities—infra supplies the host, dispatch path, and envelopes only.",
       "Routing: queue producers publish messages; routers/partitions apply delivery rules; consumers (Job Runners) claim work under visibility contracts.",
-      "Downstream support: DSP and other executors run inside the Execution Environment module; results exit via Execution Result Contract channels.",
-      "Completion: exit status, timestamps, resource usage, and opaque handles are emitted upward; interpretation stays with API/DSP docs.",
+      "Downstream: DSP and other executors run inside the Execution Environment module; results exit via Execution Result Contract channels; semantic packaging stays with DSP/API docs.",
     ],
-    doesNotDefine: "Per-field REST validation, DSP graph order, or SQL transaction boundaries inside domain services.",
+    doesNotDefine: "Orchestration policy (what runs), DSP processing semantics (how transforms run), per-field REST validation, or SQL transaction semantics inside domain services.",
     href: "/docs/infrastructure-layer/core#execution-model",
     linkLabel: "This section",
   },
@@ -98,7 +100,7 @@ export default function InfrastructureLayerCorePage() {
     <DocsContent>
       <PageTitle
         title="Infrastructure Layer - Core Specification"
-        description="Implementation-ready behavioral model: layer definition, responsibilities, execution model, operational state, and hard constraints—explicitly excluding API business logic, DSP semantics, canonical data ownership, and client logic."
+        description="Behavioral model with clear execution split: Infrastructure owns execution environment and handling; API orchestrates what runs; DSP defines how processing runs inside infra-provided runtimes—plus responsibilities, state, and constraints."
       />
       <p className="mt-2 text-xs uppercase tracking-[0.08em] text-slate-400">Infrastructure Layer (Spec) / Core Specification</p>
 
@@ -115,7 +117,7 @@ export default function InfrastructureLayerCorePage() {
             areas={[
               "Layer definition: infrastructure as runtime support, not domain orchestration.",
               "Responsibilities: runtime, queued/triggered work, recoverability, operational telemetry.",
-              "Execution model: handoff → routing → run → completion without semantic drift.",
+              "Execution model: API decides what runs; Infrastructure runs it; DSP performs processing inside the provided environment—see Execution Model details.",
               "State & behavior: operational state only; no canonical business truth.",
               "Constraints: explicit bans on API, DSP, Data, and Client ownership inside this layer.",
             ]}

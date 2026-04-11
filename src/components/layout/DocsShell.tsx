@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { DocsHeader } from "@/components/layout/DocsHeader";
 import { DocsPager } from "@/components/layout/DocsPager";
@@ -7,6 +8,7 @@ import { DocsSidebar } from "@/components/layout/DocsSidebar";
 import { DocsToc } from "@/components/layout/DocsToc";
 
 export function DocsShell({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileTocOpen, setMobileTocOpen] = useState(false);
   const [sidebarWidth, setSidebarWidth] = useState(240);
@@ -105,7 +107,7 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
         </aside>
 
         <main ref={mainRef} className="docs-main-scroll min-h-screen min-w-0 overflow-y-visible px-4 py-4 md:min-h-0 md:overflow-y-auto md:px-6 md:py-6 xl:px-8">
-          <div className="mx-auto w-full max-w-4xl">
+          <div key={pathname} className="mx-auto w-full max-w-4xl">
             {children}
             <DocsPager />
           </div>

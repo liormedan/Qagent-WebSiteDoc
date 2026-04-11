@@ -20,22 +20,3 @@ export function ApiServerLayerSpecCanonicalNotice() {
     </section>
   );
 }
-
-/** Shown on /docs/api overview: operational docs link to architecture spec tree. */
-export function ApiOperationalDocsCanonicalNotice() {
-  return (
-    <section
-      className="mb-5 rounded-md border border-violet-400/35 bg-violet-500/10 p-4 text-sm text-violet-50"
-      aria-label="Operational API documentation versus layer specification"
-    >
-      <p className="text-xs font-semibold uppercase tracking-[0.12em] text-violet-200">Operational API documentation</p>
-      <p className="mt-2 text-slate-100">This page defines the operational API behavior.</p>
-      <p className="mt-2 text-[var(--muted)]">For architectural structure and system positioning, refer to:</p>
-      <p className="mt-1">
-        <Link href="/docs/api-server-layer" className="font-medium text-violet-200 hover:text-violet-100 hover:underline">
-          → /docs/api-server-layer
-        </Link>
-      </p>
-    </section>
-  );
-}

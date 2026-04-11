@@ -414,7 +414,7 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
   const [openSection, setOpenSection] = useState<string>("Architecture");
   const safePathname = hydrated ? pathname : "";
 
-  const clientContext = safePathname.startsWith("/docs/client");
+  const clientContext = safePathname === "/docs/client" || safePathname.startsWith("/docs/client/");
   const infrastructureLayerSpecContext = safePathname.startsWith("/docs/infrastructure-layer");
   const apiServerLayerSpecContext = safePathname.startsWith("/docs/api-server-layer");
   const apiContext = safePathname.startsWith("/docs/api") && !apiServerLayerSpecContext;
