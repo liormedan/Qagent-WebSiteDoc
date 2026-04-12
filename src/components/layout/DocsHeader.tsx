@@ -11,6 +11,7 @@ import {
   type DocsNavGroupId,
   getDocsNavActivityFlags,
   isDocsNavGroupActive,
+  normalizeDocsPath,
 } from "@/components/layout/docs-nav-config";
 import { cn } from "@/lib/utils";
 
@@ -28,6 +29,7 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
   const safePathname = hydrated ? pathname : "";
 
   const { clientActive, authSecurityActive } = getDocsNavActivityFlags(safePathname);
+  const developmentActive = normalizeDocsPath(safePathname) === "/docs/development";
 
   const [openGroupId, setOpenGroupId] = useState<DocsNavGroupId | null>(null);
   const [mobileBrowseOpen, setMobileBrowseOpen] = useState(false);
@@ -72,6 +74,12 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
   const linkIdle = "text-slate-200 hover:bg-slate-800/80";
   const linkActive = "bg-cyan-500/15 text-cyan-100 ring-1 ring-cyan-400/40";
 
+  const sourcesNavTabClass = (active: boolean) =>
+    cn(
+      "flex max-w-[152px] shrink-0 items-center gap-0.5 rounded-md px-2 py-1.5 text-left text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors lg:max-w-none lg:px-2.5 lg:text-sm lg:tracking-[0.09em]",
+      active ? "bg-slate-800/90 text-slate-50" : "text-slate-400 hover:bg-slate-900/80 hover:text-slate-200",
+    );
+
   return (
     <header className="sticky top-0 z-30 border-b border-[var(--border)] bg-[#0b1020f2] backdrop-blur">
       <div className="h-full px-3 md:px-6">
@@ -84,9 +92,9 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
             WaveQ Docs
           </Link>
 
-          {/* Desktop / tablet: group tabs open a single flyout (no secondary strip) */}
-          <div ref={navClusterRef} className="relative ml-1 hidden min-w-0 flex-1 sm:block">
-            <nav className="flex items-center gap-1 lg:ml-3 lg:gap-2" aria-label="Docs section groups">
+          {/* Desktop / tablet: group flyouts; Sources sits after Platform, same tab chrome (slate, no cyan). */}
+          <div ref={navClusterRef} className="relative ml-1 hidden min-w-0 flex-1 sm:block lg:ml-3">
+            <nav className="flex items-center gap-1 lg:gap-2" aria-label="Docs section groups">
               {DOCS_NAV_GROUPS.map((group) => {
                 const routeActive = isDocsNavGroupActive(group, safePathname);
                 const flyoutOpen = openGroupId === group.id;
@@ -141,6 +149,14 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
                   </div>
                 );
               })}
+              <Link
+                href="/docs/development"
+                className={sourcesNavTabClass(developmentActive)}
+                aria-current={developmentActive ? "page" : undefined}
+              >
+                <span className="truncate lg:hidden">Src</span>
+                <span className="hidden truncate lg:inline">Sources</span>
+              </Link>
             </nav>
           </div>
 
@@ -162,6 +178,20 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
           <button type="button" onClick={onOpenToc} className="rounded-md border border-[var(--border)] px-3 py-1.5 text-sm text-slate-200 md:hidden">
             On this page
           </button>
+        </div>
+
+        {/* Mobile: Sources entry always visible (separate from Browse documentation) */}
+        <div className="border-t border-[var(--border)]/60 px-1 py-2 sm:hidden">
+          <Link
+            href="/docs/development"
+            className={cn(
+              "block rounded-md px-3 py-2 text-center text-sm font-semibold uppercase tracking-[0.08em] transition-colors",
+              developmentActive ? "bg-slate-800/90 text-slate-50" : "text-slate-200 hover:bg-slate-800/80",
+            )}
+            aria-current={developmentActive ? "page" : undefined}
+          >
+            Sources
+          </Link>
         </div>
 
         {/* Mobile: expandable grouped list only */}
