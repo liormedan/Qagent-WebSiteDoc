@@ -4,15 +4,16 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useId,
   useMemo,
   useRef,
   useState,
   type ReactNode,
 } from "react";
+import { usePathname } from "next/navigation";
 import { assembleAskQContext } from "@/lib/askQRetrieval";
 import type { AskQSource } from "@/lib/askQRetrieval";
+import type { AskQSuggestion } from "@/lib/ask-q/guidedSuggestions";
 import { isAskQResponseMode, type AskQResponseMode } from "@/lib/ask-q/responseMode";
 
 export type AskQMessageRole = "user" | "assistant";
@@ -25,6 +26,10 @@ export type AskQMessage = {
   sources?: readonly AskQSource[];
   /** Present on assistant messages from /api/ask-q or client fallback. */
   mode?: AskQResponseMode;
+  /** Server-computed 0–1 from catalog hit strength (optional on client-only paths). */
+  confidence?: number;
+  /** Grounded next-step links from the guided engine (optional). */
+  suggestions?: readonly AskQSuggestion[];
 };
 
 type AskQContextValue = {
@@ -42,18 +47,21 @@ const AskQContext = createContext<AskQContextValue | null>(null);
 
 export function AskQProvider({ children }: { children: ReactNode }) {
   const panelTitleId = useId();
+  const pathname = usePathname() ?? "";
+  const messagesRef = useRef<AskQMessage[]>([]);
   const [panelOpen, setPanelOpen] = useState(false);
   const [messages, setMessages] = useState<AskQMessage[]>(() => [
     {
       id: "welcome",
       role: "assistant",
       content:
-        "Ask Q sends your question to the docs site server: it retrieves glossary, terminology registry, and nav matches, then (when GEMINI_API_KEY is set) asks Gemini to answer in natural language using only that context. Sources always come from retrieval. If the API is unavailable, answers fall back to retrieval-only text on the client.",
+        "**Q Doc Agent** answers only from WaveQ’s official documentation signals (glossary, terminology registry, and docs index). It is not a general assistant. When the server can use the language model, replies stay grounded in those excerpts; links appear under **Sources**. If the request fails, you still get a catalog-based summary here on the client.",
       createdAt: Date.now(),
     },
   ]);
   const [composing, setComposing] = useState(false);
   const inFlightRef = useRef(false);
+  messagesRef.current = messages;
 
   const openPanel = useCallback(() => setPanelOpen(true), []);
   const closePanel = useCallback(() => setPanelOpen(false), []);
@@ -74,13 +82,22 @@ export function AskQProvider({ children }: { children: ReactNode }) {
     const assistantId = `a-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
     const NOTICE =
-      "Something went wrong — showing docs-based answer.";
+      "Something went wrong — showing a documentation-catalog summary below (Q Doc Agent safety fallback).";
 
     try {
+      const historyPayload = messagesRef.current
+        .filter((m) => m.id !== "welcome")
+        .slice(-4)
+        .map((m) => ({ role: m.role, content: m.content }));
+
       const res = await fetch("/api/ask-q", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: body }),
+        body: JSON.stringify({
+          query: body,
+          pathname: pathname.trim() || undefined,
+          ...(historyPayload.length ? { history: historyPayload } : {}),
+        }),
       });
       const data: unknown = await res.json().catch(() => null);
       const record = data && typeof data === "object" ? (data as Record<string, unknown>) : {};
@@ -88,21 +105,27 @@ export function AskQProvider({ children }: { children: ReactNode }) {
       const sources = Array.isArray(record.sources) ? record.sources : null;
       const modeRaw = record.mode;
       const mode = isAskQResponseMode(modeRaw) ? modeRaw : undefined;
+      const confRaw = record.confidence;
+      const confidence =
+        typeof confRaw === "number" && Number.isFinite(confRaw) ? Math.min(1, Math.max(0, confRaw)) : undefined;
 
-      if (!res.ok || !answer) {
-        const { answer: localAnswer, sources: localSources } = assembleAskQContext(body);
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: assistantId,
-            role: "assistant",
-            content: `${NOTICE}\n\n${localAnswer}`,
-            sources: localSources,
-            mode: "client_fallback",
-            createdAt: Date.now(),
-          },
-        ]);
-        return;
+      const rawSuggestions = record.suggestions;
+      let suggestions: AskQSuggestion[] | undefined;
+      if (Array.isArray(rawSuggestions)) {
+        const parsed: AskQSuggestion[] = [];
+        for (const x of rawSuggestions) {
+          if (!x || typeof x !== "object") continue;
+          const o = x as Record<string, unknown>;
+          if (typeof o.label !== "string" || !o.label.trim()) continue;
+          const label = o.label.trim();
+          const hrefRaw = o.href;
+          const href =
+            typeof hrefRaw === "string" && hrefRaw.startsWith("/docs/") ? hrefRaw.split("#")[0] : undefined;
+          const reason = typeof o.reason === "string" ? o.reason.trim() : undefined;
+          parsed.push({ label, href, reason });
+          if (parsed.length >= 2) break;
+        }
+        if (parsed.length) suggestions = parsed;
       }
 
       const normalizedSources = sources
@@ -113,19 +136,41 @@ export function AskQProvider({ children }: { children: ReactNode }) {
         })
         .map((s) => ({ href: s.href, title: s.title }));
 
+      if (answer?.trim()) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: assistantId,
+            role: "assistant",
+            content: answer,
+            sources: normalizedSources && normalizedSources.length > 0 ? normalizedSources : undefined,
+            mode,
+            confidence,
+            suggestions,
+            createdAt: Date.now(),
+          },
+        ]);
+        return;
+      }
+
+      const { answer: localAnswer, sources: localSources } = assembleAskQContext(body, {
+        pathname: pathname.trim() || undefined,
+      });
       setMessages((prev) => [
         ...prev,
         {
           id: assistantId,
           role: "assistant",
-          content: answer,
-          sources: normalizedSources && normalizedSources.length > 0 ? normalizedSources : undefined,
-          mode,
+          content: `${NOTICE}\n\n${localAnswer}`,
+          sources: localSources,
+          mode: "client_fallback",
           createdAt: Date.now(),
         },
       ]);
     } catch {
-      const { answer, sources } = assembleAskQContext(body);
+      const { answer, sources } = assembleAskQContext(body, {
+        pathname: pathname.trim() || undefined,
+      });
       setMessages((prev) => [
         ...prev,
         {
@@ -141,7 +186,7 @@ export function AskQProvider({ children }: { children: ReactNode }) {
       inFlightRef.current = false;
       setComposing(false);
     }
-  }, []);
+  }, [pathname]);
 
   const value = useMemo<AskQContextValue>(
     () => ({

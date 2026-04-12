@@ -1,9 +1,9 @@
 /**
- * Lightweight intent routing for Ask Q (no ML).
+ * Lightweight intent routing for Q Doc Agent (no ML).
  * Runs before retrieval to avoid unnecessary work and model calls.
  */
 
-export type AskQIntent = "greeting" | "low_signal" | "doc_query";
+export type AskQIntent = "greeting" | "low_signal" | "overview" | "navigation" | "doc_query";
 
 const GREETINGS_ASCII = new Set(["hi", "hey", "hello"]);
 const GREETINGS_HE = new Set(["הי", "שלום"]);
@@ -42,6 +42,24 @@ export function detectIntent(query: string): AskQIntent {
   if (trimmed.length < 3) return "low_signal";
 
   if (!hasMeaningfulToken(trimmed)) return "low_signal";
+
+  const lowerSpaced = lower.replace(/\s+/g, " ");
+
+  if (
+    /\b(where\s+(is|are|can|do|i|should)|which\s+(page|doc|url|section)|how\s+(do|can)\s+i\s+(find|open|navigate|get)|find\s+(the\s+)?(page|doc|section)|link\s+to|locate\s+(the\s+)?(page|doc))\b/.test(
+      lowerSpaced,
+    )
+  ) {
+    return "navigation";
+  }
+
+  if (
+    /\b(overview|big\s+picture|high[-\s]?level|architecture(\s+of|\s+overview)?|layers\s+(in|of|for)|what\s+is\s+waveq|explain\s+(the\s+)?(system|waveq|platform)|how\s+does\s+waveq\s+work|end[-\s]?to[-\s]?end\s+overview|system[-\s]?level)\b/.test(
+      lowerSpaced,
+    )
+  ) {
+    return "overview";
+  }
 
   return "doc_query";
 }

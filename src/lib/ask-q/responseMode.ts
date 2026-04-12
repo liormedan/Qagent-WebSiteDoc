@@ -6,7 +6,11 @@ export type AskQResponseMode =
   | "retrieval"
   | "retrieval_fallback"
   | "daily_limit"
-  | "client_fallback";
+  | "client_fallback"
+  | "match_gate"
+  | "output_guard"
+  | "bad_request"
+  | "error";
 
 export function isAskQResponseMode(v: unknown): v is AskQResponseMode {
   return (
@@ -16,6 +20,10 @@ export function isAskQResponseMode(v: unknown): v is AskQResponseMode {
     v === "retrieval" ||
     v === "retrieval_fallback" ||
     v === "daily_limit" ||
-    v === "client_fallback"
+    v === "client_fallback" ||
+    v === "match_gate" ||
+    v === "output_guard" ||
+    v === "bad_request" ||
+    v === "error"
   );
 }

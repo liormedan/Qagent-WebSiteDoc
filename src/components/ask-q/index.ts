@@ -11,5 +11,18 @@ export {
   retrieveRegistryMatches,
   retrieveSourceDocs,
 } from "@/lib/askQRetrieval";
+export type { GatherAskQRetrievalOptions, AskQLlmContextExtras } from "@/lib/askQRetrieval";
+export {
+  interpretQuery,
+  buildExpandedRetrievalQuery,
+  type AskQSemanticIntent,
+  type AskQInterpretedConcept,
+} from "@/lib/ask-q/interpretQuery";
+export {
+  resolveFollowUpQuery,
+  lastUserContentFromHistory,
+  type AskQHistoryTurn,
+} from "@/lib/ask-q/resolveFollowUpQuery";
+export { buildGuidedSuggestions, type AskQSuggestion } from "@/lib/ask-q/guidedSuggestions";
 export { AskQLauncher } from "@/components/ask-q/AskQLauncher";
 export { AskQPanel } from "@/components/ask-q/AskQPanel";

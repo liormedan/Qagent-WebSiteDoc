@@ -145,20 +145,23 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
             </nav>
           </div>
 
-          <div className="ml-auto flex min-w-0 max-w-[calc(100vw-12rem)] shrink-0 items-center gap-1.5 sm:max-w-none md:max-w-[min(320px,calc(100vw-20rem)))] lg:max-w-[360px]">
-            <Link
-              href="/docs/terminology"
-              className={cn(
-                "flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-slate-700/90 bg-slate-950/60 text-slate-300 transition-colors hover:border-cyan-500/35 hover:bg-slate-800/85 hover:text-cyan-100/95",
-                terminologyActive && "border-cyan-500/40 bg-cyan-500/10 text-cyan-100 ring-1 ring-cyan-400/35",
-              )}
-              aria-label="Terminology — glossary index (A–Z by scope)"
-              title="Terminology (glossary index)"
-            >
-              <BookOpen className="h-[18px] w-[18px]" aria-hidden />
-            </Link>
-            <AskQLauncher />
-            <div className="hidden min-w-0 flex-1 md:block">
+          {/* Right tools: fixed-width search + compact actions so nothing clips mid-viewport */}
+          <div className="ml-auto flex shrink-0 items-center gap-2 md:gap-2.5 lg:gap-3">
+            <div className="flex shrink-0 items-center gap-1.5 md:gap-2">
+              <Link
+                href="/docs/terminology"
+                className={cn(
+                  "flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-slate-700/90 bg-slate-950/60 text-slate-300 transition-colors hover:border-cyan-500/35 hover:bg-slate-800/85 hover:text-cyan-100/95",
+                  terminologyActive && "border-cyan-500/40 bg-cyan-500/10 text-cyan-100 ring-1 ring-cyan-400/35",
+                )}
+                aria-label="Terminology — glossary index (A–Z by scope)"
+                title="Terminology (glossary index)"
+              >
+                <BookOpen className="h-[18px] w-[18px]" aria-hidden />
+              </Link>
+              <AskQLauncher />
+            </div>
+            <div className="hidden w-[min(100%,11.5rem)] min-w-0 sm:w-[13rem] md:block md:w-[14.5rem] lg:w-[16rem] xl:w-[17.5rem]">
               <DocsHeaderSearch />
             </div>
           </div>

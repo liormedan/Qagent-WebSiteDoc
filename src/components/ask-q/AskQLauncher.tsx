@@ -18,9 +18,9 @@ export function AskQLauncher({ className }: { className?: string }) {
           panelOpen && "border-cyan-500/40 bg-cyan-500/10 text-cyan-100 ring-1 ring-cyan-400/35",
           className,
         )}
-        aria-label={panelOpen ? "Close Ask Q panel" : "Open Ask Q panel"}
+        aria-label={panelOpen ? "Close Q Doc Agent" : "Open Q Doc Agent"}
         aria-pressed={panelOpen}
-        title="Ask Q"
+        title="Q Doc Agent"
       >
         <MessageCircle className="h-[18px] w-[18px]" aria-hidden />
       </button>
@@ -31,15 +31,16 @@ export function AskQLauncher({ className }: { className?: string }) {
         size="sm"
         onClick={togglePanel}
         className={cn(
-          "hidden w-[88px] shrink-0 justify-center md:inline-flex",
-          panelOpen && "bg-slate-800/90 text-cyan-100 ring-1 ring-cyan-400/25",
+          "hidden h-9 shrink-0 items-center justify-center gap-1.5 rounded-md border border-slate-700/90 bg-slate-950/60 px-2.5 text-slate-300 transition-colors hover:border-cyan-500/35 hover:bg-slate-800/85 hover:text-cyan-100/95 md:inline-flex",
+          panelOpen && "border-cyan-500/40 bg-cyan-500/10 text-cyan-100 ring-1 ring-cyan-400/35",
           className,
         )}
-        title={panelOpen ? "Close Ask Q" : "Ask anything about WaveQ…"}
-        aria-label={panelOpen ? "Close Ask Q panel" : "Open Ask Q panel"}
+        title={panelOpen ? "Close Q Doc Agent" : "WaveQ documentation assistant"}
+        aria-label={panelOpen ? "Close Q Doc Agent" : "Open Q Doc Agent"}
         aria-pressed={panelOpen}
       >
-        Ask Q
+        <MessageCircle className="h-[17px] w-[17px] shrink-0 opacity-85" aria-hidden />
+        <span className="max-w-[7.5rem] truncate text-[13px] font-medium sm:max-w-[9rem]">Q Doc Agent</span>
       </Button>
     </>
   );
