@@ -14,8 +14,21 @@ export const SYSTEM_HOME_SCOPE_LINKS: readonly DocsScopeLink[] = [
   { href: "/docs/events-map", label: "Events map (E01–E12)" },
   { href: "/docs/authority-map", label: "Authority map" },
   { href: "/docs/terminology", label: "Terminology" },
+  { href: "/docs/end-to-end", label: "End-to-end layer" },
   { href: "/docs/system-flow", label: "End-to-end system flow" },
   { href: "/docs/system/client-frontend-layer", label: "Layer system views (Client)" },
+] as const;
+
+/** End-to-end layer overview (/docs/end-to-end): same pattern as DATA_LAYER_OVERVIEW_SCOPE_LINKS — child first, then System placement diagram. */
+export const END_TO_END_OVERVIEW_SCOPE_LINKS: readonly DocsScopeLink[] = [
+  { href: "/docs/end-to-end/system-placement", label: "System placement (this layer)" },
+  { href: "/docs/system/end-to-end-flow", label: "Placement diagram (System)" },
+] as const;
+
+/** End-to-end chapter pages: back to overview + system placement child (same pattern as DATA_LAYER_SUBPAGE_SCOPE_LINKS). */
+export const END_TO_END_SUBPAGE_SCOPE_LINKS: readonly DocsScopeLink[] = [
+  { href: "/docs/end-to-end", label: "End-to-end overview" },
+  { href: "/docs/end-to-end/system-placement", label: "System placement" },
 ] as const;
 
 export const SYSTEM_RUNTIME_SCOPE_LINKS: readonly DocsScopeLink[] = [

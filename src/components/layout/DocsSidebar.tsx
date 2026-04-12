@@ -329,6 +329,11 @@ const systemSections: SidebarSection[] = [
     items: [],
   },
   {
+    title: "End-to-end layer",
+    href: "/docs/end-to-end",
+    items: [],
+  },
+  {
     title: "End-to-End Flow (cross-layer flow)",
     href: "/docs/system/end-to-end-flow",
     items: [],
@@ -449,6 +454,45 @@ const authSecuritySections: SidebarSection[] = [
   },
 ];
 
+const endToEndSections: SidebarSection[] = [
+  {
+    title: "Overview",
+    href: "/docs/end-to-end",
+    level: "primary",
+    items: [],
+  },
+  {
+    title: "System placement",
+    href: "/docs/end-to-end/system-placement",
+    level: "secondary",
+    items: [],
+  },
+  {
+    title: "Runtime truth",
+    href: "/docs/end-to-end/runtime-truth",
+    level: "secondary",
+    items: [],
+  },
+  {
+    title: "Integration points",
+    href: "/docs/end-to-end/integration-points",
+    level: "secondary",
+    items: [],
+  },
+  {
+    title: "Failure flow",
+    href: "/docs/end-to-end/failure-flow",
+    level: "secondary",
+    items: [],
+  },
+  {
+    title: "Invariants",
+    href: "/docs/end-to-end/invariants",
+    level: "secondary",
+    items: [],
+  },
+];
+
 const dspSections: SidebarSection[] = [
   {
     title: "Overview",
@@ -495,7 +539,8 @@ function isSectionActive(pathname: string, href: string): boolean {
     target === "/docs/data-layer" ||
     target === "/docs/api-server-layer" ||
     target === "/docs/infrastructure-layer" ||
-    target === "/docs/auth-security"
+    target === "/docs/auth-security" ||
+    target === "/docs/end-to-end"
   ) {
     if (target === "/docs/auth-security") {
       return path === target || path === "/docs/system/auth-security-layer";
@@ -516,7 +561,7 @@ function useHydrated() {
 export function DocsSidebar({ className, onNavigate }: { className?: string; onNavigate?: () => void }) {
   const pathname = usePathname();
   const hydrated = useHydrated();
-  const [openSection, setOpenSection] = useState<string>("Architecture");
+  const [openSection, setOpenSection] = useState<string>("");
   const safePathname = hydrated ? pathname : "";
 
   const clientContext = safePathname === "/docs/client" || safePathname.startsWith("/docs/client/");
@@ -527,6 +572,7 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
     safePathname.startsWith("/docs/dsp-layer") ||
     safePathname.startsWith("/docs/architecture/dagent/dsp-engine-abstraction");
   const dataLayerContext = safePathname.startsWith("/docs/data-layer");
+  const endToEndContext = safePathname.startsWith("/docs/end-to-end");
   const authSecurityContext =
     safePathname.startsWith("/docs/auth-security") || safePathname === "/docs/system/auth-security-layer";
   const systemContext =
@@ -540,6 +586,7 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
     systemContext ||
     dspContext ||
     dataLayerContext ||
+    endToEndContext ||
     authSecurityContext;
   const sections = infrastructureLayerSpecContext
     ? infrastructureLayerSpecSections
@@ -553,6 +600,8 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
             ? dspSections
             : dataLayerContext
               ? dataLayerSections
+              : endToEndContext
+                ? endToEndSections
               : authSecurityContext
                 ? authSecuritySections
                 : systemContext
@@ -565,7 +614,7 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
                       })),
                     }));
 
-  const activeOpenSection = clientContext && openSection === "Architecture" ? "Surfaces" : openSection;
+  const activeOpenSection = openSection;
 
   return (
     <aside className={cn("h-full min-h-0 overflow-y-scroll bg-black px-4 py-5", className)}>
@@ -575,6 +624,7 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
             apiContext ||
             apiServerLayerSpecContext ||
             dataLayerContext ||
+            endToEndContext ||
             infrastructureLayerSpecContext ||
             authSecurityContext;
           const sectionLevel = section.level;

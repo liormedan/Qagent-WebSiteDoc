@@ -67,6 +67,8 @@ const matchAuthSecurity = (path: string) =>
   path.startsWith("/docs/auth-security/") ||
   path === "/docs/system/auth-security-layer";
 
+const matchEndToEnd = (path: string) => path === "/docs/end-to-end" || path.startsWith("/docs/end-to-end/");
+
 /** Ordered groups and items: first matching item wins (path should be normalized). */
 export const DOCS_NAV_GROUPS: readonly DocsNavGroup[] = [
   {
@@ -96,6 +98,7 @@ export const DOCS_NAV_GROUPS: readonly DocsNavGroup[] = [
     items: [
       { label: "Auth & Security", href: "/docs/auth-security", matches: matchAuthSecurity },
       { label: "Infrastructure", href: "/docs/infrastructure-layer", matches: matchInfrastructure },
+      { label: "End to end", href: "/docs/end-to-end", matches: matchEndToEnd },
     ],
   },
 ] as const;
@@ -132,5 +135,6 @@ export function getDocsNavActivityFlags(pathname: string) {
     dataLayerActive: matchDataLayer(path),
     infrastructureActive: matchInfrastructure(path),
     authSecurityActive: matchAuthSecurity(path),
+    endToEndActive: matchEndToEnd(path),
   };
 }
