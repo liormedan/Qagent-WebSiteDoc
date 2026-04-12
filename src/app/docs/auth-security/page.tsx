@@ -23,6 +23,9 @@ const inPageLinks = [
 ] as const;
 
 const chapterLinks = [
+  { href: "/docs/auth-security/system-flow", title: "System flow", description: "Canonical API request and bootstrap spines (S01–S12, B01–B06)." },
+  { href: "/docs/auth-security/session-spec", title: "Session JWT spec", description: "Claims, validation rules, bootstrap wire field names." },
+  { href: "/docs/auth-security/error-contracts", title: "Auth error contracts", description: "401 / 403 / 429 JSON envelope and stable codes." },
   { href: "/docs/auth-security/identity", title: "Identity", description: "External identity provider (e.g. Clerk); user object; no permissions." },
   { href: "/docs/auth-security/session", title: "Session", description: "WaveQ session token; bootstrap flow; separation from IdP session." },
   { href: "/docs/auth-security/authorization", title: "Authorization", description: "Workspace roles; action-based access." },
@@ -200,6 +203,7 @@ export default function AuthSecurityLayerPage() {
         <SectionBlock id="related-docs" title="Related Docs" body={[]}>
           <DocsRelatedDocs
             links={[
+              { href: "/docs/auth-security/system-flow", title: "System flow (canonical)", description: "Single ordering authority for request and bootstrap lifecycles." },
               { href: "/docs/system/auth-security-layer", title: "System map — Auth & Security", description: "Cross-layer placement." },
               { href: "/docs/architecture/policies/session-isolation", title: "Session Isolation (policy)", description: "Architecture policy complement." },
               { href: "/docs/api", title: "API Server Layer", description: "Execution and mediation after auth gates." },

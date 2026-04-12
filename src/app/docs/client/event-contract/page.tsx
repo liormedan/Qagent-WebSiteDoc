@@ -33,7 +33,7 @@ const details = [
     purpose: "Define the canonical JSON envelope for client events consumed and emitted under this contract.",
     defines: [
       `Illustrative envelope (field names and layout per contract): ${canonicalEnvelope}`,
-      "[TEXT TBD – expand Event Contract detail]",
+      "Normative machine schema: /docs/contracts (Contracts Layer → Event contracts JSON block).",
     ],
     doesNotDefine: "Stage-by-stage event sequence across Chat, QAgent, and Canvas.",
     href: "/docs/client/event-contract",
@@ -47,7 +47,6 @@ const details = [
     defines: [
       "This contract specifies structural identity, correlation, ordering, deduplication, cancellation, and session isolation rules.",
       "It does not replace Event Flow (ordering of stages) or Error Model (failure shapes and policies).",
-      "[TEXT TBD – expand Event Contract detail]",
     ],
     doesNotDefine: "Exhaustive enumeration of eventType string values.",
     href: "/docs/client/event-flow",
@@ -61,7 +60,6 @@ const details = [
     defines: [
       "The envelope includes eventId, eventType, correlationId, sessionId, sequence, timestamp, payload, and version.",
       "Dedup, ordering, correlation, session, and cancellation rules reference these fields as specified under Field Semantics and Client Runtime Expectations.",
-      "[TEXT TBD – expand Event Contract detail]",
     ],
     doesNotDefine: "Per-field optional matrix beyond participation in those rules.",
     href: "/docs/client/contracts",
@@ -76,7 +74,6 @@ const details = [
       "All events in one user operation MUST share correlationId.",
       "Retry attempts keep correlationId and increment sequence.",
       "Cross-session reuse of correlationId is forbidden.",
-      "[TEXT TBD – expand Event Contract detail]",
     ],
     doesNotDefine: "Error object shapes on failure paths.",
     href: "/docs/client/error-model",
@@ -89,7 +86,6 @@ const details = [
     purpose: "Document the version field carried on the canonical envelope.",
     defines: [
       "Canonical shape includes a version field (for example \"1.0\") on the envelope.",
-      "[TEXT TBD – expand Event Contract detail]",
     ],
     doesNotDefine: "Cross-layer schema registry and backend compatibility policy.",
     href: "/docs/client/contracts",
@@ -111,7 +107,6 @@ const details = [
       "Post-cancel non-terminal events for that correlationId MUST be dropped.",
       "Events MUST be applied only to matching sessionId store scope.",
       "Session switch MUST invalidate pending queue from previous session scope.",
-      "[TEXT TBD – expand Event Contract detail]",
     ],
     doesNotDefine: "API Server execution lifecycle orchestration.",
     href: "/docs/client/runtime",
@@ -122,7 +117,9 @@ const details = [
     title: "Debugging & Logging Notes",
     subtitle: "Operational tracing",
     purpose: "Operational guidance for tracing contract adherence and diagnosing event traces.",
-    defines: ["[TEXT TBD – expand Event Contract detail]"],
+    defines: [
+      "Emit correlationId on every envelope for cross-surface tracing; align with /docs/contracts event envelope schema for machine validation.",
+    ],
     doesNotDefine: "Formal API Server logging schema.",
     href: "/docs/client/error-model",
     linkLabel: "Error Model",

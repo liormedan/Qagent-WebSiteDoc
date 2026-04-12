@@ -27,7 +27,6 @@ const details = [
     defines: [
       canonicalFlow,
       "Use this sequence as the baseline reference for client debugging and integration behavior.",
-      "[TEXT TBD – expand Client Event Flow detail]",
     ],
     doesNotDefine: "Execution lifecycle ownership.",
     href: "/docs/client/event-flow",
@@ -42,7 +41,6 @@ const details = [
       "User interaction originates in Chat UI.",
       "QAgent returns structured outputs that drive uiPlan and downstream client behavior.",
       "Canvas and Runtime project event-driven state updates back to UI.",
-      "[TEXT TBD – expand Client Event Flow detail]",
     ],
     doesNotDefine: "Intent decision internals.",
     href: "/docs/client/chat-ui",
@@ -56,7 +54,6 @@ const details = [
     defines: [
       "uiPlan-driven events reach Canvas before runtime status projection.",
       "Runtime transitions drive audio/playback and UI feedback visibility.",
-      "[TEXT TBD – expand Client Event Flow detail]",
     ],
     doesNotDefine: "API queue orchestration.",
     href: "/docs/client/runtime",
@@ -70,7 +67,6 @@ const details = [
     defines: [
       "Client updates visible UI from runtime/event state outputs.",
       "State projection remains deterministic for user feedback continuity.",
-      "[TEXT TBD – expand Client Event Flow detail]",
     ],
     doesNotDefine: "Server execution ownership.",
     href: "/docs/client/state-model",
@@ -84,7 +80,6 @@ const details = [
     defines: [
       "Use canonical sequence to trace where event or state drift occurs.",
       "Validate stage ordering against expected client transition path.",
-      "[TEXT TBD – expand Client Event Flow detail]",
     ],
     doesNotDefine: "Formal conformance test execution policy.",
     href: "/docs/client/conformance-tests",

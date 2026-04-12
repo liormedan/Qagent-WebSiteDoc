@@ -37,7 +37,6 @@ const details = [
     defines: [
       "Minimal success scenario for lock-level validation.",
       "Validation proves the happy-path chain from upload through plan, uiPlan, render, runtime, and output behaves as an integrated Client system.",
-      "[TEXT TBD – expand System Validation detail]",
     ],
     doesNotDefine: "Executable test harness implementation (see Conformance Tests and Test Report).",
     href: "/docs/client/system-validation",
@@ -99,7 +98,6 @@ const details = [
     defines: [
       "Conformance Tests capture executable scenarios and determinism expectations derived from these validation goals.",
       "Test Report records command-run evidence and blocked traces where automation is not yet present.",
-      "[TEXT TBD – expand System Validation detail]",
     ],
     doesNotDefine: "Cross-layer bridge payload catalog (see Cross-Layer Contracts).",
     href: "/docs/client/test-report",

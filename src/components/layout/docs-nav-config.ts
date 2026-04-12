@@ -28,13 +28,19 @@ export function normalizeDocsPath(path: string): string {
 }
 
 const matchSystem = (path: string) =>
-  path === "/docs" ||
-  path.startsWith("/docs/system") ||
-  path.startsWith("/docs/system-flow");
+  (path === "/docs" ||
+    path.startsWith("/docs/system") ||
+    path === "/docs/system-runtime" ||
+    path === "/docs/authority-map" ||
+    path === "/docs/events-map" ||
+    path === "/docs/terminology" ||
+    path.startsWith("/docs/system-flow")) &&
+  path !== "/docs/system/auth-security-layer";
 
 const matchClient = (path: string) => path === "/docs/client" || path.startsWith("/docs/client/");
 
 const matchQAgent = (path: string) =>
+  path === "/docs/contracts" ||
   path.startsWith("/docs/q-agent") ||
   path.startsWith("/docs/architecture") ||
   path.startsWith("/docs/orchestration") ||
@@ -57,7 +63,9 @@ const matchDataLayer = (path: string) => path.startsWith("/docs/data-layer");
 const matchInfrastructure = (path: string) => path.startsWith("/docs/infrastructure-layer");
 
 const matchAuthSecurity = (path: string) =>
-  path === "/docs/auth-security" || path.startsWith("/docs/auth-security/");
+  path === "/docs/auth-security" ||
+  path.startsWith("/docs/auth-security/") ||
+  path === "/docs/system/auth-security-layer";
 
 /** Ordered groups and items: first matching item wins (path should be normalized). */
 export const DOCS_NAV_GROUPS: readonly DocsNavGroup[] = [

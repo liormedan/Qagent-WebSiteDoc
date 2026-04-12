@@ -126,7 +126,6 @@ const details = [
     purpose: "Define executable validation scenarios proving implementation conformance with Client contracts.",
     defines: [
       "Executable validation scenarios proving implementation conformance with Client contracts.",
-      "[TEXT TBD – expand Conformance Tests detail]",
     ],
     doesNotDefine: "System validation goals narrative (see System Validation).",
     href: "/docs/client/conformance-tests",
@@ -178,7 +177,6 @@ const details = [
     purpose: "State the implementation readiness lock derived from full conformance success.",
     defines: [
       "System is considered implementation-ready only if all tests pass, no undefined behavior exists, and no state divergence occurs.",
-      "[TEXT TBD – expand Conformance Tests detail]",
     ],
     doesNotDefine: "Architectural ownership locks beyond Client documentation scope.",
     href: "/docs/client/system-validation",

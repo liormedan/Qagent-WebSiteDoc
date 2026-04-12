@@ -146,7 +146,6 @@ const details = [
     defines: [
       "Use the matrix together with Client Runtime to determine which components may transition or observe each store over time.",
       "Use Event Flow and Event Contract to align event-driven updates with declared writers and readers.",
-      "[TEXT TBD – expand State Ownership detail]",
     ],
     doesNotDefine: "Replacement for the Event Contract or Client Runtime specifications.",
     href: "/docs/client/runtime",

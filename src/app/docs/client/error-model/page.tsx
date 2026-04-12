@@ -116,7 +116,6 @@ const details = [
     purpose: "Operational notes for correlating errors with client traces.",
     defines: [
       "Canonical format includes correlationId and sessionId for correlation with event and session traces.",
-      "[TEXT TBD – expand Client Error Model detail]",
     ],
     doesNotDefine: "Formal API Server observability schema.",
     href: "/docs/client/event-flow",

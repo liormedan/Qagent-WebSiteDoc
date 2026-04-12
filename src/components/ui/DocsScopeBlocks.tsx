@@ -20,13 +20,23 @@ export function DocsScopeBlocks({ links, note }: DocsScopeBlocksProps) {
       {hasLinks ? (
         <div className="flex flex-wrap items-center gap-x-2.5 gap-y-2">
           {links.map((link) => (
-            <Link
-              key={`${link.href}::${link.label}`}
-              href={link.href}
-              className="inline-flex items-center rounded-md border border-cyan-500/35 bg-cyan-500/10 px-3 py-2 text-sm font-medium leading-snug tracking-[0.01em] text-cyan-100 transition-colors hover:border-cyan-400/50 hover:bg-cyan-500/15"
-            >
-              {link.label}
-            </Link>
+            link.href.includes("#") ? (
+              <a
+                key={`${link.href}::${link.label}`}
+                href={link.href}
+                className="inline-flex items-center rounded-md border border-cyan-500/35 bg-cyan-500/10 px-3 py-2 text-sm font-medium leading-snug tracking-[0.01em] text-cyan-100 transition-colors hover:border-cyan-400/50 hover:bg-cyan-500/15"
+              >
+                {link.label}
+              </a>
+            ) : (
+              <Link
+                key={`${link.href}::${link.label}`}
+                href={link.href}
+                className="inline-flex items-center rounded-md border border-cyan-500/35 bg-cyan-500/10 px-3 py-2 text-sm font-medium leading-snug tracking-[0.01em] text-cyan-100 transition-colors hover:border-cyan-400/50 hover:bg-cyan-500/15"
+              >
+                {link.label}
+              </Link>
+            )
           ))}
         </div>
       ) : null}

@@ -137,7 +137,6 @@ const details = [
     defines: [
       "Execution evidence from actual command runs in this workspace.",
       "This page records outcomes and blocked traces; it does not redefine validation rules or conformance matrices.",
-      "[TEXT TBD – expand Client Test Report detail]",
     ],
     doesNotDefine: "System validation pass/fail criteria definitions (see System Validation).",
     href: "/docs/client/test-report",
@@ -191,7 +190,6 @@ const details = [
     purpose: "Capture documentation lock status versus runtime conformance automation posture.",
     defines: [
       "Documentation LOCK status is MET. Runtime conformance automation remains implementation-phase validation and does not redefine architectural ownership locks.",
-      "[TEXT TBD – expand Client Test Report detail]",
     ],
     doesNotDefine: "Cross-layer contract payload definitions (see Cross-Layer Contracts).",
     href: "/docs/client/conformance-tests",

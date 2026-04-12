@@ -1,9 +1,21 @@
 "use client";
 
-import { DocsDetailsAccordion, type DocsDetailsItem } from "@/components/ui/DocsDetailsAccordion";
+import {
+  DocsDetailsAccordion,
+  type DocsDetailsItem,
+  type DocsDetailsSummaryVariant,
+} from "@/components/ui/DocsDetailsAccordion";
 
 export type LayerSpecItem = DocsDetailsItem;
 
-export function LayerSpecAccordion({ items, defaultOpenAll = false }: { items: LayerSpecItem[]; defaultOpenAll?: boolean }) {
-  return <DocsDetailsAccordion items={items} defaultOpenAll={defaultOpenAll} />;
+export function LayerSpecAccordion({
+  items,
+  defaultOpenAll = false,
+  summaryVariant,
+}: {
+  items: LayerSpecItem[];
+  defaultOpenAll?: boolean;
+  summaryVariant?: DocsDetailsSummaryVariant;
+}) {
+  return <DocsDetailsAccordion items={items} defaultOpenAll={defaultOpenAll} summaryVariant={summaryVariant} />;
 }

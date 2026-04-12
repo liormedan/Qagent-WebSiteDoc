@@ -25,7 +25,6 @@ const details = [
     defines: [
       "Establish a consistent state model for client runtime behavior.",
       "Support synchronized UI/runtime projection across client surfaces.",
-      "[TEXT TBD – expand Client State Model detail]",
     ],
     doesNotDefine: "Cross-layer planning or server execution ownership.",
     href: "/docs/client/state-model",
@@ -41,7 +40,6 @@ const details = [
       "canvasState",
       "audioState",
       "sessionState",
-      "[TEXT TBD – expand Client State Model detail]",
     ],
     doesNotDefine: "Global server-side state authority.",
     href: "/docs/client/state-ownership",
@@ -55,7 +53,6 @@ const details = [
     defines: [
       "State is centralized in client model but consumed by scoped surfaces.",
       "Each surface reads only the state required for its UX/runtime concerns.",
-      "[TEXT TBD – expand Client State Model detail]",
     ],
     doesNotDefine: "Single-component ownership of entire state graph.",
     href: "/docs/client/workspace-ui",
@@ -69,7 +66,6 @@ const details = [
     defines: [
       "No single component owns the full state.",
       "State mutations follow explicit scoped ownership paths.",
-      "[TEXT TBD – expand Client State Model detail]",
     ],
     doesNotDefine: "Intent/planning ownership.",
     href: "/docs/client/state-ownership",
@@ -84,7 +80,6 @@ const details = [
       "Client Layer owns local UI/runtime behavior and state projection.",
       "QAgent owns intent/planning decisions.",
       "API Server owns execution lifecycle state authority.",
-      "[TEXT TBD – expand Client State Model detail]",
     ],
     doesNotDefine: "Server-side orchestration or plan authority.",
     href: "/docs/client",

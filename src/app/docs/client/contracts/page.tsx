@@ -143,7 +143,6 @@ const details = [
     purpose: "Document that illustrated payloads carry an explicit contract version.",
     defines: [
       "Each illustrated payload includes a version field set to \"1.0\" for the documented v1.0 snapshots.",
-      "[TEXT TBD – expand Cross-Layer Contracts detail]",
     ],
     doesNotDefine: "Repository-wide semver policy for all services.",
     href: "/docs/client/event-contract",
@@ -154,7 +153,9 @@ const details = [
     title: "Failure Handling",
     subtitle: "Errors at contract edges",
     purpose: "Reserve guidance for how failures at these boundaries should be treated in Client documentation.",
-    defines: ["[TEXT TBD – expand Cross-Layer Contracts detail]"],
+    defines: [
+      "Boundary failures surface through Error Model shapes; contract version mismatch rejects at ingress per System Validation.",
+    ],
     doesNotDefine: "Canonical client error JSON (see Error Model).",
     href: "/docs/client/error-model",
     linkLabel: "Error Model",
