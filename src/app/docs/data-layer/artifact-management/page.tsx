@@ -25,7 +25,6 @@ const details = [
     defines: [
       "DSP and execution pipelines produce artifacts that must be linked or stored under Data Layer artifact policy.",
       "Identifiers and lineage connect artifacts back to canonical entities.",
-      "[TEXT TBD – expand Artifact Management detail]",
     ],
     doesNotDefine: "DSP kernel implementations and encoding bit depths.",
     href: "/docs/dsp-layer",
@@ -39,7 +38,6 @@ const details = [
     defines: [
       "Retention and reference rules are persistence concerns owned by the Data Layer model.",
       "API mediation exposes artifacts but does not redefine storage ownership.",
-      "[TEXT TBD – expand Artifact Management detail]",
     ],
     doesNotDefine: "Object storage bucket naming conventions.",
     href: "/docs/data-layer/persistence-model",

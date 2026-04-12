@@ -72,7 +72,6 @@ const details = [
     defines: [
       "idle: controls disabled except input/load actions.",
       "ready: execute controls enabled, preview allowed.",
-      "[TEXT TBD – expand Client Runtime Lifecycle detail]",
     ],
     doesNotDefine: "Server-side job bootstrap or API execution lifecycle.",
     href: "/docs/client/runtime",
@@ -86,7 +85,6 @@ const details = [
     defines: [
       "Transition ready -> running is allowed; idle -> running is invalid (requires ready first).",
       "ready -> completed is invalid (requires running first).",
-      "[TEXT TBD – expand Client Runtime Lifecycle detail]",
     ],
     doesNotDefine: "Cross-surface event ordering (see Event Flow).",
     href: "/docs/client/event-flow",
@@ -101,7 +99,6 @@ const details = [
       "running: show progress and active block, lock conflicting actions.",
       "paused: show paused badge, allow resume/cancel only.",
       "Transitions running -> paused and paused -> running are allowed.",
-      "[TEXT TBD – expand Client Runtime Lifecycle detail]",
     ],
     doesNotDefine: "Canvas rendering pipeline internals.",
     href: "/docs/client/runtime",
@@ -133,7 +130,6 @@ const details = [
     purpose: "Use allowed and invalid transition lists when diagnosing stuck or illegal runtime states.",
     defines: [
       "Cross-check observed transitions against the allowed list; any invalid pattern indicates a lifecycle bug or policy drift.",
-      "[TEXT TBD – expand Client Runtime Lifecycle detail]",
     ],
     doesNotDefine: "Conformance test execution policy.",
     href: "/docs/client/conformance-tests",

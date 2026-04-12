@@ -25,7 +25,6 @@ const details = [
     defines: [
       "Data Layer governs which entities are canonical and how lineage and references remain stable across runs.",
       "Producers (DSP, pipelines) and accessors (API, Client) interact with data under policies defined here.",
-      "[TEXT TBD – expand Data Ownership detail]",
     ],
     doesNotDefine: "Physical storage engines and per-table DDL.",
     href: "/docs/data-layer/system-view",
@@ -39,7 +38,6 @@ const details = [
     defines: [
       "API Server controls access paths; ownership of canonical truth remains with the Data Layer.",
       "Client presents data; it does not become the persistence owner by rendering or caching.",
-      "[TEXT TBD – expand Data Ownership detail]",
     ],
     doesNotDefine: "API authentication mechanics and client cache eviction policies.",
     href: "/docs/api",

@@ -20,6 +20,11 @@ const qagentSections: SidebarSection[] = [
     items: [],
   },
   {
+    title: "Contracts Layer",
+    href: "/docs/contracts",
+    items: [],
+  },
+  {
     title: "Architecture",
     href: "/docs/architecture",
     items: [
@@ -52,6 +57,7 @@ const qagentSections: SidebarSection[] = [
     title: "Contracts",
     href: "/docs/architecture/contracts/schema-registry",
     items: [
+      { label: "Cross-layer contracts hub", href: "/docs/contracts" },
       { label: "Schema Registry", href: "/docs/architecture/contracts/schema-registry" },
       { label: "Client-QAgent ID Mapping", href: "/docs/architecture/contracts/client-qagent-id-mapping" },
       { label: "Lineage Model", href: "/docs/architecture/contracts/lineage-model" },
@@ -268,6 +274,26 @@ const systemSections: SidebarSection[] = [
     items: [],
   },
   {
+    title: "System runtime (spine)",
+    href: "/docs/system-runtime",
+    items: [],
+  },
+  {
+    title: "Authority map",
+    href: "/docs/authority-map",
+    items: [],
+  },
+  {
+    title: "Events map (E01–E12)",
+    href: "/docs/events-map",
+    items: [],
+  },
+  {
+    title: "Terminology",
+    href: "/docs/terminology",
+    items: [],
+  },
+  {
     title: "Client / Frontend Layer",
     href: "/docs/system/client-frontend-layer",
     items: [],
@@ -353,6 +379,24 @@ const authSecuritySections: SidebarSection[] = [
     title: "Auth & Security Layer",
     href: "/docs/auth-security",
     level: "primary",
+    items: [],
+  },
+  {
+    title: "System flow (canonical)",
+    href: "/docs/auth-security/system-flow",
+    level: "secondary",
+    items: [],
+  },
+  {
+    title: "Session JWT spec",
+    href: "/docs/auth-security/session-spec",
+    level: "secondary",
+    items: [],
+  },
+  {
+    title: "Auth error contracts",
+    href: "/docs/auth-security/error-contracts",
+    level: "secondary",
     items: [],
   },
   {
@@ -453,6 +497,9 @@ function isSectionActive(pathname: string, href: string): boolean {
     target === "/docs/infrastructure-layer" ||
     target === "/docs/auth-security"
   ) {
+    if (target === "/docs/auth-security") {
+      return path === target || path === "/docs/system/auth-security-layer";
+    }
     return path === target;
   }
   return path === target || path.startsWith(`${target}/`);
@@ -480,7 +527,8 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
     safePathname.startsWith("/docs/dsp-layer") ||
     safePathname.startsWith("/docs/architecture/dagent/dsp-engine-abstraction");
   const dataLayerContext = safePathname.startsWith("/docs/data-layer");
-  const authSecurityContext = safePathname.startsWith("/docs/auth-security");
+  const authSecurityContext =
+    safePathname.startsWith("/docs/auth-security") || safePathname === "/docs/system/auth-security-layer";
   const systemContext =
     safePathname === "/docs" ||
     safePathname.startsWith("/docs/system") ||

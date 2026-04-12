@@ -27,7 +27,6 @@ const overviewDetails = [
     defines: [
       "This section documents persistence ownership, canonical versus derived data, artifacts, metadata, and state records.",
       "Chapter pages expand ownership, canonical rules, persistence classes, and artifact policy without duplicating API or DSP execution specs.",
-      "[TEXT TBD – expand Data Layer Overview detail]",
     ],
     doesNotDefine: "Database DDL, wire-level API payloads, DSP algorithms, or client UI state machines.",
     href: "/docs/data-layer/system-view",
@@ -41,7 +40,6 @@ const overviewDetails = [
     defines: [
       "Start with System View for cross-layer placement, then read chapters in any order based on your integration concern.",
       "Use Schema Registry and architecture contracts for governed schemas referenced by the Data Layer model.",
-      "[TEXT TBD – expand Data Layer Overview detail]",
     ],
     doesNotDefine: "Orchestration sequencing across the entire WaveQ runtime.",
     href: "/docs/data-layer/data-ownership",

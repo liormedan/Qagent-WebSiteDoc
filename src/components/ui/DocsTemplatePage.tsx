@@ -1,5 +1,5 @@
 import { DocsContent } from "@/components/layout/DocsContent";
-import { DocsDiagram } from "@/components/ui/DocsDiagram";
+import { DocsDiagram, type DocsDiagramStructureGroup } from "@/components/ui/DocsDiagram";
 import { DocsInThisPageNav } from "@/components/ui/DocsInThisPageNav";
 import { DocsOverviewBlock } from "@/components/ui/DocsOverviewBlock";
 import { DocsRelatedDocs } from "@/components/ui/DocsRelatedDocs";
@@ -17,7 +17,7 @@ type NavItem = {
 
 type TemplateDiagram =
   | { mode: "flow"; steps: string[] }
-  | { mode: "structure"; root: string; groups: Array<{ title: string; items: string[] }> };
+  | { mode: "structure"; root: string; groups: readonly DocsDiagramStructureGroup[] };
 
 type DocsTemplatePageProps = {
   title: string;
@@ -31,11 +31,18 @@ type DocsTemplatePageProps = {
   relatedBoundaries: string[];
   navItems: NavItem[];
   diagramTitle: string;
-  diagram: TemplateDiagram;
+  /** Ignored when `diagramSlot` is set. */
+  diagram?: TemplateDiagram;
+  /** Custom diagram body (e.g. interactive pilot). When set, `diagram` is not used. */
+  diagramSlot?: ReactNode;
   detailsTitle: string;
   detailsItems: LayerSpecItem[];
+  /** Passed to `LayerSpecAccordion` for compact closed summaries (pilot). */
+  detailsSummaryVariant?: "default" | "reference";
   relatedDocs: string[];
   relatedFooter?: ReactNode;
+  /** Pilot: render the diagram block immediately under scope links (before overview). */
+  diagramPlacement?: "default" | "afterScope";
 };
 
 export function DocsTemplatePage({
@@ -51,11 +58,34 @@ export function DocsTemplatePage({
   navItems,
   diagramTitle,
   diagram,
+  diagramSlot,
   detailsTitle,
   detailsItems,
   relatedDocs,
   relatedFooter,
+  diagramPlacement = "default",
+  detailsSummaryVariant,
 }: DocsTemplatePageProps) {
+  const diagramAfterScope = diagramPlacement === "afterScope";
+
+  const diagramBody =
+    diagramSlot ??
+    (diagram
+      ? diagram.mode === "flow"
+        ? <DocsDiagram mode="flow" steps={diagram.steps} />
+        : <DocsDiagram mode="structure" root={diagram.root} groups={diagram.groups} />
+      : null);
+
+  if (!diagramBody) {
+    throw new Error("DocsTemplatePage requires `diagram` or `diagramSlot`.");
+  }
+
+  const diagramSection = (
+    <SectionBlock id="diagram" title={diagramTitle} body={[]}>
+      {diagramBody}
+    </SectionBlock>
+  );
+
   return (
     <DocsContent>
       <PageTitle title={title} description={description} />
@@ -64,6 +94,8 @@ export function DocsTemplatePage({
       ) : null}
 
       <DocsScopeBlocks links={scopeLinks} />
+
+      {diagramAfterScope ? <div className="mt-5">{diagramSection}</div> : null}
 
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock id="overview" title="Overview" body={[]}>
@@ -80,16 +112,10 @@ export function DocsTemplatePage({
           <DocsInThisPageNav items={navItems} />
         </SectionBlock>
 
-        <SectionBlock id="diagram" title={diagramTitle} body={[]}>
-          {diagram.mode === "flow" ? (
-            <DocsDiagram mode="flow" steps={diagram.steps} />
-          ) : (
-            <DocsDiagram mode="structure" root={diagram.root} groups={diagram.groups} />
-          )}
-        </SectionBlock>
+        {diagramAfterScope ? null : diagramSection}
 
         <SectionBlock id="details" title={detailsTitle} body={[]}>
-          <LayerSpecAccordion items={detailsItems} />
+          <LayerSpecAccordion items={detailsItems} summaryVariant={detailsSummaryVariant} />
         </SectionBlock>
 
         <SectionBlock id="related-docs" title="Related Docs" body={[]}>

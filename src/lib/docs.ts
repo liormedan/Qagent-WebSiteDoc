@@ -218,12 +218,9 @@ const draftSkeletonSummaries: Record<string, string> = {
 };
 
 function asDraftSkeleton(page: DocPageContent, summary: string): DocPageContent {
-  const status = "Status: Ready for Implementation";
-  const description = page.description ? `${page.description} ${status}` : status;
-
   return {
     ...page,
-    description,
+    description: page.description?.trim() ?? "",
     sections: [
       {
         title: "Architecture Diagram",

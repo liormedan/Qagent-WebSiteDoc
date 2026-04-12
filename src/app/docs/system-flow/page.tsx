@@ -25,7 +25,12 @@ const flowDetails = [
     title: "Flow Governance",
     subtitle: "Single-flow authority",
     purpose: "Define this page as canonical flow reference reused across layer pages.",
-    defines: ["Single canonical sequence reference.", "Cross-layer transition consistency anchor.", "Non-duplication rule for flow declarations."],
+    defines: [
+      "Single canonical sequence reference.",
+      "Cross-layer transition consistency anchor.",
+      "Non-duplication rule for flow declarations.",
+      "Numbered runtime order is authority of /docs/system-runtime (R01–R12), not this page.",
+    ],
     doesNotDefine: "Competing flow definitions in subsystem pages.",
   },
 ] as const;
@@ -37,7 +42,7 @@ export default function SystemFlowPage() {
       description="Canonical cross-layer flow from user request to versioned output."
       sectionPath={["QAgent", "Cross-Layer References", "Runtime Graph / System Structure"]}
       scopeLinks={SYSTEM_FLOW_SCOPE_LINKS}
-      overviewIntro="This page is the canonical cross-layer flow reference used by System, QAgent, Client, and API pages."
+      overviewIntro="This page is the canonical narrative and diagram cross-layer flow reference. Numbered product runtime ordering lives at /docs/system-runtime; protected HTTP ordering at /docs/auth-security/system-flow; domain canonical hrefs at /docs/authority-map."
       overviewAreasTitle="Flow concerns"
       overviewAreas={[
         "End-to-end sequence integrity.",
@@ -70,7 +75,9 @@ export default function SystemFlowPage() {
         linkLabel: "Canonical page",
       }))}
       relatedDocs={[
-        "System Flow = canonical sequence authority.",
+        "/docs/system-runtime = numbered cross-layer product spine (R01–R12).",
+        "/docs/auth-security/system-flow = protected HTTP + bootstrap spine (S/B ids).",
+        "/docs/authority-map = canonical href per documentation domain.",
         "System page = system map authority.",
         "QAgent page = planning/handoff authority.",
         "API page = execution orchestration authority.",

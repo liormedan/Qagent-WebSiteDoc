@@ -25,7 +25,6 @@ const details = [
     defines: [
       "Canonical data is durable, governed, and referenced by lineage and identifiers owned by the Data Layer model.",
       "Downstream layers consume canonical projections; they do not silently replace canonical rows.",
-      "[TEXT TBD – expand Canonical vs Derived Data detail]",
     ],
     doesNotDefine: "Row-level schema definitions and migration scripts.",
     href: "/docs/data-layer/system-view",
@@ -39,7 +38,6 @@ const details = [
     defines: [
       "Derived data may be recomputed, cached for UX, or reconstructed for runtime without becoming the persistence authority.",
       "Promotion to canonical status follows Data Layer policy, not ad hoc client or API behavior.",
-      "[TEXT TBD – expand Canonical vs Derived Data detail]",
     ],
     doesNotDefine: "Transformation code paths and cache TTL tables.",
     href: "/docs/client/state-model",

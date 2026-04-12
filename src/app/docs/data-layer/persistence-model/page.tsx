@@ -25,7 +25,6 @@ const details = [
     defines: [
       "Canonical entities, lineage references, governed artifacts, and audit-worthy records persist.",
       "Persistence expectations are architectural; storage engines are out of scope here.",
-      "[TEXT TBD – expand Persistence Model detail]",
     ],
     doesNotDefine: "Database engine selection and sharding topology.",
     href: "/docs/data-layer/system-view",
@@ -39,7 +38,6 @@ const details = [
     defines: [
       "Ephemeral coordination buffers, disposable previews, and volatile execution mirrors stay transient by default.",
       "Promotion requires policy alignment with the Data Layer model.",
-      "[TEXT TBD – expand Persistence Model detail]",
     ],
     doesNotDefine: "In-memory execution state machines owned by runtime engines.",
     href: "/docs/api",

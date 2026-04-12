@@ -1,15 +1,18 @@
 import { normalizeDocListText } from "@/lib/docs-text";
+import { DocsDiagramNavCard } from "@/components/ui/DocsDiagramNavCard";
 
-type StructureGroup = {
+export type DocsDiagramStructureGroup = {
   title: string;
   items: string[];
+  /** When set, the whole group is a focusable link (same-page anchor). */
+  href?: string;
 };
 
 type DocsDiagramProps =
   | {
       mode: "structure";
       root: string;
-      groups: StructureGroup[];
+      groups: readonly DocsDiagramStructureGroup[];
     }
   | {
       mode: "flow";
@@ -41,18 +44,36 @@ export function DocsDiagram(props: DocsDiagramProps) {
       </div>
       <div className="mx-auto h-4 w-px bg-cyan-400/40" />
       <div className={props.groups.length <= 2 ? "grid gap-3 md:grid-cols-2" : "grid gap-3 md:grid-cols-3"}>
-        {props.groups.map((group) => (
-          <div key={group.title} className="rounded-md border border-[var(--border)] bg-slate-950/40 p-3">
-            <p className="text-center text-xs font-semibold uppercase tracking-wide text-slate-300">{normalizeDocListText(group.title)}</p>
-            <div className="mt-2 space-y-1.5 text-sm text-[var(--muted)]">
-              {group.items.map((item) => (
-                <div key={`${group.title}-${item}`} className="rounded-md border border-[var(--border)]/70 bg-slate-950/20 px-2.5 py-1.5 text-center leading-6">
-                  {normalizeDocListText(item)}
-                </div>
-              ))}
+        {props.groups.map((group) => {
+          const inner = (
+            <>
+              <p className="text-center text-xs font-semibold uppercase tracking-wide text-slate-300">{normalizeDocListText(group.title)}</p>
+              <div className="mt-2 space-y-1.5 text-sm text-[var(--muted)]">
+                {group.items.map((item) => (
+                  <div key={`${group.title}-${item}`} className="rounded-md border border-[var(--border)]/70 bg-slate-950/20 px-2.5 py-1.5 text-center leading-6">
+                    {normalizeDocListText(item)}
+                  </div>
+                ))}
+              </div>
+            </>
+          );
+          const cardClass =
+            "rounded-md border border-[var(--border)] bg-slate-950/40 p-3 hover:border-cyan-400/35 hover:bg-slate-900/50 focus-visible:ring-2 focus-visible:ring-cyan-400/50";
+
+          if (group.href) {
+            return (
+              <DocsDiagramNavCard key={group.title} href={group.href} className={cardClass}>
+                {inner}
+              </DocsDiagramNavCard>
+            );
+          }
+
+          return (
+            <div key={group.title} className={cardClass}>
+              {inner}
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
