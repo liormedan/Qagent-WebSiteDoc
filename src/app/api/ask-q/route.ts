@@ -129,6 +129,8 @@ export async function POST(request: Request) {
     }
 
     const pathname = typeof body?.pathname === "string" ? body.pathname.trim() : undefined;
+    const rollingTopicSummary =
+      typeof body?.sessionSummary === "string" ? body.sessionSummary.trim().slice(0, 420) : "";
     const history = parseAskQHistory(body?.history);
     const effectiveQuery = resolveFollowUpQuery(query, history);
     const interpreted = interpretQuery(effectiveQuery);
@@ -195,6 +197,7 @@ export async function POST(request: Request) {
         pathname: pathname || undefined,
         latestUserMessage: query,
         conversationSummary,
+        rollingTopicSummary: rollingTopicSummary || undefined,
         semanticIntent: interpreted.intent,
         semanticConcepts: interpreted.concepts,
       });
@@ -206,6 +209,7 @@ export async function POST(request: Request) {
         semanticIntent: interpreted.intent,
         semanticConcepts: interpreted.concepts,
         conversationSummary,
+        rollingTopicSummary: rollingTopicSummary || undefined,
       });
       const guarded = guardGeminiAnswer(rawAnswer, snapshot, contextBlock);
       if (!guarded.ok) {

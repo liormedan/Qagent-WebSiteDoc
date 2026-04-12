@@ -2,6 +2,8 @@
  * Lightweight semantic interpretation before retrieval (keywords only; no extra model call).
  */
 
+import { getGlossaryEntryById } from "@/lib/docs-glossary";
+
 export type AskQSemanticIntent = "overview" | "concept" | "flow" | "navigation";
 
 export type AskQInterpretedConcept = "system-runtime" | "contracts" | "authority-map" | "end-to-end";
@@ -21,11 +23,34 @@ const CONCEPT_LEXICAL: Record<AskQInterpretedConcept, string> = {
   "end-to-end": "end to end runtime truth cross layer ordering pipeline E2E",
 };
 
+/** Canonical glossary rows whose labels/aliases enrich the search surface per pillar concept. */
+const CONCEPT_GLOSSARY_ID: Record<AskQInterpretedConcept, string> = {
+  "system-runtime": "system-runtime",
+  contracts: "contracts-hub",
+  "authority-map": "authority-map",
+  "end-to-end": "runtime-truth",
+};
+
+function lexicalFromConceptGlossaryEntries(concepts: readonly AskQInterpretedConcept[]): string {
+  const chunks: string[] = [];
+  for (const c of concepts) {
+    const id = CONCEPT_GLOSSARY_ID[c];
+    const e = getGlossaryEntryById(id);
+    if (!e) continue;
+    const bits = [e.label, ...(e.aliases ?? []).slice(0, 10)];
+    chunks.push(bits.join(" "));
+    if (e.tags?.length) chunks.push(e.tags.slice(0, 8).join(" "));
+  }
+  return chunks.join(" ").replace(/\s+/g, " ").trim().slice(0, 700);
+}
+
 export function buildExpandedRetrievalQuery(
   normalizedQuery: string,
   concepts: readonly AskQInterpretedConcept[],
 ): string {
   const parts = [normalizedQuery];
+  const glossaryLex = lexicalFromConceptGlossaryEntries(concepts);
+  if (glossaryLex) parts.push(glossaryLex);
   for (const c of concepts) {
     const chunk = CONCEPT_LEXICAL[c];
     if (chunk) parts.push(chunk);

@@ -14,6 +14,7 @@ import { usePathname } from "next/navigation";
 import { assembleAskQContext } from "@/lib/askQRetrieval";
 import type { AskQSource } from "@/lib/askQRetrieval";
 import type { AskQSuggestion } from "@/lib/ask-q/guidedSuggestions";
+import { appendRollingTopicSummary } from "@/lib/ask-q/rollingTopicSummary";
 import { isAskQResponseMode, type AskQResponseMode } from "@/lib/ask-q/responseMode";
 
 export type AskQMessageRole = "user" | "assistant";
@@ -49,6 +50,7 @@ export function AskQProvider({ children }: { children: ReactNode }) {
   const panelTitleId = useId();
   const pathname = usePathname() ?? "";
   const messagesRef = useRef<AskQMessage[]>([]);
+  const rollingTopicRef = useRef("");
   const [panelOpen, setPanelOpen] = useState(false);
   const [messages, setMessages] = useState<AskQMessage[]>(() => [
     {
@@ -96,6 +98,7 @@ export function AskQProvider({ children }: { children: ReactNode }) {
         body: JSON.stringify({
           query: body,
           pathname: pathname.trim() || undefined,
+          ...(rollingTopicRef.current.trim() ? { sessionSummary: rollingTopicRef.current.trim() } : {}),
           ...(historyPayload.length ? { history: historyPayload } : {}),
         }),
       });
@@ -137,6 +140,7 @@ export function AskQProvider({ children }: { children: ReactNode }) {
         .map((s) => ({ href: s.href, title: s.title }));
 
       if (answer?.trim()) {
+        rollingTopicRef.current = appendRollingTopicSummary(rollingTopicRef.current, answer);
         setMessages((prev) => [
           ...prev,
           {
@@ -156,6 +160,7 @@ export function AskQProvider({ children }: { children: ReactNode }) {
       const { answer: localAnswer, sources: localSources } = assembleAskQContext(body, {
         pathname: pathname.trim() || undefined,
       });
+      rollingTopicRef.current = appendRollingTopicSummary(rollingTopicRef.current, localAnswer);
       setMessages((prev) => [
         ...prev,
         {
@@ -171,6 +176,7 @@ export function AskQProvider({ children }: { children: ReactNode }) {
       const { answer, sources } = assembleAskQContext(body, {
         pathname: pathname.trim() || undefined,
       });
+      rollingTopicRef.current = appendRollingTopicSummary(rollingTopicRef.current, answer);
       setMessages((prev) => [
         ...prev,
         {

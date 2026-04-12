@@ -4,7 +4,7 @@ import {
   INTERPRETED_CONCEPT_HREF_PREFIX,
   type AskQInterpretedConcept,
 } from "@/lib/ask-q/interpretQuery";
-import { searchDocsNavPages, type DocsNavPageHit } from "@/lib/searchGlossary";
+import { glossarySearchScopeForFilter, searchDocsNavPages, type DocsNavPageHit } from "@/lib/searchGlossary";
 import { normalizeSearchQuery, searchGlossaryTerms, type GlossarySearchResult } from "@/lib/searchGlossaryTerms";
 import { TERMINOLOGY_ENTRIES, type TerminologyEntry } from "@/lib/terminology-registry";
 
@@ -112,8 +112,28 @@ export function retrieveGlossaryMatches(query: string): GlossarySearchResult[] {
   return searchGlossaryTerms(query, { limit: GLOSSARY_MATCH_LIMIT });
 }
 
-function retrieveGlossaryCandidatesForAskQ(query: string): GlossarySearchResult[] {
-  return searchGlossaryTerms(query, { limit: RETRIEVAL_CANDIDATE_POOL });
+function mergeGlossaryResultsByEntryId(a: GlossarySearchResult[], b: GlossarySearchResult[]): GlossarySearchResult[] {
+  const byId = new Map<string, GlossarySearchResult>();
+  for (const h of a) {
+    byId.set(h.entry.id, h);
+  }
+  for (const h of b) {
+    const prev = byId.get(h.entry.id);
+    if (!prev || h.score > prev.score) byId.set(h.entry.id, h);
+  }
+  return [...byId.values()].sort((x, y) => {
+    if (y.score !== x.score) return y.score - x.score;
+    return x.entry.label.localeCompare(y.entry.label, undefined, { sensitivity: "base" });
+  });
+}
+
+/** Wider glossary pool: merges path-scoped hits with global hits so cross-layer terms are not dropped. */
+function retrieveGlossaryCandidatesForAskQ(query: string, pathname?: string): GlossarySearchResult[] {
+  const globalHits = searchGlossaryTerms(query, { limit: RETRIEVAL_CANDIDATE_POOL });
+  const scope = pathname?.trim() ? glossarySearchScopeForFilter(pathname.trim()) : undefined;
+  if (!scope) return globalHits;
+  const scopedHits = searchGlossaryTerms(query, { limit: RETRIEVAL_CANDIDATE_POOL, scope });
+  return mergeGlossaryResultsByEntryId(scopedHits, globalHits).slice(0, RETRIEVAL_CANDIDATE_POOL);
 }
 
 function hrefTouchesCoreDoc(href: string): boolean {
@@ -371,7 +391,10 @@ export function gatherAskQRetrieval(queryOrOpts: string | GatherAskQRetrievalOpt
     expanded = `${expanded} ${opts.lexicalContext.trim()}`.replace(/\s+/g, " ").trim().slice(0, 1800);
   }
 
-  const glossaryHits = rerankGlossaryHits(retrieveGlossaryCandidatesForAskQ(expanded), boostOpts);
+  const glossaryHits = rerankGlossaryHits(
+    retrieveGlossaryCandidatesForAskQ(expanded, opts.pathname),
+    boostOpts,
+  );
   const registryHits = rerankRegistryHits(retrieveRegistryMatches(expanded, RETRIEVAL_CANDIDATE_POOL), boostOpts);
   const sourceDocs = rerankSourceDocs(retrieveSourceDocs(expanded, RETRIEVAL_CANDIDATE_POOL), boostOpts);
   const sources = collectSourcesFromHits(glossaryHits, registryHits, sourceDocs);
@@ -388,6 +411,8 @@ export type AskQLlmContextExtras = {
   pathname?: string;
   latestUserMessage?: string;
   conversationSummary?: string;
+  /** Client-maintained short summary of the running thread topic (capped by caller). */
+  rollingTopicSummary?: string;
   semanticIntent?: string;
   semanticConcepts?: readonly string[];
 };
@@ -418,6 +443,12 @@ export function formatAskQContextForLlm(snap: AskQRetrievalSnapshot, extras?: As
   if (extras?.conversationSummary?.trim()) {
     lines.push("### Recent conversation (truncated)");
     lines.push(extras.conversationSummary.trim());
+    lines.push("");
+  }
+
+  if (extras?.rollingTopicSummary?.trim()) {
+    lines.push("### Running topic summary (from prior turns; may be partial)");
+    lines.push(extras.rollingTopicSummary.trim());
     lines.push("");
   }
 

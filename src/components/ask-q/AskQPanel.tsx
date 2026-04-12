@@ -6,6 +6,7 @@ import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAskQ } from "@/components/ask-q/AskQProvider";
+import { transparencyLineForMode } from "@/lib/ask-q/modeTransparency";
 import type { AskQResponseMode } from "@/lib/ask-q/responseMode";
 import type { AskQMessage } from "./AskQProvider";
 
@@ -100,7 +101,10 @@ export function AskQPanel() {
         aria-live="polite"
         aria-relevant="additions"
       >
-        {messages.map((m) => (
+        {messages.map((m) => {
+          const transparency =
+            m.role === "assistant" && m.mode ? transparencyLineForMode(m.mode) : undefined;
+          return (
           <div
             key={m.id}
             className={cn(
@@ -112,6 +116,9 @@ export function AskQPanel() {
           >
             <span className="sr-only">{m.role === "user" ? "You: " : "Assistant: "}</span>
             {m.role === "assistant" && m.mode ? <AskQModeBadge mode={m.mode} /> : null}
+            {transparency ? (
+              <p className="mb-1 text-[10px] leading-snug text-slate-500">{transparency}</p>
+            ) : null}
             {m.role === "assistant" && m.confidence != null ? (
               <p className="mb-1 text-[10px] text-slate-500">Confidence {Math.round(m.confidence * 100)}%</p>
             ) : null}
@@ -167,7 +174,8 @@ export function AskQPanel() {
               </div>
             ) : null}
           </div>
-        ))}
+          );
+        })}
         {composing ? (
           <div className="mr-2 rounded-lg border border-slate-700/40 bg-slate-900/30 px-3 py-2 text-[13px] text-slate-400">
             <span className="inline-flex gap-1">
