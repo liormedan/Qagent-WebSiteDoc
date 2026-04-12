@@ -13,6 +13,7 @@ import {
 } from "react";
 import { assembleAskQContext } from "@/lib/askQRetrieval";
 import type { AskQSource } from "@/lib/askQRetrieval";
+import { isAskQResponseMode, type AskQResponseMode } from "@/lib/ask-q/responseMode";
 
 export type AskQMessageRole = "user" | "assistant";
 
@@ -22,6 +23,8 @@ export type AskQMessage = {
   content: string;
   createdAt: number;
   sources?: readonly AskQSource[];
+  /** Present on assistant messages from /api/ask-q or client fallback. */
+  mode?: AskQResponseMode;
 };
 
 type AskQContextValue = {
@@ -70,6 +73,9 @@ export function AskQProvider({ children }: { children: ReactNode }) {
 
     const assistantId = `a-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
+    const NOTICE =
+      "Something went wrong — showing docs-based answer.";
+
     try {
       const res = await fetch("/api/ask-q", {
         method: "POST",
@@ -80,9 +86,23 @@ export function AskQProvider({ children }: { children: ReactNode }) {
       const record = data && typeof data === "object" ? (data as Record<string, unknown>) : {};
       const answer = typeof record.answer === "string" ? record.answer : null;
       const sources = Array.isArray(record.sources) ? record.sources : null;
+      const modeRaw = record.mode;
+      const mode = isAskQResponseMode(modeRaw) ? modeRaw : undefined;
 
       if (!res.ok || !answer) {
-        throw new Error(typeof record.error === "string" ? record.error : `ask-q ${res.status}`);
+        const { answer: localAnswer, sources: localSources } = assembleAskQContext(body);
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: assistantId,
+            role: "assistant",
+            content: `${NOTICE}\n\n${localAnswer}`,
+            sources: localSources,
+            mode: "client_fallback",
+            createdAt: Date.now(),
+          },
+        ]);
+        return;
       }
 
       const normalizedSources = sources
@@ -100,6 +120,7 @@ export function AskQProvider({ children }: { children: ReactNode }) {
           role: "assistant",
           content: answer,
           sources: normalizedSources && normalizedSources.length > 0 ? normalizedSources : undefined,
+          mode,
           createdAt: Date.now(),
         },
       ]);
@@ -110,8 +131,9 @@ export function AskQProvider({ children }: { children: ReactNode }) {
         {
           id: assistantId,
           role: "assistant",
-          content: answer,
+          content: `${NOTICE}\n\n${answer}`,
           sources,
+          mode: "client_fallback",
           createdAt: Date.now(),
         },
       ]);

@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import type { AskQSource } from "@/lib/askQRetrieval";
+import { detectIntent } from "@/lib/ask-q/intent";
 import { releaseGeminiDailySlot, reserveGeminiDailySlot } from "@/lib/ask-q/geminiDailyLimit";
 import { assembleAskQFromSnapshot, gatherAskQRetrieval, formatAskQContextForLlm } from "@/lib/askQRetrieval";
 import { generateAskQWithGemini } from "@/lib/ask-q/providers/gemini";
@@ -6,6 +8,12 @@ import { generateAskQWithGemini } from "@/lib/ask-q/providers/gemini";
 export const runtime = "nodejs";
 
 const MAX_QUERY_LEN = 6000;
+
+const GREETING_REPLY =
+  "Hi — I'm Ask Q for WaveQ docs. Ask about **system runtime**, **contracts**, **authority map**, **client layer**, or **end-to-end flow**, and I'll answer from the documentation.";
+
+const LOW_SIGNAL_REPLY =
+  "Could you add a bit more detail? Try a concrete topic, for example: **system runtime**, **contracts**, **authority map**, or **end-to-end flow**.";
 
 function dailyLimitAnswerHe(assembledAnswer: string, utcDay: string): string {
   return [
@@ -30,12 +38,39 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Query too long" }, { status: 400 });
     }
 
-    // Single retrieval pass; `assembleAskQFromSnapshot` matches `assembleAskQContext(query)` output.
+    const intent = detectIntent(query);
+    if (intent === "greeting") {
+      return NextResponse.json({
+        answer: GREETING_REPLY,
+        sources: [] satisfies AskQSource[],
+        mode: "greeting" as const,
+      });
+    }
+    if (intent === "low_signal") {
+      return NextResponse.json({
+        answer: LOW_SIGNAL_REPLY,
+        sources: [] satisfies AskQSource[],
+        mode: "low_signal" as const,
+      });
+    }
+
     const snapshot = gatherAskQRetrieval(query);
     const assembled = assembleAskQFromSnapshot(snapshot);
-    const contextBlock = formatAskQContextForLlm(snapshot);
 
     if (!process.env.GEMINI_API_KEY?.trim()) {
+      return NextResponse.json({
+        answer: assembled.answer,
+        sources: snapshot.sources,
+        mode: "retrieval" as const,
+      });
+    }
+
+    const hasRetrievalContext =
+      snapshot.glossaryHits.length > 0 ||
+      snapshot.registryHits.length > 0 ||
+      snapshot.sourceDocs.length > 0;
+
+    if (!hasRetrievalContext) {
       return NextResponse.json({
         answer: assembled.answer,
         sources: snapshot.sources,
@@ -53,6 +88,7 @@ export async function POST(request: Request) {
     }
 
     try {
+      const contextBlock = formatAskQContextForLlm(snapshot);
       const answer = await generateAskQWithGemini({ query, contextBlock });
       return NextResponse.json({
         answer,

@@ -6,6 +6,25 @@ import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAskQ } from "@/components/ask-q/AskQProvider";
+import type { AskQResponseMode } from "@/lib/ask-q/responseMode";
+
+const MODE_LABEL: Record<AskQResponseMode, string> = {
+  gemini: "Gemini",
+  retrieval: "Docs",
+  retrieval_fallback: "Fallback",
+  daily_limit: "Limit",
+  greeting: "Welcome",
+  low_signal: "Ask more",
+  client_fallback: "Docs",
+};
+
+function AskQModeBadge({ mode }: { mode: AskQResponseMode }) {
+  return (
+    <span className="mb-1 inline-block rounded border border-slate-600/70 bg-slate-800/90 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-400">
+      {MODE_LABEL[mode]}
+    </span>
+  );
+}
 
 export function AskQPanel() {
   const { panelOpen, closePanel, messages, sendMessage, composing, panelTitleId } = useAskQ();
@@ -80,6 +99,7 @@ export function AskQPanel() {
             )}
           >
             <span className="sr-only">{m.role === "user" ? "You: " : "Assistant: "}</span>
+            {m.role === "assistant" && m.mode ? <AskQModeBadge mode={m.mode} /> : null}
             <p className="whitespace-pre-wrap break-words">{m.content}</p>
             {m.role === "assistant" && m.sources && m.sources.length > 0 ? (
               <div className="mt-2.5 border-t border-slate-700/55 pt-2">

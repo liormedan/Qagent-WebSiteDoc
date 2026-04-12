@@ -1,4 +1,6 @@
 export { AskQProvider, useAskQ, type AskQMessage, type AskQMessageRole } from "@/components/ask-q/AskQProvider";
+export { detectIntent, type AskQIntent } from "@/lib/ask-q/intent";
+export { isAskQResponseMode, type AskQResponseMode } from "@/lib/ask-q/responseMode";
 export type { AskQSource } from "@/lib/askQRetrieval";
 export {
   assembleAskQContext,

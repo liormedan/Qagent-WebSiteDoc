@@ -133,9 +133,15 @@ function buildRetrievalTemplateAnswer(snap: AskQRetrievalSnapshot): string {
   if (!snap.glossaryHits.length && !snap.registryHits.length && !snap.sourceDocs.length) {
     const qShow = truncate(raw, 100);
     return [
-      `No matches in the WaveQ glossary, terminology registry, or docs navigation index for “${qShow}”.`,
+      "I couldn't find a direct answer in the documentation.",
       "",
-      "Try a term from the docs (for example: runtime spine, authority map, contracts hub, event envelope) or open Terminology for curated definitions.",
+      "Try asking about:",
+      "- system runtime",
+      "- contracts",
+      "- authority map",
+      "- end-to-end flow",
+      "",
+      `(Your query: “${qShow}”)`,
     ].join("\n");
   }
 
