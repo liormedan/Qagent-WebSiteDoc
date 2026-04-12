@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { BookOpen, ChevronDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { AskQLauncher } from "@/components/ask-q/AskQLauncher";
 import { DocsHeaderSearch } from "@/components/layout/DocsHeaderSearch";
 import { DocsNavMegaFlyout, DocsNavMegaMobileBlock } from "@/components/layout/DocsNavMegaMenu";
 import {
@@ -157,21 +157,11 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
             >
               <BookOpen className="h-[18px] w-[18px]" aria-hidden />
             </Link>
+            <AskQLauncher />
             <div className="hidden min-w-0 flex-1 md:block">
               <DocsHeaderSearch />
             </div>
           </div>
-
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            className="hidden w-[88px] shrink-0 justify-center md:inline-flex"
-            title="Ask anything about WaveQ..."
-            aria-label="Ask anything about WaveQ..."
-          >
-            Ask Q
-          </Button>
 
           <button type="button" onClick={onOpenToc} className="rounded-md border border-[var(--border)] px-3 py-1.5 text-sm text-slate-200 md:hidden">
             On this page

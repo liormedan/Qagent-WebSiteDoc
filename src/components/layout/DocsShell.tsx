@@ -2,6 +2,8 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { AskQPanel } from "@/components/ask-q/AskQPanel";
+import { AskQProvider } from "@/components/ask-q/AskQProvider";
 import { DocsHeader } from "@/components/layout/DocsHeader";
 import { DocsPager } from "@/components/layout/DocsPager";
 import { DocsSidebar } from "@/components/layout/DocsSidebar";
@@ -88,6 +90,7 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
           : undefined;
 
   return (
+    <AskQProvider>
     <div className="bg-[var(--bg)] text-[var(--text)]">
       <DocsHeader onOpenMenu={() => setMobileMenuOpen(true)} onOpenToc={() => setMobileTocOpen(true)} />
 
@@ -154,6 +157,9 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       ) : null}
+
+      <AskQPanel />
     </div>
+    </AskQProvider>
   );
 }
