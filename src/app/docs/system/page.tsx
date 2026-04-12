@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AutoLinkedText } from "@/components/docs/AutoLinkedText";
 import { DocsContent } from "@/components/layout/DocsContent";
 import { DocsDiagram } from "@/components/ui/DocsDiagram";
 import { DocsInThisPageNav } from "@/components/ui/DocsInThisPageNav";
@@ -87,6 +88,7 @@ export default function SystemPage() {
       <div className="mt-5 flex flex-col gap-5">
         <SectionBlock id="overview" title="Overview" body={[]}>
           <DocsOverviewBlock
+            glossaryScope="system"
             intro="WaveQ is organized into primary execution layers and supporting layers with a single end-to-end flow from user input to versioned output."
             areasTitle="System concerns"
             areas={[
@@ -116,7 +118,10 @@ export default function SystemPage() {
 
         <SectionBlock id="system-structure-diagram" title="System Structure Diagram" body={[]}>
           <p className="mb-3 text-sm text-[var(--muted)]">
-            High-level map aligned with the canonical docs for each layer: primary execution path, persistence and DSP, platform/security, and where to read sequencing (not shown as a step graph here).
+            <AutoLinkedText
+              glossaryScope="system"
+              text="High-level map aligned with the canonical docs for each layer: primary execution path, persistence and DSP, platform/security, and where to read sequencing (not shown as a step graph here). See Terminology for shared vocabulary."
+            />
           </p>
           <DocsDiagram
             mode="structure"
@@ -144,6 +149,7 @@ export default function SystemPage() {
 
         <SectionBlock id="layer-details" title="Layer Details" body={[]}>
           <LayerSpecAccordion
+            glossaryScope="system"
             items={layerNavigationCards.map((layer) => ({
               id: layer.id,
               title: layer.title,
@@ -159,15 +165,21 @@ export default function SystemPage() {
 
         <SectionBlock id="related-docs" title="Related Docs" body={[]}>
           <DocsRelatedDocs
+            glossaryScope="system"
             items={[
-              "System page = architecture map and layer boundaries.",
+              "System overview = architecture map and layer boundaries.",
               "Layer pages = deep specification authority.",
-              "System Flow page = cross-layer transitions.",
+              "System flow page = cross-layer transitions. Contracts hub lists interfaces; Schema registry holds rows.",
             ]}
           />
           <div className="mt-4 rounded-md border border-[var(--border)] bg-slate-950/30 p-3 text-sm text-[var(--muted)]">
             <p className="font-semibold text-slate-100">Secondary references</p>
             <ul className="mt-2 list-disc space-y-1 pl-5">
+              <li>
+                <Link href="/docs/terminology" className="font-medium text-[var(--accent)] hover:underline">
+                  Terminology — glossary index (DOCS_GLOSSARY)
+                </Link>
+              </li>
               <li><Link href="/docs/system-flow" className="font-medium text-[var(--accent)] hover:underline">Flow Diagram and Cross-Layer Runtime Flow</Link></li>
               <li><Link href="/docs/system-flow#system-edge-case-handling" className="font-medium text-[var(--accent)] hover:underline">System Edge Case Handling</Link></li>
               <li><Link href="/docs/system-flow#system-error-ownership-model" className="font-medium text-[var(--accent)] hover:underline">System Error Ownership Model</Link></li>

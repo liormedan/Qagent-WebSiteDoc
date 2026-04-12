@@ -1,6 +1,7 @@
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { AutoLinkedText } from "@/components/docs/AutoLinkedText";
 import { normalizeDocListText } from "@/lib/docs-text";
 
 export type DocsDetailsItem = {
@@ -25,6 +26,7 @@ export function DocsDetailsAccordion({
   defaultOpenAll = false,
   summaryVariant = "default",
   variant = "spec",
+  glossaryScope,
 }: {
   items: readonly DocsDetailsItem[];
   defaultOpenAll?: boolean;
@@ -32,8 +34,13 @@ export function DocsDetailsAccordion({
   summaryVariant?: DocsDetailsSummaryVariant;
   /** `chapter`: chapter index rows — title-only summary; body is short description + CTA link only. */
   variant?: DocsDetailsAccordionVariant;
+  /** When set, glossary autolinking applies to purpose / defines / does-not-define (not titles). */
+  glossaryScope?: string;
 }) {
   const isChapter = variant === "chapter";
+
+  const bodyText = (raw: string) =>
+    glossaryScope ? <AutoLinkedText text={raw} scope={glossaryScope} /> : normalizeDocListText(raw);
 
   return (
     <div className="space-y-4 text-sm">
@@ -61,7 +68,7 @@ export function DocsDetailsAccordion({
                   {showSummaryPurposePreview ? (
                     <>
                       <span className="mt-2 block text-[11px] uppercase tracking-wide text-slate-500">Preview</span>
-                      <span className="mt-0.5 block text-xs leading-5 text-slate-400">{normalizeDocListText(item.purpose)}</span>
+                      <span className="mt-0.5 block text-xs leading-5 text-slate-400">{bodyText(item.purpose)}</span>
                     </>
                   ) : null}
                 </span>
@@ -70,7 +77,7 @@ export function DocsDetailsAccordion({
               <div className="border-t border-[var(--border)]">
                 {isChapter ? (
                   <div className="space-y-3 px-3 py-3">
-                    <p className="text-sm leading-relaxed text-[var(--muted)]">{normalizeDocListText(item.purpose)}</p>
+                    <p className="text-sm leading-relaxed text-[var(--muted)]">{bodyText(item.purpose)}</p>
                     <Link
                       href={item.href}
                       className="inline-flex items-center gap-1 text-sm font-semibold text-[var(--accent)] hover:underline"
@@ -82,7 +89,7 @@ export function DocsDetailsAccordion({
                   <div className="space-y-3 px-3 py-3">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">Detail Content</p>
                     <p className="rounded-md bg-slate-900/30 px-2.5 py-2 text-[var(--muted)]">
-                      <span className="font-semibold text-slate-100">Purpose:</span> {normalizeDocListText(item.purpose)}
+                      <span className="font-semibold text-slate-100">Purpose:</span> {bodyText(item.purpose)}
                     </p>
                     {defineLines.length > 0 ? (
                       <>
@@ -90,7 +97,7 @@ export function DocsDetailsAccordion({
                         <div className="space-y-2 text-[var(--muted)]">
                           {defineLines.map((line, lineIndex) => (
                             <div key={`${item.id}-defines-${lineIndex}`} className="rounded-md border border-[var(--border)]/70 bg-slate-950/20 px-2.5 py-2 leading-6">
-                              {normalizeDocListText(line)}
+                              {bodyText(line)}
                             </div>
                           ))}
                         </div>
@@ -98,7 +105,7 @@ export function DocsDetailsAccordion({
                     ) : null}
                     {item.supplement ? <div className="space-y-2">{item.supplement}</div> : null}
                     <p className="rounded-md bg-slate-900/30 px-2.5 py-2 text-[var(--muted)]">
-                      <span className="font-semibold text-slate-100">Does not define:</span> {normalizeDocListText(item.doesNotDefine)}
+                      <span className="font-semibold text-slate-100">Does not define:</span> {bodyText(item.doesNotDefine)}
                     </p>
                     <Link href={item.href} className="inline-block text-sm font-medium text-[var(--accent)] hover:underline">
                       {item.linkLabel ?? "Related section"}

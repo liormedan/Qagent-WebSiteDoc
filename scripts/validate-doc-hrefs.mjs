@@ -14,6 +14,7 @@ function shouldScanForDocHrefs(absPath) {
   if (n.endsWith("/src/lib/authority-map.ts")) return true;
   if (n.endsWith("/src/lib/system-runtime-spine.ts")) return true;
   if (n.endsWith("/src/lib/docs.ts")) return true;
+  if (n.endsWith("/src/lib/docs-glossary.ts")) return true;
   if (n.endsWith("/src/lib/docs/concept-registry.ts")) return true;
   if (n.endsWith("/src/lib/client-canonical.ts")) return true;
   return false;
@@ -53,6 +54,8 @@ function collectDocRoutes() {
 
 function normalizeDocHref(h) {
   let x = h.replace(/\/+$/, "");
+  const hash = x.indexOf("#");
+  if (hash !== -1) x = x.slice(0, hash);
   if (x === "/docs/qagent") x = "/docs/q-agent";
   return x;
 }

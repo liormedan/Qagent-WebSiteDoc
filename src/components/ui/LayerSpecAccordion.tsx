@@ -14,11 +14,13 @@ export function LayerSpecAccordion({
   defaultOpenAll = false,
   summaryVariant,
   variant,
+  glossaryScope,
 }: {
   items: LayerSpecItem[];
   defaultOpenAll?: boolean;
   summaryVariant?: DocsDetailsSummaryVariant;
   variant?: DocsDetailsAccordionVariant;
+  glossaryScope?: string;
 }) {
   return (
     <DocsDetailsAccordion
@@ -26,6 +28,7 @@ export function LayerSpecAccordion({
       defaultOpenAll={defaultOpenAll}
       summaryVariant={summaryVariant}
       variant={variant}
+      glossaryScope={glossaryScope}
     />
   );
 }

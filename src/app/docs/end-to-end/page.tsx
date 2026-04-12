@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AutoLinkedText } from "@/components/docs/AutoLinkedText";
 import { DocsContent } from "@/components/layout/DocsContent";
 import { DocsDiagram } from "@/components/ui/DocsDiagram";
 import { DocsInThisPageNav } from "@/components/ui/DocsInThisPageNav";
@@ -119,6 +120,7 @@ export default function EndToEndOverviewPage() {
           summaryPreview="Top-level entry for End-to-end docs: how this layer relates to System, runtime spines, and contracts."
         >
           <DocsOverviewBlock
+            glossaryScope="end-to-end"
             intro="The End-to-end layer is the home for documentation that spans all product layers without re-stating layer-owned specs. It mirrors other layer sections: an overview on this page, chapter pages for each topic, and explicit links to authoritative hubs (system-runtime, auth system flow, contracts, authority map)."
             areasTitle="What you will find here"
             areas={[
@@ -170,7 +172,9 @@ export default function EndToEndOverviewPage() {
         </SectionBlock>
 
         <SectionBlock id="related-docs" title="Related Docs" body={[]}>
-          <p className="text-xs text-slate-500">Cross-layer authorities (not the placement strip above).</p>
+          <p className="text-xs text-slate-500">
+            <AutoLinkedText text="Cross-layer authorities (not the placement strip above)." scope="end-to-end" />
+          </p>
           <ul className="mt-2 list-none space-y-1.5 text-sm text-[var(--muted)]">
             <li>
               <Link href="/docs/system-runtime" className="font-medium text-[var(--accent)] hover:underline">
@@ -196,11 +200,17 @@ export default function EndToEndOverviewPage() {
               </Link>
               <span className="text-xs text-slate-500"> · S/B spine and security specs</span>
             </li>
+            <li>
+              <Link href="/docs/terminology" className="font-medium text-[var(--accent)] hover:underline">
+                Terminology
+              </Link>
+              <span className="text-xs text-slate-500"> · canonical glossary index (labels, aliases, scopes)</span>
+            </li>
           </ul>
         </SectionBlock>
 
         <SectionBlock id="end-to-end-details" title="End-to-end details" body={[]}>
-          <LayerSpecAccordion items={[...overviewDetails]} />
+          <LayerSpecAccordion glossaryScope="end-to-end" items={[...overviewDetails]} />
         </SectionBlock>
       </div>
     </DocsContent>

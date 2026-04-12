@@ -23,6 +23,7 @@ export const SYSTEM_HOME_SCOPE_LINKS: readonly DocsScopeLink[] = [
 export const END_TO_END_OVERVIEW_SCOPE_LINKS: readonly DocsScopeLink[] = [
   { href: "/docs/end-to-end/system-placement", label: "System placement (this layer)" },
   { href: "/docs/system/end-to-end-flow", label: "Placement diagram (System)" },
+  { href: "/docs/terminology", label: "Terminology (glossary index)" },
 ] as const;
 
 /** End-to-end chapter pages: back to overview + system placement child (same pattern as DATA_LAYER_SUBPAGE_SCOPE_LINKS). */

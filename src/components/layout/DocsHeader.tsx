@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { ChevronDown } from "lucide-react";
+import { BookOpen, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { DocsHeaderSearch } from "@/components/layout/DocsHeaderSearch";
+import { DocsNavMegaFlyout, DocsNavMegaMobileBlock } from "@/components/layout/DocsNavMegaMenu";
 import {
   DOCS_NAV_GROUPS,
   type DocsNavGroupId,
@@ -30,6 +31,7 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
 
   const { clientActive, authSecurityActive } = getDocsNavActivityFlags(safePathname);
   const developmentActive = normalizeDocsPath(safePathname) === "/docs/development";
+  const terminologyActive = normalizeDocsPath(safePathname) === "/docs/terminology";
 
   const [openGroupId, setOpenGroupId] = useState<DocsNavGroupId | null>(null);
   const [mobileBrowseOpen, setMobileBrowseOpen] = useState(false);
@@ -76,7 +78,7 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
 
   const sourcesNavTabClass = (active: boolean) =>
     cn(
-      "flex max-w-[152px] shrink-0 items-center gap-0.5 rounded-md px-2 py-1.5 text-left text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors lg:max-w-none lg:px-2.5 lg:text-sm lg:tracking-[0.09em]",
+      "flex max-w-[152px] shrink-0 items-center gap-0.5 rounded-full px-2.5 py-1.5 text-left text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors lg:max-w-none lg:px-3 lg:text-sm lg:tracking-[0.09em]",
       active ? "bg-slate-800/90 text-slate-50" : "text-slate-400 hover:bg-slate-900/80 hover:text-slate-200",
     );
 
@@ -103,8 +105,8 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
                     <button
                       type="button"
                       className={cn(
-                        "flex max-w-[152px] items-center gap-0.5 rounded-md px-2 py-1.5 text-left text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors lg:max-w-none lg:px-2.5 lg:text-sm lg:tracking-[0.09em]",
-                        routeActive || flyoutOpen ? "bg-slate-800/90 text-slate-50" : "text-slate-400 hover:bg-slate-900/80 hover:text-slate-200",
+                        "flex max-w-[152px] items-center gap-0.5 rounded-full px-2.5 py-1.5 text-left text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors lg:max-w-none lg:px-3 lg:text-sm lg:tracking-[0.09em]",
+                        routeActive || flyoutOpen ? "bg-slate-800/95 text-slate-50" : "text-slate-400 hover:bg-slate-900/80 hover:text-slate-200",
                       )}
                       aria-expanded={flyoutOpen}
                       aria-haspopup="menu"
@@ -122,29 +124,12 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
                       aria-labelledby={`docs-nav-group-${group.id}`}
                       hidden={!flyoutOpen}
                       className={cn(
-                        "absolute left-0 top-full z-50 mt-1 min-w-[11rem] rounded-md border border-[var(--border)] bg-[#0d1428f2] py-1.5 shadow-xl backdrop-blur",
-                        !flyoutOpen && "pointer-events-none invisible opacity-0",
-                        flyoutOpen && "visible opacity-100",
+                        "absolute left-0 top-full z-50 mt-2 w-[min(calc(100vw-1.5rem),42rem)] origin-top rounded-xl border border-slate-800/90 bg-[#070a12] shadow-[0_24px_80px_-12px_rgba(0,0,0,0.78)] ring-1 ring-white/[0.04] backdrop-blur-xl transition-[opacity,transform] duration-150 ease-out",
+                        !flyoutOpen && "pointer-events-none invisible scale-[0.98] opacity-0",
+                        flyoutOpen && "visible scale-100 opacity-100",
                       )}
                     >
-                      {group.items.map((item) => {
-                        const itemActive = item.matches(safePathname);
-                        return (
-                          <Link
-                            key={item.href}
-                            href={item.href}
-                            role="menuitem"
-                            aria-current={itemActive ? "page" : undefined}
-                            className={cn(
-                              "block whitespace-nowrap px-3 py-2.5 text-[0.9375rem] leading-snug tracking-[0.01em] transition-colors",
-                              itemActive ? "bg-cyan-500/15 text-cyan-100" : "text-slate-200 hover:bg-slate-800/90",
-                            )}
-                            onClick={() => setOpenGroupId(null)}
-                          >
-                            {item.label}
-                          </Link>
-                        );
-                      })}
+                      <DocsNavMegaFlyout group={group} pathname={safePathname} onPick={() => setOpenGroupId(null)} />
                     </div>
                   </div>
                 );
@@ -160,8 +145,21 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
             </nav>
           </div>
 
-          <div className="ml-auto hidden min-w-0 max-w-[200px] shrink-0 md:block lg:max-w-[280px]">
-            <Input placeholder="Search Documentation" aria-label="Search Documentation" />
+          <div className="ml-auto flex min-w-0 max-w-[calc(100vw-12rem)] shrink-0 items-center gap-1.5 sm:max-w-none md:max-w-[min(320px,calc(100vw-20rem)))] lg:max-w-[360px]">
+            <Link
+              href="/docs/terminology"
+              className={cn(
+                "flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-slate-700/90 bg-slate-950/60 text-slate-300 transition-colors hover:border-cyan-500/35 hover:bg-slate-800/85 hover:text-cyan-100/95",
+                terminologyActive && "border-cyan-500/40 bg-cyan-500/10 text-cyan-100 ring-1 ring-cyan-400/35",
+              )}
+              aria-label="Terminology — glossary index (A–Z by scope)"
+              title="Terminology (glossary index)"
+            >
+              <BookOpen className="h-[18px] w-[18px]" aria-hidden />
+            </Link>
+            <div className="hidden min-w-0 flex-1 md:block">
+              <DocsHeaderSearch />
+            </div>
           </div>
 
           <Button
@@ -206,26 +204,17 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
             <ChevronDown className={cn("h-4 w-4 shrink-0 text-slate-400 transition-transform", mobileBrowseOpen && "rotate-180")} aria-hidden />
           </button>
           {mobileBrowseOpen ? (
-            <div className="space-y-3 border-t border-[var(--border)]/40 px-1 pb-2 pt-2">
+            <div className="space-y-4 border-t border-[var(--border)]/40 px-1 pb-2 pt-2">
               {DOCS_NAV_GROUPS.map((group) => (
-                <div key={group.id}>
-                  <p className="px-2 pb-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">{group.label}</p>
-                  <div className="flex flex-col gap-0.5">
-                    {group.items.map((item) => {
-                      const itemActive = item.matches(safePathname);
-                      return (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          className={cn(linkBase, itemActive ? linkActive : linkIdle)}
-                          onClick={() => setMobileBrowseOpen(false)}
-                        >
-                          {item.label}
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </div>
+                <DocsNavMegaMobileBlock
+                  key={group.id}
+                  group={group}
+                  pathname={safePathname}
+                  onPick={() => setMobileBrowseOpen(false)}
+                  linkBase={linkBase}
+                  linkIdle={linkIdle}
+                  linkActive={linkActive}
+                />
               ))}
             </div>
           ) : null}
