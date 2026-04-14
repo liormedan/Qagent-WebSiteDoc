@@ -279,6 +279,11 @@ const systemSections: SidebarSection[] = [
     items: [],
   },
   {
+    title: "Docs Overview",
+    href: "/docs/overview",
+    items: [],
+  },
+  {
     title: "System runtime (spine)",
     href: "/docs/system-runtime",
     items: [],
@@ -582,6 +587,7 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
     safePathname.startsWith("/docs/auth-security") || safePathname === "/docs/system/auth-security-layer";
   const systemContext =
     safePathname === "/docs" ||
+    safePathname === "/docs/overview" ||
     safePathname.startsWith("/docs/system") ||
     safePathname.startsWith("/docs/system-flow");
   const singleLevelContext =

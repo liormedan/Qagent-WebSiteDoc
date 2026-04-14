@@ -31,7 +31,6 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
 
   const { clientActive, authSecurityActive } = getDocsNavActivityFlags(safePathname);
   const developmentActive = normalizeDocsPath(safePathname) === "/docs/development";
-  const presentationKitActive = normalizeDocsPath(safePathname) === "/docs/presentation-kit";
   const terminologyActive = normalizeDocsPath(safePathname) === "/docs/terminology";
 
   const [openGroupId, setOpenGroupId] = useState<DocsNavGroupId | null>(null);
@@ -143,14 +142,6 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
                 <span className="truncate lg:hidden">Src</span>
                 <span className="hidden truncate lg:inline">Sources</span>
               </Link>
-              <Link
-                href="/docs/presentation-kit"
-                className={sourcesNavTabClass(presentationKitActive)}
-                aria-current={presentationKitActive ? "page" : undefined}
-              >
-                <span className="truncate lg:hidden">Media</span>
-                <span className="hidden truncate lg:inline">Media Kit</span>
-              </Link>
             </nav>
           </div>
 
@@ -182,7 +173,7 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
 
         {/* Mobile: top-level utility entries always visible (separate from Browse documentation) */}
         <div className="border-t border-[var(--border)]/60 px-1 py-2 sm:hidden">
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 gap-2">
             <Link
               href="/docs/development"
               className={cn(
@@ -192,16 +183,6 @@ export function DocsHeader({ onOpenMenu, onOpenToc }: { onOpenMenu: () => void; 
               aria-current={developmentActive ? "page" : undefined}
             >
               Sources
-            </Link>
-            <Link
-              href="/docs/presentation-kit"
-              className={cn(
-                "block rounded-md px-3 py-2 text-center text-sm font-semibold uppercase tracking-[0.08em] transition-colors",
-                presentationKitActive ? "bg-slate-800/90 text-slate-50" : "text-slate-200 hover:bg-slate-800/80",
-              )}
-              aria-current={presentationKitActive ? "page" : undefined}
-            >
-              Media Kit
             </Link>
           </div>
         </div>

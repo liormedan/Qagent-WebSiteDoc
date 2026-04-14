@@ -100,7 +100,13 @@ export function DocsToc({ className }: { className?: string }) {
     };
 
     const observer = new MutationObserver(scheduleCollectFromObserver);
-    observer.observe(root, { subtree: true, attributes: true, attributeFilter: ["open"] });
+    observer.observe(root, {
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["open"],
+      childList: true,
+      characterData: true,
+    });
 
     return () => {
       window.cancelAnimationFrame(frame);
@@ -167,7 +173,7 @@ export function DocsToc({ className }: { className?: string }) {
   const hasHeadings = useMemo(() => headings.length > 0, [headings]);
 
   return (
-    <aside className={cn("space-y-4 overflow-hidden", className)}>
+    <aside dir="rtl" className={cn("space-y-4 overflow-hidden text-right", className)}>
       <p className="text-xl font-semibold">On this page</p>
       {hasHeadings ? (
         <nav className="space-y-1">
@@ -203,8 +209,8 @@ export function DocsToc({ className }: { className?: string }) {
                 setActiveId(heading.id);
               }}
               className={cn(
-                "block rounded-md border-l-2 border-transparent px-3 py-1.5 text-sm text-slate-300 transition-all duration-150 hover:bg-slate-800 hover:text-white",
-                heading.id === activeId ? "translate-x-2 border-cyan-300 bg-slate-800/95 font-semibold text-white shadow-[0_0_0_1px_rgba(125,211,252,0.25)]" : "",
+                "block rounded-md border-r-2 border-transparent px-3 py-1.5 text-right text-sm text-slate-300 transition-all duration-150 hover:bg-slate-800 hover:text-white",
+                heading.id === activeId ? "border-cyan-300 bg-slate-800/95 font-semibold text-white shadow-[0_0_0_1px_rgba(125,211,252,0.25)]" : "",
               )}
             >
               {heading.text}

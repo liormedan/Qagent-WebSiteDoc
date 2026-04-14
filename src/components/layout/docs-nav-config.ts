@@ -8,7 +8,7 @@
 export type DocsNavGroupId = "core" | "execution" | "platform";
 
 /** Icon keys mapped in `DocsNavMegaMenu` (Lucide). */
-export type DocsNavIconId = "system" | "client" | "qagent" | "api" | "dsp" | "data" | "auth" | "infra" | "e2e";
+export type DocsNavIconId = "system" | "client" | "qagent" | "api" | "dsp" | "data" | "auth" | "infra" | "e2e" | "media";
 
 export type DocsNavItem = {
   label: string;
@@ -35,6 +35,7 @@ export function normalizeDocsPath(path: string): string {
 
 const matchSystem = (path: string) =>
   (path === "/docs" ||
+    path === "/docs/overview" ||
     path.startsWith("/docs/system") ||
     path === "/docs/system-runtime" ||
     path === "/docs/authority-map" ||
@@ -74,6 +75,7 @@ const matchAuthSecurity = (path: string) =>
   path === "/docs/system/auth-security-layer";
 
 const matchEndToEnd = (path: string) => path === "/docs/end-to-end" || path.startsWith("/docs/end-to-end/");
+const matchPresentationKit = (path: string) => path === "/docs/presentation-kit" || path.startsWith("/docs/presentation-kit/");
 
 /** Ordered groups and items: first matching item wins (path should be normalized). */
 export const DOCS_NAV_GROUPS: readonly DocsNavGroup[] = [
@@ -159,6 +161,13 @@ export const DOCS_NAV_GROUPS: readonly DocsNavGroup[] = [
         href: "/docs/end-to-end",
         matches: matchEndToEnd,
       },
+      {
+        label: "Media Kit",
+        description: "Video, audio, and presentation assets for system explainers.",
+        iconId: "media",
+        href: "/docs/presentation-kit",
+        matches: matchPresentationKit,
+      },
     ],
   },
 ] as const;
@@ -196,6 +205,7 @@ export function getDocsNavActivityFlags(pathname: string) {
     infrastructureActive: matchInfrastructure(path),
     authSecurityActive: matchAuthSecurity(path),
     endToEndActive: matchEndToEnd(path),
+    presentationKitActive: matchPresentationKit(path),
   };
 }
 
@@ -204,6 +214,7 @@ export type DocsNavSearchItem = { href: string; title: string; subtitle: string 
 /** Mega-menu hubs plus a few high-traffic targets for header search (deduped by href). */
 const EXTRA_DOCS_SEARCH_ITEMS: readonly DocsNavSearchItem[] = [
   { href: "/docs", title: "Docs home", subtitle: "WaveQ documentation entry." },
+  { href: "/docs/overview", title: "Docs overview", subtitle: "Main documentation overview and reading path." },
   { href: "/docs/presentation-kit", title: "Media kit", subtitle: "Video and slide materials for explaining the system." },
   { href: "/docs/contracts", title: "Contracts hub", subtitle: "contract_id registry and contract families." },
   { href: "/docs/system-runtime", title: "System runtime", subtitle: "R01–R12 spine." },

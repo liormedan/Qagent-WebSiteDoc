@@ -33,10 +33,16 @@ const groupSlugs: Record<DocsNavGroup, string> = {
 export const docsNavigation: DocNavItem[] = [
   {
     title: "Docs Home",
-    description: "Entry point for exploring architecture, flows, execution, and implementation.",
+    description: "Welcome landing page with explainer media and guided entry.",
     href: "/docs",
     group: "Architecture",
     recommendedFirst: true,
+  },
+  {
+    title: "Docs Overview",
+    description: "Main documentation overview and recommended reading path.",
+    href: "/docs/overview",
+    group: "Architecture",
   },
   {
     title: "Getting Started",

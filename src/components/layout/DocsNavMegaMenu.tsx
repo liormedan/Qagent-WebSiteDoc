@@ -10,6 +10,7 @@ import {
   GitBranch,
   LayoutDashboard,
   MonitorSmartphone,
+  Presentation,
   Server,
   Shield,
 } from "lucide-react";
@@ -26,6 +27,7 @@ const ICONS: Record<DocsNavIconId, LucideIcon> = {
   auth: Shield,
   infra: Cloud,
   e2e: GitBranch,
+  media: Presentation,
 };
 
 export function DocsNavMegaFlyout({

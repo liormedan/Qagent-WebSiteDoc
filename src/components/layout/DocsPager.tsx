@@ -7,9 +7,13 @@ import { Button } from "@/components/ui/button";
 import { getFlowNeighborsByHref, getFlowOrderedNavigation, getNavigationItemByHref } from "@/lib/navigation";
 
 const canonicalOverviewPath: Record<string, { previous?: { title: string; href: string }; next?: { title: string; href: string } }> = {
-  "/docs": { next: { title: "System Structure", href: "/docs/system" } },
-  "/docs/system": {
+  "/docs": { next: { title: "Docs Overview", href: "/docs/overview" } },
+  "/docs/overview": {
     previous: { title: "Docs Home", href: "/docs" },
+    next: { title: "System Structure", href: "/docs/system" },
+  },
+  "/docs/system": {
+    previous: { title: "Docs Overview", href: "/docs/overview" },
     next: { title: "Client Layer", href: "/docs/client" },
   },
   "/docs/client": {
