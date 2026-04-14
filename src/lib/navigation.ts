@@ -45,6 +45,12 @@ export const docsNavigation: DocNavItem[] = [
     group: "Architecture",
   },
   {
+    title: "Media Kit",
+    description: "Video explanations, slide structure, and delivery assets for system walkthroughs.",
+    href: "/docs/presentation-kit",
+    group: "Architecture",
+  },
+  {
     title: "QAgent Flow",
     description: "QAgent-layer flow from request to output.",
     href: "/docs/system-flow",

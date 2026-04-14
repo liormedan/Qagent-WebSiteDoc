@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { DocsContent } from "@/components/layout/DocsContent";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
@@ -9,6 +10,7 @@ const quickActions = [
   { label: "Understand the UI (Client)", href: "/docs/client" },
   { label: "Understand the Brain (QAgent)", href: "/docs/q-agent" },
   { label: "Understand Execution (API Server)", href: "/docs/api" },
+  { label: "Open Media Kit (Video + Slides)", href: "/docs/presentation-kit" },
 ];
 
 const readingPathSystemChapters = [
@@ -68,6 +70,56 @@ export default function DocsIndexPage() {
       />
 
       <div className="flex flex-col gap-5">
+        <SectionBlock title="חומרי הסבר: וידאו ומצגות" body={[]}>
+          <div className="space-y-4">
+            <Image
+              src="/media/waveq-architecture-hero.png"
+              alt="מפת הארכיטקטורה של WaveQ"
+              width={1400}
+              height={920}
+              className="h-auto w-full rounded-lg border border-[var(--border)] bg-slate-950/30"
+              priority
+            />
+
+            <div className="grid gap-3 md:grid-cols-2">
+              <div className="rounded-lg border border-[var(--border)] bg-slate-950/30 p-3">
+                <p className="mb-2 text-sm font-semibold text-slate-100">וידאו: המסע של פקודת אודיו</p>
+                <video
+                  controls
+                  preload="metadata"
+                  className="w-full rounded-md border border-[var(--border)]/70 bg-black"
+                  src="/media/waveq-command-journey.mp4"
+                />
+              </div>
+
+              <div className="rounded-lg border border-[var(--border)] bg-slate-950/30 p-3">
+                <p className="mb-2 text-sm font-semibold text-slate-100">אודיו: ארכיטקטורת WaveQ</p>
+                <audio controls preload="metadata" className="w-full" src="/media/waveq-architecture-audio.m4a" />
+                <a
+                  href="/media/waveq-architecture-audio.m4a"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 inline-block text-xs text-cyan-200 hover:underline"
+                >
+                  פתח אודיו בחלון נפרד
+                </a>
+              </div>
+            </div>
+
+            <div className="rounded-lg border border-[var(--border)] bg-slate-950/30 p-3">
+              <p className="mb-2 text-sm font-semibold text-slate-100">מצגת PDF: WaveQ Architecture</p>
+              <a
+                href="/media/waveq-architecture.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-cyan-200 hover:underline"
+              >
+                פתח את המצגת (PDF)
+              </a>
+            </div>
+          </div>
+        </SectionBlock>
+
         <SectionBlock title="Quick Actions" body={[]}>
           <div className="grid gap-3 md:grid-cols-2">
             {quickActions.map((action) => (

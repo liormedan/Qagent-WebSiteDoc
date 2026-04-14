@@ -204,6 +204,7 @@ export type DocsNavSearchItem = { href: string; title: string; subtitle: string 
 /** Mega-menu hubs plus a few high-traffic targets for header search (deduped by href). */
 const EXTRA_DOCS_SEARCH_ITEMS: readonly DocsNavSearchItem[] = [
   { href: "/docs", title: "Docs home", subtitle: "WaveQ documentation entry." },
+  { href: "/docs/presentation-kit", title: "Media kit", subtitle: "Video and slide materials for explaining the system." },
   { href: "/docs/contracts", title: "Contracts hub", subtitle: "contract_id registry and contract families." },
   { href: "/docs/system-runtime", title: "System runtime", subtitle: "R01–R12 spine." },
   { href: "/docs/authority-map", title: "Authority map", subtitle: "Canonical href table." },

@@ -25,6 +25,11 @@ const qagentSections: SidebarSection[] = [
     items: [],
   },
   {
+    title: "Media Kit",
+    href: "/docs/presentation-kit",
+    items: [],
+  },
+  {
     title: "Architecture",
     href: "/docs/architecture",
     items: [
@@ -725,4 +730,3 @@ export function DocsSidebar({ className, onNavigate }: { className?: string; onN
     </aside>
   );
 }
-
