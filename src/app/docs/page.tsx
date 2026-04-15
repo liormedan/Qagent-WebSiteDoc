@@ -16,6 +16,7 @@ type ContentShape = {
   toggleButton: string;
   heroTitleLine1: string;
   heroTitleLine2: string;
+  heroThinkLine: string;
   heroDescription: string;
   goOverview: string;
   openSystemMap: string;
@@ -41,6 +42,7 @@ const CONTENT: Record<Lang, ContentShape> = {
     toggleButton: "English",
     heroTitleLine1: "ברוכים הבאים ל-WaveQ",
     heroTitleLine2: "עורך אודיו על ידי שיחה עם סוכן בינה מלאכותית",
+    heroThinkLine: "חשבו Cursor/Codex לעולם האודיו",
     heroDescription:
       "זהו דף הכניסה למערכת. כאן תראו הסבר ממוקד על הארכיטקטורה, ולאחר מכן חומרי מדיה באקורדיונים: תמונת מערכת, סרטון הסבר, אודיו ומצגת PDF.",
     goOverview: "מעבר לעמוד ההסברים המלא",
@@ -69,7 +71,8 @@ const CONTENT: Record<Lang, ContentShape> = {
     toggleLabel: "Language",
     toggleButton: "עברית",
     heroTitleLine1: "Welcome to WaveQ",
-    heroTitleLine2: "An Audio Editor Driven by Conversation with an AI Agent",
+    heroTitleLine2: "An Audio Editor Driven by User Intent with AI Workflow",
+    heroThinkLine: "Think Cursor/Codex for audio",
     heroDescription:
       "This is the system landing page. Here you get a concise architecture overview, followed by media sections in accordions: system image, explainer video, audio narration, and a PDF presentation.",
     goOverview: "Go To Full Overview Page",
@@ -122,6 +125,12 @@ export default function DocsIndexPage() {
               <span className="block">{t.heroTitleLine1}</span>
               <span className="mt-1 block text-xl md:text-3xl">{t.heroTitleLine2}</span>
             </h1>
+            <p className="mt-2 inline-flex items-center gap-2 rounded-full border border-cyan-400/40 bg-cyan-500/[0.08] px-3 py-1 text-xs font-medium text-cyan-100">
+              <span>{t.heroThinkLine}</span>
+              <span className="animate-pulse" aria-hidden>
+                😊
+              </span>
+            </p>
             <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-300 md:text-base">{t.heroDescription}</p>
 
             <div className={lang === "he" ? "mt-5 flex flex-wrap justify-end gap-3" : "mt-5 flex flex-wrap justify-start gap-3"}>
