@@ -219,6 +219,7 @@ const BOX: Record<keyof DiagramNodeSet | "auth_band" | "bridge_band", Box> = {
   dsp: { x: 75, y: 21, w: 18, h: 13.5 },
   data: { x: 75, y: 38.5, w: 18, h: 13.5 },
   infra: { x: 75, y: 56, w: 18, h: 13.5 },
+  auth: { x: 44, y: 2.5, w: 12, h: 5 },
   end2end: { x: 27.5, y: 86, w: 45, h: 6.8 },
   auth_band: { x: 2, y: 4.5, w: 96, h: 70 },
   bridge_band: { x: 24, y: 80.8, w: 52, h: 11.2 },
