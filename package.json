@@ -11,6 +11,7 @@
     "test:gemini": "node scripts/test-gemini-connection.mjs"
   },
   "dependencies": {
+    "@clerk/nextjs": "^7.2.1",
     "@google/generative-ai": "^0.24.1",
     "@radix-ui/react-slot": "^1.2.4",
     "@tailwindcss/postcss": "^4.2.2",

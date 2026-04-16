@@ -286,7 +286,6 @@ function NodeCard({
   onLeave: () => void;
 }) {
   const isHub = node.role === "hub";
-  const descClamp = isHub ? "[-webkit-line-clamp:2]" : "[-webkit-line-clamp:1]";
   return (
     <Link
       href={node.href}
@@ -295,7 +294,7 @@ function NodeCard({
       onFocus={() => onEnter(node.key)}
       onBlur={onLeave}
       className={cn(
-        "absolute z-20 cursor-pointer overflow-hidden rounded-lg border px-2 py-1.5 transition-all duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300/70",
+        "absolute z-20 flex cursor-pointer items-center justify-center overflow-hidden rounded-lg border px-2 py-1.5 text-center transition-all duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300/70",
         TONE_CLASS[node.tone],
         isHub &&
           "z-30 border-emerald-300/75 bg-emerald-500/[0.16] shadow-[0_0_0_2px_rgba(16,185,129,0.42),0_20px_32px_-20px_rgba(16,185,129,0.85)]",
@@ -305,19 +304,11 @@ function NodeCard({
     >
       <p
         className={cn(
-          "overflow-hidden break-words text-slate-100 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]",
-          isHub ? "text-sm font-bold leading-4" : "text-xs font-semibold leading-4"
+          "w-full overflow-hidden break-words text-slate-100 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]",
+          isHub ? "text-sm font-bold leading-5" : "text-xs font-semibold leading-5"
         )}
       >
         {node.title}
-      </p>
-      <p
-        className={cn(
-          "mt-1 overflow-hidden break-words text-[11px] leading-4 text-slate-300 [display:-webkit-box] [-webkit-box-orient:vertical]",
-          descClamp
-        )}
-      >
-        {node.description}
       </p>
     </Link>
   );
@@ -346,9 +337,6 @@ function MobileFlow({ lang, copy, nodes }: { lang: Lang; copy: (typeof COPY)[Lan
                 )}
               >
                 <p className={cn("text-slate-100", node.role === "hub" ? "text-sm font-bold" : "text-xs font-semibold")}>{node.title}</p>
-                <p className="mt-1 overflow-hidden text-[11px] leading-4 text-slate-300 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]">
-                  {node.description}
-                </p>
               </Link>
               {i < order.length - 1 ? <div className="py-1 text-center text-slate-500">↓</div> : null}
             </div>
@@ -441,12 +429,12 @@ export function ArchitectureDiagram({ lang }: { lang: Lang }) {
               onFocus={() => setActiveNode(nodes.end2end.key)}
               onBlur={() => setActiveNode(null)}
               className={cn(
-                "absolute z-20 rounded-md border border-cyan-400/40 bg-gradient-to-r from-cyan-500/[0.08] via-sky-500/[0.12] to-cyan-500/[0.08] px-2.5 py-1 transition-all duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300/70",
+                "absolute z-20 flex flex-col items-center justify-center rounded-md border border-cyan-400/40 bg-gradient-to-r from-cyan-500/[0.08] via-sky-500/[0.12] to-cyan-500/[0.08] px-2.5 py-1 text-center transition-all duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300/70",
                 activeNode === nodes.end2end.key && "ring-1 ring-cyan-300/45"
               )}
               style={{ left: `${BOX.bridge_band.x}%`, top: `${BOX.bridge_band.y}%`, width: `${BOX.bridge_band.w}%`, minHeight: `${BOX.bridge_band.h}%` }}
             >
-              <p className="text-center text-[10px] font-semibold uppercase tracking-[0.08em] text-cyan-200/90">{copy.bridge}</p>
+              <p className="w-full overflow-hidden text-center text-[10px] font-semibold uppercase tracking-[0.08em] text-cyan-200/90 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:1]">{copy.bridge}</p>
               <p className="overflow-hidden text-center text-[11px] font-semibold text-slate-100 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:1]">
                 {nodes.end2end.title}
               </p>

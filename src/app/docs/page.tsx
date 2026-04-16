@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { DocsContent } from "@/components/layout/DocsContent";
 import { ArchitectureDiagram } from "@/components/ui/ArchitectureDiagram";
 import { PdfInlineViewer } from "@/components/ui/PdfInlineViewer";
@@ -99,7 +99,12 @@ const CONTENT: Record<Lang, ContentShape> = {
 
 export default function DocsIndexPage() {
   const [lang, setLang] = useState<Lang>("en");
+  const architectureDetailsRef = useRef<HTMLDetailsElement | null>(null);
   const t = useMemo(() => CONTENT[lang], [lang]);
+
+  useEffect(() => {
+    architectureDetailsRef.current?.setAttribute("open", "");
+  }, []);
 
   return (
     <DocsContent>
@@ -162,7 +167,10 @@ export default function DocsIndexPage() {
 
         <div className="space-y-4">
           <section>
-            <details className="group rounded-xl border border-[var(--border)] bg-slate-950/30" open>
+            <details
+              ref={architectureDetailsRef}
+              className="group rounded-xl border border-[var(--border)] bg-slate-950/30"
+            >
               <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 [&::-webkit-details-marker]:hidden">
                 <h2 className="text-lg font-semibold text-slate-100">{t.architectureTitle}</h2>
                 <span className="text-xs text-slate-400 transition-transform group-open:rotate-180">⌄</span>
