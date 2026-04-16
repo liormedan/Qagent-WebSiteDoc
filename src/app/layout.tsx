@@ -47,16 +47,16 @@ export default function RootLayout({
       <body className={`${GeistSans.className} ${GeistMono.variable} antialiased`}>
         <ClerkProvider appearance={clerkAppearance}>
           <Providers>
-            <div className="fixed right-3 top-3 z-[70] rounded-full border border-slate-700/80 bg-slate-950/85 px-3 py-2 shadow-[0_10px_40px_-16px_rgba(0,0,0,0.7)] backdrop-blur">
+            <div className="fixed right-2.5 top-2.5 z-[70] rounded-full border border-slate-700/80 bg-slate-950/85 px-2 py-1.5 shadow-[0_10px_30px_-18px_rgba(0,0,0,0.7)] backdrop-blur">
               <Show when="signed-out">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5">
                   <SignInButton mode="modal">
-                    <button type="button" className="rounded-md border border-cyan-400/45 bg-cyan-500/15 px-2.5 py-1 text-xs font-semibold text-cyan-100 transition-colors hover:bg-cyan-500/25">
+                    <button type="button" className="rounded-md border border-cyan-400/45 bg-cyan-500/15 px-2 py-0.5 text-[11px] font-semibold text-cyan-100 transition-colors hover:bg-cyan-500/25">
                       Sign in
                     </button>
                   </SignInButton>
                   <SignUpButton mode="modal">
-                    <button type="button" className="rounded-md border border-slate-600/70 bg-slate-800/80 px-2.5 py-1 text-xs font-semibold text-slate-100 transition-colors hover:border-cyan-400/45 hover:text-cyan-100">
+                    <button type="button" className="rounded-md border border-slate-600/70 bg-slate-800/80 px-2 py-0.5 text-[11px] font-semibold text-slate-100 transition-colors hover:border-cyan-400/45 hover:text-cyan-100">
                       Sign up
                     </button>
                   </SignUpButton>
