@@ -7,19 +7,20 @@ import { sendUserApprovedEmail } from "@/lib/email";
 
 async function assertAdmin() {
   const { userId } = await auth();
-  if (!userId) return { ok: false as const };
+  if (!userId) return null;
   const client = await clerkClient();
   const user = await client.users.getUser(userId);
   const email = getPrimaryEmail(user);
-  return { ok: isAdminEmail(email), adminEmail: getAdminEmail(), client };
+  if (!isAdminEmail(email)) return null;
+  return { adminEmail: getAdminEmail(), client };
 }
 
-export async function approveUserAction(formData: FormData) {
+export async function approveUserAction(formData: FormData): Promise<void> {
   const admin = await assertAdmin();
-  if (!admin.ok) return { ok: false as const, error: "unauthorized" };
+  if (!admin) return;
 
   const userId = String(formData.get("userId") ?? "");
-  if (!userId) return { ok: false as const, error: "missing_user_id" };
+  if (!userId) return;
 
   await admin.client.users.updateUserMetadata(userId, {
     publicMetadata: {
@@ -36,5 +37,4 @@ export async function approveUserAction(formData: FormData) {
   }
 
   revalidatePath("/admin/approvals");
-  return { ok: true as const };
 }
