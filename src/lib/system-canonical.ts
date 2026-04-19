@@ -1,11 +1,12 @@
+import { WAVEQ_CANONICAL_FLOW } from "@/lib/waveq-authority";
+
 export const SYSTEM_DOC_SOURCE_OF_TRUTH = {
   canonicalLocation: "/docs/system",
   rule:
     "Definitions in /docs/system are authoritative for system-level edge case handling, error ownership, and runtime lifecycle. Secondary pages may reference but must not redefine these rules.",
 } as const;
 
-export const SYSTEM_RUNTIME_LIFECYCLE =
-  "Request -> Accepted -> Job Created -> Executing -> Result Produced -> Version Stored -> Output Returned.";
+export const SYSTEM_RUNTIME_LIFECYCLE = WAVEQ_CANONICAL_FLOW;
 
 export const SYSTEM_EDGE_CASE_HANDLING = [
   {

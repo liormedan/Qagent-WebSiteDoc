@@ -183,82 +183,44 @@ const pages: Record<string, DocPageContent> = {
   roadmap: roadmapContent,
 };
 
-const draftSkeletonSummaries: Record<string, string> = {
-  "audio-comparison": "Entry page for Audio Comparison references. Use the overview as the full source of truth.",
-  "audio-comparison/versioning": "Defines version lineage for comparisons at a high level.",
-  "audio-comparison/comparison-model": "Captures the high-level comparison record between base and candidate versions.",
-  "audio-comparison/difference-model": "Summarizes detected difference categories and impact levels.",
-  "audio-comparison/playback-modes": "Outlines A/B playback behaviors used during evaluation.",
-  "audio-comparison/canvas-ui": "Describes how comparison evidence is surfaced in the canvas at a high level.",
-  "audio-comparison/user-flow": "Summarizes the user comparison journey from review to decision.",
-
-  "recommendation-engine": "Entry page for recommendation references. Use the overview as the full source of truth.",
-  "recommendation-engine/recommendation-model": "Defines the recommendation object at a high level.",
-  "recommendation-engine/recommendation-sources": "Lists the key evidence sources used to generate recommendations.",
-  "recommendation-engine/tradeoffs": "Summarizes key tradeoffs that should be shown before approval.",
-  "recommendation-engine/recommendation-flow": "Describes the recommendation lifecycle at a high level.",
-  "recommendation-engine/integration-with-comparison": "Explains how comparison evidence informs recommendation quality.",
-  "recommendation-engine/ux-presentation": "Summarizes user-facing recommendation presentation and actions.",
-
-  "execution-runtime": "Entry page for runtime references. Use the overview as the full source of truth.",
-  "execution-runtime/execution-contracts": "High-level summary of runtime request/progress/result contracts.",
-  "execution-runtime/runtime-states": "High-level runtime state model and transition intent.",
-  "execution-runtime/progress-feedback": "Summarizes progress and user feedback behavior during execution.",
-  "execution-runtime/output-versioning": "Summarizes output version creation after execution.",
-  "execution-runtime/runtime-integration": "High-level integration path between runtime and orchestration subsystems.",
-  "execution-runtime/error-handling": "Summarizes runtime failure categories and handling boundaries.",
-  "execution-runtime/cancellation-and-retry": "Summarizes cancellation and retry behavior at a high level.",
-
-  lifecycle: "Entry page for lifecycle references. Use the overview as the full source of truth.",
-  "lifecycle/session-model": "Summarizes session state ownership and transitions.",
-  "lifecycle/interaction-loop": "Summarizes repeated user-system interaction cycles in one session.",
-  "lifecycle/version-lifecycle": "Summarizes version states from original to accepted or rejected.",
-  "lifecycle/system-events": "Summarizes core lifecycle events used for traceability.",
-  "lifecycle/end-states": "Summarizes how sessions conclude and what state is persisted.",
+const EMPTY_PAGE_AUTHORITY: Record<string, string> = {
+  overview: "/docs/system",
+  planning: "/docs/q-agent",
+  intents: "/docs/q-agent",
+  "dal-integration": "/docs/architecture/modules/dal",
+  "decision-rules": "/docs/architecture/policies/control-policy-matrix",
+  "decision-with-user": "/docs/architecture/modules/approval",
+  "module-design": "/docs/architecture",
+  "implementation-map": "/docs/architecture/implementation-baseline",
+  "testing-strategy": "/docs/testing-strategy",
+  constraints: "/docs/architecture/policies/control-policy-matrix",
+  "audio-dal": "/docs/architecture/modules/dal",
+  "audio-memory": "/docs/architecture/modules/versioning",
+  "audio-intelligence": "/docs/architecture/modules/analyzer",
 };
 
-function asDraftSkeleton(page: DocPageContent, summary: string): DocPageContent {
+function isEffectivelyEmptyPage(page: DocPageContent) {
+  return !page.description?.trim() && page.sections.every((section) => section.body.length === 0);
+}
+
+function getAuthorityForSlug(slug: string) {
+  if (EMPTY_PAGE_AUTHORITY[slug]) return EMPTY_PAGE_AUTHORITY[slug];
+  if (slug.startsWith("audio-comparison")) return "/docs/audio-comparison/overview";
+  if (slug.startsWith("recommendation-engine")) return "/docs/recommendation-engine/overview";
+  if (slug.startsWith("lifecycle")) return "/docs/lifecycle/overview";
+  if (slug.startsWith("orchestration")) return "/docs/orchestration/overview";
+  if (slug.startsWith("audio-sandbox")) return "/docs/audio-sandbox/overview";
+  return "/docs/authority-map";
+}
+
+function asAuthorityLinkedPage(page: DocPageContent, authorityHref: string): DocPageContent {
   return {
     ...page,
-    description: page.description?.trim() ?? "",
+    description: page.description?.trim() || `Authority-linked to ${authorityHref}`,
     sections: [
       {
-        title: "Architecture Diagram",
-        body: [
-          "Draft placeholder for architecture visualization.",
-          "Final diagram will be added in a full completion pass.",
-        ],
-      },
-      {
-        title: "Overview",
-        body: [summary],
-      },
-      {
-        title: "Responsibilities",
-        body: ["Define module responsibilities and clear boundaries in the next documentation pass."],
-      },
-      {
-        title: "Core Capabilities",
-        body: ["Key capabilities are pending full specification and validation."],
-      },
-      {
-        title: "Flow",
-        body: ["Flow is partially documented and will be expanded into a deterministic step-by-step sequence."],
-      },
-      {
-        title: "Inputs / Outputs",
-        body: [
-          "Inputs: to be finalized with required and optional fields.",
-          "Outputs: to be finalized with structured response contracts.",
-        ],
-      },
-      {
-        title: "Control Boundary",
-        body: ["Boundary definition is pending completion to prevent responsibility overlap."],
-      },
-      {
-        title: "Summary",
-        body: ["This page is currently draft and marked as incomplete."],
+        title: "Authority Link",
+        body: [`Authority page: ${authorityHref}`],
       },
     ],
   };
@@ -268,13 +230,10 @@ export function getDocPage(slug: string): DocPageContent | undefined {
   const page = pages[slug];
   if (!page) return undefined;
 
-  const summary = draftSkeletonSummaries[slug];
-  if (!summary) return page;
-
-  return asDraftSkeleton(page, summary);
+  if (!isEffectivelyEmptyPage(page)) return page;
+  return asAuthorityLinkedPage(page, getAuthorityForSlug(slug));
 }
 
 export function getAllDocPages(): DocPageContent[] {
   return Object.values(pages);
 }
-

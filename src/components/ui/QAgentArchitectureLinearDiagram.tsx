@@ -1,18 +1,9 @@
 ﻿"use client";
 
 import { ArrowDown, CornerLeftUp } from "lucide-react";
+import { WAVEQ_CANONICAL_FLOW_STEPS } from "@/lib/waveq-authority";
 
-const flowSteps = [
-  "QCore",
-  "Files Handler",
-  "Analyzer",
-  "Intent + Clarification",
-  "DAL (Decision Abstraction Layer)",
-  "UAgent (UI Plan Generation)",
-  "Approval (UI-triggered, enforced by QCore)",
-  "DAgent (Execution)",
-  "Versioning (Result & State Update)",
-];
+const flowSteps = WAVEQ_CANONICAL_FLOW_STEPS;
 
 export function QAgentArchitectureLinearDiagram() {
   return (
@@ -20,9 +11,7 @@ export function QAgentArchitectureLinearDiagram() {
       <div className="mb-5 text-center">
         <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-300/80">Architecture Flow</p>
         <h3 className="mt-2 text-2xl font-semibold text-white md:text-3xl">QAgent Ordered Module Flow</h3>
-        <p className="mt-2 text-sm text-slate-300">
-          Deterministic routing from QCore through approval-gated execution and versioned outputs.
-        </p>
+        <p className="mt-2 text-sm text-slate-300">Deterministic routing from user input through versioning.</p>
       </div>
 
       <div className="mx-auto flex w-full max-w-3xl flex-col items-stretch gap-2">

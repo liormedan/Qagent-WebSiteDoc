@@ -1,13 +1,14 @@
 import { DocsTemplatePage } from "@/components/ui/DocsTemplatePage";
 import { SYSTEM_FLOW_SCOPE_LINKS } from "@/lib/docs-scope-links";
 import { SYSTEM_RUNTIME_LIFECYCLE } from "@/lib/system-canonical";
+import { WAVEQ_CANONICAL_FLOW_STEPS } from "@/lib/waveq-authority";
 
 const flowDetails = [
   {
     title: "Canonical Sequence",
     subtitle: "Cross-layer transition order",
     purpose: "Define the authoritative end-to-end transition sequence.",
-    defines: ["User -> Client -> QAgent -> API -> Execution -> Versioning -> Output", SYSTEM_RUNTIME_LIFECYCLE],
+    defines: [SYSTEM_RUNTIME_LIFECYCLE],
     doesNotDefine: "Module-level implementation internals.",
   },
   {
@@ -62,7 +63,7 @@ export default function SystemFlowPage() {
         { title: "Related Docs", subtitle: "Canonical references.", href: "#related-docs" },
       ]}
       diagramTitle="Flow Diagram"
-      diagram={{ mode: "flow", steps: ["User", "Client Layer", "QAgent Layer", "API Server Layer", "Execution Layer", "Versioning", "Output"] }}
+      diagram={{ mode: "flow", steps: [...WAVEQ_CANONICAL_FLOW_STEPS] }}
       detailsTitle="Flow Details"
       detailsItems={flowDetails.map((d) => ({
         id: d.title.toLowerCase().replace(/[^a-z0-9]+/g, "-"),

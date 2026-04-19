@@ -1,4 +1,4 @@
-﻿import type { DocPageContent } from "@/lib/docs";
+import type { DocPageContent } from "@/lib/docs";
 
 export const dalIntegrationContent: DocPageContent = {
   slug: "dal-integration",
@@ -22,7 +22,7 @@ export const dalIntegrationContent: DocPageContent = {
       body: [],
     },
     {
-      title: "Approval Gate (UI-triggered, enforced by QCore)",
+      title: "Approval Gate (UI-triggered, Core-enforced)",
       body: [],
     },
   ],

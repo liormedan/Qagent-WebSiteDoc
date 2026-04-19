@@ -37,7 +37,7 @@ const chatDetails = [
     subtitle: "Entry point and exchange loop",
     purpose: "Define Chat UI as the entry point for user intent and the interaction loop with QAgent.",
     defines: [
-      "Runs the canonical flow: User Input -> Chat UI -> QAgent -> Response -> Chat UI -> User.",
+      "Runs a client interaction loop: User Input -> Chat UI -> QAgent -> Response -> Chat UI -> User.",
       "Translates interaction into a structured conversational flow processable by QAgent.",
       "Maintains continuity between user actions and system responses in the chat timeline.",
     ],

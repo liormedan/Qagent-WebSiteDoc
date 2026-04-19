@@ -3,23 +3,35 @@ import type { DocPageContent } from "@/lib/docs";
 export const executionRuntimeIntegrationContent: DocPageContent = {
   slug: "execution-runtime/runtime-integration",
   title: "Runtime Integration",
-  description: "",
+  description: "Runtime integration boundaries with DAgent, Output, and Versioning.",
   sections: [
     {
-      title: "QAgent - structure Execution Scope",
-      body: [],
+      title: "Inbound Integration",
+      body: [
+        "DAgent is the single inbound producer for runtime start payloads.",
+        "Runtime start payload is validated before queued materialization.",
+      ],
     },
     {
-      title: "Execution Entry Conditions",
-      body: [],
+      title: "Runtime Internal Integration",
+      body: [
+        "State engine commits transitions.",
+        "Progress publisher emits state and progress signals.",
+      ],
     },
     {
-      title: "DSP Execution Stages",
-      body: [],
+      title: "Outbound Integration",
+      body: [
+        "Runtime publishes output package to Output boundary.",
+        "Output boundary forwards immutable payload to Versioning.",
+      ],
     },
     {
-      title: "Execution Outputs and Status",
-      body: [],
+      title: "Contract Integrity",
+      body: [
+        "All boundary transitions enforce contract version v1.0.",
+        "Schema violations are rejected before state commit.",
+      ],
     },
   ],
 };

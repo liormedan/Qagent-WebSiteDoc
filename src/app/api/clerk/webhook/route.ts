@@ -2,7 +2,6 @@ import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { clerkClient } from "@clerk/nextjs/server";
 import { getAdminEmail, isAdminEmail } from "@/lib/approval";
-import { sendAdminApprovalRequestEmail } from "@/lib/email";
 
 type ClerkWebhookEvent = {
   type: string;
@@ -71,13 +70,11 @@ export async function POST(req: Request) {
 
   await client.users.updateUserMetadata(userId, {
     publicMetadata: {
-      approved: false,
+      approved: true,
+      approvedAt: new Date().toISOString(),
+      approvedBy: "auto",
     },
   });
-
-  if (email) {
-    await sendAdminApprovalRequestEmail({ userId, email });
-  }
 
   return new Response("ok", { status: 200 });
 }

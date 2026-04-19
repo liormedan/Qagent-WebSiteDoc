@@ -7,9 +7,11 @@ import { DocsScopeBlocks } from "@/components/ui/DocsScopeBlocks";
 import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
+import { QAGENT_CANONICAL_FLOW } from "@/lib/qagent-canonical";
+import { WAVEQ_CANONICAL_FLOW_STEPS } from "@/lib/waveq-authority";
 
 import { CLIENT_SUBPAGE_SCOPE_LINKS } from "@/lib/docs-scope-links";
-const canonicalFlow = "User types -> Chat -> QAgent -> uiPlan -> Canvas -> Runtime -> Audio -> UI update";
+const canonicalFlow = QAGENT_CANONICAL_FLOW;
 
 const inPageLinks = [
   { title: "Overview", subtitle: "Event flow scope and purpose.", href: "#overview" },
@@ -124,7 +126,7 @@ export default function ClientEventFlowPage() {
         </SectionBlock>
 
         <SectionBlock id="event-flow-diagram" title="Event Flow Diagram" body={[]}>
-          <DocsDiagram mode="flow" steps={["User types", "Chat", "QAgent", "uiPlan", "Canvas", "Runtime", "Audio", "UI update"]} />
+          <DocsDiagram mode="flow" steps={[...WAVEQ_CANONICAL_FLOW_STEPS]} />
         </SectionBlock>
 
         <SectionBlock id="event-flow-details" title="Event Flow Details" body={[]}>

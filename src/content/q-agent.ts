@@ -1,4 +1,4 @@
-﻿import type { DocPageContent } from "@/lib/docs";
+import type { DocPageContent } from "@/lib/docs";
 
 export const qAgentContent: DocPageContent = {
   slug: "q-agent",
@@ -22,7 +22,7 @@ export const qAgentContent: DocPageContent = {
       body: [],
     },
     {
-      title: "Approval Gate (UI-triggered, enforced by QCore)",
+      title: "Approval Gate (UI-triggered, Core-enforced)",
       body: [],
     },
   ],

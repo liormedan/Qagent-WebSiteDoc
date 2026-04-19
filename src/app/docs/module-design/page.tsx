@@ -1,106 +1,39 @@
-import { DocsTemplatePage } from "@/components/ui/DocsTemplatePage";
-import { QAGENT_ARCH_HUB_LINKS } from "@/lib/docs-scope-links";
-
-const modules = [
-  {
-    id: "intent-detector",
-    name: "Intent Detector",
-    purpose: "Initial intent classification from QInput.",
-    defines: ["Input: QInput.", "Output: QIntent.", "Dependencies: contracts.", "Failure points: low confidence and ambiguity."],
-  },
-  {
-    id: "reasoning-engine",
-    name: "Reasoning Engine",
-    purpose: "Resolve ambiguity with bounded internal passes.",
-    defines: ["Input: QInput + base QIntent.", "Output: ReasoningResult.", "Dependencies: intent detector and reasoning policy.", "Failure points: unresolved conflict."],
-  },
-  {
-    id: "clarification-manager",
-    name: "Clarification Manager",
-    purpose: "Generate targeted clarification prompts.",
-    defines: ["Input: ReasoningResult.", "Output: ClarificationQuestion.", "Dependencies: reasoning engine."],
-  },
-  {
-    id: "planner",
-    name: "Planner",
-    purpose: "Build deterministic plan from refined intent.",
-    defines: ["Input: QIntent.", "Output: QPlan.", "Dependencies: reasoning result."],
-  },
-  {
-    id: "safety-gate",
-    name: "Safety Gate",
-    purpose: "Evaluate approval requirements before execution.",
-    defines: ["Input: QPlan.", "Output: requiresApproval flag.", "Dependencies: policy configuration."],
-  },
-  {
-    id: "dal-builder",
-    name: "DAL Builder",
-    purpose: "Map plan to AudioDAL contract.",
-    defines: ["Input: QPlan + approval status.", "Output: AudioDAL.", "Dependencies: planner and safety gate."],
-  },
-  {
-    id: "validation-layer",
-    name: "Validation Layer",
-    purpose: "Validate QOutput and DAL before handoff.",
-    defines: ["Input: QOutput + AudioDAL.", "Output: validation report.", "Dependencies: contract schemas."],
-  },
-  {
-    id: "state-manager",
-    name: "State Manager",
-    purpose: "Enforce allowed state transitions.",
-    defines: ["Input: current state + event.", "Output: next state.", "Dependencies: state machine rules."],
-  },
-] as const;
+import Link from "next/link";
+import { DocsContent } from "@/components/layout/DocsContent";
+import { PageTitle } from "@/components/ui/PageTitle";
+import { SectionBlock } from "@/components/ui/SectionBlock";
 
 export default function ModuleDesignPage() {
   return (
-    <DocsTemplatePage
-      title="Module Design"
-      description="Future Q runtime modules with IO boundaries, dependencies, and failure points."
-      sectionPath={["QAgent", "Implementation", "Implementation Notes"]}
-      scopeLinks={QAGENT_ARCH_HUB_LINKS}
-      overviewIntro="Module Design defines high-level module contracts for future Q runtime evolution."
-      overviewAreasTitle="Design concerns"
-      overviewAreas={["module boundaries", "input/output contracts", "dependency model", "failure surfaces"]}
-      outOfScope="Implementation internals and infrastructure runtime concerns."
-      relatedBoundaries={[
-        "Module Design = module blueprint authority.",
-        "Function Contracts = function boundary authority.",
-        "Testing Strategy = validation authority.",
-      ]}
-      navItems={[
-        { title: "Overview", subtitle: "Design scope.", href: "#overview" },
-        { title: "Design Diagram", subtitle: "Module structure map.", href: "#diagram" },
-        { title: "Design Details", subtitle: "Module-by-module specification.", href: "#details" },
-        { title: "Related Docs", subtitle: "Canonical references.", href: "#related-docs" },
-      ]}
-      diagramTitle="Design Diagram"
-      diagram={{
-        mode: "structure",
-        root: "Module Design",
-        groups: [
-          { title: "Reasoning Modules", items: ["Intent Detector", "Reasoning Engine", "Clarification Manager", "Planner"] },
-          { title: "Control Modules", items: ["Safety Gate", "Validation Layer", "State Manager"] },
-          { title: "Execution Modules", items: ["DAL Builder"] },
-        ],
-      }}
-      detailsTitle="Design Details"
-      detailsItems={modules.map((m) => ({
-        id: m.id,
-        title: m.name,
-        subtitle: m.purpose,
-        purpose: m.purpose,
-        defines: [...m.defines],
-        doesNotDefine: "Cross-layer orchestration ownership.",
-        href: "/docs/module-design",
-        linkLabel: "Canonical page",
-      }))}
-      relatedDocs={[
-        "Module Design = blueprint authority.",
-        "Function Contracts = interface authority.",
-        "Testing Strategy = validation authority.",
-        "Architecture page = canonical module map authority.",
-      ]}
-    />
+    <DocsContent>
+      <PageTitle title="Module Design" description="Authority Index" />
+      <div className="flex flex-col gap-5">
+        <SectionBlock title="Authority Pages" body={[]}>
+          <ul className="list-disc space-y-2 pl-5 text-sm text-slate-200">
+            <li>
+              <Link href="/docs/architecture" className="text-[var(--accent)] hover:underline">
+                /docs/architecture
+              </Link>
+            </li>
+            <li>
+              <Link href="/docs/q-agent" className="text-[var(--accent)] hover:underline">
+                /docs/q-agent
+              </Link>
+            </li>
+            <li>
+              <Link href="/docs/function-contracts" className="text-[var(--accent)] hover:underline">
+                /docs/function-contracts
+              </Link>
+            </li>
+            <li>
+              <Link href="/docs/state-machine" className="text-[var(--accent)] hover:underline">
+                /docs/state-machine
+              </Link>
+            </li>
+          </ul>
+        </SectionBlock>
+      </div>
+    </DocsContent>
   );
 }
+

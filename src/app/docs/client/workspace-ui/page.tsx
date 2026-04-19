@@ -36,7 +36,7 @@ const workspaceDetails = [
     subtitle: "Container and coordination flow",
     purpose: "Define Workspace UI as the container/coordinator inside the Client layer.",
     defines: [
-      "Run canonical flow: User Navigation -> Workspace UI -> Chat UI / Canvas UI / Runtime -> System Response -> Workspace Update.",
+      "Run workspace interaction loop: User Navigation -> Workspace UI -> Chat UI / Canvas UI / Runtime -> System Response -> Workspace Update.",
       "Maintain coherent and navigable environment across client surfaces.",
     ],
     doesNotDefine: "Cross-layer execution orchestration.",

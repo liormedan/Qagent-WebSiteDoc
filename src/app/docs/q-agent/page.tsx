@@ -8,6 +8,7 @@ import { LayerSpecAccordion } from "@/components/ui/LayerSpecAccordion";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { SectionBlock } from "@/components/ui/SectionBlock";
 import { QAGENT_CANONICAL_FLOW, QAGENT_DOC_SOURCE_OF_TRUTH } from "@/lib/qagent-canonical";
+import { WAVEQ_CANONICAL_FLOW_STEPS } from "@/lib/waveq-authority";
 import { normalizeDocListText } from "@/lib/docs-text";
 
 import { QAGENT_LAYER_HUB_LINKS } from "@/lib/docs-scope-links";
@@ -156,10 +157,7 @@ export default function QAgentPage() {
         </SectionBlock>
 
         <SectionBlock id="qagent-structure-diagram" title="QAgent Structure Diagram" body={[]}>
-          <DocsDiagram
-            mode="flow"
-            steps={["User Input", "QCore", "Files Handler", "Analyzer", "Intent + Clarification", "DAL", "UAgent", "Approval", "DAgent", "Execution Request Envelope", "API Server"]}
-          />
+          <DocsDiagram mode="flow" steps={[...WAVEQ_CANONICAL_FLOW_STEPS]} />
           <p className="mt-3 text-sm text-[var(--muted)]">Canonical flow: {QAGENT_CANONICAL_FLOW}</p>
         </SectionBlock>
 
